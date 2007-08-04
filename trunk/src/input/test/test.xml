@@ -1,0 +1,16 @@
+
+	<node name="node3">
+
+		<position x="10.0" y="2.0" z="3.0"/>
+
+		<mesh name="robot2" filename="robot.mesh" visible = "true">
+			<position x="780.0" y="30.0" z="590.0"/>
+			<scale x="0.2" y="0.2" z="0.2"/>
+		</mesh>
+		<mesh name="robot3" filename="robot.mesh" visible = "false">
+			<position x="794.0" y="28.0" z="594.0"/>
+			<scale x="0.2" y="0.2" z="0.2"/>
+		</mesh>
+	</node>
+
+

@@ -1,0 +1,137 @@
+2007-07-18  Paf <paf@tuxfamily.org>
+	* src/core/tests/testpo.cpp: Updated to play with FileSource and
+	IStream classes
+	* src/core/include/scalar.h: Change Glib::ustring to std::string
+	* include/filestream.h: File added
+	* include/sourcefile.h: File added
+	* include/istream.h: File added
+	* include/isource.h: File added
+	* src/sourcefile.cpp: File added
+	* src/filestream.cpp: File added
+
+2007-07-13  Yellow <yellow.fr@gmail.com>
+	* src/core/include/singleton.h: 'Singleton' ambiguous symbol, change to '::Singleton'
+	* src/graphic/src/cscenefactorystd.cpp: Change Glib::ustring to std::string
+	* src/graphic/src/cscenefactorystd.h: Change Glib::ustring to std::string
+	* src/graphic/src/csceneparser.cpp: Change Glib::ustring to std::string
+	* src/graphic/src/csceneparser.h: Change Glib::ustring to std::string
+
+2007-07-10  Paf <paf@tuxfamily.org>
+	* src/core/include/iattribute.h: Some doxygen comments have been
+	added, serializeXML() now returns a shared_ptr<xmlpp::Document>
+	* src/core/include/persistentobject.h: Some doxygen comments have been added
+	* src/core/src/persistentobject.cpp: implements serializeXML()
+	* src/core/include/scalar.h: implements serializeXML()
+	* src/core/tests/testpo.cpp: Updated to serialize a PersistentObject
+	* src/core/include/ctransition.h: Virtual destructor added
+
+2007-07-09  Paf <paf@tuxfamily.org>
+	* src/core/include/persistentobject.h,
+	src/core/src/persistentobject.cpp:  Files added. This is a PersistentObject as
+	described in the design document.
+	* src/core/include/iattribute.h:  File added. This is the base class of all the attributes
+	used by a PersistentObject. A PersistentObject inherits also from this
+	class.
+	* src/core/tests/testpo.cpp: File added. This is a test case for PersistentObject
+	classes.
+	* src/core/Makefile: Makefile of core test cases has been updated to
+	build the PersistentObject test case.
+
+2007-07-08  Paf <paf@tuxfamily.org>
+	* testmsg.cpp:  Update example
+
+2007-05-27  Paf <paf@tuxfamily.org>
+	* CGraphicModule.cpp: CGraphicModule::init() -> Replace
+	SHADOWTYPE_STENCIL_MODULATIVE by
+	SHADOWTYPE_TEXTURE_MODULATIVE
+	* CGraphicModule.cpp: CGraphicModule::init() -> Improvement of the
+	shadows by tweaking some parameters
+
+2007-04-29  White Tiger <hot_harissa@msn.com>
+	* CGraphicModule.cpp: CGraphicModule::init(),
+	CGraphicModule::Process() -> Add to the gui the current FPS and the
+	number of triangles currently displayed
+
+2007-04-25  Paf <paf@tuxfamily.org>
+	* CGraphicModule.h: CEGUI headers and 3 related attributes added
+	* CGraphicModule.cpp: CGraphicModule::~CGraphicModule() ->
+	Delete CEGUI related variables
+	* CGraphicModule.cpp: CGraphicModule::CGraphicModule() ->
+	Initialize CEGUI related variables to 0
+	* CGraphicModule.cpp: CGraphicModule::init() -> Initialize CEGUI and
+	create a button named 'Quit'
+	* Makefile.am: CEGUI compilation parameters added
+	* configure.ac: CEGUI parameters added
+	* README: CEGUI dependency added
+
+2007-04-08  Paf <paf@tuxfamily.org>
+	* main.cpp: Each time the user press 'r' a robot is removed
+
+2007-04-07  Paf <paf@tuxfamily.org>
+	* main.cpp: Each time the user press 'a' a new robot is added to the
+	scene. Add (unsigned int) objcnt in order to know how many robot have
+	been loaded.
+
+2007-04-05  Paf <paf@tuxfamily.org>
+	* README: Licence updated (music are now under Free Art)
+	* configure.ac: Changed to version 0.1.3
+
+2007-04-05  Paf <paf@tuxfamily.org>
+	* src/main.cpp: Added A new constant called vtourne. This constant is
+	the rotation speed of the robot
+			Added smooth turns to the robot
+	* src/graphic/src/cgraphicmodule.cpp : Tweak the camera position in
+	oder to make the scene look better
+			
+
+2007-04-04  Paf <paf@tuxfamily.org>
+	* src/main.cpp: Increase the robot speed
+	* src/main.cpp: Increase the robot speed
+			Add the ability to turn to the robot
+	* src/graphic/src/cgraphicmodule.cpp : Fix the lookAt vector of the
+	camera. The vector is now centered on the robot.
+
+2007-04-02  Paf <paf@tuxfamily.org>
+	* src/main.cpp: Fix the camera message listener so only the camera
+	will move. Add vertical movements to the camera. 
+
+2007-04-01  Paf <paf@tuxfamily.org>
+	* src/graphic/src/cgraphicmodule.cpp: Change the window creation code to 
+	display the PACKAGE_STRING constant defined in config.h
+	* README: Informations updated
+	* AUTHORS: White Tiger added
+
+2007-04-01  White Tiger <hot_harissa@msn.com>
+	* src/graphic/src/cgraphicmodule.cpp: add a new SceneNode for the
+	camera 
+	* src/main.cpp: add a new MouseEvent Listener to make the camera moves
+	when the mouse moves
+
+2007-03-31  Paf <paf@tuxfamily.org>
+	* Tab/space issue fixed in src/graphic/src/cgraphicmodule
+	* Version number updated in configure.ac
+
+2007-03-25  Paf <paf@tuxfamily.org>
+	* Rename CGraphicModule::getGLXWindow() to CGraphicModule::getWindowHandle()
+	* CGraphicModule::getWindowHandle() handles now both Windows and
+	GNU/Linux plateforms
+	* Replace locale dependant key codes by locale independant (but OIS
+	specific) key codes
+	* Add a new boolean "visible" attribute to "mesh" nodes to the scen
+	format
+
+2007-03-13  Paf <paf@tuxfamily.org>
+	* Doxygen configuration file updated
+	* Work In Progress version of the technical design document uploaded
+	(doc/design/architecture.odt)
+
+2007-03-12  Paf <paf@tuxfamily.org>
+	* Autotools scripts updated
+	* Main function moved from src/input/test/testsdl.cpp to src/main.cpp
+	* Generated config.h moved from ./config.h to src/config.h
+
+2007-03-12  Paf <paf@tuxfamily.org>
+	* Makefile replaced by autotools
+
+2007-03-09  Paf <paf@tuxfamily.org>
+	* Viracocha project started
