@@ -1,3 +1,30 @@
+2007-08-09  Paf <paf@tuxfamily.org>
+	* src/core/tests/zelda: File added
+	* src/core/include/attributehandlerregistry.h: File added
+	* src/core/include/integer.h: File added
+	* src/core/include/genericattributehandler.h: File added
+	* src/core/include/basemanager.h: File added
+	* src/core/include/iattributehandler.h: File added
+	* src/core/include/integerattributehandler.h: File added
+	* src/core/include/persistentobjectmanager.h: File added
+	* src/core/src/persistentobjectmanager.cpp: File added
+	* src/core/src/attributehandlerregistry.cpp: File added
+	* INSTALL: Updated
+	* src/core/tests/testpo.cpp: Updated to use the PersistentObjectManager
+	* src/core/include/filestream.h
+	* src/core/include/sourcefile.h
+	* src/core/include/istream.h
+	* src/core/include/scalar.h
+	* src/core/include/isource.h
+	* src/core/include/iattribute.h
+	* src/core/include/persistentobject.h
+	* src/core/src/sourcefile.cpp
+	* src/core/src/persistentobject.cpp
+	* src/core/src/filestream.cpp
+	* src/core/Makefile
+	* src/graphic/src/cgraphicmodule.cpp
+	* src/core/src/basemanager.cpp: File removed
+
 2007-07-18  Paf <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to play with FileSource and
 	IStream classes

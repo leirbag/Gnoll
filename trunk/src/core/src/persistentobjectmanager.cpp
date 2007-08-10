@@ -18,50 +18,81 @@
  ***************************************************************************/
 
 
-/*--------------------------------isource----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
+/*-----------------------------filestream----------------------------------*\
+|   This is a stream based on files                                         |
 |                                                                           |
 |   Changelog :                                                             |
-|               07/11/2007 - Paf - Initial release                          |
+|               07/18/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/sourcefile.h"
+#include "../include/persistentobjectmanager.h"
 
 
-SourceFile::SourceFile( const string _path, bool _overWrite, unsigned int _priority) : ISource(_priority), m_path(_path), m_overWrite(_overWrite)
-{
 
-}
+namespace Viracocha {
 
+	namespace Core {
 
-SourceFile::~SourceFile()
-{
-}
+		PersistentObjectManager::PersistentObjectManager()
+		{
+		
 
+		}
 
-shared_ptr<IStream> SourceFile::load( const string _url)
-{
-	shared_ptr<IStream> file ( new FileStream( m_path + string("/") + _url, m_overWrite ));
-	return file;
-}
+		PersistentObjectManager::~PersistentObjectManager()
+		{
+		}
 
 
-bool SourceFile::isFetchable( const string _url)
-{
-	if ( ! _url.find(m_path))
-	{
-			  return false;
+		shared_ptr<PersistentObject> PersistentObjectManager::loadImpl( shared_ptr<IStream> _stream)
+		{
+
+			// First : Stream -> XML
+
+			char buffer[256];
+			string content;
+
+			while (! _stream->eof())
+			{
+				int nb = _stream->read(buffer, 256);
+				content.append(buffer, nb);
+			}
+			xmlpp::DomParser parser;
+			parser.parse_memory(content);
+
+			xmlpp::Document* document = parser.get_document();
+
+			// Second : XML -> PersistentObject
+			
+			xmlpp::Element* root = document->get_root_node();
+
+			shared_ptr<PersistentObject> po (new PersistentObject("NULL"));
+
+			po->deSerializeXML(root);
+
+			return po;
+		}
+
+		bool PersistentObjectManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<PersistentObject> _obj)
+		{
+			shared_ptr<xmlpp::Document> output = _obj->serializeXML();
+			string outputString = output->write_to_string_formatted();
+
+			unsigned int bytesWritten = _stream->write( outputString.c_str() , outputString.length());
+
+			if (bytesWritten){
+				return true;
+			} else {
+				return false;
+			}
+
+		}
+
 	}
-
-	return 1; //Glib::file_test(_url, Glib::FILE_TEST_EXISTS);
 }
 
 
-void SourceFile::setOverWrite(bool _mode)
-{
-	m_overWrite = _mode;
-}
+
 

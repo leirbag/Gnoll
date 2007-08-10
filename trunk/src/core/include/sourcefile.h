@@ -53,7 +53,7 @@ class SourceFile : public ISource
 		/**
 		 * This is a constructor.
 		 */
-		SourceFile( const string _path, bool _overWrite = false);
+		SourceFile( const string _path, bool _overWrite = false, unsigned int _priority = 0);
 
 
 		/**

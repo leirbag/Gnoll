@@ -28,14 +28,17 @@
 #include <glibmm/ustring.h>
 #include <boost/shared_ptr.hpp>
 
+#include "../include/persistentobjectmanager.h"
 #include "../include/persistentobject.h"
 #include "../include/scalar.h"
+#include "../include/integer.h"
 
 #include "../include/sourcefile.h"
 #include "../include/istream.h"
 
 
 using namespace std;
+using namespace Viracocha::Core;
 
 int main() {
 
@@ -45,10 +48,12 @@ int main() {
 	PersistentObject toto = PersistentObject("toto");	
 
 	shared_ptr<Scalar<float> > pi( new Scalar<float>(3.145) );
+	shared_ptr<Integer> age( new Integer(345) );
 	shared_ptr<Scalar<Glib::ustring> > phrase ( new Scalar<Glib::ustring>("c'etait un cafard qui vivait dans le noir") );
 
 	toto.setAttribute( Glib::ustring("pi"), pi);
 	toto.setAttribute( "phrase", phrase);
+	toto.setAttribute( "age", age);
 
 	cout << (*pi)() << endl;
 	cout << (*phrase)() << endl;
@@ -109,6 +114,23 @@ int main() {
 	cout << endl << "Bytes Written : " << bytesWritten << endl;
 	
 
+
+	shared_ptr<ISource> loadChannel(new SourceFile("./"));
+
+	PersistentObjectManager pom = PersistentObjectManager::getInstance();
+
+	pom.addLoadSource(loadChannel);
+
+	shared_ptr<PersistentObject> Zelda = pom.load("zelda");
+
+	shared_ptr<Integer> ageZelda = Zelda->getAttribute< Integer > ("age");
+	shared_ptr<Integer> newAge(new Integer((*ageZelda)() + 1));
+	Zelda->setAttribute("age2", newAge);
+
+	cout << endl << "Serializationed (I'am sure it exists :) Zelda : " << endl;
+
+	shared_ptr<xmlpp::Document> outputZelda = Zelda->serializeXML();
+	cout << outputZelda->write_to_string_formatted()  << endl;
 	return 0;
 }
 

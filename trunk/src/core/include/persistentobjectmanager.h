@@ -18,50 +18,61 @@
  ***************************************************************************/
 
 
-/*--------------------------------isource----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
+/*-------------------------------BaseManager-------------------------------*\
+|   This is basic manager with cache ability.                               |
+|                                                                           |
 |                                                                           |
 |   Changelog :                                                             |
-|               07/11/2007 - Paf - Initial release                          |
+|               07/20/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/sourcefile.h"
+
+#include "basemanager.h"
+#include "singleton.h"
+#include "persistentobject.h"
+#include "attributehandlerregistry.h"
+
+#ifndef __PERSISTENTOBJECTMANAGER_H__
+#define __PERSISTENTOBJECTMANAGER_H__
+
+using namespace std;
+using namespace boost;
 
 
-SourceFile::SourceFile( const string _path, bool _overWrite, unsigned int _priority) : ISource(_priority), m_path(_path), m_overWrite(_overWrite)
-{
 
-}
+namespace Viracocha {
 
-
-SourceFile::~SourceFile()
-{
-}
+	namespace Core {
 
 
-shared_ptr<IStream> SourceFile::load( const string _url)
-{
-	shared_ptr<IStream> file ( new FileStream( m_path + string("/") + _url, m_overWrite ));
-	return file;
-}
+		class PersistentObjectManager : public BaseManager<PersistentObject>, public Singleton<PersistentObjectManager>
+		{
+
+			protected:
+
+				virtual shared_ptr<PersistentObject> loadImpl( shared_ptr<IStream> _stream);
+
+				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<PersistentObject> _obj);
+
+			public:
+
+				/**
+				 * This is a constructor.
+				 */
+				PersistentObjectManager();
 
 
-bool SourceFile::isFetchable( const string _url)
-{
-	if ( ! _url.find(m_path))
-	{
-			  return false;
+				/**
+				 * This is a destructor.
+				 */
+				virtual ~PersistentObjectManager();
+
+		};
+
 	}
-
-	return 1; //Glib::file_test(_url, Glib::FILE_TEST_EXISTS);
 }
 
-
-void SourceFile::setOverWrite(bool _mode)
-{
-	m_overWrite = _mode;
-}
+#endif // __PERSISTENTOBJECTMANAGER_H__
 

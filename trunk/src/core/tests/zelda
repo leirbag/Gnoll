@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<persistentobject instance="zelda">
+  <attribute name="age">
+    <integer value="345"/>
+  </attribute>
+  <attribute name="phrase">
+    <scalar value="c'etait un cafard qui vivait dans le noir"/>
+  </attribute>
+  <attribute name="pi">
+    <scalar value="3.145"/>
+  </attribute>
+</persistentobject>
+

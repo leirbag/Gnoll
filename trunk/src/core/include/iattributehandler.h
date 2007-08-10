@@ -18,50 +18,60 @@
  ***************************************************************************/
 
 
-/*--------------------------------isource----------------------------------*\
+/*-------------------------------cmessage----------------------------------*\
 |   This is the interface of all the attributes. Each Attribute has to be   |
 |     (de)serializable                                                      |
 |                                                                           |
 |   Changelog :                                                             |
-|               07/11/2007 - Paf - Initial release                          |
+|               08/03/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/sourcefile.h"
+#include <boost/shared_ptr.hpp>
+#include <libxml++/libxml++.h>
+
+#include "iattribute.h"
+
+#ifndef __ATTRIBUTEHANDLER_H__
+#define __ATTRIBUTEHANDLER_H__
+
+using namespace boost;
 
 
-SourceFile::SourceFile( const string _path, bool _overWrite, unsigned int _priority) : ISource(_priority), m_path(_path), m_overWrite(_overWrite)
+namespace Viracocha 
 {
 
-}
-
-
-SourceFile::~SourceFile()
-{
-}
-
-
-shared_ptr<IStream> SourceFile::load( const string _url)
-{
-	shared_ptr<IStream> file ( new FileStream( m_path + string("/") + _url, m_overWrite ));
-	return file;
-}
-
-
-bool SourceFile::isFetchable( const string _url)
-{
-	if ( ! _url.find(m_path))
+	namespace Core
 	{
-			  return false;
+
+		/**
+		*	This is the interface of an attribute handler.
+		*	This make sure each Attribute will be (de)serializable
+		*/ 
+		class IAttributeHandler
+		{
+
+			public:
+
+				/**
+				* This is a constructor.
+				*/
+				IAttributeHandler() {}
+
+
+				/**
+				* This is a destructor.
+				*/
+				virtual ~IAttributeHandler() {}
+
+
+		
+				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node) = 0;
+
+		};
+
 	}
-
-	return 1; //Glib::file_test(_url, Glib::FILE_TEST_EXISTS);
 }
 
-
-void SourceFile::setOverWrite(bool _mode)
-{
-	m_overWrite = _mode;
-}
-
+#endif // __IATTRIBUTEHANDLER_H__

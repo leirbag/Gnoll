@@ -18,50 +18,66 @@
  ***************************************************************************/
 
 
-/*--------------------------------isource----------------------------------*\
+/*-------------------------------cmessage----------------------------------*\
 |   This is the interface of all the attributes. Each Attribute has to be   |
 |     (de)serializable                                                      |
 |                                                                           |
 |   Changelog :                                                             |
-|               07/11/2007 - Paf - Initial release                          |
+|               08/03/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/sourcefile.h"
+#include <boost/shared_ptr.hpp>
+#include <libxml++/libxml++.h>
+
+#include "../include/iattributehandler.h"
+
+#ifndef __INTEGERATTRIBUTEHANDLER_H__
+#define __INTEGERATTRIBUTEHANDLER_H__
+
+using namespace boost;
 
 
-SourceFile::SourceFile( const string _path, bool _overWrite, unsigned int _priority) : ISource(_priority), m_path(_path), m_overWrite(_overWrite)
+namespace Viracocha 
 {
 
-}
-
-
-SourceFile::~SourceFile()
-{
-}
-
-
-shared_ptr<IStream> SourceFile::load( const string _url)
-{
-	shared_ptr<IStream> file ( new FileStream( m_path + string("/") + _url, m_overWrite ));
-	return file;
-}
-
-
-bool SourceFile::isFetchable( const string _url)
-{
-	if ( ! _url.find(m_path))
+	namespace Core
 	{
-			  return false;
+
+		/**
+		*	This is the interface of an attribute handler.
+		*	This make sure each Attribute will be (de)serializable
+		*/ 
+		class IntegerAttributeHandler : public IAttributeHandler
+		{
+
+			public:
+
+				/**
+				* This is a constructor.
+				*/
+				IntegerAttributeHandler() {]
+
+
+				/**
+				* This is a destructor.
+				*/
+				~IntegerAttributeHandler() {}
+
+
+		
+				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node) 
+				{
+					shared_ptr<Integer> integer = new Integer();
+					integer->deSerialize(_node);
+
+					return dynamic_pointer_cast<IAttribute>(integer);
+				}
+
+		};
+
 	}
-
-	return 1; //Glib::file_test(_url, Glib::FILE_TEST_EXISTS);
 }
 
-
-void SourceFile::setOverWrite(bool _mode)
-{
-	m_overWrite = _mode;
-}
-
+#endif // __SCALARATTRIBUTEHANDLER_H__

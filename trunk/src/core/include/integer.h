@@ -18,50 +18,85 @@
  ***************************************************************************/
 
 
-/*--------------------------------isource----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
+/*---------------------------------integer---------------------------------*\
+|   This is a basic container supposed to an integer basic type             |
 |                                                                           |
 |   Changelog :                                                             |
-|               07/11/2007 - Paf - Initial release                          |
+|               08/04/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/sourcefile.h"
+#include "iattribute.h" 
+#include <sstream>
+
+#ifndef __INTEGER_H__
+#define __INTEGER_H__
+
+using namespace std;
+using namespace boost;
 
 
-SourceFile::SourceFile( const string _path, bool _overWrite, unsigned int _priority) : ISource(_priority), m_path(_path), m_overWrite(_overWrite)
+namespace Viracocha
 {
 
-}
-
-
-SourceFile::~SourceFile()
-{
-}
-
-
-shared_ptr<IStream> SourceFile::load( const string _url)
-{
-	shared_ptr<IStream> file ( new FileStream( m_path + string("/") + _url, m_overWrite ));
-	return file;
-}
-
-
-bool SourceFile::isFetchable( const string _url)
-{
-	if ( ! _url.find(m_path))
+	namespace Core 
 	{
-			  return false;
-	}
 
-	return 1; //Glib::file_test(_url, Glib::FILE_TEST_EXISTS);
-}
+		/**
+		*	This is a simple attribute. 
+		*/ 
+		class Integer : public IAttribute
+		{
+			private:
+				int m_element;
+
+			public:
+
+				Integer(int _value = 0) : m_element(_value) {};
 
 
-void SourceFile::setOverWrite(bool _mode)
-{
-	m_overWrite = _mode;
-}
+				int operator() (void) { return m_element;};
 
+				virtual shared_ptr<xmlpp::Document> serializeXML() 
+				{
+					shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));  
+
+					xmlpp::Element* root = document->create_root_node("integer");
+
+					// std::stringstream is not really friendly with non-ascii
+					// characters.
+					std::stringstream ss;
+					string finalString;
+
+					ss << m_element;
+					finalString = ss.str();
+
+					root->set_attribute("value", finalString);
+
+					return document;
+				};		
+
+				virtual void deSerializeXML( xmlpp::Element* _element ) 
+				{
+
+					if (_element == NULL)
+					{
+						return;
+					}
+
+					xmlpp::Attribute* attr = _element->get_attribute("value");
+
+					if (attr == NULL)
+					{
+						return;
+					}
+
+					std::istringstream ss(attr->get_value());
+					ss >> m_element;
+				};		
+		};
+	};
+};
+
+#endif // __INTEGER_H__

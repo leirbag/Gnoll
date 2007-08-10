@@ -42,12 +42,15 @@ using namespace Viracocha::Core;
 
 class ISource
 {
+	private:
+		unsigned int m_priority;
+
 	public:
 
 		/**
 		 * This is a constructor.
 		 */
-		ISource() {};
+		ISource(unsigned int _priority) : m_priority(_priority) {};
 
 
 		/**
@@ -58,6 +61,9 @@ class ISource
 
 		virtual shared_ptr<IStream> load( const string _url) = 0;
 		virtual bool isFetchable( const string _url) = 0;
+
+
+		bool operator< (shared_ptr<ISource> op) {return this->m_priority < op->m_priority;}
 
 };
 

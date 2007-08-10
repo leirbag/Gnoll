@@ -73,7 +73,7 @@ template <class T> class Scalar : public IAttribute
 		};		
 
 		// XXX TODO : Implement this method
-		virtual void deSerializeXML( shared_ptr<xmlpp::Element> _element ) {};		
+		virtual void deSerializeXML( xmlpp::Element* _element ) {};		
 };
 
 #endif // __SCALAR_H__

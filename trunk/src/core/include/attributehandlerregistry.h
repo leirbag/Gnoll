@@ -18,50 +18,81 @@
  ***************************************************************************/
 
 
-/*--------------------------------isource----------------------------------*\
+/*-------------------------------cmessage----------------------------------*\
 |   This is the interface of all the attributes. Each Attribute has to be   |
 |     (de)serializable                                                      |
 |                                                                           |
 |   Changelog :                                                             |
-|               07/11/2007 - Paf - Initial release                          |
+|               07/09/2007 - Paf - Initial release                          |
+|               07/10/2007 - Paf - Add some comments                        |
+|                          - Paf - serializeXML() now returns a             |
+|                                    shared_ptr<xmlpp::Document>            |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/sourcefile.h"
+#include <boost/shared_ptr.hpp>
+#include <libxml++/libxml++.h>
+#include <string>
+
+#include "iattributehandler.h"
+#include "singleton.h"
+
+// Handlers
+#include "genericattributehandler.h"
+#include "integer.h"
 
 
-SourceFile::SourceFile( const string _path, bool _overWrite, unsigned int _priority) : ISource(_priority), m_path(_path), m_overWrite(_overWrite)
+#ifndef __ATTRIBUTEHANDLERREGISTRY_H__
+#define __ATTRIBUTEHANDLERREGISTRY_H__
+
+using namespace boost;
+using namespace std;
+
+
+namespace Viracocha 
 {
 
-}
-
-
-SourceFile::~SourceFile()
-{
-}
-
-
-shared_ptr<IStream> SourceFile::load( const string _url)
-{
-	shared_ptr<IStream> file ( new FileStream( m_path + string("/") + _url, m_overWrite ));
-	return file;
-}
-
-
-bool SourceFile::isFetchable( const string _url)
-{
-	if ( ! _url.find(m_path))
+	namespace Core
 	{
-			  return false;
+
+		/**
+		*	This is the interface of an attribute.
+		*	This make sure each Attribute will be (de)serializable
+		*/ 
+		class AttributeHandlerRegistry: public Singleton<AttributeHandlerRegistry>
+		{
+
+			private:
+
+				map<string, shared_ptr<IAttributeHandler> > m_handlersMap;
+
+			public:
+
+				/**
+				* This is a constructor.
+				*/
+				AttributeHandlerRegistry();
+
+
+				/**
+				* This is a destructor.
+				*/
+				~AttributeHandlerRegistry();
+
+
+		
+				void registerHandler(string _attributeType, shared_ptr<IAttributeHandler> _handler);
+
+
+				void unregisterHandler(string _attributeType);
+
+
+				shared_ptr<IAttributeHandler> getHandler(string _attributeType);
+
+		};
+
 	}
-
-	return 1; //Glib::file_test(_url, Glib::FILE_TEST_EXISTS);
 }
 
-
-void SourceFile::setOverWrite(bool _mode)
-{
-	m_overWrite = _mode;
-}
-
+#endif // __IATTRIBUTEHANDLERREGISTRY_H__

@@ -67,7 +67,7 @@ namespace Viracocha {
 
 				virtual size_t read( char* _buff, size_t _size);
 
-				virtual size_t write( char* _buff, size_t _size);
+				virtual size_t write( const char* _buff, size_t _size);
 	
 				virtual void close();
 

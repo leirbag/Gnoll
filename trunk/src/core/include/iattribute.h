@@ -76,7 +76,7 @@ class IAttribute
 		 *
 		 * @param _element This is the XML tree containing the state of this object
 		 */
-		virtual void deSerializeXML( shared_ptr<xmlpp::Element> _element ) = 0;		
+		virtual void deSerializeXML( xmlpp::Element* _element ) = 0;		
 
 };
 

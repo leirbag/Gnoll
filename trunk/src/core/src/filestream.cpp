@@ -39,6 +39,7 @@ namespace Viracocha {
 		FileStream::FileStream( string _filename, bool _overWrite) : m_filename(_filename)
 		{
 			ios::openmode mode = ios::out | ios::in | ios::binary; 
+			m_isOpen = false;
 
 			if (_overWrite)
 			{
@@ -75,7 +76,7 @@ namespace Viracocha {
 			}
 		}
 
-		size_t FileStream::write( char* _buff, size_t _size)
+		size_t FileStream::write( const char* _buff, size_t _size)
 		{
 			if (m_isOpen)
 			{

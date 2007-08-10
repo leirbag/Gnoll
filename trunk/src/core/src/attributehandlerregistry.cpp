@@ -18,50 +18,59 @@
  ***************************************************************************/
 
 
-/*--------------------------------isource----------------------------------*\
+/*-------------------------------cmessage----------------------------------*\
 |   This is the interface of all the attributes. Each Attribute has to be   |
 |     (de)serializable                                                      |
 |                                                                           |
 |   Changelog :                                                             |
-|               07/11/2007 - Paf - Initial release                          |
+|               08/02/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/sourcefile.h"
+#include "../include/attributehandlerregistry.h"
 
 
-SourceFile::SourceFile( const string _path, bool _overWrite, unsigned int _priority) : ISource(_priority), m_path(_path), m_overWrite(_overWrite)
+
+namespace Viracocha 
 {
 
-}
-
-
-SourceFile::~SourceFile()
-{
-}
-
-
-shared_ptr<IStream> SourceFile::load( const string _url)
-{
-	shared_ptr<IStream> file ( new FileStream( m_path + string("/") + _url, m_overWrite ));
-	return file;
-}
-
-
-bool SourceFile::isFetchable( const string _url)
-{
-	if ( ! _url.find(m_path))
+	namespace Core
 	{
-			  return false;
+
+		AttributeHandlerRegistry::AttributeHandlerRegistry()
+		{
+			// Default handlers are added here
+
+			this->registerHandler(string("integer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Integer>()));
+
+		}
+
+
+		AttributeHandlerRegistry::~AttributeHandlerRegistry()
+		{
+
+		}
+
+
+		
+		void AttributeHandlerRegistry::registerHandler(string _attributeType, shared_ptr<IAttributeHandler> _handler)
+		{
+			m_handlersMap[_attributeType] = _handler;
+		}
+
+
+		void AttributeHandlerRegistry::unregisterHandler(string _attributeType)
+		{
+			m_handlersMap.erase(_attributeType);
+		}
+
+
+		shared_ptr<IAttributeHandler> AttributeHandlerRegistry::getHandler(string _attributeType)
+		{
+			return m_handlersMap[_attributeType];
+		}
+
 	}
-
-	return 1; //Glib::file_test(_url, Glib::FILE_TEST_EXISTS);
-}
-
-
-void SourceFile::setOverWrite(bool _mode)
-{
-	m_overWrite = _mode;
 }
 

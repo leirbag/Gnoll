@@ -36,6 +36,8 @@
 #include <map>
 
 #include "iattribute.h"
+#include "iattributehandler.h"
+#include "attributehandlerregistry.h"
 
 #ifndef __PERSISTENTOBJECT_H__
 #define __PERSISTENTOBJECT_H__
@@ -148,7 +150,7 @@ class PersistentObject : public IAttribute
 
 		// XXX : just to make it compile with -Wall flag
 		// Need to be implemented (will be fixed within 2-3 days)
-		virtual void deSerializeXML( shared_ptr<xmlpp::Element> _element ) {};		
+		virtual void deSerializeXML( xmlpp::Element* _element );		
 };
 
 #endif // __PERSISTENTOBJECT_H__

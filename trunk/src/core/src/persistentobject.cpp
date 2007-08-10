@@ -29,6 +29,7 @@
 
 #include "../include/persistentobject.h"
 
+
 PersistentObject::PersistentObject(Glib::ustring _instance) : m_instance(_instance)
 {
 }
@@ -72,7 +73,7 @@ string PersistentObject::getInstance()
 	return m_instance;
 }
 
-
+															 
 shared_ptr<xmlpp::Document> PersistentObject::serializeXML() 
 {
 	// First a new document is created
@@ -104,5 +105,68 @@ shared_ptr<xmlpp::Document> PersistentObject::serializeXML()
 
 	return document;
 }		
+
+
+void PersistentObject::deSerializeXML( xmlpp::Element* _element )
+{
+	if (_element	== NULL)
+	{
+		return;
+	}
+
+	if (_element->get_name() != "persistentobject")
+	{
+		return;
+	}
+
+	xmlpp::Attribute* instanceName = _element->get_attribute("instance");
+	if(instanceName)
+	{
+		this->m_instance = instanceName->get_value();
+	}
+
+	xmlpp::Node::NodeList nodeList = _element->get_children("attribute");
+
+	for(xmlpp::Node::NodeList::iterator it = nodeList.begin(); it != nodeList.end(); it++)
+	{
+		xmlpp::Attribute* attr = NULL;
+
+		xmlpp::Element* tmpElement = dynamic_cast<xmlpp::Element*>(*it);
+		if (tmpElement)
+		{
+			attr = tmpElement->get_attribute("name");
+		}
+		if (attr != NULL)
+		{
+			string attrName = attr->get_value();
+			
+			xmlpp::Node::NodeList childrenList = (*it)->get_children();
+
+			for(xmlpp::Node::NodeList::iterator itChildren = childrenList.begin(); itChildren != childrenList.end(); itChildren++)
+			{
+				string name= (*itChildren)->get_name();
+
+				xmlpp::Element* elementChild = dynamic_cast<xmlpp::Element*>(*itChildren);
+
+				if (elementChild)
+				{
+					Viracocha::Core::AttributeHandlerRegistry registry = Viracocha::Core::AttributeHandlerRegistry::getInstance();
+
+					shared_ptr<Viracocha::Core::IAttributeHandler> handler = registry.getHandler(name);
+	
+					if (handler.get() != NULL)
+					{
+
+						shared_ptr<IAttribute> attribute = handler->handle(elementChild);
+						this->setAttribute(attrName, attribute);
+					}
+				}
+			}
+		}
+	}
+
+
+}		
+
 
 
