@@ -1,3 +1,7 @@
+2007-08-11  Paf <paf@tuxfamily.org>
+	* src/core/include/attributehandlerregistry.h: Update comments and remove
+	the unused libxml++ header
+
 2007-08-09  Paf <paf@tuxfamily.org>
 	* src/core/tests/zelda: File added
 	* src/core/include/attributehandlerregistry.h: File added

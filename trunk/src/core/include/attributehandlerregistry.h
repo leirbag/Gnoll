@@ -18,27 +18,26 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
+/*-------------------------AttributeHandlerRegistry------------------------*\
+|   This is the Attributes Handler Registry. Each attribute handler is      |
+|     required to register. So when we want to handle an attribute          |
+|     we can retrive its handler quite easily                               |
 |                                                                           |
 |   Changelog :                                                             |
-|               07/09/2007 - Paf - Initial release                          |
-|               07/10/2007 - Paf - Add some comments                        |
-|                          - Paf - serializeXML() now returns a             |
-|                                    shared_ptr<xmlpp::Document>            |
+|               08/10/2007 - Paf - Initial release                          |
+|               08/11/2007 - Paf - Add some comments, removed unused        |
+|                                    libxml++ include                       |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 #include <boost/shared_ptr.hpp>
-#include <libxml++/libxml++.h>
 #include <string>
 
 #include "iattributehandler.h"
 #include "singleton.h"
 
-// Handlers
+// Default Handlers
 #include "genericattributehandler.h"
 #include "integer.h"
 
@@ -57,14 +56,17 @@ namespace Viracocha
 	{
 
 		/**
-		*	This is the interface of an attribute.
-		*	This make sure each Attribute will be (de)serializable
+		*	This is where an attribute has its handler registered.</br>
+		*	This is a Singleton.
 		*/ 
 		class AttributeHandlerRegistry: public Singleton<AttributeHandlerRegistry>
 		{
 
 			private:
 
+				/**
+				 * This the map that associates an attribute handler to its attribute
+				 */
 				map<string, shared_ptr<IAttributeHandler> > m_handlersMap;
 
 			public:
@@ -81,13 +83,24 @@ namespace Viracocha
 				~AttributeHandlerRegistry();
 
 
-		
+				/**
+				 * This method provides a way to register an attribute handler
+				 * @param _attributeType The attribute to associate the attribute handler with
+				 * @param _handler The attributehHandler
+				 */	
 				void registerHandler(string _attributeType, shared_ptr<IAttributeHandler> _handler);
 
 
+				/**
+				 *	This method unregisters an attribute handler
+				 *	@param _attributeType The attribute that is going to be unregistered
+				 */
 				void unregisterHandler(string _attributeType);
 
-
+				/**
+				 * This method returns the attribute handler associated to an attribute type
+				 * @param _attributeType The attribute type
+				 */
 				shared_ptr<IAttributeHandler> getHandler(string _attributeType);
 
 		};
