@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
+/*-----------------------------iattribute----------------------------------*\
 |   This is the interface of all the attributes. Each Attribute has to be   |
 |     (de)serializable                                                      |
 |                                                                           |
@@ -27,6 +27,7 @@
 |               07/10/2007 - Paf - Add some comments                        |
 |                          - Paf - serializeXML() now returns a             |
 |                                    shared_ptr<xmlpp::Document>            |
+|               08/14/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 

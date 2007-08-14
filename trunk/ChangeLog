@@ -1,3 +1,7 @@
+2007-08-14  Paf <paf@tuxfamily.org>
+	* src/core/include/genericattributehandler.h: Update comments
+	* src/core/include/iattribute.h: update comments
+
 2007-08-13  Paf <paf@tuxfamily.org>
 	* src/core/include/basemanager.h: Update comments and implement the save()
 	method
@@ -20,17 +24,17 @@
 	* src/core/src/attributehandlerregistry.cpp: File added
 	* INSTALL: Updated
 	* src/core/tests/testpo.cpp: Updated to use the PersistentObjectManager
-	* src/core/include/filestream.h
-	* src/core/include/sourcefile.h
-	* src/core/include/istream.h
-	* src/core/include/scalar.h
-	* src/core/include/isource.h
-	* src/core/include/iattribute.h
-	* src/core/include/persistentobject.h
-	* src/core/src/sourcefile.cpp
-	* src/core/src/persistentobject.cpp
-	* src/core/src/filestream.cpp
-	* src/core/Makefile
+	* src/core/include/filestream.h: File added
+	* src/core/include/sourcefile.h: File added
+	* src/core/include/istream.h: File added
+	* src/core/include/scalar.h: File added
+	* src/core/include/isource.h: File added
+	* src/core/include/iattribute.h: File added
+	* src/core/include/persistentobject.h: File added
+	* src/core/src/sourcefile.cpp: File added
+	* src/core/src/persistentobject.cpp: File added
+	* src/core/src/filestream.cpp: File added
+	* src/core/Makefile: Updated
 	* src/graphic/src/cgraphicmodule.cpp
 	* src/core/src/basemanager.cpp: File removed
 

@@ -18,12 +18,13 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
+/*--------------------------genericattributehandler------------------------*\
+|   This is a generic attribute handler.                                    |
+|                                                                           |
 |                                                                           |
 |   Changelog :                                                             |
 |               08/03/2007 - Paf - Initial release                          |
+|               08/14/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -46,8 +47,9 @@ namespace Viracocha
 	{
 
 		/**
-		*	This is the interface of an attribute handler.
-		*	This make sure each Attribute will be (de)serializable
+		*	This is the interface of an attribute handler.</br>
+		*	This make sure each Attribute will be (de)serializable.</br>
+		*	This works as long as T inherits from IAttribute.
 		*/ 
 		template <class T> class GenericAttributeHandler : public IAttributeHandler
 		{
@@ -66,7 +68,11 @@ namespace Viracocha
 				~GenericAttributeHandler() {}
 
 
-		
+				/**
+				 * This is the handler method
+				 * @param _node Node to process and extract the IAttribute smart pointer from
+				 * @return Smart pointer to an IAttribute
+				 */		
 				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node) 
 				{
 					shared_ptr<T> attribute( new T() );
