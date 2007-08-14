@@ -24,6 +24,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               07/18/2007 - Paf - Initial release                          |
+|               08/13/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -42,12 +43,26 @@ namespace Viracocha {
 
 	namespace Core {
 
-
+		/**
+		 * This is a stream based on files
+		 */
 		class FileStream : public IStream
 		{
 			private:
+
+				/**
+				 * Filename
+				 */
 				string m_filename;
+
+				/**
+				 * iostream to the file
+				 */
 				fstream m_stream;
+
+				/**
+				 * Boolean to tell if the stream is open or not
+				 */
 				bool m_isOpen;
 
 
@@ -55,6 +70,8 @@ namespace Viracocha {
 
 				/**
 				 * This is a constructor.
+				 * @param _filename File name
+				 * @param _overWrite Will this stream overwrite a file if it already exists
 				 */
 				FileStream( string _filename, bool _overWrite = false);
 
@@ -64,13 +81,31 @@ namespace Viracocha {
 				 */
 				virtual ~FileStream();
 
-
+				/**
+				 * Read some bytes from the stream
+				 * @param _buff Address of the buffer where the data will be stored
+				 * @param _size Size of the buffer _buff
+				 * @return Returns the number of bytes read
+				 */
 				virtual size_t read( char* _buff, size_t _size);
 
+				/**
+				 * Read some bytes to the stream
+				 * @param _buff Address of the buffer where the data to write are be stored
+				 * @param _size Size of the buffer _buff
+				 * @return Returns the number of bytes written
+				 */
 				virtual size_t write( const char* _buff, size_t _size);
 	
+				/**
+				 * Closes the stream
+				 */
 				virtual void close();
 
+				/**
+				 * Tell if the end of the stream has been reached
+				 * @return Returns true if the end of the stream has been reached. False otherwise.
+				 */
 				virtual bool eof();
 
 		};

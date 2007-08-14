@@ -1,3 +1,8 @@
+2007-08-13  Paf <paf@tuxfamily.org>
+	* src/core/include/basemanager.h: Update comments and implement the save()
+	method
+	* src/core/include/filestream.h: Update comments
+
 2007-08-11  Paf <paf@tuxfamily.org>
 	* src/core/include/attributehandlerregistry.h: Update comments and remove
 	the unused libxml++ header
