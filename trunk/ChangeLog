@@ -1,6 +1,16 @@
+2007-08-16  Paf <paf@tuxfamily.org>
+	* src/core/include/integer.h: Update comments
+	* src/core/include/istream.h: Update comments
+	* src/core/include/scalar.h: Update comments
+	* src/core/include/isource.h: Update comments
+	* src/core/include/iattributehandler.h: Update comments
+	* src/core/include/integerattributehandler.h: Update comments
+	* src/core/include/persistentobjectmanager.h: Update comments
+	* src/core/include/persistentobject.h: Update comments
+
 2007-08-14  Paf <paf@tuxfamily.org>
 	* src/core/include/genericattributehandler.h: Update comments
-	* src/core/include/iattribute.h: update comments
+	* src/core/include/iattribute.h: Update comments
 
 2007-08-13  Paf <paf@tuxfamily.org>
 	* src/core/include/basemanager.h: Update comments and implement the save()

@@ -18,12 +18,12 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
+/*----------------------------iattributehandler----------------------------*\
+|   This is the interface of all the attributes handlers.                   |
 |                                                                           |
 |   Changelog :                                                             |
 |               08/03/2007 - Paf - Initial release                          |
+|               08/14/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -33,8 +33,8 @@
 
 #include "iattribute.h"
 
-#ifndef __ATTRIBUTEHANDLER_H__
-#define __ATTRIBUTEHANDLER_H__
+#ifndef __IATTRIBUTEHANDLER_H__
+#define __IATTRIBUTEHANDLER_H__
 
 using namespace boost;
 
@@ -47,7 +47,7 @@ namespace Viracocha
 
 		/**
 		*	This is the interface of an attribute handler.
-		*	This make sure each Attribute will be (de)serializable
+		*	This make sure each Attribute will be deserializable
 		*/ 
 		class IAttributeHandler
 		{
@@ -66,7 +66,11 @@ namespace Viracocha
 				virtual ~IAttributeHandler() {}
 
 
-		
+				/**
+				 * This is the handler
+				 * @param _node The attribute passed as a xml tree
+				 * @return Smart pointer to the deserialized IAttribute
+				 */
 				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node) = 0;
 
 		};

@@ -44,19 +44,38 @@ namespace Viracocha
 	{
 
 		/**
-		*	This is a simple attribute. 
+		*	This is a simple attribute. </br> 
+		*	This hold a signed integer.
 		*/ 
 		class Integer : public IAttribute
 		{
 			private:
+
+				/**
+				 * The actual value hold by one instance of this class
+				 */
 				int m_element;
 
 			public:
 
+				/**
+				 * This is a constructor
+				 * @param _value Value to hold
+				 */
 				Integer(int _value = 0) : m_element(_value) {};
 
 
+				/**
+				 * This operator gives a convenient way to get the value hold by an instance of this class
+				 */
 				int operator() (void) { return m_element;};
+
+				/**
+			  	 * This method serialize the object. <br/>
+				 * It has to be implemented by all classes that inherits from this class.
+				 *
+				 * @return This return the object as a XML tree 
+				 */
 
 				virtual shared_ptr<xmlpp::Document> serializeXML() 
 				{
@@ -77,6 +96,14 @@ namespace Viracocha
 					return document;
 				};		
 
+			
+				/**
+				 * This method deserialize the object. <br/>
+				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
+				 * It has to be implemented by all classes that inherits from this class.
+				 *
+	  			 * @param _element This is the XML tree containing the state of this object
+				 */
 				virtual void deSerializeXML( xmlpp::Element* _element ) 
 				{
 

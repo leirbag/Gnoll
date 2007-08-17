@@ -23,6 +23,9 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               07/11/2007 - Paf - Initial release                          |
+|               08/16/2007 - Paf - Update comments                          |
+|                                - Enclose ISource in Viracocha::Core       |
+|                                    namespace                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -39,32 +42,63 @@ using namespace std;
 using namespace boost;
 using namespace Viracocha::Core;
 
-
-class ISource
+namespace Viracocha 
 {
-	private:
-		unsigned int m_priority;
-
-	public:
+	namespace Core
+	{
 
 		/**
-		 * This is a constructor.
+		 * This is the interface of all Sources.</br>
+		 * A Source is an abstraction that can return a stream from a url.</br>
+		 * So through this interface one can get a stream from a local file,</br>
+		 * a file located on a ftp server, or procedurally generated...
 		 */
-		ISource(unsigned int _priority) : m_priority(_priority) {};
+		class ISource
+		{
+			private:
+		
+				/**
+				 * This is the priority of a Source. This is
+				 * Example : A local source should have a higher priority than a remote source.
+				 */ 
+				unsigned int m_priority;
+
+			public:
+
+				/**
+				* This is a constructor.
+				*/
+				ISource(unsigned int _priority) : m_priority(_priority) {};
 
 
-		/**
-		 * This is a destructor.
-		 */
-		virtual ~ISource() {};
+				/**
+				* This is a destructor.
+				*/
+				virtual ~ISource() {};
 
+				/**
+				 * This loads a stream from a given URL
+				 * @param _url URL to load
+				 * @return Stream based on this URL
+				 */ 
+				virtual shared_ptr<IStream> load( const string _url) = 0;
 
-		virtual shared_ptr<IStream> load( const string _url) = 0;
-		virtual bool isFetchable( const string _url) = 0;
+				/**
+				 *	This methods tells if a stream can be built from a given URL
+				 *	@param _url URL to be tested
+				 *	@param True if a stream can be built from this URL
+				 */
+				virtual bool isFetchable( const string _url) = 0;
 
+				/**
+				 * Comparison operator to compare two sources based on their priorities
+				 * @param op Source to compare to
+				 * @return True if this source has a smaller priority 
+				 */
+				bool operator< (shared_ptr<ISource> op) {return this->m_priority < op->m_priority;}
 
-		bool operator< (shared_ptr<ISource> op) {return this->m_priority < op->m_priority;}
-
-};
+		};
+	}
+}
 
 #endif // __ISOURCE_H__

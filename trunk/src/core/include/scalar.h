@@ -30,6 +30,7 @@
 
 #include "iattribute.h" 
 #include <sstream>
+#include <string>
 
 #ifndef __SCALAR_H__
 #define __SCALAR_H__
@@ -41,7 +42,7 @@ using namespace boost;
 /**
  *	This is a simple attribute. 
  */ 
-template <class T> class Scalar : public IAttribute
+template <class T > class Scalar : public IAttribute
 {
 	private:
 		T m_element;

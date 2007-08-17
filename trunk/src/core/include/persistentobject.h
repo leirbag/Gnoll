@@ -19,13 +19,15 @@
 
 
 /*----------------------------persistentobject-----------------------------*\
-|   This is a message                                                       |
+|   This is a PersistentObject. An object that can store any kind of data   |
+|     and can be readt/written from anywhere                                |
 |                                                                           |
 |   Changelog :                                                             |
 |               07/09/2007 - Paf - Initial release                          |
 |               07/10/2007 - Paf - Add Doxygen comments                     |
 |                          - Paf - Implements                               |
 |                                     PersistentObject::serializeXML()      |
+|               08/10/2007 - Paf - Add Doxygen comments                     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -148,8 +150,11 @@ class PersistentObject : public IAttribute
 		virtual shared_ptr<xmlpp::Document> serializeXML(); 
 
 
-		// XXX : just to make it compile with -Wall flag
-		// Need to be implemented (will be fixed within 2-3 days)
+		/**
+		 * This method deserialize the PersistentObject and all its attributes from a XML element
+		 *
+		 * @param _element The XML Element to parse data from 
+		 */
 		virtual void deSerializeXML( xmlpp::Element* _element );		
 };
 

@@ -18,12 +18,12 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
+/*-------------------------integerattributehandler-------------------------*\
+|   This attribute handler can deserialize Integer attributes               |
 |                                                                           |
 |   Changelog :                                                             |
 |               08/03/2007 - Paf - Initial release                          |
+|               08/14/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -46,8 +46,7 @@ namespace Viracocha
 	{
 
 		/**
-		*	This is the interface of an attribute handler.
-		*	This make sure each Attribute will be (de)serializable
+		*	This attribute handler deserialize Integer attributes.
 		*/ 
 		class IntegerAttributeHandler : public IAttributeHandler
 		{
@@ -66,7 +65,11 @@ namespace Viracocha
 				~IntegerAttributeHandler() {}
 
 
-		
+				/**
+				 * This is the handler
+				 * @param _node The attribute passed as a xml tree
+				 * @return Smart pointer to the deserialized IAttribute
+				 */
 				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node) 
 				{
 					shared_ptr<Integer> integer = new Integer();
@@ -80,4 +83,4 @@ namespace Viracocha
 	}
 }
 
-#endif // __SCALARATTRIBUTEHANDLER_H__
+#endif // __INTEGERATTRIBUTEHANDLER_H__

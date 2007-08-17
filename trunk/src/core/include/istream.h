@@ -24,6 +24,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               07/18/2007 - Paf - Initial release                          |
+|               08/16/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -53,13 +54,31 @@ namespace Viracocha {
 				 */
 				virtual ~IStream() {};
 
-
+				/**
+				 * This methods reads at most _size bytes and store them in the buffer _buff
+				 * @param _buff Buffer where data will be stored
+				 * @param _size Maximum number of bytes to read
+				 * @return Number of bytes actually read
+				 */
 				virtual size_t read( char* _buff, size_t _size) = 0;
 
+				/**
+				 * This methods writes at most _size bytes from the buffer _buff
+				 * @param _buff Buffer from where data will be read
+				 * @param _size Maximum number of bytes to written
+				 * @return Number of bytes actually written
+				 */
 				virtual size_t write(const char* _buff, size_t _size) = 0;
 	
+				/**
+				 * This method closes the stream
+				 */
 				virtual void close() = 0;
 
+				/**
+				 * This method tells you if it's the end of the stream
+				 * @return True if it's the end of the stream. False otherwise
+				 */
 				virtual bool eof() = 0;
 
 		};
