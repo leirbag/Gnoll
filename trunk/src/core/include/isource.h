@@ -40,7 +40,6 @@
 
 using namespace std;
 using namespace boost;
-using namespace Viracocha::Core;
 
 namespace Viracocha 
 {

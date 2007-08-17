@@ -7,6 +7,7 @@
 	* src/core/include/integerattributehandler.h: Update comments
 	* src/core/include/persistentobjectmanager.h: Update comments
 	* src/core/include/persistentobject.h: Update comments
+	* src/core/include/sourcefile.h: Update comments
 
 2007-08-14  Paf <paf@tuxfamily.org>
 	* src/core/include/genericattributehandler.h: Update comments

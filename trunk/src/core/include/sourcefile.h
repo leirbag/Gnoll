@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               07/11/2007 - Paf - Initial release                          |
+|               08/17/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -38,34 +39,56 @@
 
 using namespace std;
 using namespace boost;
-using namespace Viracocha::Core;
 
 
-class SourceFile : public ISource
+namespace Viracocha
 {
-	private:
+	namespace Core
+	{
 
-		const string m_path;
-		bool m_overWrite;
+		class SourceFile : public ISource
+		{
+			private:
 
-	public:
+				const string m_path;
+				bool m_overWrite;
 
-		/**
-		 * This is a constructor.
-		 */
-		SourceFile( const string _path, bool _overWrite = false, unsigned int _priority = 0);
+			public:
 
-
-		/**
-		 * This is a destructor.
-		 */
-		virtual ~SourceFile();
+				/**
+				* This is a constructor.
+				*/
+				SourceFile( const string _path, bool _overWrite = false, unsigned int _priority = 0);
 
 
-		virtual shared_ptr<IStream> load( const string _url);
-		virtual bool isFetchable( const string _url);
+				/**
+				* This is a destructor.
+				*/
+				virtual ~SourceFile();
 
-		void setOverWrite(bool _mode);
-};
+
+				/**
+				 * This loads a stream from a given URL
+				 * @param _url URL to load
+				 * @return Stream based on this URL
+				 */ 
+				virtual shared_ptr<IStream> load( const string _url);
+
+
+				/**
+				 *	This methods tells if a stream can be built from a given URL
+				 *	@param _url URL to be tested
+				 *	@param True if a stream can be built from this URL
+				 */
+				virtual bool isFetchable( const string _url);
+
+				/**
+				 * This methods set the overwriting mode
+				 * @param _mode True means files will be overwritten. False means no file will be overwritten.
+				 */
+				void setOverWrite(bool _mode);
+		};
+	}
+}
 
 #endif // __SOURCEFILE_H__
