@@ -1,3 +1,6 @@
+2007-08-19  Paf <paf@tuxfamily.org>
+	* configure.ac: Project name and contact address updated
+
 2007-08-18  Paf <paf@tuxfamily.org>
 	* src/core/src/persistentobjectmanager.cpp: Update comments
 	* src/core/src/sourcefile.cpp: Implement SourceFile::isFetchable() method
