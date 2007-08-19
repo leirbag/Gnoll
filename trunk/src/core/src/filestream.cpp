@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               07/18/2007 - Paf - Initial release                          |
+|               08/18/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -104,7 +105,7 @@ namespace Viracocha {
 			{
 				return m_stream.eof();
 			} else 
-			{ // XXX TODO : Implement this part
+			{ 
 				return 1;		  
 			}
 		}

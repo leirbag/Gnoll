@@ -1,3 +1,9 @@
+2007-08-18  Paf <paf@tuxfamily.org>
+	* src/core/src/persistentobjectmanager.cpp: Update comments
+	* src/core/src/sourcefile.cpp: Implement SourceFile::isFetchable() method
+	* src/core/src/persistentobject.cpp: Update comments
+	* src/core/src/filestream.cpp: Update comments
+
 2007-08-16  Paf <paf@tuxfamily.org>
 	* src/core/include/integer.h: Update comments
 	* src/core/include/istream.h: Update comments

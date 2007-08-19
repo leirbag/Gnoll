@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               07/18/2007 - Paf - Initial release                          |
+|               08/18/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -50,6 +51,8 @@ namespace Viracocha {
 		{
 
 			// First : Stream -> XML
+			// The file is read and stored in a string
+			// Then this string is parsed by a DOM parser
 
 			char buffer[256];
 			string content;

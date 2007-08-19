@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               07/09/2007 - Paf - Initial release                          |
+|               08/18/2007 - Paf - Update comments                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -107,8 +108,28 @@ shared_ptr<xmlpp::Document> PersistentObject::serializeXML()
 }		
 
 
+
+
+
+/**
+ * Example of a serialized PersistentObject :
+ *
+ * <persistentobject instance="zelda">
+ *   <attribute name="age">
+ *     <integer value="345"/>
+ *   </attribute>
+ *   <attribute name="phrase">
+ *     <string value="c'etait un cafard qui vivait dans le noir"/>
+ *   </attribute>
+ *   <attribute name="pi">
+ *     <float value="3.145"/>
+ *   </attribute>
+ * </persistentobject>
+ *
+ */
 void PersistentObject::deSerializeXML( xmlpp::Element* _element )
 {
+
 	if (_element	== NULL)
 	{
 		return;
@@ -127,6 +148,7 @@ void PersistentObject::deSerializeXML( xmlpp::Element* _element )
 
 	xmlpp::Node::NodeList nodeList = _element->get_children("attribute");
 
+	// Looping through all attributes
 	for(xmlpp::Node::NodeList::iterator it = nodeList.begin(); it != nodeList.end(); it++)
 	{
 		xmlpp::Attribute* attr = NULL;
@@ -136,36 +158,43 @@ void PersistentObject::deSerializeXML( xmlpp::Element* _element )
 		{
 			attr = tmpElement->get_attribute("name");
 		}
+
+		// There must be an attribute name
 		if (attr != NULL)
 		{
 			string attrName = attr->get_value();
 			
 			xmlpp::Node::NodeList childrenList = (*it)->get_children();
 
+			// Looping through all attributes' children
+			// Only the last child will be taken in account and associated to the attribute name
 			for(xmlpp::Node::NodeList::iterator itChildren = childrenList.begin(); itChildren != childrenList.end(); itChildren++)
 			{
+				// Get the type of the attribute
 				string name= (*itChildren)->get_name();
 
 				xmlpp::Element* elementChild = dynamic_cast<xmlpp::Element*>(*itChildren);
 
 				if (elementChild)
 				{
+					// We need a handler for this attribute
 					Viracocha::Core::AttributeHandlerRegistry registry = Viracocha::Core::AttributeHandlerRegistry::getInstance();
 
 					shared_ptr<Viracocha::Core::IAttributeHandler> handler = registry.getHandler(name);
 	
+					// Check if a handler is available for this attribute
 					if (handler.get() != NULL)
 					{
-
+						// The handler returns an shared_pointer to a new IAttribute
 						shared_ptr<IAttribute> attribute = handler->handle(elementChild);
+
+						// This new IAttribute is associated to the attribute name
 						this->setAttribute(attrName, attribute);
 					}
 				}
 			}
 		}
 	}
-
-
 }		
 
 
