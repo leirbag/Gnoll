@@ -312,7 +312,7 @@ namespace Viracocha {
 						}
 
 						// First we need a stream
-						shared_ptr<IStream> stream = source->load(_instance);
+						shared_ptr<IStream> stream = source->loadStream(_instance);
 
 						// Then we load the object from the stream
 						// This method has to be implemented by any class that inherits from BaseManager
@@ -348,7 +348,7 @@ namespace Viracocha {
 						std::sort(m_LRUTable.begin(), m_LRUTable.end());
 						m_LRUIndex[_instance] = it;
 
-						return dynamic_pointer_cast<T>(ressource.getObject());
+						return ressource.getObject();
 					} else { 
 						// An instance has been found in the cache
 		
@@ -360,7 +360,7 @@ namespace Viracocha {
 						res.update();
 	
 						// 3./ We return the instance.
-						return dynamic_pointer_cast<T>(res.getObject());
+						return res.getObject();
 
 					}
 
@@ -403,13 +403,13 @@ namespace Viracocha {
 						}
 
 						// We need a stream to save this object
-						shared_ptr<IStream> stream = source->load(_instance);
+						shared_ptr<IStream> stream = source->saveStream(_instance);
 
 						// Then we save the object to the stream
 						// This method has to be implemented by any class that inherits from BaseManager
 						// (that's why there is 'Base' in the name)
-						this->saveImpl(stream, res->getObject());
-			
+						this->saveImpl(stream, res.getObject());
+
 						stream->close();
 
 

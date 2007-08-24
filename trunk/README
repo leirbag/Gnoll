@@ -1,22 +1,22 @@
 README
 -----
 
-Viracocha is a free (as free speech) 3D action/rpg game still at an early 
+Gnoll is a free (as free speech) 3D action/rpg game engine still at an early 
 development stage.
 The source code, sounds, music, models and textures are respectively diffused 
 under GPL and Free Art licences. 
 
 You can contact the development team at:
-Viracocha Devel <viracocha-devel@lists.forge.games-creators.org>
+Gnoll Devel <gnoll-devel@gna.org>
 
 ======================================
-Building Viracocha
+Building Gnoll
 ======================================
 
-In order to build Viracocha you will need these packages :
+In order to build Gnoll you will need these packages :
 - Autotools
 - g++
-- libxml++
+- libxml++2.6
 - glibmm
 - Ogre 3d 1.2.x 
 - CEGUI 0.5.0

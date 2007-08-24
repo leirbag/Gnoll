@@ -1,3 +1,16 @@
+2007-08-23  Paf <paf@tuxfamily.org>
+	* README: Replace references to Viracocha by Gnoll
+	* src/core/tests/testpo.cpp: Update tests coverage
+	* src/core/include/sourcefile.h: Update class regarding new method added to
+	the class ISource. This add a new method to create writeable streams
+	* src/core/include/basemanager.h: Fix some bugs and update accordingly to
+	the new interface of the class ISource
+	* src/core/include/isource.h: load() renamed to loadStream() and added
+	saveStream(). So there will be no more confusion. loadStream() creates
+	streams to read from and saveStream() creates streams to write to
+	* src/core/src/sourcefile.cpp: Update methods accordingly to the new
+	interface of the class ISource and thus SourceFile
+
 2007-08-21  Paf <paf@tuxfamily.org>
 	* doc/design/architecture.odt: Update design document about PersistentObject, BaseManager, IStream and ISource
 

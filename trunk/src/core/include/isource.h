@@ -80,7 +80,14 @@ namespace Viracocha
 				 * @param _url URL to load
 				 * @return Stream based on this URL
 				 */ 
-				virtual shared_ptr<IStream> load( const string _url) = 0;
+				virtual shared_ptr<IStream> loadStream( const string _url) = 0;
+
+				/**
+				 * This loads a stream with written permissions to a given URL
+				 * @param _url URL to save to
+				 * @return True if the operation is successful. False otherwise
+				 */ 
+				virtual shared_ptr<IStream> saveStream( const string _url) = 0;
 
 				/**
 				 *	This methods tells if a stream can be built from a given URL

@@ -51,13 +51,24 @@ namespace Viracocha
 		{
 		}
 
-
-		shared_ptr<IStream> SourceFile::load( const string _url)
+		shared_ptr<IStream> SourceFile::newStream(const string _url)
 		{
 			shared_ptr<IStream> file ( new FileStream( m_path + string("/") + _url, m_overWrite ));
 			return file;
 		}
 
+
+
+		shared_ptr<IStream> SourceFile::loadStream( const string _url)
+		{
+			return newStream(_url);
+		}
+
+		shared_ptr<IStream> SourceFile::saveStream( const string _url)
+		{
+			setOverWrite(true);
+			return newStream(_url);
+		}
 
 		bool SourceFile::isFetchable( const string _url)
 		{

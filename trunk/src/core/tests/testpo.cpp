@@ -90,14 +90,14 @@ int main() {
 
 	SourceFile sf("./");
 
-	shared_ptr<IStream> stream = sf.load("testpo.cpp");
+	shared_ptr<IStream> stream = sf.loadStream("testpo.cpp");
 	unsigned int bytesRead = 0;
 	while (!stream->eof())
 	{
 		char buffer[256];
 		unsigned int nbRead = stream->read(buffer, 255);
 		buffer[nbRead] = 0;
-		cout << buffer;
+//	cout << buffer;
 		bytesRead += nbRead;
 	}
 	stream->close();
@@ -106,7 +106,7 @@ int main() {
 
 	sf.setOverWrite(true);
 
-	shared_ptr<IStream> streamW = sf.load("testpo.cppW");
+	shared_ptr<IStream> streamW = sf.saveStream("testpo.cppW");
 
 	unsigned int bytesWritten = streamW->write("Jesuislorsdelajusticeetdel'emeriteca\nvalier", 40);
 	streamW->close();
@@ -120,12 +120,15 @@ int main() {
 	PersistentObjectManager pom = PersistentObjectManager::getInstance();
 
 	pom.addLoadSource(loadChannel);
+	pom.addSaveSource(loadChannel);
 
 	shared_ptr<PersistentObject> Zelda = pom.load("zelda");
 
 	shared_ptr<Integer> ageZelda = Zelda->getAttribute< Integer > ("age");
 	shared_ptr<Integer> newAge(new Integer((*ageZelda)() + 1));
 	Zelda->setAttribute("age2", newAge);
+
+	pom.save(Zelda->getInstance());
 
 	cout << endl << "Serializationed (I'am sure it exists :) Zelda : " << endl;
 

@@ -53,6 +53,13 @@ namespace Viracocha
 				const string m_path;
 				bool m_overWrite;
 
+				/**
+				 * This creates a stream from a given URL
+				 * @param _url URL to load
+				 * @return Stream based on this URL
+				 */ 
+				shared_ptr<IStream> newStream(const string _url);
+
 			public:
 
 				/**
@@ -72,8 +79,14 @@ namespace Viracocha
 				 * @param _url URL to load
 				 * @return Stream based on this URL
 				 */ 
-				virtual shared_ptr<IStream> load( const string _url);
+				virtual shared_ptr<IStream> loadStream( const string _url);
 
+				/**
+				 * This loads a stream with writing permissions to a given URL
+				 * @param _url URL to save to
+				 * @return True if the operation is successful. False otherwise
+				 */ 
+				virtual shared_ptr<IStream> saveStream( const string _url);
 
 				/**
 				 *	This methods tells if a stream can be built from a given URL
