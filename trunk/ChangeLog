@@ -1,3 +1,7 @@
+2007-08-24  Paf <paf@tuxfamily.org>
+	* src/core/Makefile: Add boost::filesystem library
+	* src/core/include/sourcefile.h: Replace dirent.h use by boost::filesystem
+
 2007-08-23  Paf <paf@tuxfamily.org>
 	* README: Replace references to Viracocha by Gnoll
 	* src/core/tests/testpo.cpp: Update tests coverage
