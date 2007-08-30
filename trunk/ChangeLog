@@ -1,3 +1,6 @@
+2007-08-29  Paf <paf@tuxfamily.org>
+	* src/core/src/sourcefile.cpp: Fix a bug found by Soax
+
 2007-08-24  Paf <paf@tuxfamily.org>
 	* src/core/Makefile: Add boost::filesystem library
 	* src/core/include/sourcefile.h: Replace dirent.h use by boost::filesystem

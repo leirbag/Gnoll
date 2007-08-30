@@ -78,7 +78,7 @@ namespace Viracocha
 			path file( m_path);	
 			file = file / _url;
 
-			result = exists( m_path );
+			result = exists( file );
 
 		 	return result;
 
