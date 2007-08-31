@@ -1,3 +1,10 @@
+2007-08-30 Vince <platonman1758@hotmail.com>
+	* src/core/include/itimer.h: File added
+	* src/core/include/ctimermodule.h: File added
+	* src/core/include/cogretimer.h: File added
+	* src/core/src/cogretimer.cpp: File added
+	* src/core/src/ctimermodule.cpp: File added
+
 2007-08-29  Paf <paf@tuxfamily.org>
 	* src/core/src/sourcefile.cpp: Fix a bug found by Soax
 
