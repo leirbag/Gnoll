@@ -37,6 +37,7 @@
 class ITimer
 {
     public:
+
         /**
          *   A virtual destructor
          */
@@ -54,6 +55,7 @@ class ITimer
          *   Reset the timer
          */
         virtual void reset() = 0;
+
 };
 
 

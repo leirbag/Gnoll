@@ -1,3 +1,23 @@
+2007-08-29  Paf <paf@tuxfamily.org>
+	* src/core/tests/testtimer.cpp: File added
+	* src/core/include/itimer.h: Cosmetic change
+	* src/core/include/clinuxtimer.h: File added
+	* src/core/include/ctimermessages.h: File added
+	* src/core/include/cdestroyperiodictimerlistener.h: File added
+	* src/core/include/ctimermodule.h: Complete module
+	* src/core/include/ccreateperiodictimerlistener.h: File added
+	* src/core/include/cogretimer.h: Cosmetic change
+	* src/core/include/cdestroytimerlistener.h: File added
+	* src/core/include/ccreatetimerlistener.h: File added
+	* src/core/src/cogretimer.cpp: Remove unused line
+	* src/core/src/clinuxtimer.cpp: File added
+	* src/core/src/cdestroytimerlistener.cpp: File added
+	* src/core/src/ccreatetimerlistener.cpp: File added
+	* src/core/src/cdestroyperiodictimerlistener.cpp: File added
+	* src/core/src/ctimermodule.cpp: Complete module
+	* src/core/src/ccreateperiodictimerlistener.cpp: File added
+	* src/core/Makefile: Update makefile
+
 2007-08-30 Vince <platonman1758@hotmail.com>
 	* src/core/include/itimer.h: File added
 	* src/core/include/ctimermodule.h: File added

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
+|               09/20/2007 - Paf   - Make it prettier                       |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -44,25 +45,40 @@ using namespace boost;
 
 class COgreTimer : public ITimer
 {
-    public:
-        COgreTimer(void);
-        ~COgreTimer(void);
+	private:
+
+		/**
+		 * An Ogre timer 
+		 */
+		shared_ptr<Ogre::Timer> mTimer;
 
 
-        /**
-         *   Returns elapsed milliseconds since timer start/reset
-         *   @return milliseconds elapsed
-         */
-        unsigned long int getMsecs(void);
+	public:
+
+		/**
+		 *   A constructor
+		 */
+		COgreTimer(void);
 
 
-        /**
-         *   Reset the timer
-         */
-        void reset(void);
+		/**
+		 *   A destructor
+		 */
+		~COgreTimer(void);
 
-    private:
-        shared_ptr<Ogre::Timer> mTimer;
+
+		/**
+		 *   Returns elapsed milliseconds since timer start/reset
+		 *   @return milliseconds elapsed
+		 */
+		unsigned long int getMsecs(void);
+
+
+		/**
+		 *   Reset the timer
+		 */
+		void reset(void);
+
 };
 
 #endif // __COGRETIMER_H__

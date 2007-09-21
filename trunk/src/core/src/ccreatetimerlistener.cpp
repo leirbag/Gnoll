@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,37 +18,45 @@
  ***************************************************************************/
 
 
-/*---------------------------------cogretimer.h----------------------------*\
-|   A class to encapsulate the Ogre Timer                                   |
+/*-----------------------------CTimerListener------------------------------*\
+|   This is defines listeners used by the time module                       |
 |                                                                           |
 |   Changelog :                                                             |
-|               05/12/2007 - Vince - Initial release                        |
+|               09/14/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/cogretimer.h"
+#include "../include/ccreatetimerlistener.h"
 
 
-COgreTimer::COgreTimer(void)
-{
-    mTimer = shared_ptr<Ogre::Timer>(Ogre::PlatformManager::getSingleton().createTimer());
-    mTimer->reset();
+
+namespace Gnoll {
+
+	namespace Core {
+
+				
+		CCreateTimerListener::CCreateTimerListener() 
+		{
+		}
+
+		CCreateTimerListener::~CCreateTimerListener() 
+		{
+		}
+
+		void CCreateTimerListener::handle ( shared_ptr<CMessage> message )
+		{
+		
+			TimerEvent timerEvent ( message->getData<TimerEvent>());
+
+			CTimerModule* timerModule = CTimerModule::getInstancePtr();
+
+			timerModule->addTimeout(timerEvent.delay, timerEvent.message);
+		}
+
+	}
 }
 
 
-COgreTimer::~COgreTimer(void)
-{
-}
 
 
-unsigned long int COgreTimer::getMsecs(void)
-{
-    return mTimer->getMilliseconds();
-}
-
-
-void COgreTimer::reset(void)
-{
-    mTimer->reset();
-}

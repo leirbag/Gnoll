@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,37 +18,42 @@
  ***************************************************************************/
 
 
-/*---------------------------------cogretimer.h----------------------------*\
-|   A class to encapsulate the Ogre Timer                                   |
+/*----------------------------clinuxtimer.cpp------------------------------*\
+|   A class to encapsulate a timer based on standard GNU/Linux libraries    |
 |                                                                           |
 |   Changelog :                                                             |
-|               05/12/2007 - Vince - Initial release                        |
+|               09/07/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/cogretimer.h"
+#include "../include/clinuxtimer.h"
+#include <sys/time.h>
+#include <stddef.h>
 
 
-COgreTimer::COgreTimer(void)
+CLinuxTimer::CLinuxTimer(void)
 {
-    mTimer = shared_ptr<Ogre::Timer>(Ogre::PlatformManager::getSingleton().createTimer());
-    mTimer->reset();
+	this->reset();
 }
 
 
-COgreTimer::~COgreTimer(void)
+CLinuxTimer::~CLinuxTimer(void)
 {
 }
 
 
-unsigned long int COgreTimer::getMsecs(void)
+unsigned long int CLinuxTimer::getMsecs(void)
 {
-    return mTimer->getMilliseconds();
+	struct timeval now;
+	gettimeofday( &now, NULL);
+
+	return (now.tv_sec - m_initialTime.tv_sec) * 1000 + (now.tv_usec - m_initialTime.tv_usec) / 1000;
+
 }
 
 
-void COgreTimer::reset(void)
+void CLinuxTimer::reset(void)
 {
-    mTimer->reset();
+	gettimeofday( &m_initialTime, NULL);
 }

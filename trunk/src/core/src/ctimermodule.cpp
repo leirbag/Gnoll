@@ -23,118 +23,231 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
+|               09/20/2007 - Paf   - Complete the module                    |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/ctimermodule.h"
+#include <iostream>
 
-using namespace Ogre;
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	#include "../include/clinuxtimer.h"
+#else
+	#include "../include/cogretimer.h"
+#endif
 
 
-CTimerModule::CTimerModule()
+using namespace std;
+
+
+namespace Gnoll
 {
+
+	namespace Core
+	{
+
+		CTimerModule::CTimerModule()
+		{
+		}
+
+
+		CTimerModule::~CTimerModule()
+		{
+		}
+
+
+		void CTimerModule::init()
+		{
+
+			/**
+			 * COgreTimer is multiplatform but introduces also some heavy dependencies.
+			 * You cannot use it outside of Ogre as it is.
+			 */
+
+			#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+				m_timer = shared_ptr<ITimer>(new CLinuxTimer());
+			#else
+				m_timer = shared_ptr<ITimer>(new COgreTimer());
+			#endif
+
+			m_timer->reset();
+
+
+			shared_ptr<CMessageListener> createTimerListener ( new CCreateTimerListener() );
+			CMessageType createTimerType("CREATE_TIMER");
+
+			this->addListener ( createTimerListener, createTimerType );
+
+
+			shared_ptr<CMessageListener> destroyTimerListener ( new CDestroyTimerListener() );
+			CMessageType destroyTimerType("DESTROY_TIMER");
+
+			this->addListener ( destroyTimerListener, destroyTimerType );
+
+
+			shared_ptr<CMessageListener> createPeriodicTimerListener ( new CCreatePeriodicTimerListener() );
+			CMessageType createPeriodicTimerType("CREATE_PERIODIC_TIMER");
+
+			this->addListener ( createPeriodicTimerListener, createPeriodicTimerType );
+
+
+			shared_ptr<CMessageListener> destroyPeriodicTimerListener ( new CDestroyPeriodicTimerListener() );
+			CMessageType destroyPeriodicTimerType("DESTROY_PERIODIC_TIMER");
+
+			this->addListener ( destroyPeriodicTimerListener, destroyPeriodicTimerType );
+		}
+
+		bool CTimerModule::addListener(shared_ptr<CMessageListener> _listener, CMessageType _type)
+		{
+			bool result = true;
+
+			CGenericMessageManager* messageManager = CGenericMessageManager::getInstancePtr();
+			
+			if (messageManager->addListener ( _listener, _type ) != true)
+			{
+				result = false;
+	//			LogManager::getSingleton().logMessage("Couldn't add listener for timer module");
+			}
+
+			pair< shared_ptr<CMessageListener>, CMessageType> listener( _listener, _type);
+			m_listListeners.push_back(listener);
+
+			return result;
+		}
+
+		void CTimerModule::process()
+		{
+			msgMapIter it = m_timers.begin();
+			while(it != m_timers.end())
+			{
+				if(it->first < m_timer->getMsecs())
+				{
+					CGenericMessageManager::getInstancePtr()->trigger(it->second);
+
+					// Delete this timer
+					msgMapIter tmp = it;
+					it++;
+					m_timers.erase(tmp);
+				}
+				else
+				{
+					it++;
+				}
+			}
+
+
+			pair<unsigned long int, shared_ptr<CMessage> > p;
+			perMsgMapIter itPeriodic = m_timersPeriodic.begin();
+			while ( itPeriodic != m_timersPeriodic.end() )
+			{
+				if(itPeriodic->first < m_timer->getMsecs())
+				{
+	
+					pair<unsigned long int, shared_ptr<CMessage> > p = itPeriodic->second;
+
+					unsigned long int period = p.first;
+					shared_ptr<CMessage> msg = p.second;
+
+					addPeriodicTimeout(period, msg, period);
+			
+					// Delete this timer
+					perMsgMapIter tmp = itPeriodic;
+					itPeriodic++;
+					m_timersPeriodic.erase(tmp);
+
+					CGenericMessageManager::getInstancePtr()->trigger(msg);
+				}
+				else
+				{
+					itPeriodic++;
+				}
+			}
+		}
+
+
+		void CTimerModule::exit()
+		{
+			m_timers.clear();
+
+
+			/**
+			 * Removing all registered listeners
+			 */
+
+			CGenericMessageManager* messageManager = CGenericMessageManager::getInstancePtr();
+
+			for(list< pair< shared_ptr<CMessageListener>, CMessageType> >::iterator it = m_listListeners.begin(); it != m_listListeners.end(); it++)
+			{
+				if (messageManager->delListener ( (*it).first, (*it).second ) != true)
+				{
+		//			LogManager::getSingleton().logMessage("Couldn't add listener for timer module");
+				}
+
+			}
+
+			m_listListeners.clear();
+
+		}
+
+
+		void CTimerModule::addTimeout(unsigned long int delay, shared_ptr<CMessage> msg)
+		{
+			m_timers.insert(pair<unsigned long int, shared_ptr<CMessage> >(m_timer->getMsecs() + delay, msg));
+		}
+
+
+		void CTimerModule::delTimeout(unsigned long int delay, shared_ptr<CMessage> msg)
+		{
+			for(msgMapIter it = m_timers.begin(); it != m_timers.end(); it++)
+			{
+				if(it->first == delay && it->second == msg)
+				{
+					m_timers.erase(it);
+				}
+			}
+		}
+
+
+		void CTimerModule::addPeriodicTimeout(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
+		{
+			pair<unsigned long int, shared_ptr<CMessage> > p(period, msg);
+			m_timersPeriodic.insert(pair<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >(m_timer->getMsecs() + delay, p));
+		}
+
+
+		void CTimerModule::delPeriodicTimeout(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
+		{
+	 
+			pair<unsigned long int, shared_ptr<CMessage> > p(period, msg);
+	
+		  	for(perMsgMapIter it = m_timersPeriodic.begin(); it != m_timersPeriodic.end(); it++)
+			{
+				if(it->second == p)
+				{
+						m_timersPeriodic.erase(it);
+				}
+			}
+		}
+
+
+		unsigned long int CTimerModule::getMsecs()
+		{
+			return m_timer->getMsecs();
+		}
+
+
+		void CTimerModule::resetTimer(bool resTimeouts)
+		{
+			m_timer->reset();
+		
+			if(resTimeouts)
+			{
+				m_timers.clear();
+			}
+		}
+
+	}
 }
 
 
-CTimerModule::~CTimerModule()
-{
-}
-
-
-void CTimerModule::init()
-{
-    mTimer = shared_ptr<ITimer>(new COgreTimer());
-    mTimer->reset();
-}
-
-
-void CTimerModule::process()
-{
-    //cout << "CTimerModule::process" << endl;
-    msgMapIter it = timers.begin();
-    msgMapIter tmp;
-    while(it != timers.end())
-    {
-        if(it->first > mTimer->getMsecs())
-        {
-            cout << "Timer expired @ " << mTimer->getMsecs() << endl;
-            CGenericMessageManager::getInstance().trigger(it->second);
-
-            // Supprimer ce timer :
-            tmp = it;
-            it++;
-            timers.erase(tmp);
-        }
-        else
-        {
-            it++;
-        }
-    }
-
-
-    // Et on fait de même avec les timers périodiques :
-    /*pair<unsigned long int, unsigned long int> p;
-    for(perMsgMapIter it = timersPeriodic.begin(); it != timersPeriodic.end(); it++)
-    {
-        p = it->first;
-
-        if(p->
-    }*/
-}
-
-
-void CTimerModule::exit()
-{
-    timers.clear();
-}
-
-
-void CTimerModule::addTimeout(unsigned long int delay, shared_ptr<CMessage> msg)
-{
-    cout << "Adding timer @ " << (mTimer->getMsecs() + delay) << endl;
-    timers.insert(pair<unsigned long int, shared_ptr<CMessage> >(mTimer->getMsecs() + delay, msg));
-}
-
-
-void CTimerModule::delTimeout(unsigned long int delay, shared_ptr<CMessage> msg)
-{
-    for(msgMapIter it=timers.begin(); it != timers.end(); it++)
-    {
-        if(it->first == delay && it->second == msg)
-            timers.erase(it);
-    }
-}
-
-
-void CTimerModule::addPeriodicTimeout(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
-{
-    pair<unsigned long int, shared_ptr<CMessage> > p(delay, msg);
-    timersPeriodic.insert(pair<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >(delay, p));
-}
-
-
-void CTimerModule::delPeriodicTimeout(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
-{
-    pair<unsigned long int, shared_ptr<CMessage> > p(delay, msg);
-
-    for(perMsgMapIter it=timersPeriodic.begin(); it != timersPeriodic.end(); it++)
-    {
-        if(it->first == delay && it->second == p)
-            timersPeriodic.erase(it);
-    }
-}
-
-
-unsigned long int CTimerModule::getMsecs()
-{
-    return mTimer->getMsecs();
-}
-
-
-void CTimerModule::resetTimer(bool resTimeouts)
-{
-    mTimer->reset();
-
-    if(resTimeouts)
-        timers.clear();
-}

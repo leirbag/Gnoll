@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,37 +18,67 @@
  ***************************************************************************/
 
 
-/*---------------------------------cogretimer.h----------------------------*\
-|   A class to encapsulate the Ogre Timer                                   |
+/*---------------------------clinuxtimer.h---------------------------------*\
+|   A class to encapsulate a timer based on GNU/Linux standard libraries    |
 |                                                                           |
 |   Changelog :                                                             |
-|               05/12/2007 - Vince - Initial release                        |
+|               09/07/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/cogretimer.h"
+
+#ifndef __CLINUXTIMER_H__
+#define __CLINUXTIMER_H__
 
 
-COgreTimer::COgreTimer(void)
+#include "itimer.h"
+#include <sys/time.h>
+
+
+using namespace std;
+
+
+class CLinuxTimer : public ITimer
 {
-    mTimer = shared_ptr<Ogre::Timer>(Ogre::PlatformManager::getSingleton().createTimer());
-    mTimer->reset();
-}
+	
+	private:
+
+		/**
+		 * Initial time </br>
+		 * This will be used as the reference time to compare to
+		 */
+		struct timeval m_initialTime;
 
 
-COgreTimer::~COgreTimer(void)
-{
-}
 
 
-unsigned long int COgreTimer::getMsecs(void)
-{
-    return mTimer->getMilliseconds();
-}
+	public:
+
+		/**
+		 *   A constructor
+		 */
+		CLinuxTimer(void);
 
 
-void COgreTimer::reset(void)
-{
-    mTimer->reset();
-}
+		/**
+		 *   A destructor
+		 */
+		~CLinuxTimer(void);
+
+
+		/**
+		 *   Returns elapsed milliseconds since timer start/reset
+		 *   @return milliseconds elapsed
+		 */
+		unsigned long int getMsecs(void);
+
+
+		/**
+		 *   Reset the timer
+		 */
+		void reset(void);
+
+};
+
+#endif // __CLINUXTIMER_H__
