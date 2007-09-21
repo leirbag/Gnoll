@@ -1,4 +1,23 @@
-2007-08-29  Paf <paf@tuxfamily.org>
+2007-09-20  Paf <paf@tuxfamily.org>
+	* src/core/tests/testtimer.cpp: File moved to src/time/tests/
+	* src/core/include/clinuxtimer.h: File moved to src/time/include/
+	* src/core/include/ctimermessages.h: File moved to src/time/include/
+	* src/core/include/cdestroyperiodictimerlistener.h: File moved to src/time/include/
+	* src/core/include/ctimermodule.h: File moved to src/time/include/
+	* src/core/include/ccreateperiodictimerlistener.h: File moved to src/time/include/
+	* src/core/include/cogretimer.h: File moved to src/time/include/
+	* src/core/include/cdestroytimerlistener.h: File moved to src/time/include/
+	* src/core/include/ccreatetimerlistener.h: File moved to src/time/include/
+	* src/core/src/cogretimer.cpp: File moved to src/time/src/
+	* src/core/src/clinuxtimer.cpp: File moved to src/time/src/
+	* src/core/src/cdestroytimerlistener.cpp: File moved to src/time/src/
+	* src/core/src/ccreatetimerlistener.cpp: File moved to src/time/src/
+	* src/core/src/cdestroyperiodictimerlistener.cpp: File moved to src/time/src/
+	* src/core/src/ctimermodule.cpp: File moved to src/time/src/
+	* src/core/src/ccreateperiodictimerlistener.cpp: File moved to src/time/src/
+	* src/time/Makefile: File copied to src/time/
+
+2007-09-20  Paf <paf@tuxfamily.org>
 	* src/core/tests/testtimer.cpp: File added
 	* src/core/include/itimer.h: Cosmetic change
 	* src/core/include/clinuxtimer.h: File added
