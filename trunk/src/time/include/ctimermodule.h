@@ -37,7 +37,7 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 #include "itimer.h"
-#include "cmodule.h"
+#include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
 #include "../../core/include/cgenericmessagemanager.h"
 //#include <OgreLogManager.h>

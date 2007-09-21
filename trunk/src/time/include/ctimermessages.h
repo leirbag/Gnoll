@@ -27,7 +27,7 @@
 \*-------------------------------------------------------------------------*/
 
 
-#include "cmessage.h"
+#include "../../core/include/cmessage.h"
 #include <boost/shared_ptr.hpp>
 
 

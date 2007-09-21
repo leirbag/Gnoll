@@ -36,7 +36,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "cmessagelistener.h"
+#include "../../core/include/cmessagelistener.h"
 #include "ctimermessages.h"
 
 #include "ctimermodule.h"

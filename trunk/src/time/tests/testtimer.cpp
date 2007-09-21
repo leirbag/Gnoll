@@ -28,11 +28,11 @@
 
 
 
-#include "../include/cmessage.h"
-#include "../include/cmessagetype.h"
-#include "../include/cmessagemanager.h"
-#include "../include/cgenericmessagemanager.h"
-#include "../include/cmessagelistener.h"
+#include "../../core/include/cmessage.h"
+#include "../../core/include/cmessagetype.h"
+#include "../../core/include/cmessagemanager.h"
+#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagelistener.h"
 #include "../include/ctimermodule.h"
 #include "../include/itimer.h"
 #include "../include/clinuxtimer.h"

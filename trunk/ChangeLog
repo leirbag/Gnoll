@@ -1,4 +1,16 @@
 2007-09-20  Paf <paf@tuxfamily.org>
+	* src/core/Makefile: Removed timer module target
+	* src/time/Makefile: Removed all targets but the timer module example
+	* src/time/include/itimer.h: File moved to src/time/include/
+	* src/time/tests/testtimer.cpp: Update includes
+	* src/time/include/ctimermodule.h: Update includes
+	* src/time/include/ctimermessages.h: Update includes
+	* src/time/include/ccreateperiodictimerlistener.h: Update includes
+	* src/time/include/ccreatetimerlistener.h: Update includes
+	* src/time/include/cdestroyperiodictimerlistener.h: Update includes
+	* src/time/include/cdestroytimerlistener.h: Update includes
+
+2007-09-20  Paf <paf@tuxfamily.org>
 	* src/core/tests/testtimer.cpp: File moved to src/time/tests/
 	* src/core/include/clinuxtimer.h: File moved to src/time/include/
 	* src/core/include/ctimermessages.h: File moved to src/time/include/
