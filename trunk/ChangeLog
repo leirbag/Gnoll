@@ -1,3 +1,8 @@
+2007-09-23  Paf <paf@tuxfamily.org>
+	* src/time/include/ctimermodule.h: Add CTimerModule::createTimer() method
+	* src/core/src/ctimermodule.cpp: Add CTimerModule::createTimer() method.
+	CTimerModule constructor uses this new method
+
 2007-09-20  Paf <paf@tuxfamily.org>
 	* src/core/Makefile: Removed timer module target
 	* src/time/Makefile: Removed all targets but the timer module example

@@ -24,6 +24,7 @@
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
 |               09/20/2007 - Paf   - Complete the work                      |
+|               09/23/2007 - Paf   - Add createTimer() method               |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -122,10 +123,18 @@ namespace Gnoll
 				 */
 				unsigned long int getMsecs(void);
 
+
 				/**
 				 * Resets the internal timer of this module
 				 */
 				void resetTimer(bool resTimeouts=false);
+
+
+				/**
+				 * Create a Timer
+				 * @return A Timer
+				 */
+				shared_ptr<ITimer> createTimer();
 
 
 			private:

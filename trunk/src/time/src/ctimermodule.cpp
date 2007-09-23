@@ -24,6 +24,8 @@
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
 |               09/20/2007 - Paf   - Complete the module                    |
+|               09/23/2007 - Paf   - Add createTimer method()               |
+|                                  - s/TIMER/TIMOUT/g to make a separation  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -60,16 +62,7 @@ namespace Gnoll
 		void CTimerModule::init()
 		{
 
-			/**
-			 * COgreTimer is multiplatform but introduces also some heavy dependencies.
-			 * You cannot use it outside of Ogre as it is.
-			 */
-
-			#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-				m_timer = shared_ptr<ITimer>(new CLinuxTimer());
-			#else
-				m_timer = shared_ptr<ITimer>(new COgreTimer());
-			#endif
+			m_timer = this->createTimer();
 
 			m_timer->reset();
 
@@ -245,6 +238,26 @@ namespace Gnoll
 			{
 				m_timers.clear();
 			}
+		}
+
+
+		shared_ptr<ITimer> CTimerModule::createTimer()
+		{
+
+			shared_ptr<ITimer> timer;
+			/**
+			 * COgreTimer is multiplatform but introduces also some heavy dependencies.
+			 * You cannot use it outside of Ogre as it is.
+			 */
+
+			#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+				timer = shared_ptr<ITimer>(new CLinuxTimer());
+			#else
+				timer = shared_ptr<ITimer>(new COgreTimer());
+			#endif
+
+			return timer;
+
 		}
 
 	}
