@@ -64,7 +64,7 @@ namespace Gnoll
 	namespace Core
 	{
 
-		class CTimeModule : public CModule, public Singleton<CTimerModule>
+		class CTimeModule : public CModule, public Singleton<CTimeModule>
 		{
 			public:
 				/**

@@ -99,9 +99,6 @@ int main()
 	shared_ptr<CMessageListener> mylistener(new MyMessageListener);
 
 
-	// Initialization of the message module
-	myManager->init();
-
 	// Initialization of the time module
 	myTimeModule->init();
 
@@ -124,10 +121,10 @@ int main()
 	shared_ptr<CMessage>  mymessage2 (new CMessage(mytype, texte2 ));
 
 	// In 20 000 milliseconds mymessage will be sent
-	myTimerModule->addDelayedEvent(20000, mymessage);
+	myTimeModule->addDelayedEvent(20000, mymessage);
 
 	// Every 1 000 milliseconds my message will be sent. But this will happen in 20 000 millisecondes
-	myTimerModule->addPeriodicEvent(20000, mymessage, 1000);
+	myTimeModule->addPeriodicEvent(20000, mymessage, 1000);
 
 
 
@@ -203,7 +200,6 @@ int main()
 
 
 	myTimeModule->exit();
-	myManager->exit();
 
 
 	myTimeModule->exit();

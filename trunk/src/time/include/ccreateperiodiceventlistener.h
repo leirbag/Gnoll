@@ -40,7 +40,7 @@
 #include "../../core/include/cmessagelistener.h"
 #include "ctimermessages.h"
 
-#include "ctimermodule.h"
+#include "ctimemodule.h"
 
 
 using namespace std;

@@ -67,7 +67,7 @@ namespace Gnoll
 				/**
 				* This is a destructor
 				*/
-				virtual ~CCreateTimerListener();
+				virtual ~CCreateDelayedEventListener();
 
 				/**
 				* This method is called in order to process a message
