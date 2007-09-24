@@ -18,20 +18,24 @@
  ***************************************************************************/
 
 
-/*-------------------------ctimermodule.h----------------------------------*\
-|   The timer, to handle all time functionnalities                          |
+/*--------------------------ctimemodule.h----------------------------------*\
+|   The time module handle all time related functionnalities                |
 |                                                                           |
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
 |               09/20/2007 - Paf   - Complete the work                      |
 |               09/23/2007 - Paf   - Add createTimer() method               |
+|                                  - CTimerModule renamed to CTimeModule    |
+|                                  - Rename timeout to delayed event        |
+|                                  - Rename periodic timeout to periodic    |
+|                                      event                                |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
-#ifndef __CTIMERMODULE_H__
-#define __CTIMERMODULE_H__ 
+#ifndef __CTIMEMODULE_H__
+#define __CTIMEMODULE_H__ 
 
 
 
@@ -44,11 +48,11 @@
 //#include <OgreLogManager.h>
 
 
-#include "ccreatetimerlistener.h"
-#include "cdestroytimerlistener.h"
+#include "ccreatedelayedeventlistener.h"
+#include "cdestroydelayedeventlistener.h"
 
-#include "ccreateperiodictimerlistener.h"
-#include "cdestroyperiodictimerlistener.h"
+#include "ccreateperiodiceventlistener.h"
+#include "cdestroyperiodiceventlistener.h"
 
 
 
@@ -60,19 +64,19 @@ namespace Gnoll
 	namespace Core
 	{
 
-		class CTimerModule : public CModule, public Singleton<CTimerModule>
+		class CTimeModule : public CModule, public Singleton<CTimerModule>
 		{
 			public:
 				/**
 				 *   Default constructor
 				 */
-				CTimerModule();
+				CTimeModule();
 
 
 				/**
 				 *   Virtual destructor
 				 */
-				virtual ~CTimerModule();
+				virtual ~CTimeModule();
 
 
 				/**
@@ -93,29 +97,29 @@ namespace Gnoll
 
 
 				/**
-				 *   Add an unique timeout @ delay msecs after timer start/reset, sending
+				 *   Add an unique event @ delay msecs after timer start/reset, sending
          	 *   msg when triggered
          	 */
-				void addTimeout(unsigned long int delay, shared_ptr<CMessage> msg);
+				void addDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg);
 
 
 				/**
-				 *   Delete an unique timeout
+				 *   Delete an unique event
 				 */
-				void delTimeout(unsigned long int delay, shared_ptr<CMessage> msg);
+				void delDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg);
 
 
 				/**
-				 *   Add a periodic timeout @ delay msecs after timer start/reset, sending
+				 *   Add a periodic event @ delay msecs after timer start/reset, sending
 				 *   msg when triggered, every period msecs
 				 */
-				void addPeriodicTimeout(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period);
+				void addPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period);
 
 
 				/**
-				 *   Delete a periodic timeout
+				 *   Delete a periodic event
 				 */
-				void delPeriodicTimeout(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period);
+				void delPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period);
 
 
 				/**
@@ -149,14 +153,14 @@ namespace Gnoll
 	  			shared_ptr<ITimer> m_timer;
 
 		 		/**
-				 *	Map of one time timers.</br>
+				 *	Map of delayed events.</br>
 				 *	Key : When an event will happen (in milliseconds) </br>
 			 	 *	Value : Message to send when the delay expires
 				 */
 				multimap<unsigned long int, shared_ptr<CMessage> > m_timers;
 
 				/**
-				 *	Map of periodic timers
+				 *	Map of periodic events
 				 *	Key : When an event will happen (in milliseconds) </br>
 			 	 *	Value : Pair of the following values : period and message to send when the delay expires
 				 */
@@ -179,4 +183,4 @@ namespace Gnoll
 	}
 }
 
-#endif // __CTIMERMODULE_H__
+#endif // __CTIMEMODULE_H__

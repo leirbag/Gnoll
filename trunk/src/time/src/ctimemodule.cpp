@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,18 +18,21 @@
  ***************************************************************************/
 
 
-/*---------------------------------ctimermodule.h--------------------------*\
-|   The timer, to handle all time functionnalities                          |
+/*--------------------------ctimemodule.h----------------------------------*\
+|   The time module handle all time related functionnalities                |
 |                                                                           |
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
 |               09/20/2007 - Paf   - Complete the module                    |
 |               09/23/2007 - Paf   - Add createTimer method()               |
-|                                  - s/TIMER/TIMOUT/g to make a separation  |
+|                                  - s/TIMER/TIMEOUT/g to make a separation |
+|                                  - Rename timeout to delayed event        |
+|                                  - Rename periodic timeout to periodic    |
+|                                      event                                |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#include "../include/ctimermodule.h"
+#include "../include/ctimemodule.h"
 #include <iostream>
 
 
@@ -49,17 +52,17 @@ namespace Gnoll
 	namespace Core
 	{
 
-		CTimerModule::CTimerModule()
+		CTimeModule::CTimeModule()
 		{
 		}
 
 
-		CTimerModule::~CTimerModule()
+		CTimeModule::~CTimeModule()
 		{
 		}
 
 
-		void CTimerModule::init()
+		void CTimeModule::init()
 		{
 
 			m_timer = this->createTimer();
@@ -67,31 +70,31 @@ namespace Gnoll
 			m_timer->reset();
 
 
-			shared_ptr<CMessageListener> createTimerListener ( new CCreateTimerListener() );
-			CMessageType createTimerType("CREATE_TIMER");
+			shared_ptr<CMessageListener> createDelayedEventListener ( new CCreateDelayedEventListener() );
+			CMessageType createDelayedEventType("CREATE_DELAYED_EVENT");
 
-			this->addListener ( createTimerListener, createTimerType );
-
-
-			shared_ptr<CMessageListener> destroyTimerListener ( new CDestroyTimerListener() );
-			CMessageType destroyTimerType("DESTROY_TIMER");
-
-			this->addListener ( destroyTimerListener, destroyTimerType );
+			this->addListener ( createDelayedEventListener, createDelayedEventType );
 
 
-			shared_ptr<CMessageListener> createPeriodicTimerListener ( new CCreatePeriodicTimerListener() );
-			CMessageType createPeriodicTimerType("CREATE_PERIODIC_TIMER");
+			shared_ptr<CMessageListener> destroyDelayedEventListener ( new CDestroyDelayedEventListener() );
+			CMessageType destroyDelayedEventType("DESTROY_DELAYED_EVENT");
 
-			this->addListener ( createPeriodicTimerListener, createPeriodicTimerType );
+			this->addListener ( destroyDelayedEventListener, destroyDelayedEventType );
 
 
-			shared_ptr<CMessageListener> destroyPeriodicTimerListener ( new CDestroyPeriodicTimerListener() );
-			CMessageType destroyPeriodicTimerType("DESTROY_PERIODIC_TIMER");
+			shared_ptr<CMessageListener> createPeriodicEventListener ( new CCreatePeriodicEventListener() );
+			CMessageType createPeriodicEventType("CREATE_PERIODIC_EVENT");
 
-			this->addListener ( destroyPeriodicTimerListener, destroyPeriodicTimerType );
+			this->addListener ( createPeriodicEventListener, createPeriodicEventType );
+
+
+			shared_ptr<CMessageListener> destroyPeriodicEventListener ( new CDestroyPeriodicEventListener() );
+			CMessageType destroyPeriodicEventType("DESTROY_PERIODIC_EVENT");
+
+			this->addListener ( destroyPeriodicEventListener, destroyPeriodicEventType );
 		}
 
-		bool CTimerModule::addListener(shared_ptr<CMessageListener> _listener, CMessageType _type)
+		bool CTimeModule::addListener(shared_ptr<CMessageListener> _listener, CMessageType _type)
 		{
 			bool result = true;
 
@@ -109,7 +112,7 @@ namespace Gnoll
 			return result;
 		}
 
-		void CTimerModule::process()
+		void CTimeModule::process()
 		{
 			msgMapIter it = m_timers.begin();
 			while(it != m_timers.end())
@@ -142,7 +145,7 @@ namespace Gnoll
 					unsigned long int period = p.first;
 					shared_ptr<CMessage> msg = p.second;
 
-					addPeriodicTimeout(period, msg, period);
+					addPeriodicEvent(period, msg, period);
 			
 					// Delete this timer
 					perMsgMapIter tmp = itPeriodic;
@@ -159,7 +162,7 @@ namespace Gnoll
 		}
 
 
-		void CTimerModule::exit()
+		void CTimeModule::exit()
 		{
 			m_timers.clear();
 
@@ -184,13 +187,13 @@ namespace Gnoll
 		}
 
 
-		void CTimerModule::addTimeout(unsigned long int delay, shared_ptr<CMessage> msg)
+		void CTimeModule::addDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg)
 		{
 			m_timers.insert(pair<unsigned long int, shared_ptr<CMessage> >(m_timer->getMsecs() + delay, msg));
 		}
 
 
-		void CTimerModule::delTimeout(unsigned long int delay, shared_ptr<CMessage> msg)
+		void CTimeModule::delDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg)
 		{
 			for(msgMapIter it = m_timers.begin(); it != m_timers.end(); it++)
 			{
@@ -202,14 +205,14 @@ namespace Gnoll
 		}
 
 
-		void CTimerModule::addPeriodicTimeout(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
+		void CTimeModule::addPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
 		{
 			pair<unsigned long int, shared_ptr<CMessage> > p(period, msg);
 			m_timersPeriodic.insert(pair<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >(m_timer->getMsecs() + delay, p));
 		}
 
 
-		void CTimerModule::delPeriodicTimeout(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
+		void CTimeModule::delPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
 		{
 	 
 			pair<unsigned long int, shared_ptr<CMessage> > p(period, msg);
@@ -224,13 +227,13 @@ namespace Gnoll
 		}
 
 
-		unsigned long int CTimerModule::getMsecs()
+		unsigned long int CTimeModule::getMsecs()
 		{
 			return m_timer->getMsecs();
 		}
 
 
-		void CTimerModule::resetTimer(bool resTimeouts)
+		void CTimeModule::resetTimer(bool resTimeouts)
 		{
 			m_timer->reset();
 		
@@ -241,7 +244,7 @@ namespace Gnoll
 		}
 
 
-		shared_ptr<ITimer> CTimerModule::createTimer()
+		shared_ptr<ITimer> CTimeModule::createTimer()
 		{
 
 			shared_ptr<ITimer> timer;

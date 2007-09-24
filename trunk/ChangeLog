@@ -1,10 +1,28 @@
 2007-09-23  Paf <paf@tuxfamily.org>
 	* src/time/include/ctimermodule.h: Renamed to src/time/include/ctimemodule.h
-	* src/core/src/ctimermodule.cpp: Renamed to src/core/src/ctimemodule.cpp
+	* src/time/src/ctimermodule.cpp: Renamed to src/core/src/ctimemodule.cpp,
+	update to rename timeout -> delayed event and periodic timeout -> periodic
+	event
+	* src/time/include/ccreateperiodictimerlistener.h: Renamed to
+	src/time/include/ccreateperiodiceventlistener.h
+	* src/time/include/ccreatetimerlistener.h: Renamed to
+	src/time/include/ccreatedelayedeventlistener.h
+	* src/time/include/cdestroyperiodictimerlistener.h: Renamed to
+	src/time/include/cdestroyperiodiceventlistener.h
+	* src/time/include/cdestroytimerlistener.h: Renamed to
+	src/time/include/cdestroydelayedeventlistener.h
+	* src/time/src/ccreateperiodictimerlistener.cpp: Renamed to
+	src/time/src/ccreateperiodiceventlistener.cpp
+	* src/time/src/ccreatetimerlistener.h: Renamed to
+	src/time/src/ccreatedelayedeventlistener.cpp
+	* src/time/src/cdestroyperiodictimerlistener.cpp: Renamed to
+	src/time/src/cdestroyperiodiceventlistener.cpp
+	* src/time/src/cdestroytimerlistener.cpp: Renamed to
+	src/time/src/cdestroydelayedeventlistener.cpp
 
 2007-09-23  Paf <paf@tuxfamily.org>
 	* src/time/include/ctimermodule.h: Add CTimerModule::createTimer() method
-	* src/core/src/ctimermodule.cpp: Add CTimerModule::createTimer() method.
+	* src/time/src/ctimermodule.cpp: Add CTimerModule::createTimer() method.
 	CTimerModule constructor uses this new method
 
 2007-09-20  Paf <paf@tuxfamily.org>
