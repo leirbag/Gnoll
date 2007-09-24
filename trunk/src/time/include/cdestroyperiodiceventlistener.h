@@ -18,18 +18,19 @@
  ***************************************************************************/
 
 
-/*----------------------CDestroyPeriodicTimerListener----------------------*\
+/*----------------------CDestroyPeriodicEventListener----------------------*\
 |   This is a message listener for the timer module                         |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/20/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Renamed to CDestroyPeriodicEventListener |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
-#ifndef __CDESTROYPERIODICTIMERLISTENER_H__
-#define __CDESTROYPERIODICTIMERLISTENER_H__ 
+#ifndef __CDESTROYPERIODICEVENTLISTENER_H__
+#define __CDESTROYPERIODICEVENTLISTENER_H__ 
 
 
 #include <string>
@@ -52,9 +53,9 @@ namespace Gnoll
 
 		/**
 		*	A message listener for the timer module.
-		*	This listener destroy registered one-shot timers
+		*	This listener destroy registered periodic events
 		*/ 
-		class CDestroyPeriodicTimerListener : public CMessageListener
+		class CDestroyPeriodicEventListener : public CMessageListener
 		{
 
 			public:
@@ -62,12 +63,12 @@ namespace Gnoll
 				/**
 				* This is a constructor
 				*/
-				CDestroyPeriodicTimerListener(); 
+				CDestroyPeriodicEventListener(); 
 
 				/**
 				* This is a destructor
 				*/
-				virtual ~CDestroyPeriodicTimerListener();
+				virtual ~CDestroyPeriodicEventListener();
 
 				/**
 				* This method is called in order to process a message
@@ -78,4 +79,4 @@ namespace Gnoll
 	}
 }
 
-#endif // __CDESTROYPERIODICTIMERLISTENER_H__
+#endif // __CDESTROYPERIODICEVENTLISTENER_H__

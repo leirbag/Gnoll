@@ -18,16 +18,17 @@
  ***************************************************************************/
 
 
-/*--------------------------CDestroyTimerListener--------------------------*\
+/*----------------------CDestroyDelayedEventListener-----------------------*\
 |   This is defines listeners used by the time module                       |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/20/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Renamed to CDestroyDelayedEventListener  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/cdestroytimerlistener.h"
+#include "../include/cdestroydelayedeventlistener.h"
 
 
 
@@ -36,22 +37,22 @@ namespace Gnoll {
 	namespace Core {
 
 				
-		CDestroyTimerListener::CDestroyTimerListener() 
+		CDestroyDelayedEventListener::CDestroyDelayedEventListener() 
 		{
 		}
 
-		CDestroyTimerListener::~CDestroyTimerListener() 
+		CDestroyDelayedEventListener::~CDestroyDelayedEventListener() 
 		{
 		}
 
-		void CDestroyTimerListener::handle ( shared_ptr<CMessage> message )
+		void CDestroyDelayedEventListener::handle ( shared_ptr<CMessage> message )
 		{
 		
 			TimerEvent timerEvent ( message->getData<TimerEvent>());
 
-			CTimerModule* timerModule = CTimerModule::getInstancePtr();
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
-			timerModule->delTimeout(timerEvent.delay, timerEvent.message);
+			timeModule->delDelayedEvent(timerEvent.delay, timerEvent.message);
 		}
 
 	}

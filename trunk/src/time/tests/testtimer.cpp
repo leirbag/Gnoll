@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/30/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Update class names                       |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -33,7 +34,7 @@
 #include "../../core/include/cmessagemanager.h"
 #include "../../core/include/cgenericmessagemanager.h"
 #include "../../core/include/cmessagelistener.h"
-#include "../include/ctimermodule.h"
+#include "../include/ctimemodule.h"
 #include "../include/itimer.h"
 #include "../include/clinuxtimer.h"
 #include "../include/ctimermessages.h"
@@ -88,7 +89,7 @@ int main()
 
 	// A message manager 
 	CGenericMessageManager* myManager = CGenericMessageManager::getInstancePtr();
-	CTimerModule* myTimerModule = CTimerModule::getInstancePtr();
+	CTimeModule* myTimeModule = CTimeModule::getInstancePtr();
 
 	// A message type called "string" 
 	CMessageType mytype("string");
@@ -98,8 +99,11 @@ int main()
 	shared_ptr<CMessageListener> mylistener(new MyMessageListener);
 
 
+	// Initialization of the message module
+	myManager->init();
+
 	// Initialization of the time module
-	myTimerModule->init();
+	myTimeModule->init();
 
 
 	/*
@@ -120,10 +124,10 @@ int main()
 	shared_ptr<CMessage>  mymessage2 (new CMessage(mytype, texte2 ));
 
 	// In 20 000 milliseconds mymessage will be sent
-	myTimerModule->addTimeout(20000, mymessage);
+	myTimerModule->addDelayedEvent(20000, mymessage);
 
 	// Every 1 000 milliseconds my message will be sent. But this will happen in 20 000 millisecondes
-	myTimerModule->addPeriodicTimeout(20000, mymessage, 1000);
+	myTimerModule->addPeriodicEvent(20000, mymessage, 1000);
 
 
 
@@ -133,7 +137,7 @@ int main()
 	 */
 
 	// Message type to create a periodic timer
-	CMessageType creation("CREATE_PERIODIC_TIMER");
+	CMessageType creation("CREATE_PERIODIC_EVENT");
 
 	// Description of the timer
 	TimerPeriodicEvent ev;
@@ -161,7 +165,7 @@ int main()
 
 
 	// Message type
-	CMessageType destroyation("DESTROY_PERIODIC_TIMER");
+	CMessageType destroyation("DESTROY_PERIODIC_EVENT");
 
 	// Mesage that will destroy the previous timer :
 	// destroyation means we want to destroy one periodic timer
@@ -170,7 +174,7 @@ int main()
 
 	// We want to create a one-shot timer in 35 seconds.
 	// This timer will shout the message desztroyPeriodicMsg
-	CMessageType simpleTimer("CREATE_TIMER");
+	CMessageType simpleTimer("CREATE_DELAYED_EVENT");
 	TimerEvent sTimer;
 	sTimer.delay = 35000;
 	sTimer.message = destroyPeriodicMsg;
@@ -189,7 +193,7 @@ int main()
 	for (unsigned long i = 0; i < 999999999; i++)
 	{
 		myManager->process();
-		myTimerModule->process();
+		myTimeModule->process();
 	}
 
 
@@ -198,8 +202,11 @@ int main()
 		cout << "Listener supprime" << endl;
 
 
-	myTimerModule->exit();
+	myTimeModule->exit();
+	myManager->exit();
 
+
+	myTimeModule->exit();
 	myManager->destroy();
 
 

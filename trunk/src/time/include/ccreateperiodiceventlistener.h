@@ -18,18 +18,19 @@
  ***************************************************************************/
 
 
-/*----------------------CCreatePeriodicTimerListener-----------------------*\
+/*----------------------CCreatePeriodicEventListener-----------------------*\
 |   This is a message listener for the timer module                         |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/20/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Renamed to CCreatePeriodicEventListener  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
-#ifndef __CCREATEPERIODICTIMERLISTENER_H__
-#define __CCREATEPERIODICTIMERLISTENER_H__ 
+#ifndef __CCREATEPERIODICEVENTLISTENER_H__
+#define __CCREATEPERIODICEVENTLISTENER_H__ 
 
 
 
@@ -54,7 +55,7 @@ namespace Gnoll
 		/**
 		*	A message listener for the timer module.
 		*/ 
-		class CCreatePeriodicTimerListener : public CMessageListener
+		class CCreatePeriodicEventListener : public CMessageListener
 		{
 
 			public:
@@ -62,12 +63,12 @@ namespace Gnoll
 				/**
 				* This is a constructor
 				*/
-				CCreatePeriodicTimerListener(); 
+				CCreatePeriodicEventListener(); 
 
 				/**
 				* This is a destructor
 				*/
-				virtual ~CCreatePeriodicTimerListener();
+				virtual ~CCreatePeriodicEventListener();
 
 				/**
 				* This method is called in order to process a message
@@ -78,4 +79,4 @@ namespace Gnoll
 	}
 }
 
-#endif // __CCREATEPERIODICTIMERLISTENER_H__
+#endif // __CCREATEPERIODICEVENTLISTENER_H__

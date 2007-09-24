@@ -18,18 +18,19 @@
  ***************************************************************************/
 
 
-/*-------------------------CDestroyTimerListener---------------------------*\
+/*----------------------CDestroyDelayedEventListener-----------------------*\
 |   This is a message listener for the timer module                         |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/20/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Renamed to CDestroyDelayedEventListener  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
-#ifndef __CDESTROYTIMERLISTENER_H__
-#define __CDESTROYTIMERLISTENER_H__ 
+#ifndef __CDESTROYDELAYEDEVENTLISTENER_H__
+#define __CDESTROYDELAYEDEVENTLISTENER_H__ 
 
 
 
@@ -52,9 +53,9 @@ namespace Gnoll
 
 		/**
 		*	A message listener for the timer module.
-		*	This listener destroy registered one-shot timers
+		*	This listener destroy registered delayed events
 		*/ 
-		class CDestroyTimerListener : public CMessageListener
+		class CDestroyDelayedEventListener : public CMessageListener
 		{
 
 			public:
@@ -62,12 +63,12 @@ namespace Gnoll
 				/**
 				* This is a constructor
 				*/
-				CDestroyTimerListener(); 
+				CDestroyDelayedEventListener(); 
 
 				/**
 				* This is a destructor
 				*/
-				virtual ~CDestroyTimerListener();
+				virtual ~CDestroyDelayedEventListener();
 
 				/**
 				* This method is called in order to process a message
@@ -78,4 +79,4 @@ namespace Gnoll
 	}
 }
 
-#endif // __CDESTROYTIMERLISTENER_H__
+#endif // __CDESTROYDELAYEDEVENTLISTENER_H__

@@ -18,18 +18,19 @@
  ***************************************************************************/
 
 
-/*------------------------------ctimerlistener-----------------------------*\
+/*-----------------------CCreateDelayedEventListener-----------------------*\
 |   This is a message listener for the timer module                         |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/12/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Renamed to CCreateDelayedEventListener   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
-#ifndef __CCREATETIMERLISTENER_H__
-#define __CCREATETIMERLISTENER_H__ 
+#ifndef __CCREATEDELAYEDEVENTLISTENER_H__
+#define __CCREATEDELAYEDEVENTLISTENER_H__ 
 
 
 
@@ -39,7 +40,7 @@
 #include "../../core/include/cmessagelistener.h"
 #include "ctimermessages.h"
 
-#include "ctimermodule.h"
+#include "ctimemodule.h"
 
 
 using namespace boost;
@@ -53,7 +54,7 @@ namespace Gnoll
 		/**
 		*	A message listener for the timer module.
 		*/ 
-		class CCreateTimerListener : public CMessageListener
+		class CCreateDelayedEventListener : public CMessageListener
 		{
 
 			public:
@@ -61,7 +62,7 @@ namespace Gnoll
 				/**
 				* This is a constructor
 				*/
-				CCreateTimerListener(); 
+				CCreateDelayedEventListener(); 
 
 				/**
 				* This is a destructor
@@ -77,4 +78,4 @@ namespace Gnoll
 	}
 }
 
-#endif // __CCREATETIMERLISTENER_H__
+#endif // __CCREATEDELAYEDEVENTLISTENER_H__

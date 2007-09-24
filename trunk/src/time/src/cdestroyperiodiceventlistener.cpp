@@ -18,16 +18,17 @@
  ***************************************************************************/
 
 
-/*----------------------CDestroyPeriodicTimerListener----------------------*\
+/*----------------------CDestroyPeriodicEventListener----------------------*\
 |   This is defines listeners used by the time module                       |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/20/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Renamed to CDestroyPeriodicEventListener |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/cdestroyperiodictimerlistener.h"
+#include "../include/cdestroyperiodiceventlistener.h"
 
 
 
@@ -36,22 +37,22 @@ namespace Gnoll {
 	namespace Core {
 
 				
-		CDestroyPeriodicTimerListener::CDestroyPeriodicTimerListener() 
+		CDestroyPeriodicEventListener::CDestroyPeriodicEventListener() 
 		{
 		}
 
-		CDestroyPeriodicTimerListener::~CDestroyPeriodicTimerListener() 
+		CDestroyPeriodicEventListener::~CDestroyPeriodicEventListener() 
 		{
 		}
 
-		void CDestroyPeriodicTimerListener::handle ( shared_ptr<CMessage> message )
+		void CDestroyPeriodicEventListener::handle ( shared_ptr<CMessage> message )
 		{
 		
 			TimerPeriodicEvent timerEvent ( message->getData<TimerPeriodicEvent>());
 
-			CTimerModule* timerModule = CTimerModule::getInstancePtr();
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
-			timerModule->delPeriodicTimeout(timerEvent.delay, timerEvent.message, timerEvent.period);
+			timeModule->delPeriodicEvent(timerEvent.delay, timerEvent.message, timerEvent.period);
 		}
 
 	}

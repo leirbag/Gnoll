@@ -18,11 +18,12 @@
  ***************************************************************************/
 
 
-/*-----------------------------CTimerListener------------------------------*\
+/*------------------------CCreateDelayedEventListener----------------------*\
 |   This is defines listeners used by the time module                       |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/14/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Renamed to CCreateDelayedEventListener   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -36,22 +37,22 @@ namespace Gnoll {
 	namespace Core {
 
 				
-		CCreateTimerListener::CCreateTimerListener() 
+		CCreateDelayedEventListener::CCreateDelayedEventListener() 
 		{
 		}
 
-		CCreateTimerListener::~CCreateTimerListener() 
+		CCreateDelayedEventListener::~CCreateDelayedEventListener() 
 		{
 		}
 
-		void CCreateTimerListener::handle ( shared_ptr<CMessage> message )
+		void CCreateDelayedEventListener::handle ( shared_ptr<CMessage> message )
 		{
 		
 			TimerEvent timerEvent ( message->getData<TimerEvent>());
 
-			CTimerModule* timerModule = CTimerModule::getInstancePtr();
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
-			timerModule->addTimeout(timerEvent.delay, timerEvent.message);
+			timeModule->addDelayedEvent(timerEvent.delay, timerEvent.message);
 		}
 
 	}

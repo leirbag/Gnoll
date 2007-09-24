@@ -18,11 +18,12 @@
  ***************************************************************************/
 
 
-/*----------------------CCreatePeriodicTimerListener-----------------------*\
+/*----------------------CCreatePeriodicEventListener-----------------------*\
 |   This is defines listeners used by the time module                       |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/20/2007 - Paf - Initial release                          |
+|               09/23/2007 - Paf - Renamed to CCreatePeriodicEventListener  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -36,22 +37,22 @@ namespace Gnoll {
 	namespace Core {
 
 				
-		CCreatePeriodicTimerListener::CCreatePeriodicTimerListener() 
+		CCreatePeriodicEventListener::CCreatePeriodicEventListener() 
 		{
 		}
 
-		CCreatePeriodicTimerListener::~CCreatePeriodicTimerListener() 
+		CCreatePeriodicEventListener::~CCreatePeriodicEventListener() 
 		{
 		}
 
-		void CCreatePeriodicTimerListener::handle ( shared_ptr<CMessage> message )
+		void CCreatePeriodicEventListener::handle ( shared_ptr<CMessage> message )
 		{
 		
 			TimerPeriodicEvent timerEvent ( message->getData<TimerPeriodicEvent>());
 
-			CTimerModule* timerModule = CTimerModule::getInstancePtr();
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
-			timerModule->addPeriodicTimeout(timerEvent.delay, timerEvent.message, timerEvent.period);
+			timeModule->addPeriodicEvent(timerEvent.delay, timerEvent.message, timerEvent.period);
 		}
 
 	}
