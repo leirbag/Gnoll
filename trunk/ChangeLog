@@ -1,4 +1,8 @@
 2007-09-23  Paf <paf@tuxfamily.org>
+	* src/time/include/ctimermodule.h: Renamed to src/time/include/ctimemodule.h
+	* src/core/src/ctimermodule.cpp: Renamed to src/core/src/ctimemodule.cpp
+
+2007-09-23  Paf <paf@tuxfamily.org>
 	* src/time/include/ctimermodule.h: Add CTimerModule::createTimer() method
 	* src/core/src/ctimermodule.cpp: Add CTimerModule::createTimer() method.
 	CTimerModule constructor uses this new method
