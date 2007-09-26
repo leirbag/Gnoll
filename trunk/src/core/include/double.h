@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*---------------------------------string----------------------------------*\
-|   This is a string attribute for PersistentObject                         |
+/*---------------------------------double----------------------------------*\
+|   This is a double attribute for PersistentObject                         |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/26/2007 - Paf - Initial release                          |
@@ -28,13 +28,12 @@
 
 
 
-#ifndef __STRING_H__
-#define __STRING_H__
+#ifndef __DOUBLE_H__
+#define __DOUBLE_H__
 
 
 #include "iattribute.h" 
 #include "scalar.h" 
-#include <string> 
 
 using namespace std;
 using namespace boost;
@@ -47,44 +46,15 @@ namespace Gnoll
 		/**
 		 *	This is a simple attribute. 
 		 */ 
-		class String : public Scalar<string>
+		class Double : public Scalar<double>
 		{
 			public:
 		
-				String(string _value = "") : Scalar<string>("string", _value) {};
-
-
-				/**
-				 * This method deserialize the object. <br/>
-				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
-				 * It has to be implemented by all classes that inherits from this class.
-				 *
-			  	 * @param _element This is the XML tree containing the state of this object
-				 */
-				virtual void deSerializeXML( xmlpp::Element* _element ) 
-				{
-					
-					if (_element == NULL)
-					{
-						return;
-					}
-
-					xmlpp::Attribute* attr = _element->get_attribute("value");
-
-					if (attr == NULL)
-					{
-						return;
-					}
-
-					this->setValue(attr->get_value());
-			
-				};		
-
-
-
+				Double(double _value = 0.0f) : Scalar<double>("double", _value) {};
+		
 		};
 
 	}
 }
 
-#endif // __STRING_H__
+#endif // __DOUBLE_H__

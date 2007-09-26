@@ -29,6 +29,8 @@
 |                                    libxml++ include                       |
 |               09/25/2007 - Paf - Add float.h                              |
 |                                - Replace namespace Viracocha by Gnoll     |
+|               09/26/2007 - Paf - Add string.h                             |
+|                                - Add double.h                             |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -44,6 +46,7 @@
 #include "integer.h"
 #include "float.h"
 #include "string.h"
+#include "double.h"
 
 
 #ifndef __ATTRIBUTEHANDLERREGISTRY_H__

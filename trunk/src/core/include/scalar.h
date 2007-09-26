@@ -28,13 +28,16 @@
 |                                - Add method Scalar::getValue()            |
 |                                - Enclose Scalar in namespace Gnoll::Core  |
 |                                - Add more comments                        |
+|               09/26/2007 - Paf - Replace sstream by boost::lexical_cast   |
+|                                    for lexical conversions                |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 #include "iattribute.h" 
-#include <sstream>
 #include <string>
+#include <boost/lexical_cast.hpp>
+
 
 #ifndef __SCALAR_H__
 #define __SCALAR_H__
@@ -113,13 +116,7 @@ namespace Gnoll
 
 					xmlpp::Element* root = document->create_root_node( m_attributeType );
 	
-					// std::stringstream is not really friendly with non-ascii
-					// characters.
-					std::stringstream ss;
-					string finalString;
-
-					ss << m_element;
-					finalString = ss.str();
+					string finalString = lexical_cast<string> (m_element);
 
 					root->set_attribute("value", finalString);
 		
@@ -149,8 +146,9 @@ namespace Gnoll
 						return;
 					}
 
-					std::istringstream ss(attr->get_value());
-					ss >> m_element;
+					string attrValue = attr->get_value();
+
+					m_element = lexical_cast<T>(attrValue);
 			
 				};		
 		};

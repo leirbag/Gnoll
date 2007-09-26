@@ -1,4 +1,15 @@
 2007-09-26  Paf <paf@tuxfamily.org>
+	* src/core/tests/testpo.cpp: Updated to test Double attributes
+	* src/core/tests/zelda: Add a new Double attribute
+	* src/core/include/attributehandlerregistry.h: Add double.h
+	* src/core/include/scalar.h: Replace sstream by boost::lexical_cast for
+	lexical conversions
+	* src/core/include/string.h: Fix a comment
+	* src/core/include/double.h: New attribute of type double
+	* src/core/src/attributehandlerregistry.cpp: Associate by default double
+	attributes to nodes of type "double"
+
+2007-09-26  Paf <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to test String attributes
 	* src/core/tests/zelda: Add a new String attribute
 	* src/core/include/attributehandlerregistry.h: Add string.h header

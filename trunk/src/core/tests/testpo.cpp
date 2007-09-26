@@ -23,6 +23,7 @@
 
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 
 #include <glibmm/ustring.h>
@@ -131,17 +132,32 @@ int main() {
 	Zelda->setAttribute("age2", newAge);
 
 
+	try
+	{
 
-	shared_ptr< Float > piZelda = Zelda->getAttribute< Float > ("pi");
-	float fpiZelda = piZelda->getValue();
-
-	cout << "Float pi**2 zelda : " << fpiZelda * fpiZelda << endl;
-
+		shared_ptr< Float > piZelda = Zelda->getAttribute< Float > ("pi");
+		float fpiZelda = piZelda->getValue();
+		cout << "Float pi**2 zelda : " << fpiZelda * fpiZelda << endl;
 
 
-	shared_ptr< String > nut = Zelda->getAttribute< String > ("nut");
-	string noisette = nut->getValue();
-	cout << "Attribute nut = '" << noisette << "'" << endl;
+
+		shared_ptr< String > nut = Zelda->getAttribute< String > ("nut");
+		string noisette = nut->getValue();
+		cout << "Attribute nut = '" << noisette << "'" << endl;
+
+
+
+		shared_ptr< Double > dpi = Zelda->getAttribute< Double > ("dpi");
+		double dpid = dpi->getValue();
+		cout << "Double PI in Zelda : " << setprecision(16) << dpid << endl;
+		cout << "Squared Double PI in Zelda : " << setprecision(16) << dpid * dpid << endl;
+
+
+	}
+	catch(Glib::ustring e)
+	{
+		cout << e << endl;
+	}
 
 	pom.save(Zelda->getInstance());
 

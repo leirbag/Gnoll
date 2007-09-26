@@ -12,5 +12,8 @@
   <attribute name="nut">
     <string value="cric crac croc !"/>
   </attribute>
+  <attribute name="dpi">
+    <double value="3.145123456713556778"/>
+  </attribute>
 </persistentobject>
 
