@@ -33,6 +33,7 @@
 #include "../include/scalar.h"
 #include "../include/integer.h"
 #include "../include/float.h"
+#include "../include/string.h"
 
 #include "../include/sourcefile.h"
 #include "../include/istream.h"
@@ -129,11 +130,18 @@ int main() {
 	shared_ptr<Integer> newAge(new Integer((*ageZelda)() + 1));
 	Zelda->setAttribute("age2", newAge);
 
-	shared_ptr< Float > piZelda = Zelda->getAttribute< Float > ("pi");
 
+
+	shared_ptr< Float > piZelda = Zelda->getAttribute< Float > ("pi");
 	float fpiZelda = piZelda->getValue();
 
 	cout << "Float pi**2 zelda : " << fpiZelda * fpiZelda << endl;
+
+
+
+	shared_ptr< String > nut = Zelda->getAttribute< String > ("nut");
+	string noisette = nut->getValue();
+	cout << "Attribute nut = '" << noisette << "'" << endl;
 
 	pom.save(Zelda->getInstance());
 

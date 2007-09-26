@@ -9,5 +9,8 @@
   <attribute name="pi">
     <float value="3.145"/>
   </attribute>
+  <attribute name="nut">
+    <string value="cric crac croc !"/>
+  </attribute>
 </persistentobject>
 

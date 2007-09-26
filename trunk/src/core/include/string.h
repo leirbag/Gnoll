@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,63 +18,73 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
+/*---------------------------------string----------------------------------*\
+|   This is a string attribute for PersistentObject                         |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/02/2007 - Paf - Initial release                          |
-|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
-|                                - Add float attribute handler              |
+|               09/26/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "../include/attributehandlerregistry.h"
+
+#ifndef __STRING_H__
+#define __STRING_H__
 
 
+#include "iattribute.h" 
+#include "scalar.h" 
+#include <string> 
 
-namespace Gnoll 
+using namespace std;
+using namespace boost;
+
+namespace Gnoll
 {
-
 	namespace Core
 	{
 
-		AttributeHandlerRegistry::AttributeHandlerRegistry()
+		/**
+		 *	This is a simple attribute. 
+		 */ 
+		class String : public Scalar<string>
 		{
-			// Default handlers are added here
-
-			this->registerHandler(string("integer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Integer>()));
-			this->registerHandler(string("float"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Float>()));
-			this->registerHandler(string("string"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<String>()));
-
-		}
-
-
-		AttributeHandlerRegistry::~AttributeHandlerRegistry()
-		{
-
-		}
-
-
+			public:
 		
-		void AttributeHandlerRegistry::registerHandler(string _attributeType, shared_ptr<IAttributeHandler> _handler)
-		{
-			m_handlersMap[_attributeType] = _handler;
-		}
+				String(string _value = "") : Scalar<string>("string", _value) {};
 
 
-		void AttributeHandlerRegistry::unregisterHandler(string _attributeType)
-		{
-			m_handlersMap.erase(_attributeType);
-		}
+				/**
+				 * This method deserialize the object. <br/>
+				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
+				 * It has to be implemented by all classes that inherits from this class.
+				 *
+			  	 * @param _element This is the XML tree containing the state of this object
+				 */
+				virtual void deSerializeXML( xmlpp::Element* _element ) 
+				{
+					
+					if (_element == NULL)
+					{
+						return;
+					}
+
+					xmlpp::Attribute* attr = _element->get_attribute("value");
+
+					if (attr == NULL)
+					{
+						return;
+					}
+
+					this->setValue(attr->get_value());
+			
+				};		
 
 
-		shared_ptr<IAttributeHandler> AttributeHandlerRegistry::getHandler(string _attributeType)
-		{
-			return m_handlersMap[_attributeType];
-		}
+
+		};
 
 	}
 }
 
+#endif // __FLOAT_H__

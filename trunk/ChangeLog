@@ -1,3 +1,12 @@
+2007-09-26  Paf <paf@tuxfamily.org>
+	* src/core/tests/testpo.cpp: Updated to test String attributes
+	* src/core/tests/zelda: Add a new String attribute
+	* src/core/include/attributehandlerregistry.h: Add string.h header
+	* src/core/include/scalar.h: Add a setter for the value hold
+	* src/core/include/string.h: New attribute of type string
+	* src/core/src/attributehandlerregistry.cpp: Associate by default string
+	attributes to nodes of type "string"
+
 2007-09-25  Paf <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Update example
 	* src/core/tests/zelda: Fix attribute type ("scalar" -> "float")

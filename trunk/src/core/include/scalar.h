@@ -96,6 +96,12 @@ namespace Gnoll
 
 
 				/**
+				 * This operator gives a convenient way to set the value hold by an instance of this class
+				 */
+				void setValue( T _elem) { m_element = _elem;};
+
+
+				/**
 				 * This method serialize the object. <br/>
 				 * It has to be implemented by all classes that inherits from this class.
 				 *

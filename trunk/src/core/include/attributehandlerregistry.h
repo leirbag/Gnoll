@@ -43,6 +43,7 @@
 #include "genericattributehandler.h"
 #include "integer.h"
 #include "float.h"
+#include "string.h"
 
 
 #ifndef __ATTRIBUTEHANDLERREGISTRY_H__
