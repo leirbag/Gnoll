@@ -32,13 +32,14 @@
 #include "../include/persistentobject.h"
 #include "../include/scalar.h"
 #include "../include/integer.h"
+#include "../include/float.h"
 
 #include "../include/sourcefile.h"
 #include "../include/istream.h"
 
 
 using namespace std;
-using namespace Viracocha::Core;
+using namespace Gnoll::Core;
 
 int main() {
 
@@ -47,9 +48,9 @@ int main() {
 
 	PersistentObject toto = PersistentObject("toto");	
 
-	shared_ptr<Scalar<float> > pi( new Scalar<float>(3.145) );
+	shared_ptr<Scalar<float> > pi( new Scalar<float>("float", 3.145) );
 	shared_ptr<Integer> age( new Integer(345) );
-	shared_ptr<Scalar<Glib::ustring> > phrase ( new Scalar<Glib::ustring>("c'etait un cafard qui vivait dans le noir") );
+	shared_ptr<Scalar<Glib::ustring> > phrase ( new Scalar<Glib::ustring>("string", "c'etait un cafard qui vivait dans le noir") );
 
 	toto.setAttribute( Glib::ustring("pi"), pi);
 	toto.setAttribute( "phrase", phrase);
@@ -127,6 +128,12 @@ int main() {
 	shared_ptr<Integer> ageZelda = Zelda->getAttribute< Integer > ("age");
 	shared_ptr<Integer> newAge(new Integer((*ageZelda)() + 1));
 	Zelda->setAttribute("age2", newAge);
+
+	shared_ptr< Float > piZelda = Zelda->getAttribute< Float > ("pi");
+
+	float fpiZelda = piZelda->getValue();
+
+	cout << "Float pi**2 zelda : " << fpiZelda * fpiZelda << endl;
 
 	pom.save(Zelda->getInstance());
 

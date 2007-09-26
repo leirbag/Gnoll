@@ -26,6 +26,7 @@
 |               07/11/2007 - Paf - Initial release                          |
 |               08/17/2007 - Paf - Update namespace                         |
 |               08/18/2007 - Paf - Implement SourceFile::isFetcheable()     |
+|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -37,7 +38,7 @@
 using namespace boost::filesystem;       
 
 
-namespace Viracocha 
+namespace Gnoll 
 {
 	namespace Core 
 	{

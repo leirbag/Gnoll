@@ -24,6 +24,8 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/02/2007 - Paf - Initial release                          |
+|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|                                - Add float attribute handler              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -32,7 +34,7 @@
 
 
 
-namespace Viracocha 
+namespace Gnoll 
 {
 
 	namespace Core
@@ -43,6 +45,7 @@ namespace Viracocha
 			// Default handlers are added here
 
 			this->registerHandler(string("integer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Integer>()));
+			this->registerHandler(string("float"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Float>()));
 
 		}
 

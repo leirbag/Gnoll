@@ -27,6 +27,8 @@
 |               08/10/2007 - Paf - Initial release                          |
 |               08/11/2007 - Paf - Add some comments, removed unused        |
 |                                    libxml++ include                       |
+|               09/25/2007 - Paf - Add float.h                              |
+|                                - Replace namespace Viracocha by Gnoll     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -40,6 +42,7 @@
 // Default Handlers
 #include "genericattributehandler.h"
 #include "integer.h"
+#include "float.h"
 
 
 #ifndef __ATTRIBUTEHANDLERREGISTRY_H__
@@ -49,7 +52,7 @@ using namespace boost;
 using namespace std;
 
 
-namespace Viracocha 
+namespace Gnoll
 {
 
 	namespace Core

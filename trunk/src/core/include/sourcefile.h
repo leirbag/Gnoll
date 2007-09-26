@@ -24,6 +24,7 @@
 |   Changelog :                                                             |
 |               07/11/2007 - Paf - Initial release                          |
 |               08/17/2007 - Paf - Update comments                          |
+|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -41,7 +42,7 @@ using namespace std;
 using namespace boost;
 
 
-namespace Viracocha
+namespace  Gnoll
 {
 	namespace Core
 	{

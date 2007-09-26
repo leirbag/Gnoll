@@ -25,6 +25,7 @@
 |   Changelog :                                                             |
 |               07/18/2007 - Paf - Initial release                          |
 |               08/16/2007 - Paf - Update comments                          |
+|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -34,7 +35,7 @@
 #define __ISTREAM_H__
 
 
-namespace Viracocha {
+namespace Gnoll {
 
 	namespace Core {
 

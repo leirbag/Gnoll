@@ -23,21 +23,25 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/04/2007 - Paf - Initial release                          |
+|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|                                - Make Integer inherits from Scalar<int>   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "iattribute.h" 
-#include <sstream>
-
 #ifndef __INTEGER_H__
 #define __INTEGER_H__
+
+
+#include "iattribute.h" 
+#include "scalar.h" 
+#include <sstream>
 
 using namespace std;
 using namespace boost;
 
 
-namespace Viracocha
+namespace Gnoll
 {
 
 	namespace Core 
@@ -47,81 +51,13 @@ namespace Viracocha
 		*	This is a simple attribute. </br> 
 		*	This hold a signed integer.
 		*/ 
-		class Integer : public IAttribute
+		class Integer : public Scalar<int>
 		{
-			private:
-
-				/**
-				 * The actual value hold by one instance of this class
-				 */
-				int m_element;
 
 			public:
 
-				/**
-				 * This is a constructor
-				 * @param _value Value to hold
-				 */
-				Integer(int _value = 0) : m_element(_value) {};
+				Integer(int _value = 0) : Scalar<int>("integer", _value) {};
 
-
-				/**
-				 * This operator gives a convenient way to get the value hold by an instance of this class
-				 */
-				int operator() (void) { return m_element;};
-
-				/**
-			  	 * This method serialize the object. <br/>
-				 * It has to be implemented by all classes that inherits from this class.
-				 *
-				 * @return This return the object as a XML tree 
-				 */
-
-				virtual shared_ptr<xmlpp::Document> serializeXML() 
-				{
-					shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));  
-
-					xmlpp::Element* root = document->create_root_node("integer");
-
-					// std::stringstream is not really friendly with non-ascii
-					// characters.
-					std::stringstream ss;
-					string finalString;
-
-					ss << m_element;
-					finalString = ss.str();
-
-					root->set_attribute("value", finalString);
-
-					return document;
-				};		
-
-			
-				/**
-				 * This method deserialize the object. <br/>
-				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
-				 * It has to be implemented by all classes that inherits from this class.
-				 *
-	  			 * @param _element This is the XML tree containing the state of this object
-				 */
-				virtual void deSerializeXML( xmlpp::Element* _element ) 
-				{
-
-					if (_element == NULL)
-					{
-						return;
-					}
-
-					xmlpp::Attribute* attr = _element->get_attribute("value");
-
-					if (attr == NULL)
-					{
-						return;
-					}
-
-					std::istringstream ss(attr->get_value());
-					ss >> m_element;
-				};		
 		};
 	};
 };

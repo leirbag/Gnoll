@@ -1,3 +1,30 @@
+2007-09-25  Paf <paf@tuxfamily.org>
+	* src/core/tests/testpo.cpp: Update example
+	* src/core/tests/zelda: Fix attribute type ("scalar" -> "float")
+	* src/core/include/attributehandlerregistry.h:  Add float.h; Replace namespace Viracocha by Gnoll
+	* src/core/include/filestream.h: Replace namespace Viracocha by Gnoll
+	* src/core/include/integer.h: Make Integer inherits from Scalar<int>; Replace namespace Viracocha by Gnoll
+	* src/core/include/genericattributehandler.h:  Replace namespace Viracocha by Gnoll
+	* src/core/include/sourcefile.h: Replace namespace Viracocha by Gnoll
+	* src/core/include/istream.h: Replace namespace Viracocha by Gnoll
+	* src/core/include/scalar.h:  Implements Scalar::deSerializeXML(); Add
+	method Scalar::getValue(); Enclose Scalar in namespace Gnoll::Core; Add
+	more comments
+	* src/core/include/basemanager.h: Replace namespace Viracocha by Gnoll
+	* src/core/include/float.h: New IAttribute child added. This attribute
+	handles float
+	* src/core/include/isource.h: Replace namespace Viracocha by Gnoll  
+	* src/core/include/iattributehandler.h: Replace namespace Viracocha by Gnoll
+	* src/core/include/integerattributehandler.h: File deleted. This file was
+	unused and useless
+	* src/core/include/persistentobjectmanager.h: Replace namespace Viracocha by Gnoll
+	* src/core/src/sourcefile.cpp: Replace namespace Viracocha by Gnoll
+	* src/core/src/persistentobjectmanager.cpp: Replace namespace Viracocha by Gnoll
+	* src/core/src/persistentobject.cpp: Replace namespace Viracocha by Gnoll
+	* src/core/src/attributehandlerregistry.cpp: Replace namespace Viracocha by
+	Gnoll; Add float attribute handler
+	* src/core/src/filestream.cpp: Replace namespace Viracocha by Gnoll
+
 2007-09-23  Paf <paf@tuxfamily.org>
 	* src/time/include/ctimermodule.h: Renamed to src/time/include/ctimemodule.h
 	* src/time/src/ctimermodule.cpp: Renamed to src/core/src/ctimemodule.cpp,

@@ -18,69 +18,43 @@
  ***************************************************************************/
 
 
-/*-------------------------integerattributehandler-------------------------*\
-|   This attribute handler can deserialize Integer attributes               |
+/*----------------------------------float----------------------------------*\
+|   This is a float attribute for PersistentObject                          |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/03/2007 - Paf - Initial release                          |
-|               08/14/2007 - Paf - Update comments                          |
+|               09/24/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include <boost/shared_ptr.hpp>
-#include <libxml++/libxml++.h>
 
-#include "../include/iattributehandler.h"
+#ifndef __FLOAT_H__
+#define __FLOAT_H__
 
-#ifndef __INTEGERATTRIBUTEHANDLER_H__
-#define __INTEGERATTRIBUTEHANDLER_H__
 
+#include "iattribute.h" 
+#include "scalar.h" 
+
+using namespace std;
 using namespace boost;
 
-
-namespace Viracocha 
+namespace Gnoll
 {
-
 	namespace Core
 	{
 
 		/**
-		*	This attribute handler deserialize Integer attributes.
-		*/ 
-		class IntegerAttributeHandler : public IAttributeHandler
+		 *	This is a simple attribute. 
+		 */ 
+		class Float : public Scalar<float>
 		{
-
 			public:
-
-				/**
-				* This is a constructor.
-				*/
-				IntegerAttributeHandler() {]
-
-
-				/**
-				* This is a destructor.
-				*/
-				~IntegerAttributeHandler() {}
-
-
-				/**
-				 * This is the handler
-				 * @param _node The attribute passed as a xml tree
-				 * @return Smart pointer to the deserialized IAttribute
-				 */
-				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node) 
-				{
-					shared_ptr<Integer> integer = new Integer();
-					integer->deSerialize(_node);
-
-					return dynamic_pointer_cast<IAttribute>(integer);
-				}
-
+		
+				Float(float _value = 0.0f) : Scalar<float>("float", _value) {};
+		
 		};
 
 	}
 }
 
-#endif // __INTEGERATTRIBUTEHANDLER_H__
+#endif // __FLOAT_H__

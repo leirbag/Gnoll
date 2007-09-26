@@ -24,6 +24,7 @@
 |   Changelog :                                                             |
 |               07/09/2007 - Paf - Initial release                          |
 |               08/18/2007 - Paf - Update comments                          |
+|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll    |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -178,9 +179,9 @@ void PersistentObject::deSerializeXML( xmlpp::Element* _element )
 				if (elementChild)
 				{
 					// We need a handler for this attribute
-					Viracocha::Core::AttributeHandlerRegistry registry = Viracocha::Core::AttributeHandlerRegistry::getInstance();
+					Gnoll::Core::AttributeHandlerRegistry registry = Gnoll::Core::AttributeHandlerRegistry::getInstance();
 
-					shared_ptr<Viracocha::Core::IAttributeHandler> handler = registry.getHandler(name);
+					shared_ptr<Gnoll::Core::IAttributeHandler> handler = registry.getHandler(name);
 	
 					// Check if a handler is available for this attribute
 					if (handler.get() != NULL)

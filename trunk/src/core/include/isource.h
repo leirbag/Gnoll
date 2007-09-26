@@ -26,6 +26,7 @@
 |               08/16/2007 - Paf - Update comments                          |
 |                                - Enclose ISource in Viracocha::Core       |
 |                                    namespace                              |
+|               08/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -41,7 +42,7 @@
 using namespace std;
 using namespace boost;
 
-namespace Viracocha 
+namespace Gnoll 
 {
 	namespace Core
 	{

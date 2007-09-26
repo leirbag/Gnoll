@@ -7,7 +7,7 @@
     <scalar value="c'etait un cafard qui vivait dans le noir"/>
   </attribute>
   <attribute name="pi">
-    <scalar value="3.145"/>
+    <float value="3.145"/>
   </attribute>
 </persistentobject>
 
