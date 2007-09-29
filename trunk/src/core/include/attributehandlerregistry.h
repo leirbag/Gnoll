@@ -31,6 +31,7 @@
 |                                - Replace namespace Viracocha by Gnoll     |
 |               09/26/2007 - Paf - Add string.h                             |
 |                                - Add double.h                             |
+|               09/28/2007 - Paf - Add list.h                               |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -47,6 +48,7 @@
 #include "float.h"
 #include "string.h"
 #include "double.h"
+#include "list.h"
 
 
 #ifndef __ATTRIBUTEHANDLERREGISTRY_H__

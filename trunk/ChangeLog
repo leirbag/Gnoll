@@ -1,3 +1,16 @@
+2007-09-28  Paf <paf@tuxfamily.org>
+	* src/core/tests/testpo.cpp: Updated to test List attributes
+	* src/core/tests/zelda: Add a new list attribute
+	* src/core/include/attributehandlerregistry.h: Add list.h
+	* src/core/include/list.h: New attribute of type list. This can hold a list
+	of attributes IAttribute
+	* src/core/src/attributehandlerregistry.cpp: Associate by default list
+	attributes to nodes of type "list"
+	* src/core/src/list.cpp: New attribute of type list. This can hold a list
+	of attributes IAttribute
+	* src/core/Makefile: Makefile updated for target testpo so it can use the
+	new List attribute
+
 2007-09-26  Paf <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to test Double attributes
 	* src/core/tests/zelda: Add a new Double attribute

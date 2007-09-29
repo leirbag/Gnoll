@@ -28,6 +28,7 @@
 |                                - Add float attribute handler              |
 |               09/26/2007 - Paf - Add string attribute handler             |
 |                                - Add double attribute handler             |
+|               09/28/2007 - Paf - Add list attribute handler               |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -50,6 +51,7 @@ namespace Gnoll
 			this->registerHandler(string("float"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Float>()));
 			this->registerHandler(string("string"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<String>()));
 			this->registerHandler(string("double"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Double>()));
+			this->registerHandler(string("list"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<List>()));
 
 		}
 

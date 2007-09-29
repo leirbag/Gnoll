@@ -4,7 +4,7 @@
     <integer value="345"/>
   </attribute>
   <attribute name="phrase">
-    <scalar value="c'etait un cafard qui vivait dans le noir"/>
+    <string value="c'etait un cafard qui vivait dans le noir"/>
   </attribute>
   <attribute name="pi">
     <float value="3.145"/>
@@ -15,5 +15,13 @@
   <attribute name="dpi">
     <double value="3.145123456713556778"/>
   </attribute>
+  <attribute name="ListPreums">
+    <list>
+      <integer value="6810"/>
+      <string value="c'etait un cafard qui vivait dans le noir"/>
+      <float value="3.145"/>
+    </list>
+  </attribute>
+
 </persistentobject>
 

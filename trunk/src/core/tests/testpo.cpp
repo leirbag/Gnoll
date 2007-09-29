@@ -35,6 +35,7 @@
 #include "../include/integer.h"
 #include "../include/float.h"
 #include "../include/string.h"
+#include "../include/list.h"
 
 #include "../include/sourcefile.h"
 #include "../include/istream.h"
@@ -152,6 +153,31 @@ int main() {
 		cout << "Double PI in Zelda : " << setprecision(16) << dpid << endl;
 		cout << "Squared Double PI in Zelda : " << setprecision(16) << dpid * dpid << endl;
 
+
+		typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+		shared_ptr< List > list = Zelda->getAttribute< List > ("ListPreums");
+		for (ListIterator it = list->begin(); it != list->end(); it++)
+		{
+			if (shared_ptr<String> str = dynamic_pointer_cast<String>(*it))
+			{
+				cout << "String element in list : '" << str->getValue() << "'" << endl;
+			}
+
+			if (shared_ptr<Integer> integer = dynamic_pointer_cast<Integer>(*it))
+			{
+				cout << "Integer element in list : [" << integer->getValue() << "]" << endl;
+			}
+
+			if (shared_ptr<Double> dbl = dynamic_pointer_cast<Double>(*it))
+			{
+				cout << "Double element in list : [" << dbl->getValue() << "]" << endl;
+			}
+
+			if (shared_ptr<Float> flt = dynamic_pointer_cast<Float>(*it))
+			{
+				cout << "Float element in list : [" << flt->getValue() << "]" << endl;
+			}
+		}
 
 	}
 	catch(Glib::ustring e)
