@@ -242,7 +242,7 @@ class robotcontroler : public CMessageListener
 			OIS::KeyCode temp2 = message->getData<OIS::KeyCode>();
 
 
-			SceneManager* scenetemp = CGraphicModule::getInstance().getSceneManager();
+			SceneManager* scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 			Ogre::SceneNode* robotnode = scenetemp->getSceneNode("RobotNode");
 
 
@@ -283,7 +283,7 @@ void deleteRobot(){
 	int tempcnt = --objcnt;
 	cout << "B : " << objcnt <<endl;
 	if (tempcnt >= 0) {
-		Ogre::SceneManager* sceneMgr = CGraphicModule::getInstance().getSceneManager();
+		Ogre::SceneManager* sceneMgr = CGraphicModule::getInstancePtr()->getSceneManager();
 		Ogre::SceneNode *node = sceneMgr->getSceneNode(Ogre::StringConverter::toString(tempcnt));
 		node->detachObject(Ogre::StringConverter::toString(tempcnt));
 		Ogre::Entity *ent = sceneMgr->getEntity(Ogre::StringConverter::toString(tempcnt));
@@ -329,7 +329,7 @@ class keydown : public CMessageListener
 			// Add a robot at a random position
 			if (temp2 == OIS::KC_A) {
 				cout << "IN : " << objcnt << endl;
-				Ogre::SceneManager* sceneMgr = CGraphicModule::getInstance().getSceneManager();
+				Ogre::SceneManager* sceneMgr = CGraphicModule::getInstancePtr()->getSceneManager();
 				Ogre::Entity *ent = sceneMgr->createEntity( Ogre::StringConverter::toString(objcnt), "robot.mesh" );
 				cout << "F2 : " << objcnt << endl;
 				Ogre::SceneNode *node1 = sceneMgr->getRootSceneNode()->createChildSceneNode( Ogre::StringConverter::toString(objcnt));
@@ -387,7 +387,7 @@ class keydown : public CMessageListener
 				toucherecule = true;
 
 				if (scenetemp == NULL)
-					scenetemp = CGraphicModule::getInstance().getSceneManager();
+					scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 				Entity *ent = scenetemp->getEntity( "Robot" );
 				AnimationState * anim = ent->getAnimationState( "Walk" );
    	      anim->setLoop( true );
@@ -401,7 +401,7 @@ class keydown : public CMessageListener
 				toucheavance = true;
 
 				if (scenetemp == NULL)
-					scenetemp = CGraphicModule::getInstance().getSceneManager();
+					scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 				Entity *ent = scenetemp->getEntity( "Robot" );
 				AnimationState * anim = ent->getAnimationState( "Walk" );
 			   	anim->setLoop( true );
@@ -502,7 +502,7 @@ class AnimationListener : public CMessageListener
 
 			if (scenetemp == NULL)
 			{
-				scenetemp = CGraphicModule::getInstance().getSceneManager();
+				scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 			}
 			Entity *ent = scenetemp->getEntity( "Robot" );
 			AnimationState * anim = ent->getAnimationState( state);
@@ -513,7 +513,7 @@ class AnimationListener : public CMessageListener
 				anim->addTime( lasttime / 1000.0);
 
 
-			scenetemp = CGraphicModule::getInstance().getSceneManager();
+			scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 			Ogre::SceneNode* robotnode = scenetemp->getSceneNode("RobotNode");
 			if (tourne == -1) {
 				direction -= Degree(vtourne * lasttime / 1000.0);
@@ -584,12 +584,12 @@ int main()
 	shared_ptr<CMessageListener> mylistener7(new MousePressedListener);
 	shared_ptr<CMessageListener> mylistener8(new MousePressedListener);
  
-	CGraphicModule& graphicmanager = CGraphicModule::getInstance();
+	CGraphicModule* graphicmanager = CGraphicModule::getInstancePtr();
 	COISInputModule inputmanager;
 	CTimeModule timeModule;
 
 
-	graphicmanager.init();
+	graphicmanager->init();
 	inputmanager.init();
 	timeModule.init();
 
@@ -597,36 +597,36 @@ int main()
 	 * We add a listner and send some messages
 	 * Each of them are handle by the listener thanks to the message manager
 	 */
-	if (CGenericMessageManager::getInstance().addListener ( mylistener6, alltype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener6, alltype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstance().addListener ( mylistener, mytype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstance().addListener ( mylistener2, mytype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener2, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstance().addListener ( mylistener3, framerendered ) == true)
+	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener3, framerendered ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstance().addListener ( mylistener4, mytype2 ) == true)
+	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener4, mytype2 ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstance().addListener ( mylistener5, mytype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener5, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstance().addListener ( mylistener7, mptype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener7, mptype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstance().addListener ( mylistener8, mrtype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener8, mrtype ) == true)
 		cout << "Listener ajoute" << endl;
 
 	while (done == false)
 	{
 
 		inputmanager.process();
-		CGenericMessageManager::getInstance().process();
-		graphicmanager.process();
+		CGenericMessageManager::getInstancePtr()->process();
+		graphicmanager->process();
 		timeModule.process();
 		
 	}
@@ -642,28 +642,28 @@ int main()
 	 *  which care about this message type
 	 */
 
-	if (CGenericMessageManager::getInstance().delListener ( mylistener, mytype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstance().delListener ( mylistener2, mytype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener2, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstance().delListener ( mylistener3, framerendered ) == true)
+	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener3, framerendered ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstance().delListener ( mylistener4, mytype2 ) == true)
+	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener4, mytype2 ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstance().delListener ( mylistener5, mytype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener5, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstance().delListener ( mylistener6, alltype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener6, alltype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstance().delListener ( mylistener7, mptype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener7, mptype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstance().delListener ( mylistener8, mrtype ) == true)
+	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener8, mrtype ) == true)
 		cout << "Listener supprime" << endl;
 
 	 
@@ -673,7 +673,7 @@ int main()
 
 	timeModule.exit();
 	inputmanager.exit();
-	graphicmanager.exit();
+	graphicmanager->exit();
 
 	// Bye bye 
 	cout << "Au revoir !" << endl;

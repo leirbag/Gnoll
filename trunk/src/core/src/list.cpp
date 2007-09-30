@@ -75,7 +75,7 @@ namespace Gnoll {
 			}
 
 			// We need a handler to deserialize attributes
-			Gnoll::Core::AttributeHandlerRegistry registry = Gnoll::Core::AttributeHandlerRegistry::getInstance();
+			Gnoll::Core::AttributeHandlerRegistry* registry = Gnoll::Core::AttributeHandlerRegistry::getInstancePtr();
 
 
 			xmlpp::Node::NodeList list = _element->get_children();
@@ -88,7 +88,7 @@ namespace Gnoll {
 				if (elementChild)
 				{
 
-					shared_ptr<Gnoll::Core::IAttributeHandler> handler = registry.getHandler(name);
+					shared_ptr<Gnoll::Core::IAttributeHandler> handler = registry->getHandler(name);
 	
 					// Check if a handler is available for this attribute
 					if (handler.get() != NULL)

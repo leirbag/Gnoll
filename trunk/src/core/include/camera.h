@@ -30,7 +30,7 @@
 #include <glibmm/ustring.h>
 #include <OgreVector3.h>
 #include <OgreCamera.h>
-#include <ogrescenemanager.h>
+#include <OgreSceneManager.h>
 #include "persistentobject.h" 
 
 #ifndef __CAMERA_H__

@@ -270,7 +270,7 @@ void CGraphicModule::process()
 			);
 	shared_ptr<CMessage>  mymessage (new CMessage(framerendered, tempTime));
 
-	if (CGenericMessageManager::getInstance().queueMessage(mymessage) == false)
+	if (CGenericMessageManager::getInstancePtr()->queueMessage(mymessage) == false)
 		cout << "Message pas ajoute !!!" << endl;
 	
 	m_lastframe = newframe;

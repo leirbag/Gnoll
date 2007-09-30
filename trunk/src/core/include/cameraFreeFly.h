@@ -73,9 +73,9 @@ namespace Viracocha
 			 */
 			virtual ~CameraFreeFly()
 			{
-				CGenericMessageManager::getInstance().delListener ( mylistener, CMessageType("KEYBOARD_KEYDOWN") );
-				CGenericMessageManager::getInstance().delListener ( mylistener1, CMessageType("KEYBOARD_KEYDOWN") );
-				CGenericMessageManager::getInstance().delListener ( mylistener2, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstancePtr()->delListener ( mylistener, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstancePtr()->delListener ( mylistener1, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstancePtr()->delListener ( mylistener2, CMessageType("KEYBOARD_KEYDOWN") );
 			}
 
 			/**

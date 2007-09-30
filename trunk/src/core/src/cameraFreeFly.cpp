@@ -37,11 +37,11 @@ namespace Viracocha
 		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Viracocha::Core::Camera(instanceName, pSM)
 		{
 			mylistener = shared_ptr<CMessageListener>(new Viracocha::Core::MoveCameraFreeFlyListener(static_cast<Viracocha::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstance().addListener ( mylistener, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( mylistener, CMessageType("KEYBOARD_KEYDOWN") );
 			mylistener1 = shared_ptr<CMessageListener>(new Viracocha::Core::RotateCameraFreeFlyListener(static_cast<Viracocha::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstance().addListener ( mylistener1, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( mylistener1, CMessageType("KEYBOARD_KEYDOWN") );
 			mylistener2 = shared_ptr<CMessageListener>(new Viracocha::Core::StrafeCameraFreeFlyListener(static_cast<Viracocha::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstance().addListener ( mylistener2, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( mylistener2, CMessageType("KEYBOARD_KEYDOWN") );
 		}
 
 		void CameraFreeFly::move(const Ogre::Vector3& dir)

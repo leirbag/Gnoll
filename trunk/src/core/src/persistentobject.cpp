@@ -179,9 +179,9 @@ void PersistentObject::deSerializeXML( xmlpp::Element* _element )
 				if (elementChild)
 				{
 					// We need a handler for this attribute
-					Gnoll::Core::AttributeHandlerRegistry registry = Gnoll::Core::AttributeHandlerRegistry::getInstance();
+					Gnoll::Core::AttributeHandlerRegistry* registry = Gnoll::Core::AttributeHandlerRegistry::getInstancePtr();
 
-					shared_ptr<Gnoll::Core::IAttributeHandler> handler = registry.getHandler(name);
+					shared_ptr<Gnoll::Core::IAttributeHandler> handler = registry->getHandler(name);
 	
 					// Check if a handler is available for this attribute
 					if (handler.get() != NULL)

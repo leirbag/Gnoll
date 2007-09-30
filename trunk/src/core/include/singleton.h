@@ -69,18 +69,6 @@ template <typename T> class Singleton
 		}
 
 		/**
-		 * This returns the singleton by reference
-		 */
-		static T& getInstance() 
-		{ 
-			if (m_instance == 0)
-				m_instance = new T;
-
-			return *m_instance;
-		}
-
-
-		/**
 		 * This destroys the singleton
 		 */
 		static void destroy()

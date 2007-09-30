@@ -1,6 +1,23 @@
+2007-09-30  Paf <paf@tuxfamily.org>
+	* src/input/src/coisinputmanager.cpp: Replace getInstance() by
+	getInstancePtr()
+	* src/main.cpp: Replace getInstance() by getInstancePtr()
+	* src/core/include/singleton.h: Removed method Singleton::getInstance()
+	* src/core/include/cameraFreeFly.h : Replace getInstance() by
+	getInstancePtr()
+	* src/core/include/camera.h: Fix include that was not taking in account
+	upper case letters
+	* src/core/src/cameraFreeFly.cpp: Replace getInstance() by getInstancePtr()
+	* src/core/src/persistentobject.cpp : Replace getInstance() by
+	getInstancePtr()
+	* src/core/src/list.cpp: Replace getInstance() by getInstancePtr()
+	* src/graphic/src/cgraphicmodule.cpp: Replace getInstance() by
+	getInstancePtr()
+	* Makefile.am: Add free fly camera source file
+
 2007-09-29  Paf <paf@tuxfamily.org>
 	* src/main.cpp: Add CTimeModule
-	* Makefile.am: Add Time module  and PersistentObject source files
+	* Makefile.am: Add Time module and PersistentObject source files
 
 2007-09-28  Paf <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to test List attributes
