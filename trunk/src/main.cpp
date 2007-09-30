@@ -51,6 +51,7 @@
 #include "input/include/coisinputmodule.h"
 #include "input/include/cinputmouseevents.h"
 #include "graphic/include/cgraphicmodule.h"
+#include "time/include/ctimemodule.h"
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>
@@ -630,10 +631,12 @@ int main()
  
 	CGraphicModule& graphicmanager = CGraphicModule::getInstance();
 	COISInputModule inputmanager;
+	CTimeModule timeModule;
 
 
 	graphicmanager.init();
 	inputmanager.init();
+	timeModule.init();
 
 	/*
 	 * We add a listner and send some messages
@@ -671,6 +674,7 @@ int main()
 		inputmanager.process();
 		CGenericMessageManager::getInstance().process();
 		graphicmanager.process();
+		timeModule.process();
 		
 	}
 
@@ -717,6 +721,7 @@ int main()
 		deleteRobot();
 	}
 
+	timeModule.exit();
 	inputmanager.exit();
 	graphicmanager.exit();
 
