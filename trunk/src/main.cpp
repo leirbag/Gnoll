@@ -64,6 +64,7 @@
 
 using namespace boost;
 using namespace std;
+using namespace Gnoll::Core;
 
 bool done = false;
 

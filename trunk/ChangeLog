@@ -1,6 +1,6 @@
 2007-09-29  Paf <paf@tuxfamily.org>
 	* src/main.cpp: Add CTimeModule
-	* Makefile.am: Add Time module source files
+	* Makefile.am: Add Time module  and PersistentObject source files
 
 2007-09-28  Paf <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to test List attributes
