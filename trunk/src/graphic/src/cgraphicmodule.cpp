@@ -46,9 +46,18 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
+#include "../../core/include/camera.h"
+#include "../../core/include/cameraFixe.h"
+#include "../../core/include/cameraFreeFly.h"
 
 #include "../include/cgraphicmodule.h"
 #include "../../config.h"
+
+#include "../../core/include/cmessage.h"
+#include "../../core/include/cmessagetype.h"
+#include "../../core/include/cmessagemanager.h"
+#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagelistener.h"
 
 using namespace Ogre;
 
@@ -71,148 +80,115 @@ LogManager::getSingleton().logMessage("GRApHICMANAGER : " + string(gni) );*/
 void CGraphicModule::init()
 {
 	this->mRoot = new Root("plugins.cfg","display.cfg","log.txt"); 
-
-	// Show the configuration dialog and initialise the system
-	// You can skip this and use root.restoreConfig() to load configuration
-	// settings if you were sure there are valid ones saved in ogre.cfg
-	if(mRoot->showConfigDialog())
-	{
-		// If returned true, user clicked OK so initialise
-		// Here we choose to let the system create a default rendering window by passing 'true'
-		//mWindow = mRoot->initialise(true);
-	}
-
+	this->mRoot->showConfigDialog();
 	this->mwindow = mRoot->initialise(true, PACKAGE_STRING);
-//	mWindow->setAutoUpdated(true);
-	mwindow->setActive(true);
 
+	mwindow->setActive(true);
 	mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
-	Camera *Camera = mSceneMgr->createCamera("PlayerCam");
-	// Position it at 500 in Z direction
-	Camera->setPosition(Vector3(-50, 25, 0));
-	// Look back along -Z
-	Camera->lookAt(Vector3(0, 10, 0));
-	Camera->setNearClipDistance(5);
-	//Camera->setFarClipDistance(1000);
+	// Create and configure the camera
+	Viracocha::Core::Camera* pCamera = new Viracocha::Core::CameraFreeFly("PlayerCam", mSceneMgr);
+
+	pCamera->setEye(Vector3(780, 25, 590));
+	pCamera->setLookAt(Vector3(0, 10, 0));
+	pCamera->setNearDistance(5);
+	pCamera->setFarDistance(1000);
 
 	// Create one viewport, entire window
-	Viewport* vp = mwindow->addViewport(Camera);
+	Viewport* vp = mwindow->addViewport(&pCamera->getOgreCamera());
 	vp->setBackgroundColour(ColourValue(0.5,1,0));
 
-
 	// Alter the camera aspect ratio to match the viewport
-	Camera->setAspectRatio( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
+	pCamera->setFov( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
 
 	mSceneMgr->setAmbientLight( ColourValue( 0.6, 0.6, 0.6 ) );
 	mSceneMgr->setShadowTechnique( SHADOWTYPE_TEXTURE_ADDITIVE );
 	mSceneMgr->setShadowFarDistance(5000);
 	mSceneMgr->setShadowTextureSize(2048);
-	mSceneMgr->setShadowTextureCount(8);
+	mSceneMgr->setShadowTextureCount(4);
 
-        // Load resource paths from config file
-        ConfigFile cf;
-        cf.load("resources.cfg");
+	// Load resource paths from config file
+	ConfigFile cf;
+	cf.load("resources.cfg");
 
-        // Go through all sections & settings in the file
-        ConfigFile::SectionIterator seci = cf.getSectionIterator();
+    // Go through all sections & settings in the file
+    ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
-        String secName, typeName, archName;
-        while (seci.hasMoreElements())
+    String secName, typeName, archName;
+    while (seci.hasMoreElements())
+    {
+        secName = seci.peekNextKey();
+        ConfigFile::SettingsMultiMap *settings = seci.getNext();
+        ConfigFile::SettingsMultiMap::iterator i;
+        for (i = settings->begin(); i != settings->end(); ++i)
         {
-            secName = seci.peekNextKey();
-            ConfigFile::SettingsMultiMap *settings = seci.getNext();
-            ConfigFile::SettingsMultiMap::iterator i;
-            for (i = settings->begin(); i != settings->end(); ++i)
-            {
-                typeName = i->first;
-                archName = i->second;
-                ResourceGroupManager::getSingleton().addResourceLocation(
-                    archName, typeName, secName);
-            }
+            typeName = i->first;
+            archName = i->second;
+            ResourceGroupManager::getSingleton().addResourceLocation(
+                archName, typeName, secName);
         }
+    }
 
-// Initialise, parse scripts etc
-		ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+	// Initialise, parse scripts etc
+	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
-        // Create a skybox
-        mSceneMgr->setSkyDome(true, "Examples/CloudySky", 1, 15);//setSkyBox(true, "Examples/SpaceSkyBox", 50 );
-
-
-        // Create a light
-        Light* l = mSceneMgr->createLight("MainLight");
-        // Accept default settings: point light, white diffuse, just set position
-        // NB I could attach the light to a SceneNode if I wanted it to move automatically with
-        //  other objects, but I don't
-        l->setPosition(699,380,485);
-		l->setType( Light::LT_POINT );
-
-    	    // Fog
-        // NB it's VERY important to set this before calling setWorldGeometry 
-        // because the vertex program picked will be different
-   //     ColourValue fadeColour(0.93, 0.86, 0.76);
-   //     mSceneMgr->setFog( FOG_LINEAR, fadeColour, .001, 500, 1000);
-   //     mWindow->getViewport(0)->setBackgroundColour(fadeColour);
+    // Create a skybox
+    mSceneMgr->setSkyDome(true, "Examples/CloudySky", 1, 15);//setSkyBox(true, "Examples/SpaceSkyBox", 50 );
 
 
+    // Create a light
+    Light* l = mSceneMgr->createLight("MainLight");
+    // Accept default settings: point light, white diffuse, just set position
+    // NB I could attach the light to a SceneNode if I wanted it to move automatically with
+    //  other objects, but I don't
+    l->setPosition(699,380,485);
+	l->setType( Light::LT_POINT );
 
-
-        std::string terrain_cfg("terrain.cfg");
+    std::string terrain_cfg("terrain.cfg");
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
         terrain_cfg = mResourcePath + terrain_cfg;
 #endif
-        mSceneMgr -> setWorldGeometry( terrain_cfg );
-        // Infinite far plane?
-        if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
-        {
-            Camera->setFarClipDistance(0);
-        }
+	mSceneMgr -> setWorldGeometry( terrain_cfg );
+	// Infinite far plane?
+	if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
+	{
+		pCamera->setFarDistance(0);
+	}
 
-        // Set a nice viewpoint
-        //Camera->setPosition(699,2500,485);
-//        Camera->setPosition(699,0,485);
-        //Camera->setOrientation(Quaternion(-0.3486, 0.0122, 0.9365, 0.0329));
-        //mRoot -> showDebugOverlay( true );
+	RaySceneQuery* raySceneQuery = mSceneMgr->createRayQuery(
+	Ray(pCamera->getEye(), Vector3::NEGATIVE_UNIT_Y));
 
-        RaySceneQuery* raySceneQuery = mSceneMgr->createRayQuery(
-            Ray(Camera->getPosition(), Vector3::NEGATIVE_UNIT_Y));
-
-        Ray updateRay;
-        updateRay.setOrigin(Camera->getPosition());
-        updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
-        raySceneQuery->setRay(updateRay);
-        RaySceneQueryResult& qryResult = raySceneQuery->execute();
-        RaySceneQueryResult::iterator i = qryResult.begin();
-        if (i != qryResult.end() && i->worldFragment)
-        {
-            Camera->setPosition(Camera->getPosition().x, 
-                i->worldFragment->singleIntersection.y + 5, 
-                Camera->getPosition().z);
-        }
-
-			//delete raySceneQuery;
+	Ray updateRay;
+	updateRay.setOrigin(pCamera->getEye());
+	updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
+	raySceneQuery->setRay(updateRay);
+	RaySceneQueryResult& qryResult = raySceneQuery->execute();
+	RaySceneQueryResult::iterator i = qryResult.begin();
+	if (i != qryResult.end() && i->worldFragment)
+	{
+		pCamera->setEye(Vector3(pCamera->getEye().x, 
+		i->worldFragment->singleIntersection.y + 5, 
+		pCamera->getEye().z));
+	}
 
 
-Entity *ent1 = mSceneMgr->createEntity( "Robot", "robot.mesh" );
+	Entity *ent1 = mSceneMgr->createEntity( "Robot", "robot.mesh" );
 	SceneNode *node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "RobotNode");
-//	ent1->setCastShadows( true );
 
-        raySceneQuery = mSceneMgr->createRayQuery(
-            Ray(Vector3(780,2500,590) , Vector3::NEGATIVE_UNIT_Y));
+	raySceneQuery = mSceneMgr->createRayQuery(
+	Ray(Vector3(780,2500,590) , Vector3::NEGATIVE_UNIT_Y));
 
-  
-        updateRay.setOrigin( Vector3(780,2500,590) );
-        updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
-        raySceneQuery->setRay(updateRay);
-        qryResult = raySceneQuery->execute();
-        i = qryResult.begin();
-        if (i != qryResult.end() && i->worldFragment)
-        {
-            node1->setPosition(780, 
-                i->worldFragment->singleIntersection.y , 
-                590);
-	//	Ogre::LogManager::getSingleton().logMessage(Ogre::String((float)(i->worldFragment->singleIntersection.y)) );
-        }
+    updateRay.setOrigin( Vector3(780,2500,590) );
+    updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
+    raySceneQuery->setRay(updateRay);
+    qryResult = raySceneQuery->execute();
+    i = qryResult.begin();
+    if (i != qryResult.end() && i->worldFragment)
+    {
+        node1->setPosition(780, 
+            i->worldFragment->singleIntersection.y , 
+            590);
+    }
 
 	//delete raySceneQuery;
 	node1->scale(0.2, 0.2, 0.2);
@@ -226,16 +202,8 @@ Entity *ent1 = mSceneMgr->createEntity( "Robot", "robot.mesh" );
 	m_timer = PlatformManager::getSingleton().createTimer();
 	m_lastframe = m_timer->getMilliseconds ();
 
-	SceneNode *node2 = node1->createChildSceneNode( "Camera" );
-	node2->attachObject( Camera );
-
-
 	ISceneFactory * sf = new CSceneFactoryStd("test.xml", this->mRoot);
 	sf->loadScene();
-
-
-
-
 
 	// Set up GUI system
 	mGUIRenderer = new CEGUI::OgreCEGUIRenderer(mwindow, Ogre::RENDER_QUEUE_OVERLAY, false, 3000, mSceneMgr);
@@ -256,7 +224,7 @@ Entity *ent1 = mSceneMgr->createEntity( "Robot", "robot.mesh" );
 	CEGUI::PushButton* btn = static_cast<CEGUI::PushButton*>(CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/Button", "QuitButton"));
 	mEditorGuiSheet->addChildWindow(btn);
 	btn->setText("Quit!");
-	btn->setPosition(CEGUI::UVector2(cegui_reldim(0.035f), cegui_reldim( 0.0f)));
+	btn->setPosition(CEGUI::UVector2(CEGUI::UDim(0.035f, 0.0f), CEGUI::UDim(0.035f, 0.0f)));
 	btn->setSize(CEGUI::UVector2(cegui_reldim(0.1f), cegui_reldim( 0.036f)));
 	//btn->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Demo4Sample::handleQuit, this));
 	btn->setAlwaysOnTop(true);
@@ -267,9 +235,6 @@ Entity *ent1 = mSceneMgr->createEntity( "Robot", "robot.mesh" );
 	eb->setPosition(CEGUI::UVector2(cegui_reldim(0.025f), cegui_reldim(0.85f)));
 	eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 	eb->setAlwaysOnTop(true);
-
-
-
 }
 
 
@@ -314,7 +279,7 @@ void CGraphicModule::process()
 
 void CGraphicModule::exit()
 {
-  PlatformManager::getSingleton().destroyTimer( m_timer );
+    PlatformManager::getSingleton().destroyTimer( m_timer );
 }
 
 

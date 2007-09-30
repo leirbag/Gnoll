@@ -34,7 +34,7 @@
 
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagetype.h"
 
 #include "cscenefactorystd.h"
 
@@ -59,6 +59,8 @@
 #include <CEGUI/elements/CEGUIPushButton.h>
 //regular mem handler
 #include <OgreMemoryMacros.h> 
+
+
 
 
 

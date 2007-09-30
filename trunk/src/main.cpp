@@ -47,6 +47,7 @@
 #include "core/include/cmessagemanager.h"
 #include "core/include/cgenericmessagemanager.h"
 #include "core/include/cmessagelistener.h"
+#include "core/include/cameraFreeFly.h"
 
 #include "input/include/coisinputmodule.h"
 #include "input/include/cinputmouseevents.h"
@@ -81,6 +82,7 @@ Ogre::Radian direction(0.0);
 
 
 int objcnt = 0;
+
 
 /**
  * An idiot message listener 
@@ -207,53 +209,6 @@ class MyMessageListener : public CMessageListener
 
 
 };
-
-class CamMessageListener : public CMessageListener
-{
-
-	public:
-		
-		/**
-		 * This is a constructor
-		 */
-		CamMessageListener() {}
-
-		/**
-		 * This is a destructor
-		 */
-		virtual ~CamMessageListener() {}
-
-		/**
-		 * This method is called in order to process a message
-		 * @param message The message this method will have to process
-		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
-		{ 
-			/*
-			 * A string is embeded in the message and is displayed
-			 * A very dirty thing but it works ;)
-			 */
-			MouseEvent event = message->getData<MouseEvent>() ;
-
-			Ogre::SceneManager* scenetemp = CGraphicModule::getInstance().getSceneManager();
-			Ogre::SceneNode* camnode = scenetemp->getSceneNode("Camera");
-			Ogre::SceneNode* robotnode = scenetemp->getSceneNode("RobotNode");
-			
-			if(event.relX)
-			{
-				camnode->rotate(Ogre::Vector3(0,1.0,0), Ogre::Radian(-event.relX)/100 );
-			}
-
-			if(event.relY)
-			{
-				camnode->rotate(Ogre::Vector3(0,0,1.0), Ogre::Radian(-event.relY)/100 );
-			}
-
-		}
-};
-
-
-
 
 using namespace Ogre;
 
@@ -628,7 +583,6 @@ int main()
 	shared_ptr<CMessageListener> mylistener6(new AllMessageListener);	
 	shared_ptr<CMessageListener> mylistener7(new MousePressedListener);
 	shared_ptr<CMessageListener> mylistener8(new MousePressedListener);
-	shared_ptr<CMessageListener> mylistener6b(new CamMessageListener);
  
 	CGraphicModule& graphicmanager = CGraphicModule::getInstance();
 	COISInputModule inputmanager;
@@ -665,8 +619,6 @@ int main()
 		cout << "Listener ajoute" << endl;
 
 	if (CGenericMessageManager::getInstance().addListener ( mylistener8, mrtype ) == true)
-		cout << "Listener ajoute" << endl;
-	if (CGenericMessageManager::getInstance().addListener ( mylistener6b, alltype ) == true)
 		cout << "Listener ajoute" << endl;
 
 	while (done == false)
@@ -713,9 +665,6 @@ int main()
 
 	if (CGenericMessageManager::getInstance().delListener ( mylistener8, mrtype ) == true)
 		cout << "Listener supprime" << endl;
-	if (CGenericMessageManager::getInstance().delListener ( mylistener6b, alltype ) == true)
-		cout << "Listener supprime" << endl;
-
 
 	 
 	while(objcnt >=0) {
