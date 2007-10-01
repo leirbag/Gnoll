@@ -23,7 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/04/2007 - Paf - Initial release                          |
-|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               09/25/2007 - Paf - Replace namespace Gnoll by Gnoll     |
 |                                - Make Integer inherits from Scalar<int>   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/

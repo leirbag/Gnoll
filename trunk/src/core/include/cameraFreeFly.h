@@ -40,7 +40,7 @@
 #ifndef __CAMERAFREEFLY_H__
 #define __CAMERAFREEFLY_H__
 
-namespace Viracocha
+namespace Gnoll
 {
 
 	namespace Core 
@@ -53,12 +53,12 @@ namespace Viracocha
 		*	This is the interface of all Sources.</br>
 		*   This class cannot be instanciable.
 		*/ 
-		class CameraFreeFly : public Viracocha::Core::Camera
+		class CameraFreeFly : public Gnoll::Core::Camera
 		{
 		private:
-			shared_ptr<CMessageListener> mylistener;
-			shared_ptr<CMessageListener> mylistener1;
-			shared_ptr<CMessageListener> mylistener2;
+			shared_ptr<CMessageListener> m_listenerMove;
+			shared_ptr<CMessageListener> m_listenerRotate;
+			shared_ptr<CMessageListener> m_listenerStrafe;
 
 		public:
 
@@ -73,9 +73,9 @@ namespace Viracocha
 			 */
 			virtual ~CameraFreeFly()
 			{
-				CGenericMessageManager::getInstancePtr()->delListener ( mylistener, CMessageType("KEYBOARD_KEYDOWN") );
-				CGenericMessageManager::getInstancePtr()->delListener ( mylistener1, CMessageType("KEYBOARD_KEYDOWN") );
-				CGenericMessageManager::getInstancePtr()->delListener ( mylistener2, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstance().delListener ( m_listenerMove, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstance().delListener ( m_listenerRotate, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstance().delListener ( m_listenerStrafe, CMessageType("KEYBOARD_KEYDOWN") );
 			}
 
 			/**
@@ -125,14 +125,14 @@ namespace Viracocha
 		class MoveCameraFreeFlyListener : public CMessageListener
 		{
 			private:
-				Viracocha::Core::CameraFreeFly* m_pInstanceCam;
+				Gnoll::Core::CameraFreeFly* m_pInstanceCam;
 
 			public:
 				
 				/**
 				 * This is a constructor
 				 */
-				MoveCameraFreeFlyListener(Viracocha::Core::CameraFreeFly* pInstanceCam) 
+				MoveCameraFreeFlyListener(Gnoll::Core::CameraFreeFly* pInstanceCam) 
 				{
 					m_pInstanceCam = pInstanceCam;
 				}
@@ -164,14 +164,14 @@ namespace Viracocha
 		class RotateCameraFreeFlyListener : public CMessageListener
 		{
 			private:
-				Viracocha::Core::CameraFreeFly* m_pInstanceCam;
+				Gnoll::Core::CameraFreeFly* m_pInstanceCam;
 
 			public:
 				
 				/**
 				 * This is a constructor
 				 */
-				RotateCameraFreeFlyListener(Viracocha::Core::CameraFreeFly* pInstanceCam) 
+				RotateCameraFreeFlyListener(Gnoll::Core::CameraFreeFly* pInstanceCam) 
 				{
 					m_pInstanceCam = pInstanceCam;
 				}
@@ -209,14 +209,14 @@ namespace Viracocha
 		class StrafeCameraFreeFlyListener : public CMessageListener
 		{
 			private:
-				Viracocha::Core::CameraFreeFly* m_pInstanceCam;
+				Gnoll::Core::CameraFreeFly* m_pInstanceCam;
 
 			public:
 				
 				/**
 				 * This is a constructor
 				 */
-				StrafeCameraFreeFlyListener(Viracocha::Core::CameraFreeFly* pInstanceCam) 
+				StrafeCameraFreeFlyListener(Gnoll::Core::CameraFreeFly* pInstanceCam) 
 				{
 					m_pInstanceCam = pInstanceCam;
 				}

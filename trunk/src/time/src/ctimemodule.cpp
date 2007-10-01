@@ -33,9 +33,9 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
+#include <Ogreplatform.h>
 #include "../include/ctimemodule.h"
 #include <iostream>
-
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	#include "../include/clinuxtimer.h"

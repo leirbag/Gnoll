@@ -24,9 +24,9 @@
 |   Changelog :                                                             |
 |               07/11/2007 - Paf - Initial release                          |
 |               08/16/2007 - Paf - Update comments                          |
-|                                - Enclose ISource in Viracocha::Core       |
+|                                - Enclose ISource in Gnoll::Core       |
 |                                    namespace                              |
-|               08/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               08/25/2007 - Paf - Replace namespace Gnoll by Gnoll     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 

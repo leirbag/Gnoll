@@ -25,7 +25,7 @@
 |   Changelog :                                                             |
 |               07/20/2007 - Paf - Initial release                          |
 |               08/13/2007 - Paf - Update comments, implement method save() |
-|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               09/25/2007 - Paf - Replace namespace Gnoll by Gnoll     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 

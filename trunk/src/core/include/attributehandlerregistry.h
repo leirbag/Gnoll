@@ -28,7 +28,7 @@
 |               08/11/2007 - Paf - Add some comments, removed unused        |
 |                                    libxml++ include                       |
 |               09/25/2007 - Paf - Add float.h                              |
-|                                - Replace namespace Viracocha by Gnoll     |
+|                                - Replace namespace Gnoll by Gnoll     |
 |               09/26/2007 - Paf - Add string.h                             |
 |                                - Add double.h                             |
 |               09/28/2007 - Paf - Add list.h                               |

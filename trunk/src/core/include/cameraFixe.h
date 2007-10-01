@@ -32,7 +32,7 @@
 #ifndef __CAMERAFIXE_H__
 #define __CAMERAFIXE_H__
 
-namespace Viracocha
+namespace Gnoll
 {
 
 	namespace Core 
@@ -42,7 +42,7 @@ namespace Viracocha
 		*	This is the interface of all Sources.</br>
 		*   This class cannot be instanciable.
 		*/ 
-		class CameraFixe : public Viracocha::Core::Camera
+		class CameraFixe : public Gnoll::Core::Camera
 		{
 		public:
 
@@ -50,7 +50,7 @@ namespace Viracocha
 			 * This is the constructor.
 			 * @param _instance This is the instance name; the Camera's name
 			 */
-			CameraFixe(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Viracocha::Core::Camera(instanceName, pSM)
+			CameraFixe(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
 			{
 			}
 

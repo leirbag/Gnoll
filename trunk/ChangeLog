@@ -1,3 +1,10 @@
+2007-10-01  Gabriel <countag@wanadoo.fr>
+	* src/core/include/camera.h: Initial release
+	* src/core/include/camerafreefly.h: Initial release
+	* src/core/include/camerafixe.h: Initial release
+	* src/core/src/cgraphicmodule.cpp: Change ogre camera to our camera
+	* update namespace Viracocha to Gnoll
+
 2007-09-30  Paf <paf@tuxfamily.org>
 	* src/main.cpp: Add namespace to Gnoll::Time
 	* src/time/tests/testtimer.cpp: Fix namespace to Gnoll::Time

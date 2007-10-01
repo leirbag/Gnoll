@@ -26,22 +26,22 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#include "../include/cameraFreeFly.h"
+#include "../include/camerafreefly.h"
 
-namespace Viracocha
+namespace Gnoll
 {
 
 	namespace Core 
 	{
 
-		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Viracocha::Core::Camera(instanceName, pSM)
+		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
 		{
-			mylistener = shared_ptr<CMessageListener>(new Viracocha::Core::MoveCameraFreeFlyListener(static_cast<Viracocha::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( mylistener, CMessageType("KEYBOARD_KEYDOWN") );
-			mylistener1 = shared_ptr<CMessageListener>(new Viracocha::Core::RotateCameraFreeFlyListener(static_cast<Viracocha::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( mylistener1, CMessageType("KEYBOARD_KEYDOWN") );
-			mylistener2 = shared_ptr<CMessageListener>(new Viracocha::Core::StrafeCameraFreeFlyListener(static_cast<Viracocha::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( mylistener2, CMessageType("KEYBOARD_KEYDOWN") );
+			m_listenerMove = shared_ptr<CMessageListener>(new Gnoll::Core::MoveCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
+			CGenericMessageManager::getInstance().addListener ( m_listenerMove, CMessageType("KEYBOARD_KEYDOWN") );
+			m_listenerRotate = shared_ptr<CMessageListener>(new Gnoll::Core::RotateCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
+			CGenericMessageManager::getInstance().addListener ( m_listenerRotate, CMessageType("KEYBOARD_KEYDOWN") );
+			m_listenerStrafe = shared_ptr<CMessageListener>(new Gnoll::Core::StrafeCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
+			CGenericMessageManager::getInstance().addListener ( m_listenerStrafe, CMessageType("KEYBOARD_KEYDOWN") );
 		}
 
 		void CameraFreeFly::move(const Ogre::Vector3& dir)

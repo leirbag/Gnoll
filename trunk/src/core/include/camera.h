@@ -36,7 +36,7 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-namespace Viracocha
+namespace Gnoll
 {
 
 	namespace Core 
