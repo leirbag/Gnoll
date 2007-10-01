@@ -73,9 +73,9 @@ namespace Gnoll
 			 */
 			virtual ~CameraFreeFly()
 			{
-				CGenericMessageManager::getInstance().delListener ( m_listenerMove, CMessageType("KEYBOARD_KEYDOWN") );
-				CGenericMessageManager::getInstance().delListener ( m_listenerRotate, CMessageType("KEYBOARD_KEYDOWN") );
-				CGenericMessageManager::getInstance().delListener ( m_listenerStrafe, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerMove, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerRotate, CMessageType("KEYBOARD_KEYDOWN") );
+				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerStrafe, CMessageType("KEYBOARD_KEYDOWN") );
 			}
 
 			/**

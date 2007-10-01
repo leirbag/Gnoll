@@ -19,10 +19,10 @@
 
 
 /*-------------------------------cmessage----------------------------------*\
-|   This is a free fly camera                                                       |
+|   This is a free fly camera                                               |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/31/2007 - Gabriel - Initial release                          |
+|               08/31/2007 - Gabriel - Initial release                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -37,11 +37,11 @@ namespace Gnoll
 		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
 		{
 			m_listenerMove = shared_ptr<CMessageListener>(new Gnoll::Core::MoveCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstance().addListener ( m_listenerMove, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerMove, CMessageType("KEYBOARD_KEYDOWN") );
 			m_listenerRotate = shared_ptr<CMessageListener>(new Gnoll::Core::RotateCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstance().addListener ( m_listenerRotate, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerRotate, CMessageType("KEYBOARD_KEYDOWN") );
 			m_listenerStrafe = shared_ptr<CMessageListener>(new Gnoll::Core::StrafeCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstance().addListener ( m_listenerStrafe, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerStrafe, CMessageType("KEYBOARD_KEYDOWN") );
 		}
 
 		void CameraFreeFly::move(const Ogre::Vector3& dir)
