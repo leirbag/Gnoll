@@ -29,6 +29,7 @@
 |                                  - Rename timeout to delayed event        |
 |                                  - Rename periodic timeout to periodic    |
 |                                      event                                |
+|               09/30/2007 - Paf   - Fix namespace (replace Core by Time)   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -49,7 +50,7 @@ using namespace std;
 namespace Gnoll
 {
 
-	namespace Core
+	namespace Time 
 	{
 
 		CTimeModule::CTimeModule()

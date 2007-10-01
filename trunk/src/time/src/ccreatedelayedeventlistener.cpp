@@ -24,6 +24,7 @@
 |   Changelog :                                                             |
 |               09/14/2007 - Paf - Initial release                          |
 |               09/23/2007 - Paf - Renamed to CCreateDelayedEventListener   |
+|               09/30/2007 - Paf - Fix namespace (replace Core by Time)     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -34,7 +35,7 @@
 
 namespace Gnoll {
 
-	namespace Core {
+	namespace Time {
 
 				
 		CCreateDelayedEventListener::CCreateDelayedEventListener() 

@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               09/07/2007 - Paf - Initial release                          |
+|               09/30/2007 - Paf - Enclose class in Gnoll::Time namespace   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -38,47 +39,53 @@
 
 using namespace std;
 
-
-class CLinuxTimer : public ITimer
+namespace Gnoll
 {
+	namespace Time
+	{
+
+		class CLinuxTimer : public ITimer
+		{
 	
-	private:
+			private:
 
-		/**
-		 * Initial time </br>
-		 * This will be used as the reference time to compare to
-		 */
-		struct timeval m_initialTime;
-
-
+				/**
+				 * Initial time </br>
+				 * This will be used as the reference time to compare to
+				 */
+				struct timeval m_initialTime;
 
 
-	public:
-
-		/**
-		 *   A constructor
-		 */
-		CLinuxTimer(void);
 
 
-		/**
-		 *   A destructor
-		 */
-		~CLinuxTimer(void);
+			public:
+
+				/**
+				 *   A constructor
+				 */
+				CLinuxTimer(void);
 
 
-		/**
-		 *   Returns elapsed milliseconds since timer start/reset
-		 *   @return milliseconds elapsed
-		 */
-		unsigned long int getMsecs(void);
+				/**
+				 *   A destructor
+				 */
+				~CLinuxTimer(void);
 
 
-		/**
-		 *   Reset the timer
-		 */
-		void reset(void);
+				/**
+			 	 *   Returns elapsed milliseconds since timer start/reset
+				 *   @return milliseconds elapsed
+				 */
+				unsigned long int getMsecs(void);
 
-};
+
+				/**
+				 *   Reset the timer
+				 */
+				void reset(void);
+
+		};
+	}
+}
 
 #endif // __CLINUXTIMER_H__

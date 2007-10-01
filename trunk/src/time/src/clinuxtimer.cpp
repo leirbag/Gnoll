@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               09/07/2007 - Paf - Initial release                          |
+|               09/30/2007 - Paf - Enclose class in namespace Gnoll::Time   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -31,29 +32,39 @@
 #include <sys/time.h>
 #include <stddef.h>
 
-
-CLinuxTimer::CLinuxTimer(void)
+namespace Gnoll
 {
-	this->reset();
+	namespace Time
+	{
+
+
+		CLinuxTimer::CLinuxTimer(void)
+		{
+			this->reset();
+		}
+
+
+		CLinuxTimer::~CLinuxTimer(void)
+		{
+		}
+
+
+		unsigned long int CLinuxTimer::getMsecs(void)
+		{
+			struct timeval now;
+			gettimeofday( &now, NULL);
+
+			return (now.tv_sec - m_initialTime.tv_sec) * 1000 + (now.tv_usec - m_initialTime.tv_usec) / 1000;
+
+		}
+
+
+		void CLinuxTimer::reset(void)
+		{
+			gettimeofday( &m_initialTime, NULL);
+		}
+
+	}
 }
 
 
-CLinuxTimer::~CLinuxTimer(void)
-{
-}
-
-
-unsigned long int CLinuxTimer::getMsecs(void)
-{
-	struct timeval now;
-	gettimeofday( &now, NULL);
-
-	return (now.tv_sec - m_initialTime.tv_sec) * 1000 + (now.tv_usec - m_initialTime.tv_usec) / 1000;
-
-}
-
-
-void CLinuxTimer::reset(void)
-{
-	gettimeofday( &m_initialTime, NULL);
-}

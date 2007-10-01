@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
+|               09/30/2007 - Paf   - Enclose class in namespace Gnoll::Time |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -31,32 +32,39 @@
 #define __ITIMER_H__
 
 
-/**
- *   An abstract base class for timer classes
- */
-class ITimer
+namespace Gnoll
 {
-    public:
+	namespace Time
+	{
 
-        /**
-         *   A virtual destructor
-         */
-        virtual ~ITimer()  {}
+		/**
+		 *   An abstract base class for timer classes
+		 */
+		class ITimer
+		{
+			public:
+
+				/**
+				 * A virtual destructor
+   		    */
+				virtual ~ITimer()  {}
 
 
-        /**
-         *   Returns amount of milliseconds since timer start or reset
-         *   @return amount of milliseconds
-         */
-        virtual unsigned long int getMsecs() = 0;
+				/**
+				 * Returns amount of milliseconds since timer start or reset
+				 * @return Amount of milliseconds
+				 */
+		        virtual unsigned long int getMsecs() = 0;
 
 
-        /**
-         *   Reset the timer
-         */
-        virtual void reset() = 0;
+				/**
+				 * Reset the timer
+				 */
+				virtual void reset() = 0;
 
-};
+			};
+	}
+}
 
 
 #endif // __ITIMER_H__

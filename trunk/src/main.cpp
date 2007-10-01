@@ -37,6 +37,7 @@
 |                                   one of the robots                       |
 |               05/09/2007 - Paf - Adapt everything to the new interface of |
 |                                   CMessage                                |
+|               09/30/2007 - Paf - Add Time Module                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -66,6 +67,7 @@
 using namespace boost;
 using namespace std;
 using namespace Gnoll::Core;
+using namespace Gnoll::Time;
 
 bool done = false;
 

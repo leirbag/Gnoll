@@ -1,4 +1,24 @@
 2007-09-30  Paf <paf@tuxfamily.org>
+	* src/main.cpp: Add namespace to Gnoll::Time
+	* src/time/tests/testtimer.cpp: Fix namespace to Gnoll::Time
+	* src/time/include/itimer.h: Fix namespace to Gnoll::Time
+	* src/time/include/ctimermessages.h: Fix namespace to Gnoll::Time
+	* src/time/include/cdestroydelayedeventlistener.h: Fix namespace to Gnoll::Time
+	* src/time/include/ccreateperiodiceventlistener.h: Fix namespace to Gnoll::Time
+	* src/time/include/cogretimer.h: Fix namespace to Gnoll::Time
+	* src/time/include/cdestroyperiodiceventlistener.h: Fix namespace to Gnoll::Time
+	* src/time/include/clinuxtimer.h: Fix namespace to Gnoll::Time
+	* src/time/include/ccreatedelayedeventlistener.h: Fix namespace to Gnoll::Time
+	* src/time/include/ctimemodule.h: Fix namespace to Gnoll::Time
+	* src/time/src/cogretimer.cpp: Fix namespace to Gnoll::Time
+	* src/time/src/cdestroyperiodiceventlistener.cpp: Fix namespace to Gnoll::Time
+	* src/time/src/clinuxtimer.cpp: Fix namespace to Gnoll::Time
+	* src/time/src/ccreatedelayedeventlistener.cpp: Fix namespace to Gnoll::Time
+	* src/time/src/ctimemodule.cpp: Fix namespace to Gnoll::Time
+	* src/time/src/cdestroydelayedeventlistener.cpp: Fix namespace to Gnoll::Time
+	* src/time/src/ccreateperiodiceventlistener.cpp: Fix namespace to Gnoll::Time
+
+2007-09-30  Paf <paf@tuxfamily.org>
 	* src/input/src/coisinputmanager.cpp: Replace getInstance() by
 	getInstancePtr()
 	* src/main.cpp: Replace getInstance() by getInstancePtr()

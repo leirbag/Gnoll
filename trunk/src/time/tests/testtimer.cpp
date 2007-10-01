@@ -47,7 +47,7 @@
 
 using namespace boost;
 using namespace std;
-using namespace Gnoll::Core;
+using namespace Gnoll::Time;
 
 /**
  * An idiot message listener 

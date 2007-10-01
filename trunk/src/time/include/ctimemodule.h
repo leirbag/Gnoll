@@ -29,6 +29,7 @@
 |                                  - Rename timeout to delayed event        |
 |                                  - Rename periodic timeout to periodic    |
 |                                      event                                |
+|               09/30/2007 - Paf   - Fix namespace (replace Core by Time)   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -61,7 +62,7 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Time
 	{
 
 		class CTimeModule : public CModule, public Singleton<CTimeModule>

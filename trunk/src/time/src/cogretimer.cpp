@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
+|               09/30/2007 - Paf   - Enclose class in namespace Gnoll::Time |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -30,25 +31,36 @@
 #include "../include/cogretimer.h"
 
 
-COgreTimer::COgreTimer(void)
+namespace Gnoll
 {
-    mTimer = shared_ptr<Ogre::Timer>(Ogre::PlatformManager::getSingleton().createTimer());
-    mTimer->reset();
+	namespace Time
+	{
+
+
+		COgreTimer::COgreTimer(void)
+		{
+			mTimer = shared_ptr<Ogre::Timer>(Ogre::PlatformManager::getSingleton().createTimer());
+			mTimer->reset();
+		}
+
+
+		COgreTimer::~COgreTimer(void)
+		{
+		}
+
+
+		unsigned long int COgreTimer::getMsecs(void)
+		{
+			return mTimer->getMilliseconds();
+		}
+
+
+		void COgreTimer::reset(void)
+		{
+			mTimer->reset();
+		}
+
+	}
 }
 
 
-COgreTimer::~COgreTimer(void)
-{
-}
-
-
-unsigned long int COgreTimer::getMsecs(void)
-{
-    return mTimer->getMilliseconds();
-}
-
-
-void COgreTimer::reset(void)
-{
-    mTimer->reset();
-}

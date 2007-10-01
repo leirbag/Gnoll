@@ -24,6 +24,7 @@
 |   Changelog :                                                             |
 |               09/20/2007 - Paf - Initial release                          |
 |               09/23/2007 - Paf - Renamed to CCreatePeriodicEventListener  |
+|               09/30/2007 - Paf - Fix namespace (replace Core by Time)     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -49,7 +50,7 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Time
 	{
 
 		/**

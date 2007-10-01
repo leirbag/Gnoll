@@ -24,6 +24,7 @@
 |   Changelog :                                                             |
 |               05/12/2007 - Vince - Initial release                        |
 |               09/20/2007 - Paf   - Make it prettier                       |
+|               09/30/2007 - Paf   - Enclose class in namespace Gnoll::Time |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -43,42 +44,49 @@ using namespace std;
 using namespace boost;
 
 
-class COgreTimer : public ITimer
+namespace Gnoll
 {
-	private:
+	namespace Time
+	{
 
-		/**
-		 * An Ogre timer 
-		 */
-		shared_ptr<Ogre::Timer> mTimer;
+		class COgreTimer : public ITimer
+		{
+			private:
 
-
-	public:
-
-		/**
-		 *   A constructor
-		 */
-		COgreTimer(void);
+				/**
+				 * An Ogre timer 
+				 */
+				shared_ptr<Ogre::Timer> mTimer;
 
 
-		/**
-		 *   A destructor
-		 */
-		~COgreTimer(void);
+			public:
+
+				/**
+				 *   A constructor
+				 */
+				COgreTimer(void);
 
 
-		/**
-		 *   Returns elapsed milliseconds since timer start/reset
-		 *   @return milliseconds elapsed
-		 */
-		unsigned long int getMsecs(void);
+				/**
+				 *   A destructor
+				 */
+				~COgreTimer(void);
 
 
-		/**
-		 *   Reset the timer
-		 */
-		void reset(void);
+				/**
+				 *   Returns elapsed milliseconds since timer start/reset
+				 *   @return milliseconds elapsed
+				 */
+				unsigned long int getMsecs(void);
 
-};
 
+				/**
+				 *   Reset the timer
+				 */
+				void reset(void);
+
+		};
+	}
+}
+	
 #endif // __COGRETIMER_H__
