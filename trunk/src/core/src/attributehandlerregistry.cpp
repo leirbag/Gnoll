@@ -24,7 +24,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/02/2007 - Paf - Initial release                          |
-|               09/25/2007 - Paf - Replace namespace Gnoll by Gnoll     |
+|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
 |                                - Add float attribute handler              |
 |               09/26/2007 - Paf - Add string attribute handler             |
 |                                - Add double attribute handler             |

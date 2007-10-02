@@ -144,8 +144,8 @@ namespace Gnoll
 
 			private:
 
-				typedef multimap<unsigned long int, shared_ptr<CMessage> >::iterator msgMapIter;
-				typedef multimap<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >::iterator perMsgMapIter;
+				typedef map<unsigned long int, shared_ptr<CMessage> >::iterator msgMapIter;
+				typedef map<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >::iterator perMsgMapIter;
 
 
 				/**

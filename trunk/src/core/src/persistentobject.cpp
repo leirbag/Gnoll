@@ -24,7 +24,7 @@
 |   Changelog :                                                             |
 |               07/09/2007 - Paf - Initial release                          |
 |               08/18/2007 - Paf - Update comments                          |
-|               09/25/2007 - Paf - Replace namespace Gnoll by Gnoll    |
+|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 

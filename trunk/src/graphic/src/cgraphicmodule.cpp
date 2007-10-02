@@ -43,14 +43,12 @@
 |                             r41 - Improvement of the shadows by tweaking  |
 |                               some parameters                             |
 |                                                                           |
-|		   05/27/2007 - Gabriel - Change ogre camera to our camera          |
-|                                                                           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../../core/include/camera.h"
-#include "../../core/include/camerafixe.h"
-#include "../../core/include/camerafreefly.h"
+#include "../../core/include/cameraFixe.h"
+#include "../../core/include/cameraFreeFly.h"
 
 #include "../include/cgraphicmodule.h"
 #include "../../config.h"
@@ -89,7 +87,7 @@ void CGraphicModule::init()
 	mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 	// Create and configure the camera
-	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraFreeFly("PlayerCam", mSceneMgr);
+	Viracocha::Core::Camera* pCamera = new Viracocha::Core::CameraFreeFly("PlayerCam", mSceneMgr);
 
 	pCamera->setEye(Vector3(780, 25, 590));
 	pCamera->setLookAt(Vector3(0, 10, 0));
@@ -226,7 +224,7 @@ void CGraphicModule::init()
 	CEGUI::PushButton* btn = static_cast<CEGUI::PushButton*>(CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/Button", "QuitButton"));
 	mEditorGuiSheet->addChildWindow(btn);
 	btn->setText("Quit!");
-	btn->setPosition(CEGUI::UVector2(cegui_reldim(0.035f), cegui_reldim( 0.0f)));
+	btn->setPosition(CEGUI::UVector2(CEGUI::UDim(0.035f, 0.0f), CEGUI::UDim(0.035f, 0.0f)));
 	btn->setSize(CEGUI::UVector2(cegui_reldim(0.1f), cegui_reldim( 0.036f)));
 	//btn->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Demo4Sample::handleQuit, this));
 	btn->setAlwaysOnTop(true);
