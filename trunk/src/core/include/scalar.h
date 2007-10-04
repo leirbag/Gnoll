@@ -30,6 +30,11 @@
 |                                - Add more comments                        |
 |               09/26/2007 - Paf - Replace sstream by boost::lexical_cast   |
 |                                    for lexical conversions                |
+|               10/02/2007 - Paf - Add conversion operators                 |
+|                                - Add arithmetic operators                 |
+|                                - Add insertion and extraction operators   |
+|                                - getValue() method is now const           |
+|                                - Add attribute type getter and setter     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -86,6 +91,7 @@ namespace Gnoll
 				Scalar(string _attributeType ) : m_attributeType(_attributeType) {};
 
 
+
 				/**
 				 * This operator gives a convenient way to get the value hold by an instance of this class
 				 */
@@ -95,13 +101,25 @@ namespace Gnoll
 				/**
 				 * This operator gives a convenient way to get the value hold by an instance of this class
 				 */
-				T getValue() {return m_element;};
+				T getValue() const {return m_element;};
 
 
 				/**
 				 * This operator gives a convenient way to set the value hold by an instance of this class
 				 */
 				void setValue( T _elem) { m_element = _elem;};
+
+
+				/**
+				 * This operator gives a convenient way to get the attribute type 
+				 */
+				string getAttrType() const {return m_attributeType;};
+
+
+				/**
+				 * This operator gives a convenient way to set the attribute type
+				 */
+				void setAttrType( string _type) { m_attributeType = _type;};
 
 
 				/**
@@ -150,8 +168,120 @@ namespace Gnoll
 
 					m_element = lexical_cast<T>(attrValue);
 			
-				};		
+				};	
+
+				/**
+				 * Overloading of the inserting operator
+				 * @param _stream Stream to insert the value to
+				 * @return Stream
+				 */
+				virtual ostream &operator<<(ostream &_stream)
+				{
+				 	return  _stream << this->getValue();
+				}
+
+
+				/**
+				 * Overloading of the extraction operator
+				 * @param _stream Streaim to extract the value from
+				 * @return Stream
+				 */
+				virtual istream &operator>>(istream &_stream)
+				{
+
+					T value;
+					if (_stream >> value)    
+					{
+						this->setValue(value);
+					}
+
+					return _stream;
+				}
+
+
+				/**
+				 * Overloading of the conversion T -> Scalar<T> operator
+				 * @param _rValue Value to convert from
+				 * @return Converted value 
+				 */
+			 	virtual Scalar<T> const &operator=(const T _rValue)
+				{
+					this->setValue(_rValue);
+					return *this;
+				}
+
+
+				/**
+				 * Overloading of the conversion Scalar<T> -> T operator
+				 * @return Converted value 
+				 */
+		  		virtual operator T() const
+				{
+					return getValue();
+				}
+
+
 		};
+
+
+		/**
+		 * Overloading of operator +
+		 * @param _lValue Left value 
+		 * @param _rValue Right value 
+		 * @return Result of the operation 
+		 */
+		template <typename T> Scalar<T> const operator+(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return Scalar<T>( _lValue.getAttrType, _lValue.getValue() + _rValue.getValue() );
+		}
+
+
+		/**
+		 * Overloading of operator -
+		 * @param _lValue Left value 
+		 * @param _rValue Right value 
+		 * @return Result of the operation 
+		 */
+		template <typename T> Scalar<T> const operator-(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return Scalar<T>( _lValue.getAttrType(),  _lValue.getValue() - _rValue.getValue() );
+		}
+
+
+		/**
+		 * Overloading of operator *
+		 * @param _lValue Left value 
+		 * @param _rValue Right value 
+		 * @return Result of the operation 
+		 */
+		template <typename T> Scalar<T> const operator*(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return Scalar<T>( _lValue.getAttrType(), _lValue.getValue() * _rValue.getValue() );
+		}
+
+
+		/**
+		 * Overloading of operator /
+		 * @param _lValue Left value 
+		 * @param _rValue Right value 
+		 * @return Result of the operation 
+		 */
+		template <typename T> Scalar<T> const operator/(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return Scalar<T>( _lValue.getAttrType(), _lValue.getValue() / _rValue.getValue() );
+		}
+
+
+		/**
+		 * Overloading of operator ^
+		 * @param _lValue Left value 
+		 * @param _rValue Right value 
+		 * @return Result of the operation 
+		 */
+		template <typename T> Scalar<T> const operator^(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return Scalar<T>( _lValue.getAttrType(), _lValue.getValue() ^ _rValue.getValue() );
+		}
 
 	}
 

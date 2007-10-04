@@ -1,3 +1,13 @@
+2007-10-03  Paf <paf@tuxfamily.org>
+	* src/core/tests/testpo.cpp: Updated regarding operators changes in class
+	Scalar<T>
+	*  src/core/include/string.h: Add some operators and put class definition in string.cpp
+	* src/core/include/scalar.h: Add conversion, arithmetic, insertion and
+	extraction operators. getValue() method is now const. Add attribute type getter and setter
+	* src/core/src/string.cpp: File added
+	* src/core/Makefile: Add src/core/src/string.cpp to testpo target
+	* Makefile.am: Add src/core/src/string.cpp to list of source files
+
 2007-10-01  Gabriel <countag@wanadoo.fr>
 	* src/core/include/camera.h: Initial release
 	* src/core/include/camerafreefly.h: Initial release

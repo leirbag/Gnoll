@@ -73,8 +73,8 @@ int main() {
 	shared_ptr<Scalar<Glib::ustring> > phrase2 = toto.getAttribute< Scalar<Glib::ustring> > ("phrase");
 
 
-	cout << "Get attribute 'pi' : " << (*pi2)() << endl;
-	cout << "Get attribute 'phrase' : " << (*phrase2)() << endl;
+	cout << "Get attribute 'pi' : " << *pi2 << endl;
+	cout << "Get attribute 'phrase' : " << *phrase2 << endl;
 	
 	try 
 	{
@@ -121,12 +121,12 @@ int main() {
 
 	shared_ptr<ISource> loadChannel(new SourceFile("./"));
 
-	PersistentObjectManager pom = PersistentObjectManager::getInstance();
+	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
 
-	pom.addLoadSource(loadChannel);
-	pom.addSaveSource(loadChannel);
+	pom->addLoadSource(loadChannel);
+	pom->addSaveSource(loadChannel);
 
-	shared_ptr<PersistentObject> Zelda = pom.load("zelda");
+	shared_ptr<PersistentObject> Zelda = pom->load("zelda");
 
 	shared_ptr<Integer> ageZelda = Zelda->getAttribute< Integer > ("age");
 	shared_ptr<Integer> newAge(new Integer((*ageZelda)() + 1));
@@ -137,21 +137,18 @@ int main() {
 	{
 
 		shared_ptr< Float > piZelda = Zelda->getAttribute< Float > ("pi");
-		float fpiZelda = piZelda->getValue();
-		cout << "Float pi**2 zelda : " << fpiZelda * fpiZelda << endl;
+		cout << "Float pi**2 zelda : " << (*piZelda) * (*piZelda) << endl;
 
 
 
 		shared_ptr< String > nut = Zelda->getAttribute< String > ("nut");
-		string noisette = nut->getValue();
-		cout << "Attribute nut = '" << noisette << "'" << endl;
+		cout << "Attribute nut = '" << *nut << "'" << endl;
 
 
 
 		shared_ptr< Double > dpi = Zelda->getAttribute< Double > ("dpi");
-		double dpid = dpi->getValue();
-		cout << "Double PI in Zelda : " << setprecision(16) << dpid << endl;
-		cout << "Squared Double PI in Zelda : " << setprecision(16) << dpid * dpid << endl;
+		cout << "Double PI in Zelda : " << setprecision(16) << *dpi << endl;
+		cout << "Squared Double PI in Zelda : " << setprecision(16) << (*dpi) * (*dpi) << endl;
 
 
 		typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
@@ -160,22 +157,22 @@ int main() {
 		{
 			if (shared_ptr<String> str = dynamic_pointer_cast<String>(*it))
 			{
-				cout << "String element in list : '" << str->getValue() << "'" << endl;
+				cout << "String element in list : '" << (*str) << "'" << endl;
 			}
 
 			if (shared_ptr<Integer> integer = dynamic_pointer_cast<Integer>(*it))
 			{
-				cout << "Integer element in list : [" << integer->getValue() << "]" << endl;
+				cout << "Integer element in list : [" << (*integer) + 2 << "]" << endl;
 			}
 
 			if (shared_ptr<Double> dbl = dynamic_pointer_cast<Double>(*it))
 			{
-				cout << "Double element in list : [" << dbl->getValue() << "]" << endl;
+				cout << "Double element in list : [" << (*dbl) << "]" << endl;
 			}
 
 			if (shared_ptr<Float> flt = dynamic_pointer_cast<Float>(*it))
 			{
-				cout << "Float element in list : [" << flt->getValue() << "]" << endl;
+				cout << "Float element in list : [" << (*flt) << "]" << endl;
 			}
 		}
 
@@ -185,7 +182,7 @@ int main() {
 		cout << e << endl;
 	}
 
-	pom.save(Zelda->getInstance());
+	pom->save(Zelda->getInstance());
 
 	cout << endl << "Serializationed (I'am sure it exists :) Zelda : " << endl;
 
