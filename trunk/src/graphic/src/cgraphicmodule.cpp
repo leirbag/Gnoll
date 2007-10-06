@@ -49,8 +49,8 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../../core/include/camera.h"
-#include "../../core/include/cameraFixe.h"
-#include "../../core/include/cameraFreeFly.h"
+#include "../../core/include/camerafixe.h"
+#include "../../core/include/camerafreefly.h"
 
 #include "../include/cgraphicmodule.h"
 #include "../../config.h"

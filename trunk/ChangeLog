@@ -1,3 +1,11 @@
+2007-10-06  Paf <paf@tuxfamily.org>
+	* src/main.cpp: Fix case issue in includes
+	* src/core/include/cameraFixe.h: Renamed to src/core/include/camerafixe.h
+	* src/core/include/cameraFreeFly.h: Renamed to src/core/include/camerafreefly.h
+	* src/core/src/cameraFreeFly.cpp: Renamed to src/core/src/camerafreefly.cpp
+	* src/graphic/src/cgraphicmodule.cpp: Fix case issue in includes
+	* Makefile.am: Fix case issue in includes
+
 2007-10-06  Gabriel <countag@wanadoo.fr>
 	* src/core/include/camerafreefly.h: Add hack to enable key repeat
 	* src/core/include/camerafreefly.h: Add management of mouse for the rotation

@@ -48,7 +48,7 @@
 #include "core/include/cmessagemanager.h"
 #include "core/include/cgenericmessagemanager.h"
 #include "core/include/cmessagelistener.h"
-#include "core/include/cameraFreeFly.h"
+#include "core/include/camerafreefly.h"
 
 #include "input/include/coisinputmodule.h"
 #include "input/include/cinputmouseevents.h"
