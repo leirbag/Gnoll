@@ -23,6 +23,9 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/31/2007 - Gabriel - Initial release                      |
+|               10/06/2007 - Gabriel - Add hack to enable key repeat        |
+|                                    - Add management of mouse for the      |
+|									   rotation                             |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -36,12 +39,19 @@ namespace Gnoll
 
 		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
 		{
+			m_listenerKeyUp = shared_ptr<CMessageListener>(new Gnoll::Core::KeyUp);
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+			m_listenerKeyDown = shared_ptr<CMessageListener>(new Gnoll::Core::KeyDown);
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+
 			m_listenerMove = shared_ptr<CMessageListener>(new Gnoll::Core::MoveCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerMove, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
 			m_listenerRotate = shared_ptr<CMessageListener>(new Gnoll::Core::RotateCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerRotate, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			m_listenerMouseRotate = shared_ptr<CMessageListener>(new Gnoll::Core::MouseRotateCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
 			m_listenerStrafe = shared_ptr<CMessageListener>(new Gnoll::Core::StrafeCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerStrafe, CMessageType("KEYBOARD_KEYDOWN") );
+			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerStrafe, CMessageType("GRAPHIC_FRAME_RENDERED") );
 		}
 
 		void CameraFreeFly::move(const Ogre::Vector3& dir)
@@ -51,12 +61,12 @@ namespace Gnoll
 
 		void CameraFreeFly::rotateAxisX(float angle)
 		{
-			m_ogreCamera->rotate(m_ogreCamera->getRealRight(), Ogre::Radian(angle));
+			m_ogreCamera->rotate(m_ogreCamera->getRight(), Ogre::Radian(angle));
 		}
 
 		void CameraFreeFly::rotateAxisY(float angle)
 		{
-			m_ogreCamera->rotate(m_ogreCamera->getRealUp(), Ogre::Radian(angle));
+			m_ogreCamera->rotate(m_ogreCamera->getUp(), Ogre::Radian(angle));
 		}
 
 		void CameraFreeFly::rotateAxisZ(float angle)

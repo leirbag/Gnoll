@@ -1,3 +1,10 @@
+2007-10-06  Gabriel <countag@wanadoo.fr>
+	* src/core/include/camerafreefly.h: Add hack to enable key repeat
+	* src/core/include/camerafreefly.h: Add management of mouse for the rotation
+	* src/core/include/ctimermodule.cpp: Fix error on windows because of missing header "OgrePlatform.h"
+	* src/core/include/ctimermodule.h: Fix conflict between map and multimap that generated an error on VS2005 
+	* src/core/include/cgraphicmodule.h: Fix namespace (Viracocha to Gnoll) for the camera
+
 2007-10-03  Paf <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated regarding operators changes in class
 	Scalar<T>

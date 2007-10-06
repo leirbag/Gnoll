@@ -30,12 +30,14 @@
 |                                  - Rename periodic timeout to periodic    |
 |                                      event                                |
 |               09/30/2007 - Paf   - Fix namespace (replace Core by Time)   |
+|               10/06/2007 - Gabriel - Fix error on windows because of      |
+|                                      missing header "OgrePlatform.h"      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
+#include <OgrePlatform.h>
 #include "../include/ctimemodule.h"
 #include <iostream>
-
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 	#include "../include/clinuxtimer.h"

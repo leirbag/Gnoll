@@ -43,6 +43,8 @@
 |                             r41 - Improvement of the shadows by tweaking  |
 |                               some parameters                             |
 |                                                                           |
+|          06/10/2007 - Gabriel - Fix namespace (Viracocha to Gnoll) for    |
+|                                 the camera                                |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -87,7 +89,7 @@ void CGraphicModule::init()
 	mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 	// Create and configure the camera
-	Viracocha::Core::Camera* pCamera = new Viracocha::Core::CameraFreeFly("PlayerCam", mSceneMgr);
+	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraFreeFly("PlayerCam", mSceneMgr);
 
 	pCamera->setEye(Vector3(780, 25, 590));
 	pCamera->setLookAt(Vector3(0, 10, 0));

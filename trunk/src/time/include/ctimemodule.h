@@ -30,6 +30,9 @@
 |                                  - Rename periodic timeout to periodic    |
 |                                      event                                |
 |               09/30/2007 - Paf   - Fix namespace (replace Core by Time)   |
+|               10/06/2007 - Gabriel   - Fix conflict between map and       |
+|                                        multimap that generated an error   |
+|                                        on VS2005                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -144,8 +147,8 @@ namespace Gnoll
 
 			private:
 
-				typedef map<unsigned long int, shared_ptr<CMessage> >::iterator msgMapIter;
-				typedef map<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >::iterator perMsgMapIter;
+				typedef multimap<unsigned long int, shared_ptr<CMessage> >::iterator msgMapIter;
+				typedef multimap<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >::iterator perMsgMapIter;
 
 
 				/**
