@@ -1,3 +1,9 @@
+2007-10-11  Paf <paf@tuxfamily.org>
+	* include/persistentobject.h: Add method getAttributesNames(); Make
+	const_iterator on attributes possible                  
+	* src/persistentobject.cpp: Add method getAttributesNames(); Make
+	const_iterator on attributes possible                  
+
 2007-10-06  Paf <paf@tuxfamily.org>
 	* src/main.cpp: Fix case issue in includes
 	* src/core/include/cameraFixe.h: Renamed to src/core/include/camerafixe.h
