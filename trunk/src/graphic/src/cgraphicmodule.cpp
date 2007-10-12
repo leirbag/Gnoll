@@ -46,11 +46,14 @@
 |          06/10/2007 - Gabriel - Fix namespace (Viracocha to Gnoll) for    |
 |                                 the camera                                |
 |                                                                           |
+|          06/10/2007 - Gabriel - Add thirdperson camera to test            |
+|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../../core/include/camera.h"
 #include "../../core/include/camerafixe.h"
 #include "../../core/include/camerafreefly.h"
+#include "../../core/include/camerathirdperson.h"
 
 #include "../include/cgraphicmodule.h"
 #include "../../config.h"
@@ -89,12 +92,14 @@ void CGraphicModule::init()
 	mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 	// Create and configure the camera
-	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraFreeFly("PlayerCam", mSceneMgr);
+	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraThirdPerson("PlayerCam", mSceneMgr);
 
-	pCamera->setEye(Vector3(780, 25, 590));
-	pCamera->setLookAt(Vector3(0, 10, 0));
+	//pCamera->setEye(Vector3(780, 25, 590));
+	//pCamera->setLookAt(Vector3(0, 10, 0));
 	pCamera->setNearDistance(5);
 	pCamera->setFarDistance(1000);
+	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setLimitRotationX(45.0f);
+	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setLimitRotationY(90.0f);
 
 	// Create one viewport, entire window
 	Viewport* vp = mwindow->addViewport(&pCamera->getOgreCamera());
@@ -237,6 +242,9 @@ void CGraphicModule::init()
 	eb->setPosition(CEGUI::UVector2(cegui_reldim(0.025f), cegui_reldim(0.85f)));
 	eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 	eb->setAlwaysOnTop(true);
+
+	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
+	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setOffset(70.0f);
 }
 
 

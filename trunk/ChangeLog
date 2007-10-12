@@ -1,3 +1,8 @@
+2007-12-06  Gabriel <countag@wanadoo.fr>
+	* src/core/include/camerathirperson.h: Initial release
+	* src/core/include/camerathirperson.cpp: Initial release
+	* src/core/include/cgraphicmodule.cpp: Fix Add thirdperson camera to test 
+
 2007-10-11  Paf <paf@tuxfamily.org>
 	* include/persistentobject.h: Add method getAttributesNames(); Make
 	const_iterator on attributes possible                  
