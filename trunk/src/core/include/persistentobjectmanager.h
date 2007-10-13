@@ -31,13 +31,14 @@
 
 
 
+#ifndef __PERSISTENTOBJECTMANAGER_H__
+#define __PERSISTENTOBJECTMANAGER_H__
+
 #include "basemanager.h"
 #include "singleton.h"
 #include "persistentobject.h"
 #include "attributehandlerregistry.h"
 
-#ifndef __PERSISTENTOBJECTMANAGER_H__
-#define __PERSISTENTOBJECTMANAGER_H__
 
 using namespace std;
 using namespace boost;

@@ -25,17 +25,20 @@
 |               08/03/2007 - Paf - Initial release                          |
 |               08/14/2007 - Paf - Update comments                          |
 |               08/25/2007 - Paf - Replace namespace Viraoccha by Gnoll     |
+|               10/12/2007 - Paf - Add a new parameter to handle()          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
+
+
+#ifndef __IATTRIBUTEHANDLER_H__
+#define __IATTRIBUTEHANDLER_H__
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 
 #include "iattribute.h"
 
-#ifndef __IATTRIBUTEHANDLER_H__
-#define __IATTRIBUTEHANDLER_H__
 
 using namespace boost;
 
@@ -45,6 +48,12 @@ namespace Gnoll
 
 	namespace Core
 	{
+
+		/**
+		 * Forward declaration
+		 */
+		class PersistentObject;
+
 
 		/**
 		*	This is the interface of an attribute handler.
@@ -72,7 +81,7 @@ namespace Gnoll
 				 * @param _node The attribute passed as a xml tree
 				 * @return Smart pointer to the deserialized IAttribute
 				 */
-				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node) = 0;
+				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, PersistentObject* _po = NULL) = 0;
 
 		};
 

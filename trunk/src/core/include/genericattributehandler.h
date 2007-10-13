@@ -30,13 +30,16 @@
 \*-------------------------------------------------------------------------*/
 
 
+#ifndef __GENERICATTRIBUTEHANDLER_H__
+#define __GENERICATTRIBUTEHANDLER_H__
+
+
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 
-#include "../include/iattributehandler.h"
+#include "iattributehandler.h"
+#include "persistentobject.h"
 
-#ifndef __GENERICATTRIBUTEHANDLER_H__
-#define __GENERICATTRIBUTEHANDLER_H__
 
 using namespace boost;
 
@@ -74,7 +77,7 @@ namespace Gnoll
 				 * @param _node Node to process and extract the IAttribute smart pointer from
 				 * @return Smart pointer to an IAttribute
 				 */		
-				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node) 
+				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, PersistentObject* _po = NULL) 
 				{
 					shared_ptr<T> attribute( new T() );
 					attribute->deSerializeXML(_node);

@@ -32,12 +32,14 @@
 \*-------------------------------------------------------------------------*/
 
 
-#include <boost/shared_ptr.hpp>
-#include <libxml++/libxml++.h>
-
 
 #ifndef __IATTRIBUTE_H__
 #define __IATTRIBUTE_H__
+
+
+#include <boost/shared_ptr.hpp>
+#include <libxml++/libxml++.h>
+
 
 using namespace boost;
 

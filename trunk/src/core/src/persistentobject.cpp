@@ -28,6 +28,10 @@
 |               10/11/2007 - Paf - Add method getAttributesNames()          |
 |               						- Make const_iterator on attributes        |
 |               						    possible                               |
+|               10/12/2007 - Paf - Pass itself to the attribute handler. So |
+|                                    attributes will be able to affect      |
+|                                    their PersistentObject (ex: inheritan- |
+|                                    ce)                                    |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -221,7 +225,7 @@ namespace Gnoll
 							if (handler.get() != NULL)
 							{
 								// The handler returns an shared_pointer to a new IAttribute
-								shared_ptr<IAttribute> attribute = handler->handle(elementChild);
+								shared_ptr<IAttribute> attribute = handler->handle(elementChild, this);
 	
 								// This new IAttribute is associated to the attribute name
 								this->setAttribute(attrName, attribute);

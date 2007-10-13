@@ -48,7 +48,6 @@
 #include "iattributehandler.h"
 #include "attributehandlerregistry.h"
 
-#include "list.h"
 #include "string.h"
 
 
@@ -59,6 +58,12 @@ namespace Gnoll
 {
 	namespace Core
 	{
+
+		/**
+		 * Forward declaration
+		 */
+		class List;
+
 
 		/**
 		 *	This is a Persistent Object.
@@ -155,7 +160,7 @@ namespace Gnoll
 				 * Get a list of attributes names
 				 * @return A list of all attribute's names
 				 */
-				List getAttributesNames();
+				List getAttributesNames(void);
 
 				/**
 				 * Get a const_iterator on the first element of the map of the attributes

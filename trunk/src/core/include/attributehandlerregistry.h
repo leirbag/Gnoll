@@ -36,6 +36,10 @@
 \*-------------------------------------------------------------------------*/
 
 
+#ifndef __ATTRIBUTEHANDLERREGISTRY_H__
+#define __ATTRIBUTEHANDLERREGISTRY_H__
+
+
 #include <boost/shared_ptr.hpp>
 #include <string>
 
@@ -51,8 +55,6 @@
 #include "list.h"
 
 
-#ifndef __ATTRIBUTEHANDLERREGISTRY_H__
-#define __ATTRIBUTEHANDLERREGISTRY_H__
 
 using namespace boost;
 using namespace std;

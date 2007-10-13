@@ -32,11 +32,12 @@
 #define __LIST_H__
 
 
+#include <boost/shared_ptr.hpp>
+#include <libxml++/libxml++.h>
 #include <list>
+
 #include "iattribute.h" 
-#include "scalar.h" 
-#include "iattributehandler.h"
-#include "attributehandlerregistry.h"
+#include "attributehandlerregistry.h" 
 
 
 using namespace std;

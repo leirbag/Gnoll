@@ -1,3 +1,16 @@
+2007-10-12  Paf <paf@tuxfamily.org>
+	* src/core/include/attributehandlerregistry.h: Move #define statements
+	* src/core/include/genericattributehandler.h: Move #define statements; Add
+	parameter PersistentObject* to methood handle()
+	* src/core/include/iattributehandler.h: Move #define statements; Add
+	parameter PersistentObject* to method handle() 
+	* src/core/include/list.h: Fix includes
+	* src/core/include/iattribute.h: Move #define statements
+	* src/core/include/persistentobjectmanager.h: Move #define statements
+	* src/core/include/persistentobject.h: Fix List declaration
+	* src/core/src/persistentobject.cpp: Add parameter PersistentObject* to
+	method handle() 
+
 2007-12-06  Gabriel <countag@wanadoo.fr>
 	* src/core/include/camerathirperson.h: Initial release
 	* src/core/include/camerathirperson.cpp: Initial release
