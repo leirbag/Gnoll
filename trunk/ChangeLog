@@ -1,19 +1,20 @@
 2007-10-17  Paf <paf@tuxfamily.org>
-	* tests/testpo.cpp: Update test program
-	* tests/zelda2: Initial release
-	* include/attributehandlerregistry.h: Some includes have been moved
+	* src/core/tests/testpo.cpp: Update test program
+	* src/core/tests/zelda2: Initial release
+	* src/core/include/attributehandlerregistry.h: Some includes have been moved
 	src/attributehandlerregistry.cpp
-	* include/inheritsattributehandler.h: Initial release
-	* include/inherits.h: Initial release
-	* include/basemanager.h: Add a new method isInstanceInCache()
-	* include/persistentobjectmanager.h: Update includes
-	* include/persistentobject.h: Update includes
-	* src/persistentobjectmanager.cpp: Handle case where content file is empty
+	* src/core/include/inheritsattributehandler.h: Initial release
+	* src/core/include/inherits.h: Initial release
+	* src/core/include/basemanager.h: Add a new method isInstanceInCache()
+	* src/core/include/persistentobjectmanager.h: Update includes
+	* src/core/include/persistentobject.h: Update includes
+	* src/core/src/persistentobjectmanager.cpp: Handle case where content file is empty
 	in PersistentObjectManager::loadImpl()
-	* src/inherits.cpp: Initial release
-	* src/inheritsattributehandler.cpp: Initial Release
-	* src/attributehandlerregistry.cpp: Add inherits attribute handler
-	* Makefile : Update source files to compile
+	* src/core/src/inherits.cpp: Initial release
+	* src/core/src/inheritsattributehandler.cpp: Initial Release
+	* src/core/src/attributehandlerregistry.cpp: Add inherits attribute handler
+	* src/core/Makefile : Update source files to compile
+	* Makefile.am : Update source files to compile
 
 2007-10-12  Paf <paf@tuxfamily.org>
 	* src/core/include/attributehandlerregistry.h: Move #define statements
@@ -34,9 +35,9 @@
 	* src/core/include/cgraphicmodule.cpp: Fix Add thirdperson camera to test 
 
 2007-10-11  Paf <paf@tuxfamily.org>
-	* include/persistentobject.h: Add method getAttributesNames(); Make
+	* src/core/include/persistentobject.h: Add method getAttributesNames(); Make
 	const_iterator on attributes possible                  
-	* src/persistentobject.cpp: Add method getAttributesNames(); Make
+	* src/core/src/persistentobject.cpp: Add method getAttributesNames(); Make
 	const_iterator on attributes possible                  
 
 2007-10-06  Paf <paf@tuxfamily.org>
