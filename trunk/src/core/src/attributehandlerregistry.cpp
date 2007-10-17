@@ -29,11 +29,23 @@
 |               09/26/2007 - Paf - Add string attribute handler             |
 |                                - Add double attribute handler             |
 |               09/28/2007 - Paf - Add list attribute handler               |
+|               10/17/2007 - Paf - Add inherits attribute handler           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 #include "../include/attributehandlerregistry.h"
+
+// Default Handlers
+#include "../include/genericattributehandler.h"
+#include "../include/inheritsattributehandler.h"
+
+#include "../include/integer.h"
+#include "../include/float.h"
+#include "../include/string.h"
+#include "../include/double.h"
+#include "../include/list.h"
+#include "../include/inherits.h"
 
 
 
@@ -52,6 +64,7 @@ namespace Gnoll
 			this->registerHandler(string("string"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<String>()));
 			this->registerHandler(string("double"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Double>()));
 			this->registerHandler(string("list"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<List>()));
+			this->registerHandler(string("inherits"), shared_ptr<IAttributeHandler>(new InheritsAttributeHandler()));
 
 		}
 

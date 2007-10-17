@@ -37,7 +37,6 @@
 #include "basemanager.h"
 #include "singleton.h"
 #include "persistentobject.h"
-#include "attributehandlerregistry.h"
 
 
 using namespace std;

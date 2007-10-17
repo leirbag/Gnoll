@@ -46,13 +46,6 @@
 #include "iattributehandler.h"
 #include "singleton.h"
 
-// Default Handlers
-#include "genericattributehandler.h"
-#include "integer.h"
-#include "float.h"
-#include "string.h"
-#include "double.h"
-#include "list.h"
 
 
 

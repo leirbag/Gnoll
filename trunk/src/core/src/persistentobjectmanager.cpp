@@ -25,12 +25,14 @@
 |               07/18/2007 - Paf - Initial release                          |
 |               08/18/2007 - Paf - Update comments                          |
 |               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               10/17/2007 - Paf - Handle case where content file is empty  |
+|                                    in loadImpl()                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 #include "../include/persistentobjectmanager.h"
-
+#include "../include/attributehandlerregistry.h"
 
 
 namespace Gnoll {
@@ -63,18 +65,24 @@ namespace Gnoll {
 				int nb = _stream->read(buffer, 256);
 				content.append(buffer, nb);
 			}
-			xmlpp::DomParser parser;
-			parser.parse_memory(content);
-
-			xmlpp::Document* document = parser.get_document();
-
-			// Second : XML -> PersistentObject
-			
-			xmlpp::Element* root = document->get_root_node();
-
+	
+			xmlpp::Document* document;
 			shared_ptr<PersistentObject> po (new PersistentObject("NULL"));
+	
+			// Second : XML -> PersistentObject
+			// Only if some data are available
+			if (content.length() > 0)
+			{
+				xmlpp::DomParser parser;
+				parser.parse_memory(content);
 
-			po->deSerializeXML(root);
+				document = parser.get_document();
+
+				xmlpp::Element* root = document->get_root_node();
+
+				po->deSerializeXML(root);
+
+			}
 
 			return po;
 		}

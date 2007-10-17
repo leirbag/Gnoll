@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<persistentobject instance="zelda2">
+  <attribute name="parent">
+    <inherits>
+    	<string value="zelda"/>
+	 </inherits>
+  </attribute>
+  <attribute name="age2">
+    <integer value="6"/>
+  </attribute>
+
+</persistentobject>
+

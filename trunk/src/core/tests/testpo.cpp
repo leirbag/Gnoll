@@ -36,6 +36,8 @@
 #include "../include/float.h"
 #include "../include/string.h"
 #include "../include/list.h"
+#include "../include/double.h"
+#include "../include/inherits.h"
 
 #include "../include/sourcefile.h"
 #include "../include/istream.h"
@@ -119,12 +121,13 @@ int main() {
 	
 
 
-	shared_ptr<ISource> loadChannel(new SourceFile("./"));
+	shared_ptr<ISource> loadChannel(new SourceFile(".", false));
+	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
 
 	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
 
 	pom->addLoadSource(loadChannel);
-	pom->addSaveSource(loadChannel);
+	pom->addSaveSource(saveChannel);
 
 	shared_ptr<PersistentObject> Zelda = pom->load("zelda");
 
@@ -188,6 +191,16 @@ int main() {
 
 	shared_ptr<xmlpp::Document> outputZelda = Zelda->serializeXML();
 	cout << outputZelda->write_to_string_formatted()  << endl;
+
+
+	cout << endl << endl << "--------------------------------------------" << endl << endl;
+
+
+	shared_ptr<PersistentObject> Zelda2 = pom->load("zelda2");
+
+	shared_ptr<xmlpp::Document> outputZelda2 = Zelda2->serializeXML();
+	cout << outputZelda2->write_to_string_formatted()  << endl;
+
 	return 0;
 }
 

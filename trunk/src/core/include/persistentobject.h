@@ -49,6 +49,7 @@
 #include "attributehandlerregistry.h"
 
 #include "string.h"
+#include "list.h"
 
 
 using namespace std;

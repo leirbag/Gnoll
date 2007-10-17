@@ -26,6 +26,7 @@
 |               07/20/2007 - Paf - Initial release                          |
 |               08/13/2007 - Paf - Update comments, implement method save() |
 |               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               10/17/2007 - Paf - Add a new method isInstanceInCache()     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -283,6 +284,25 @@ namespace Gnoll {
 				void addSaveSource(shared_ptr<ISource> _source)
 				{
 					m_saveSources.insert(_source);
+				}
+
+				
+				/**
+				 * Check if an instance has already been load and is cached
+				 * @param _instance Instance name
+				 * @return Return true if the instance is cached. False otherwise
+				 */
+				bool isInstanceInCache(string _instance)
+				{
+					CacheIterator iter = m_cache.find(_instance);
+
+					// There is no such instance in the cache
+					if (iter == m_cache.end())
+					{
+						return false;
+					} else {
+						return true;
+					}
 				}
 
 				/**
