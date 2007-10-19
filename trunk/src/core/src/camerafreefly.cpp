@@ -26,7 +26,9 @@
 |               10/06/2007 - Gabriel - Add hack to enable key repeat        |
 |                                    - Add management of mouse for the      |
 |									   rotation                             |
-|                                                                           |
+|               19/06/2007 - Gabriel - Change all variables for listener    |
+|                                      by a map.                            |
+|									   Add time to the transformation       |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camerafreefly.h"
@@ -52,6 +54,20 @@ namespace Gnoll
 			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
 			m_listenerStrafe = shared_ptr<CMessageListener>(new Gnoll::Core::StrafeCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
 			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerStrafe, CMessageType("GRAPHIC_FRAME_RENDERED") );
+
+			// Add key listener
+			g_mapCffKeys["MoveUp"] = false;
+			g_mapCffKeys["MoveDown"] = false;
+
+			g_mapCffKeys["StrafeUp"] = false;
+			g_mapCffKeys["StrafeDown"] = false;
+			g_mapCffKeys["StrafeLeft"] = false;
+			g_mapCffKeys["StrafeRight"] = false;
+
+			g_mapCffKeys["RotateUp"] = false;
+			g_mapCffKeys["RotateDown"] = false;
+			g_mapCffKeys["RotateLeft"] = false;
+			g_mapCffKeys["RotateRight"] = false;
 		}
 
 		void CameraFreeFly::move(const Ogre::Vector3& dir)

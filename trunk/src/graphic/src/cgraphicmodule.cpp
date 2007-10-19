@@ -179,7 +179,7 @@ void CGraphicModule::init()
 	}
 
 
-	Entity *ent1 = mSceneMgr->createEntity( "Robot", "robot.mesh" );
+	Entity *ent1 = mSceneMgr->createEntity( "Robot", "ninja.mesh" );
 	SceneNode *node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "RobotNode");
 
 	raySceneQuery = mSceneMgr->createRayQuery(
@@ -202,7 +202,7 @@ void CGraphicModule::init()
 	node1->attachObject( ent1 );
 	ent1->setCastShadows( true );
 	
-	AnimationState * anim = ent1->getAnimationState( "Idle" );
+	AnimationState * anim = ent1->getAnimationState( "Idle1" );
 	anim->setLoop( true );
 	anim->setEnabled( true );
 

@@ -78,7 +78,7 @@ int tourne = 0;
 bool toucheavance = false;
 bool toucherecule = false;
 
-string state = "Idle";
+string state = "Idle1";
 
 Ogre::Radian direction(0.0);
 
@@ -332,7 +332,7 @@ class keydown : public CMessageListener
 			if (temp2 == OIS::KC_A) {
 				cout << "IN : " << objcnt << endl;
 				Ogre::SceneManager* sceneMgr = CGraphicModule::getInstancePtr()->getSceneManager();
-				Ogre::Entity *ent = sceneMgr->createEntity( Ogre::StringConverter::toString(objcnt), "robot.mesh" );
+				Ogre::Entity *ent = sceneMgr->createEntity( Ogre::StringConverter::toString(objcnt), "ninja.mesh" );
 				cout << "F2 : " << objcnt << endl;
 				Ogre::SceneNode *node1 = sceneMgr->getRootSceneNode()->createChildSceneNode( Ogre::StringConverter::toString(objcnt));
 
@@ -457,13 +457,13 @@ class keyup : public CMessageListener
 			if (temp2 == OIS::KC_DOWN)
 			{
 				toucherecule = false;
-				state = "Idle";
+				state = "Idle1";
 			}
 
 			if (temp2 == OIS::KC_UP)
 			{
 				toucheavance = false;
-				state = "Idle";
+				state = "Idle1";
 			}
 
 

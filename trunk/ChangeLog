@@ -1,3 +1,9 @@
+2007-12-19  Gabriel <countag@wanadoo.fr>
+	* src/core/include/camerathirperson.h: add map for the key listener, add time for the transformation and add limit rotation
+	* src/core/include/camerathirperson.cpp: add map for the key listener, add time for the transformation and add limit rotation
+	* src/core/include/camerafreefly.h: add map for the key listener, add time for the transformation
+	* src/core/include/camerafreefly.cpp: add map for the key listener, add time for the transformation
+
 2007-10-17  Paf <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Update test program
 	* src/core/tests/zelda2: Initial release

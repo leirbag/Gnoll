@@ -26,7 +26,9 @@
 |               10/06/2007 - Gabriel - Add hack to enable key repeat        |
 |                                    - Add management of mouse for the      |
 |									   rotation                             |
-|                                                                           |
+|               19/06/2007 - Gabriel - Change all variables for listener    |
+|                                      by a map.                            |
+|									   Add time to the transformation       |
 \*-------------------------------------------------------------------------*/
 
 #include <OgreVector3.h>
@@ -134,19 +136,8 @@ namespace Gnoll
 		};
 
 
-		// Will be change by a std::map later ... maybe ...
-		static bool cffKeyMoveUp   = false;
-		static bool cffKeyMoveDown = false;
-
-		static bool cffKeyStrafeUp    = false;
-		static bool cffKeyStrafeDown  = false;
-		static bool cffKeyStrafeLeft  = false;
-		static bool cffKeyStrafeRight = false;
-
-		static bool cffKeyRotateUp    = false;
-		static bool cffKeyRotateDown  = false;
-		static bool cffKeyRotateLeft  = false;
-		static bool cffKeyRotateRight = false;
+		// Map for the key listener
+		static std::map<std::string, bool> g_mapCffKeys;
 
 		class KeyUp : public CMessageListener
 		{
@@ -175,34 +166,34 @@ namespace Gnoll
 					OIS::KeyCode key = message->getData<OIS::KeyCode>();
 
 					if(key == OIS::KC_UP)
-						cffKeyMoveUp = false;
+						g_mapCffKeys["MoveUp"] = false;
 
 					if(key == OIS::KC_DOWN)
-						cffKeyMoveDown = false;
+						g_mapCffKeys["MoveDown"] = false;
 
 					if(key == OIS::KC_E)
-						cffKeyRotateUp = false;
+						g_mapCffKeys["RotateUp"] = false;
 
 					if(key == OIS::KC_D)
-						cffKeyRotateDown = false;
+						g_mapCffKeys["RotateDown"] = false;
 
 					if(key == OIS::KC_S)
-						cffKeyRotateLeft = false;
+						g_mapCffKeys["RotateLeft"] = false;
 
 					if(key == OIS::KC_F)
-						cffKeyRotateRight = false;
+						g_mapCffKeys["RotateRight"] = false;
 
 					if(key == OIS::KC_C)
-						cffKeyStrafeRight = false;
+						g_mapCffKeys["StrafeRight"] = false;
 
 					if(key == OIS::KC_V)
-						cffKeyStrafeLeft = false;
+						g_mapCffKeys["StrafeLeft"] = false;
 
 					if(key == OIS::KC_B)
-						cffKeyStrafeUp = false;
+						g_mapCffKeys["StrafeUp"] = false;
 
 					if(key == OIS::KC_N)
-						cffKeyStrafeDown = false;
+						g_mapCffKeys["StrafeDown"] = false;
 				}
 		};
 
@@ -233,34 +224,34 @@ namespace Gnoll
 					OIS::KeyCode key = message->getData<OIS::KeyCode>();
 
 					if(key == OIS::KC_UP)
-						cffKeyMoveUp = true;
+						g_mapCffKeys["MoveUp"] = true;
 
 					if(key == OIS::KC_DOWN)
-						cffKeyMoveDown = true;
+						g_mapCffKeys["MoveDown"] = true;
 
 					if(key == OIS::KC_E)
-						cffKeyRotateUp = true;
+						g_mapCffKeys["RotateUp"] = true;
 
 					if(key == OIS::KC_D)
-						cffKeyRotateDown = true;
+						g_mapCffKeys["RotateDown"] = true;
 
 					if(key == OIS::KC_S)
-						cffKeyRotateLeft = true;
+						g_mapCffKeys["RotateLeft"] = true;
 
 					if(key == OIS::KC_F)
-						cffKeyRotateRight = true;
+						g_mapCffKeys["RotateRight"] = true;
 
 					if(key == OIS::KC_C)
-						cffKeyStrafeRight = true;
+						g_mapCffKeys["StrafeRight"] = true;
 
 					if(key == OIS::KC_V)
-						cffKeyStrafeLeft = true;
+						g_mapCffKeys["StrafeLeft"] = true;
 
 					if(key == OIS::KC_B)
-						cffKeyStrafeUp = true;
+						g_mapCffKeys["StrafeUp"] = true;
 
 					if(key == OIS::KC_N)
-						cffKeyStrafeDown = true;
+						g_mapCffKeys["StrafeDown"] = true;
 				}
 		};
 
@@ -293,13 +284,14 @@ namespace Gnoll
 				 */
 				virtual void handle ( shared_ptr<CMessage> message ) 
 				{ 
-					unsigned long lasttime = message->getData<unsigned long>();
+					unsigned long temp = message->getData<unsigned long>();
+					float lasttime = temp / 1000.0f;
 
-					if(cffKeyMoveUp)
-						m_pInstanceCam->move(Ogre::Vector3(0.0f, 0.0f, -1.0f));
+					if(g_mapCffKeys["MoveUp"])
+						m_pInstanceCam->move(Ogre::Vector3(0.0f, 0.0f, -10.0f * lasttime));
 
-					if(cffKeyMoveDown)
-						m_pInstanceCam->move(Ogre::Vector3(0.0f, 0.0f, 1.0f));
+					if(g_mapCffKeys["MoveDown"])
+						m_pInstanceCam->move(Ogre::Vector3(0.0f, 0.0f, 10.0f * lasttime));
 				}
 		};
 
@@ -332,17 +324,20 @@ namespace Gnoll
 				 */
 				virtual void handle ( shared_ptr<CMessage> message ) 
 				{ 
-					if(cffKeyRotateUp)
-						m_pInstanceCam->rotateAxisX(0.02);
+					unsigned long temp = message->getData<unsigned long>();
+					float lasttime = temp / 1000.0f;
 
-					if(cffKeyRotateDown)
-						m_pInstanceCam->rotateAxisX(-0.02);
+					if(g_mapCffKeys["RotateUp"])
+						m_pInstanceCam->rotateAxisX(1.0f * lasttime);
 
-					if(cffKeyRotateLeft)
-						m_pInstanceCam->rotateAxisY(0.02);
+					if(g_mapCffKeys["RotateDown"])
+						m_pInstanceCam->rotateAxisX(-1.0f * lasttime);
 
-					if(cffKeyRotateRight)
-						m_pInstanceCam->rotateAxisY(-0.02);
+					if(g_mapCffKeys["RotateLeft"])
+						m_pInstanceCam->rotateAxisY(1.0f * lasttime);
+
+					if(g_mapCffKeys["RotateRight"])
+						m_pInstanceCam->rotateAxisY(-1.0f * lasttime);
 				}
 		};
 
@@ -411,17 +406,20 @@ namespace Gnoll
 				 */
 				virtual void handle ( shared_ptr<CMessage> message ) 
 				{ 
-					if(cffKeyStrafeLeft)
-						m_pInstanceCam->strafe(1.0f);
+					unsigned long temp = message->getData<unsigned long>();
+					float lasttime = temp / 1000.0f;
 
-					if(cffKeyStrafeRight)
-						m_pInstanceCam->strafe(-1.0f);
+					if(g_mapCffKeys["StrafeLeft"])
+						m_pInstanceCam->strafe(10.0f * lasttime);
 
-					if(cffKeyStrafeUp)
-						m_pInstanceCam->strafeUp(1.0f);
+					if(g_mapCffKeys["StrafeRight"])
+						m_pInstanceCam->strafe(-10.0f * lasttime);
 
-					if(cffKeyStrafeDown)
-						m_pInstanceCam->strafeUp(-1.0f);
+					if(g_mapCffKeys["StrafeUp"])
+						m_pInstanceCam->strafeUp(10.0f * lasttime);
+
+					if(g_mapCffKeys["StrafeDown"])
+						m_pInstanceCam->strafeUp(-10.0f * lasttime);
 				}
 		};
 

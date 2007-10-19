@@ -23,6 +23,10 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               10/06/2007 - Gabriel - Initial release                      |
+|               19/06/2007 - Gabriel - Change all variables for listener    |
+|                                      by a map.                            |
+|									   Add limitation of rotation           |
+|									   Add time to the transformation       |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -157,14 +161,8 @@ namespace Gnoll
 				
 		};
 
-		// Will be change by a std::map later ... maybe ...
-		static bool ctpKeyMoveUp   = false;
-		static bool ctpKeyMoveDown = false;
-
-		static bool ctpKeyRotateUp    = false;
-		static bool ctpKeyRotateDown  = false;
-		static bool ctpKeyRotateLeft  = false;
-		static bool ctpKeyRotateRight = false;
+		// Map for the key listener
+		static std::map<std::string, bool> g_mapCtpKeys;
 
 		class CtpKeyUp : public CMessageListener
 		{
@@ -193,22 +191,22 @@ namespace Gnoll
 					OIS::KeyCode key = message->getData<OIS::KeyCode>();
 
 					if(key == OIS::KC_UP)
-						ctpKeyMoveUp = false;
+						g_mapCtpKeys["MoveUp"] = false;
 
 					if(key == OIS::KC_DOWN)
-						ctpKeyMoveDown = false;
+						g_mapCtpKeys["MoveDown"] = false;
 
 					if(key == OIS::KC_E)
-						ctpKeyRotateUp = false;
+						g_mapCtpKeys["RotateUp"] = false;
 
 					if(key == OIS::KC_D)
-						ctpKeyRotateDown = false;
+						g_mapCtpKeys["RotateDown"] = false;
 
 					if(key == OIS::KC_S)
-						ctpKeyRotateLeft = false;
+						g_mapCtpKeys["RotateLeft"] = false;
 
 					if(key == OIS::KC_F)
-						ctpKeyRotateRight = false;
+						g_mapCtpKeys["RotateRight"] = false;
 				}
 		};
 
@@ -239,22 +237,22 @@ namespace Gnoll
 					OIS::KeyCode key = message->getData<OIS::KeyCode>();
 
 					if(key == OIS::KC_UP)
-						ctpKeyMoveUp = true;
+						g_mapCtpKeys["MoveUp"] = true;
 
 					if(key == OIS::KC_DOWN)
-						ctpKeyMoveDown = true;
+						g_mapCtpKeys["MoveDown"] = true;
 
 					if(key == OIS::KC_E)
-						ctpKeyRotateUp = true;
+						g_mapCtpKeys["RotateUp"] = true;
 
 					if(key == OIS::KC_D)
-						ctpKeyRotateDown = true;
+						g_mapCtpKeys["RotateDown"] = true;
 
 					if(key == OIS::KC_S)
-						ctpKeyRotateLeft = true;
+						g_mapCtpKeys["RotateLeft"] = true;
 
 					if(key == OIS::KC_F)
-						ctpKeyRotateRight = true;
+						g_mapCtpKeys["RotateRight"] = true;
 				}
 		};
 
@@ -320,17 +318,20 @@ namespace Gnoll
 				 */
 				virtual void handle ( shared_ptr<CMessage> message ) 
 				{ 
-					if(ctpKeyRotateLeft)
-						m_pInstanceCam->rotateAxisY(0.02);
+					unsigned long temp = message->getData<unsigned long>();
+					float lasttime = temp / 1000.0f;
 
-					if(ctpKeyRotateRight)
-						m_pInstanceCam->rotateAxisY(-0.02);
+					if(g_mapCtpKeys["RotateLeft"])
+						m_pInstanceCam->rotateAxisY(1.0f * lasttime);
 
-					if(ctpKeyRotateUp)
-						m_pInstanceCam->rotateAxisX(0.02);
+					if(g_mapCtpKeys["RotateRight"])
+						m_pInstanceCam->rotateAxisY(-1.0f * lasttime);
 
-					if(ctpKeyRotateDown)
-						m_pInstanceCam->rotateAxisX(-0.02);
+					if(g_mapCtpKeys["RotateUp"])
+						m_pInstanceCam->rotateAxisX(1.0f * lasttime);
+
+					if(g_mapCtpKeys["RotateDown"])
+						m_pInstanceCam->rotateAxisX(-1.0f * lasttime);
 				}
 		};
 

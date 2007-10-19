@@ -23,6 +23,10 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               10/06/2007 - Gabriel - Initial release                      |
+|               19/06/2007 - Gabriel - Change all variables for listener    |
+|                                      by a map.                            |
+|									   Add limitation of rotation           |
+|									   Add time to the transformation       |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -36,11 +40,13 @@ namespace Gnoll
 
 		CameraThirdPerson::CameraThirdPerson(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
 		{
+			// Initialize attributs
 			m_pNode = NULL;
 			m_fOffset = 30.0f; 
 			m_fAmountDegreeX = m_fAmountDegreeY = m_fAmountDegreeZ = 0.0f;
 			m_fLimitRotX     = m_fLimitRotY     = m_fLimitRotZ     = 0.0f;
 
+			// Add listener
 			m_listenerKeyUp = shared_ptr<CMessageListener>(new Gnoll::Core::CtpKeyUp);
 			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
 			m_listenerKeyDown = shared_ptr<CMessageListener>(new Gnoll::Core::CtpKeyDown);
@@ -52,11 +58,24 @@ namespace Gnoll
 			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
 			m_listenerMouseRotate = shared_ptr<CMessageListener>(new Gnoll::Core::MouseRotateCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
 			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
+
+			// Creation of controller
+			g_mapCtpKeys["MoveUp"]         = false;
+			g_mapCtpKeys["ctpKeyMoveDown"] = false;
+
+			g_mapCtpKeys["RotateUp"]       = false;
+			g_mapCtpKeys["RotateDown"]     = false;
+			g_mapCtpKeys["RotateLeft"]     = false;
+			g_mapCtpKeys["RotateRight"]    = false;
 		}
 
 		void CameraThirdPerson::setTarget(Ogre::SceneNode* pNode)
 		{
 			m_pNode = pNode;
+			if(m_pNode == NULL)
+				return;
+
+			m_ogreCamera->setOrientation (m_pNode->getWorldOrientation());
 			update();
 		}
 
