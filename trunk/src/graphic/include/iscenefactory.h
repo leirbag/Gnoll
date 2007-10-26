@@ -30,7 +30,7 @@
 #include <boost/shared_ptr.hpp>
 #include <Ogre.h>
 #include <OgreLogManager.h>
-#include <OgrePlatformManager.h>
+#include <OgrePlatform.h>
 #include <libxml++/libxml++.h>
 
 #if OGRE_PLATFORM == PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32

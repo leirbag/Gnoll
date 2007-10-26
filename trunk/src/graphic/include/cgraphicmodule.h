@@ -42,7 +42,8 @@
 #include <boost/any.hpp>
 #include <Ogre.h>
 #include <OgreLogManager.h>
-#include <OgrePlatformManager.h>
+#include <OgrePlatform.h>
+#include <OgreTimer.h>
 
 //mem probs without this next one
 #include <OgreNoMemoryMacros.h>

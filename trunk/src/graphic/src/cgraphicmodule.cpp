@@ -206,7 +206,7 @@ void CGraphicModule::init()
 	anim->setLoop( true );
 	anim->setEnabled( true );
 
-	m_timer = PlatformManager::getSingleton().createTimer();
+	m_timer = new Timer();
 	m_lastframe = m_timer->getMilliseconds ();
 
 	ISceneFactory * sf = new CSceneFactoryStd("test.xml", this->mRoot);
@@ -219,7 +219,7 @@ void CGraphicModule::init()
 
 	CEGUI::SchemeManager::getSingleton().loadScheme((CEGUI::utf8*)"TaharezLook.scheme");
 	mGUISystem->setDefaultMouseCursor((CEGUI::utf8*)"TaharezLook", (CEGUI::utf8*)"MouseArrow");
-	CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseMoveCursor");
+	CEGUI::MouseCursor::getSingleton().setImage("aharezLook", "MouseMoveCursor");
 	//mGUISystem->setDefaultFont((CEGUI::utf8*)"DejaVuSans-10.font");
 
 	CEGUI::FontManager::getSingleton().createFont("Commonwealth-10.font");
@@ -289,7 +289,7 @@ void CGraphicModule::process()
 
 void CGraphicModule::exit()
 {
-    PlatformManager::getSingleton().destroyTimer( m_timer );
+    delete m_timer;
 }
 
 

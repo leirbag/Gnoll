@@ -31,7 +31,7 @@
 #include <boost/shared_ptr.hpp>
 #include <Ogre.h>
 #include <OgreLogManager.h>
-#include <OgrePlatformManager.h>
+#include <OgrePlatform.h>
 #include <libxml++/libxml++.h>
 #include <stack>
 
