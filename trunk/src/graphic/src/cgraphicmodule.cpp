@@ -219,7 +219,7 @@ void CGraphicModule::init()
 
 	CEGUI::SchemeManager::getSingleton().loadScheme((CEGUI::utf8*)"TaharezLook.scheme");
 	mGUISystem->setDefaultMouseCursor((CEGUI::utf8*)"TaharezLook", (CEGUI::utf8*)"MouseArrow");
-	CEGUI::MouseCursor::getSingleton().setImage("aharezLook", "MouseMoveCursor");
+	CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseMoveCursor");
 	//mGUISystem->setDefaultFont((CEGUI::utf8*)"DejaVuSans-10.font");
 
 	CEGUI::FontManager::getSingleton().createFont("Commonwealth-10.font");
@@ -327,16 +327,7 @@ size_t CGraphicModule::getWindowHandle()
 {
 	size_t windowhnd = 0;
 
-	// Get window handle
-	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-
-	   mwindow->getCustomAttribute( "HWND", &windowhnd );
-
-	#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-
-		mwindow->getCustomAttribute( "GLXWINDOW", &windowhnd );
-
-	#endif
+	mwindow->getCustomAttribute( "WINDOW", &windowhnd );
 
 	return windowhnd;
 }
