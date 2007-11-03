@@ -27,6 +27,7 @@
 |                                      by a map.                            |
 |									   Add limitation of rotation           |
 |									   Add time to the transformation       |
+|               10/30/2007 - Gabriel - add time to update()                 |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -90,7 +91,7 @@ namespace Gnoll
 			/**
 			 * This update the View.
 			 */
-			virtual void update()
+			virtual void update(float time)
 			{
 				if(m_pNode == NULL)
 					return;
@@ -285,7 +286,7 @@ namespace Gnoll
 				 */
 				virtual void handle ( shared_ptr<CMessage> message ) 
 				{ 
-					m_pInstanceCam->update();
+					m_pInstanceCam->update(0);
 				}
 		};
 

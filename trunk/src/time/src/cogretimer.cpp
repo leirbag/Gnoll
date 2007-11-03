@@ -27,7 +27,6 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-
 #include "../include/cogretimer.h"
 
 
@@ -39,7 +38,7 @@ namespace Gnoll
 
 		COgreTimer::COgreTimer(void)
 		{
-			mTimer = shared_ptr<Ogre::Timer>(Ogre::PlatformManager::getSingleton().createTimer());
+			mTimer = shared_ptr<Ogre::Timer>(new Ogre::Timer());
 			mTimer->reset();
 		}
 

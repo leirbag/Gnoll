@@ -1,3 +1,8 @@
+2007-11-3  Gabriel <contact@huau-gabriel.fr>
+	* src/core/include/cameraspline.h: Initial release
+	* src/core/include/cameraspline.cpp: Initial release
+	* src/core/include/coisinputmanager.cpp: change numKeyBoards() to numKeyboards()
+
 2007-10-27  Paf <paf@tuxfamily.org>
 	* src/core/include/cgraphicmodule.cpp: Upgrade to Ogre 1.4
 

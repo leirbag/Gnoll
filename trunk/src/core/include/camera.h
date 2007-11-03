@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/30/2007 - Gabriel - Initial release                      |
+|               10/30/2007 - Gabriel - add time to update()                 |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -54,8 +55,10 @@ namespace Gnoll
 			 */ 
 			Ogre::Camera* m_ogreCamera;
 
-		public:
+			Ogre::SceneManager* m_pSM;
+			Glib::ustring m_name;
 
+		public:
 			/**
 			 * This is the constructor.
 			 * @param _instance This is the instance name; the Camera's name
@@ -63,6 +66,8 @@ namespace Gnoll
 			Camera(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : PersistentObject(instanceName)
 			{
 				m_ogreCamera = pSM->createCamera(instanceName);
+				m_pSM = pSM;
+				m_name = instanceName;
 			}
 
 			/**
@@ -76,7 +81,7 @@ namespace Gnoll
 			 * This update the View.
 			 * Method virtual pure
 			 */
-			virtual void update() = 0;
+			virtual void update(float time) = 0;
 
 			/**
 			 * Get the look at of the current camera

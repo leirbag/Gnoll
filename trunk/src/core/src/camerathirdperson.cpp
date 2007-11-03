@@ -76,7 +76,7 @@ namespace Gnoll
 				return;
 
 			m_ogreCamera->setOrientation (m_pNode->getWorldOrientation());
-			update();
+			update(0);
 		}
 
 		Ogre::SceneNode* CameraThirdPerson::getTarget()
@@ -87,7 +87,7 @@ namespace Gnoll
 		void CameraThirdPerson::setOffset(float offset)
 		{
 			m_fOffset = offset;
-			update();
+			update(0);
 		}
 
 		float CameraThirdPerson::getOffset()
@@ -117,7 +117,7 @@ namespace Gnoll
 
 			m_fAmountDegreeX -= Ogre::Radian(angle).valueDegrees();
 			m_ogreCamera->pitch(-Ogre::Radian(angle));
-			update();
+			update(0);
 		}
 
 		void CameraThirdPerson::rotateAxisY(float angle)
@@ -127,7 +127,7 @@ namespace Gnoll
 
 			m_fAmountDegreeY -= Ogre::Radian(angle).valueDegrees();
 			m_ogreCamera->yaw(-Ogre::Radian(angle));
-			update();
+			update(0);
 		}
 
 		void CameraThirdPerson::rotateAxisZ(float angle)
@@ -137,7 +137,7 @@ namespace Gnoll
 
 			m_fAmountDegreeZ -= Ogre::Radian(angle).valueDegrees();
 			m_ogreCamera->roll(-Ogre::Radian(angle));
-			update();
+			update(0);
 		}
 	};
 };

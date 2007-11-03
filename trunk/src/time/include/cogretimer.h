@@ -31,7 +31,7 @@
 
 #include <OgreTimer.h>
 #include <Ogre.h>
-#include <OgrePlatformManager.h>
+#include <OgrePlatform.h>
 #include <boost/shared_ptr.hpp>
 #include "itimer.h"
 

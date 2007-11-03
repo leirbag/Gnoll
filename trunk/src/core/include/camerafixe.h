@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/30/2007 - Gabriel - Initial release                      |
+|               10/30/2007 - Gabriel - add time to update()                 |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -64,7 +65,7 @@ namespace Gnoll
 			/**
 			 * This update the View.
 			 */
-			virtual void update()
+			virtual void update(float time)
 			{
 			}
 				

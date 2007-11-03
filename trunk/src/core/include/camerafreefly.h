@@ -23,12 +23,14 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               08/31/2007 - Gabriel - Initial release                      |
-|               10/06/2007 - Gabriel - Add hack to enable key repeat        |
+|               06/10/2007 - Gabriel - Add hack to enable key repeat        |
 |                                    - Add management of mouse for the      |
 |									   rotation                             |
-|               19/06/2007 - Gabriel - Change all variables for listener    |
+|               10/10/2007 - Gabriel - Change all variables for listener    |
 |                                      by a map.                            |
 |									   Add time to the transformation       |
+|               10/30/2007 - Gabriel - add time to update()                 |
+|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include <OgreVector3.h>
@@ -94,7 +96,7 @@ namespace Gnoll
 			/**
 			 * This update the View.
 			 */
-			virtual void update()
+			virtual void update(float time)
 			{
 			}
 

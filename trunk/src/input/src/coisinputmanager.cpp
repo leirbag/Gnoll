@@ -25,6 +25,8 @@
 |               06/23/2006 - Paf - Initial release                          |
 |               05/09/2007 - Paf - Adapt everything to the new interface of |
 |                                   CMessage                                |
+|               11/3/2006 - Gabriel - change numKeyBoards() to              |
+|                                     numKeyboards()                        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -81,7 +83,7 @@ void COISInputManager::initialise(  ) {
         mInputSystem = OIS::InputManager::createInputSystem( paramList );
 
         // If possible create a buffered keyboard
-        if( mInputSystem->numKeyBoards() > 0 ) {
+        if( mInputSystem->numKeyboards() > 0 ) {
             mKeyboard = static_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
             mKeyboard->setEventCallback( this );
         }

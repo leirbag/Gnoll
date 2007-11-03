@@ -506,59 +506,54 @@ class AnimationListener : public CMessageListener
 			{
 				scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 			}
+
 			Entity *ent = scenetemp->getEntity( "Robot" );
 			AnimationState * anim = ent->getAnimationState( state);
-
-//			if (toucherecule)
-//				anim->addTime( -lasttime / 1000.0);
-//			else 
-				anim->addTime( lasttime / 1000.0);
+			anim->addTime( lasttime / 1000.0);
 
 
 			scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 			Ogre::SceneNode* robotnode = scenetemp->getSceneNode("RobotNode");
-			if (tourne == -1) {
+			if (tourne == -1) 
+			{
 				direction -= Degree(vtourne * lasttime / 1000.0);
 				robotnode->setOrientation(Quaternion(-Radian(direction), Vector3(0.0, 1.0, 0.0)));
-			}else if (tourne == 1) {
+			}
+			else if (tourne == 1) 
+			{
 				direction += Degree(vtourne * lasttime / 1000.0);
 				robotnode->setOrientation(Quaternion(-Radian(direction), Vector3(0.0, 1.0, 0.0)));
 			}
 
 
-		if (state == "Walk")
-		{
+			if (state == "Walk")
+			{
 
 
-			if (toucheavance)
-				robotnode->translate( Math::Cos(direction)*vitesse * lasttime / 1000.0, 0, Math::Sin(direction)*vitesse*lasttime/1000.0 );
-			else if (toucherecule)
-				robotnode->translate( -Math::Cos(direction)*vitesse * lasttime / 1000.0, 0, -Math::Sin(direction)*vitesse*lasttime/1000.0 );
+				if (toucheavance)
+					robotnode->translate( Ogre::Vector3(0.0f, 0.0f, -1.0f), Ogre::Node::TS_LOCAL );
+				else if (toucherecule)
+					robotnode->translate( Ogre::Vector3(0.0f, 0.0f, 1.0f), Ogre::Node::TS_LOCAL );
 
 
-			Vector3 pos = robotnode->getPosition();
-			pos.y = 2500;
-        RaySceneQuery* raySceneQuery = scenetemp->createRayQuery(
-            Ray(pos, Vector3::NEGATIVE_UNIT_Y));
-			Ray updateRay;
+				Vector3 pos = robotnode->getPosition();
+				pos.y = 2500;
+			    RaySceneQuery* raySceneQuery = scenetemp->createRayQuery(
+			    Ray(pos, Vector3::NEGATIVE_UNIT_Y));
+				Ray updateRay;
   
-        updateRay.setOrigin( pos );
-        updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
-        raySceneQuery->setRay(updateRay);
-        RaySceneQueryResult& qryResult = raySceneQuery->execute();
-        RaySceneQueryResult::iterator i = qryResult.begin();
-        if (i != qryResult.end() && i->worldFragment)
-        {
-            robotnode->setPosition(pos.x, 
-                i->worldFragment->singleIntersection.y , 
-                pos.z);
-        }
-
-		}
-
-
-
-
+				updateRay.setOrigin( pos );
+				updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
+				raySceneQuery->setRay(updateRay);
+				RaySceneQueryResult& qryResult = raySceneQuery->execute();
+				RaySceneQueryResult::iterator i = qryResult.begin();
+			    if (i != qryResult.end() && i->worldFragment)
+				{
+					robotnode->setPosition(pos.x, 
+			       i->worldFragment->singleIntersection.y , 
+			       pos.z);
+				}
+			}
 		}
 };
 
