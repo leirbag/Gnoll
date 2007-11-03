@@ -55,7 +55,7 @@ COISInputManager::~COISInputManager( void ) {
             mMouse = 0;
         }
 
-        mInputSystem->destroyInputSystem();
+        OIS::InputManager::destroyInputSystem( mInputSystem );
         mInputSystem = 0;
 
     }
@@ -157,9 +157,9 @@ bool COISInputManager::mouseMoved( const OIS::MouseEvent &arg )
 {
 	CMessageType mouseMoved("MOUSE_MOVED");
 
-	MouseEvent mouseE (arg.state.abX, arg.state.abY, arg.state.abZ,
-				arg.state.relX, arg.state.relY, arg.state.relZ,
-				arg.state.absOnly );
+	MouseEvent mouseE (arg.state.X.abs, arg.state.Y.abs, arg.state.Z.abs,
+				arg.state.X.rel, arg.state.Y.rel, arg.state.Z.rel,
+				arg.state.X.absOnly );
 
 	shared_ptr<boost::any> data ( new boost::any(mouseE) )  ;
 	shared_ptr<CMessage>  mymessage (new CMessage(mouseMoved, data ));

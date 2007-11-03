@@ -79,7 +79,6 @@ class COISInputManager : public OIS::KeyListener, public OIS::MouseListener
 		OIS::Mouse		*mMouse;
 
 		unsigned int mMouseButtonsState;
-
 };
 
 
