@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,42 +18,90 @@
  ***************************************************************************/
 
 
-/*--------------------------------cstate.h---------------------------------*\
-|   Interface of all the FSM's states                                       |
+/*---------------------------------CWorker---------------------------------*\
+|   This is thread object used by CPoolThreads.                             |
+|                                                                           |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/27/2006 - Paf - Initial release                          |
+|               11/08/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef __CSTATE_H__
-#define __CSTATE_H__
 
-/**
- *	Interface of all the FSM's states. <br>A state is a description of an activity.
- */ 
-class CState
-{
-	public:
-		/**
-		 * This is called after entering this state
-		 */
-		virtual void onInit() = 0;
 
-		/**
-		 * This is called during its activation
-		 */
-		virtual void onProcess() = 0;
 
-		/**
-		 * This is called before exiting this state
-		 */
-		virtual void onExit() = 0;
+#ifndef __CWORKER_H__
+#define __CWORKER_H__
+
+
+
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
+
+#include "cthread.h"
+
+
+
+namespace Gnoll {
+
+	namespace Core {
 
 		/**
-		 * This is a virtual destructor
+		 * Forward declaration
 		 */
-		virtual ~CState() {};
-};
+		class CPoolThreads;
 
-#endif // __CSTATE_H__
+
+
+		/**
+		 *	This is a ressource template.</br>
+		 *	This hold the ressource itself and some information
+		 */
+		class CWorker : public CThread
+		{
+			private:
+
+				/**
+				 * Stop flag
+				 */
+				bool m_stop;
+				
+				/**
+				 * Pointer on the pool this worker belongs to
+				 */
+				CPoolThreads* m_poolOfThreads;
+
+
+			public:
+
+				/**
+				 * What is going to be executed by this thread
+				 */
+				virtual void run ();
+
+
+
+				/**
+				 * This is a constructor
+				 * @param _pool Pool containing the worker
+				 */
+				CWorker (CPoolThreads* _pool);
+			
+				/**
+				 * This is a destructor
+				 */
+				virtual ~CWorker();
+
+				/**
+				 * Tells the worker to exit as soon as it has finished its current job
+				 */
+				void stop(); 
+
+		};
+
+	}
+}
+
+#endif // __CWORKER_H__
+

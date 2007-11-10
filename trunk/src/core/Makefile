@@ -2,6 +2,7 @@ all:
 	make testfsm
 	make testmsg
 	make testpo
+	make testmt
 
 testfsm:
 	g++ -g -Wall -o tests/testfsm tests/testfsm.cpp src/cfsm.cpp
@@ -12,3 +13,5 @@ testmsg:
 testpo:
 	g++ -g -Wall -o tests/testpo src/persistentobject.cpp tests/testpo.cpp src/sourcefile.cpp src/filestream.cpp src/persistentobjectmanager.cpp src/attributehandlerregistry.cpp src/list.cpp src/string.cpp src/inherits.cpp src/inheritsattributehandler.cpp `pkg-config --cflags --libs libxml++-2.6` `pkg-config --cflags --libs glibmm-2.4`  -lboost_filesystem
 
+testmt:
+	g++ -g -Wall -o tests/testmt tests/testmt.cpp src/cworker.cpp src/cpoolthreads.cpp src/cthreadstopper.cpp -lboost_thread

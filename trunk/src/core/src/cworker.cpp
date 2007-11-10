@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,42 +18,86 @@
  ***************************************************************************/
 
 
-/*--------------------------------cstate.h---------------------------------*\
-|   Interface of all the FSM's states                                       |
+/*---------------------------------CWorker---------------------------------*\
+|   This is thread object used by CPoolThreads.                             |
+|                                                                           |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/27/2006 - Paf - Initial release                          |
+|               11/08/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef __CSTATE_H__
-#define __CSTATE_H__
 
-/**
- *	Interface of all the FSM's states. <br>A state is a description of an activity.
- */ 
-class CState
-{
-	public:
-		/**
-		 * This is called after entering this state
-		 */
-		virtual void onInit() = 0;
 
-		/**
-		 * This is called during its activation
-		 */
-		virtual void onProcess() = 0;
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
+
+#include "../include/cthread.h"
+#include "../include/cworker.h"
+#include "../include/cpoolthreads.h"
+
+#include <iostream>
+
+
+namespace Gnoll {
+
+	namespace Core {
 
 		/**
-		 * This is called before exiting this state
+		 * What is going to be executed by this thread
 		 */
-		virtual void onExit() = 0;
+		void CWorker::run ()
+		{
+			if ( m_poolOfThreads == NULL )
+			{
+				cout << this << "  No Poolthread sent. Exiting." << endl;
+				return;
+			}
+
+
+			while ( m_stop == false )
+			{
+				cout << this << " I don't have to stop [" << m_stop << "]. Popping a job..." << endl;
+
+				shared_ptr<CJob> job = m_poolOfThreads->popJob();	
+
+				cout << "  Job popped" << endl;
+				if (job.get())
+				{
+					cout << this << " It's a real job ! It's not empty" << endl;
+					job->run();
+					cout << this << " Job run" << endl;
+				}
+			}
+			cout << this << " I have to stop. Byebye..." << endl;
+		}
+
+
 
 		/**
-		 * This is a virtual destructor
+		 * This is a constructor
 		 */
-		virtual ~CState() {};
-};
+		CWorker::CWorker (CPoolThreads* _pool): m_stop(false), m_poolOfThreads(_pool)
+		{
+		}
+			
+		/**
+		 * This is a destructor
+		 */
+		CWorker::~CWorker()
+		{
+		}
 
-#endif // __CSTATE_H__
+
+		void CWorker::stop() 
+		{
+			m_stop = true;
+			cout << this << "  m_stop changed to true" << endl;
+		}
+
+
+	}
+}
+
+

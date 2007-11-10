@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,42 +18,45 @@
  ***************************************************************************/
 
 
-/*--------------------------------cstate.h---------------------------------*\
-|   Interface of all the FSM's states                                       |
+/*------------------------------CThreadStopper-----------------------------*\
+|   This is basic thread object.                                            |
+|                                                                           |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/27/2006 - Paf - Initial release                          |
+|               11/09/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef __CSTATE_H__
-#define __CSTATE_H__
 
-/**
- *	Interface of all the FSM's states. <br>A state is a description of an activity.
- */ 
-class CState
-{
-	public:
-		/**
-		 * This is called after entering this state
-		 */
-		virtual void onInit() = 0;
 
-		/**
-		 * This is called during its activation
-		 */
-		virtual void onProcess() = 0;
+#include "../include/cthreadstopper.h"
 
-		/**
-		 * This is called before exiting this state
-		 */
-		virtual void onExit() = 0;
 
-		/**
-		 * This is a virtual destructor
-		 */
-		virtual ~CState() {};
-};
 
-#endif // __CSTATE_H__
+using namespace std;
+using namespace boost;
+
+namespace Gnoll {
+
+	namespace Core {
+
+
+		void CThreadStopper::run ()
+		{
+			m_worker->stop();
+		}
+
+
+		CThreadStopper::CThreadStopper(shared_ptr<CWorker> _worker) : m_worker(_worker)
+		{
+		}
+	
+		CThreadStopper::~CThreadStopper()
+		{
+		}
+
+
+	}
+}
+
+

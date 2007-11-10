@@ -1,3 +1,20 @@
+2007-11-09  Paf <paf@tuxfamily.org>
+	* src/core/tests/testmt.cpp: Initial release. Test program for threads pool
+	* src/core/include/cthread.h: Initial release. Thread abstraction
+	* src/core/include/cworker.h: Initial release. A worker is what is running
+	commands inside of thread of a pool of threads
+	* src/core/include/cthreadstopper.h: Initial release. Stop a given worker
+	* src/core/include/cmtqueue.h: Initial release. Multi-thread friendly
+	templatized queue
+	* src/core/include/cstate.h: Remove annoying \r
+	* src/core/include/cpoolthreads.h: Initial release. Pool of threads
+	* src/core/src/cworker.cpp: Initial release. A worker is what is running
+	commands inside of thread of a pool of threads
+	* src/core/src/cthreadstopper.cpp: Initial release. Stop a given worker
+	* src/core/src/cpoolthreads.cpp: Initial release. Pool of threads
+	* src/core/Makefile: Add new target 'testmt' to compile
+	src/core/tests/testmt.cpp
+
 2007-11-3  Gabriel <contact@huau-gabriel.fr>
 	* src/core/include/cameraspline.h: Initial release
 	* src/core/include/cameraspline.cpp: Initial release

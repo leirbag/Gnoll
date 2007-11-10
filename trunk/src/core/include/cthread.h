@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,42 +18,87 @@
  ***************************************************************************/
 
 
-/*--------------------------------cstate.h---------------------------------*\
-|   Interface of all the FSM's states                                       |
+/*---------------------------------CThread---------------------------------*\
+|   This is basic thread object.                                            |
+|                                                                           |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/27/2006 - Paf - Initial release                          |
+|               10/30/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef __CSTATE_H__
-#define __CSTATE_H__
 
-/**
- *	Interface of all the FSM's states. <br>A state is a description of an activity.
- */ 
-class CState
-{
-	public:
-		/**
-		 * This is called after entering this state
-		 */
-		virtual void onInit() = 0;
 
-		/**
-		 * This is called during its activation
-		 */
-		virtual void onProcess() = 0;
+#ifndef __CTHREAD_H__
+#define __CTHREAD_H__
+
+
+
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
+
+
+
+namespace Gnoll {
+
+	namespace Core {
 
 		/**
-		 * This is called before exiting this state
+		 *	This is a ressource template.</br>
+		 *	This hold the ressource itself and some information
 		 */
-		virtual void onExit() = 0;
+		class CThread
+		{
+			private:
 
-		/**
-		 * This is a virtual destructor
-		 */
-		virtual ~CState() {};
-};
+				/**
+				 * There can be only one instance of a thread running a the same time
+				 */
+				boost::mutex m_threadMutex;
 
-#endif // __CSTATE_H__
+
+			public:
+
+				/**
+				 * What is going to be executed by this thread
+				 */
+				virtual void run () = 0;
+
+
+				/**
+				 * This is a constructor
+				 */
+				CThread()
+				{
+				}
+	
+				/**
+				 * This is a copy constructor
+				 */
+				CThread(const CThread& _thread)
+				{
+				}
+		
+				/**
+				 * This is a destructor
+				 */
+				virtual ~CThread() {};
+
+
+				/**
+				 * Functor that will run the code
+				 */
+				void operator()()
+				{
+					boost::mutex::scoped_lock scoped_lock(m_threadMutex);
+					this->run();
+				}
+
+		};
+
+	}
+}
+
+#endif // __CTHREAD_H__
+

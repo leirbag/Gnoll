@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,42 +18,41 @@
  ***************************************************************************/
 
 
-/*--------------------------------cstate.h---------------------------------*\
-|   Interface of all the FSM's states                                       |
+/*-------------------------------testmt.cpp--------------------------------*\
+|   This program show how to use threads object                             |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/27/2006 - Paf - Initial release                          |
+|               11/08/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef __CSTATE_H__
-#define __CSTATE_H__
 
-/**
- *	Interface of all the FSM's states. <br>A state is a description of an activity.
- */ 
-class CState
+
+#include "../include/cthread.h"
+#include "../include/cworker.h"
+#include "../include/cmtqueue.h"
+#include "../include/cpoolthreads.h"
+
+#include <boost/shared_ptr.hpp>
+#include <iostream>
+
+
+using namespace boost;
+using namespace std;
+using namespace Gnoll::Core;
+
+
+int main()
 {
-	public:
-		/**
-		 * This is called after entering this state
-		 */
-		virtual void onInit() = 0;
+	CPoolThreads pool;
 
-		/**
-		 * This is called during its activation
-		 */
-		virtual void onProcess() = 0;
+	cout << endl;
+	cout << endl;
 
-		/**
-		 * This is called before exiting this state
-		 */
-		virtual void onExit() = 0;
+	cout << "Number of threads running in the pool : " << pool.getNumRunningThreads();
 
-		/**
-		 * This is a virtual destructor
-		 */
-		virtual ~CState() {};
-};
+	cout << endl;
+	cout << endl;
 
-#endif // __CSTATE_H__
+	return 0;
+}
