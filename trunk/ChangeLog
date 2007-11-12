@@ -1,3 +1,7 @@
+2007-11-12  Gabriel <contact@huau-gabriel.fr>
+	* src/core/include/camerafirstperson.h: Initial release, add time to update() 
+	* src/core/include/camerafirstperson.cpp: Initial release, add time to update() 
+
 2007-11-09  Paf <paf@tuxfamily.org>
 	* src/core/tests/testmt.cpp: Initial release. Test program for threads pool
 	* src/core/include/cthread.h: Initial release. Thread abstraction
