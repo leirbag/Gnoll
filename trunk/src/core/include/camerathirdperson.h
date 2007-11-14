@@ -19,7 +19,7 @@
 
 
 /*-------------------------------cmessage----------------------------------*\
-|   This is a free fly camera                                               |
+|   This is a third person camera                                           |
 |                                                                           |
 |   Changelog :                                                             |
 |               10/06/2007 - Gabriel - Initial release                      |
@@ -90,6 +90,7 @@ namespace Gnoll
 
 			/**
 			 * This update the View.
+			 * @param time This is the time between 2 frames
 			 */
 			virtual void update(float time)
 			{
@@ -102,7 +103,7 @@ namespace Gnoll
 
 			/**
 			 * This set a pointer to the target node
-			 * @param node to target
+			 * @param pNode This is the target
 			 */
 			void setTarget(Ogre::SceneNode* pNode);
 
@@ -114,7 +115,7 @@ namespace Gnoll
 
 			/**
 			 * This set the offset between camera and target
-			 * @param offset
+			 * @param offset This is the offset between target and camera
 			 */
 			void setOffset(float offset);
 
@@ -150,13 +151,13 @@ namespace Gnoll
 
 			/**
 			 * This rotate the camera around the axis Y
-			 * @param angle The angle to rotate
+			 * @param angle The angle to rotate in degree
 			 */
 			virtual void rotateAxisY(float angle);
 
 			/**
 			 * This rotate the camera around the axis Z
-			 * @param angle The angle to rotate
+			 * @param angle The angle to rotate in degree
 			 */
 			virtual void rotateAxisZ(float angle);
 				

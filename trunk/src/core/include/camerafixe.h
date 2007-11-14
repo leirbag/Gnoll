@@ -64,6 +64,7 @@ namespace Gnoll
 
 			/**
 			 * This update the View.
+			 * @param time This is the time between 2 frames
 			 */
 			virtual void update(float time)
 			{

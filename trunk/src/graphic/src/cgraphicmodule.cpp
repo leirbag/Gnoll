@@ -246,9 +246,9 @@ void CGraphicModule::init()
 	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
 	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->setLenght(10);
 	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(30, 10,  10), 0);
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(100, 10,  100), 3);
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(300, 10,  300), 6);
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(30, 10,  10), 9);
+	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(100, 50,  100), 3);
+	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(300, 30,  300), 6);
+	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(30, 10,  10), 8);
 	// start() or stop(), choose or die !
 	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->start();
 }

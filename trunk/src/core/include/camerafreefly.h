@@ -107,31 +107,31 @@ namespace Gnoll
 
 			/**
 			 * This rotate the camera around the axis X
-			 * @param angle The angle to rotate
+			 * @param angle The angle to rotate in degree
 			 */
 			virtual void rotateAxisX(float angle);
 
 			/**
 			 * This rotate the camera around the axis Y
-			 * @param angle The angle to rotate
+			 * @param angle The angle to rotate in degree
 			 */
 			virtual void rotateAxisY(float angle);
 
 			/**
 			 * This rotate the camera around the axis Z
-			 * @param angle The angle to rotate
+			 * @param angle The angle to rotate in degree
 			 */
 			virtual void rotateAxisZ(float angle);
 
 			/**
 			 * This strafe the camera on left or right
-			 * @param distance The distance to strafe
+			 * @param distance The distance to strafe (left or right)
 			 */
 			virtual void strafe(float distance);
 
 			/**
 			 * This strafe the camera on up or down
-			 * @param distance The distance to strafe
+			 * @param distance The distance to strafe (up or down)
 			 */
 			virtual void strafeUp(float distance);
 				

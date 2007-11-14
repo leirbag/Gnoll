@@ -82,6 +82,7 @@ namespace Gnoll
 
 			/**
 			 * This update the View.
+			 * @param time This is the time between 2 frames
 			 */
 			virtual void update(float time)
 			{
@@ -91,7 +92,7 @@ namespace Gnoll
 
 			/**
 			 * This set a pointer to the target node
-			 * @param node to target
+			 * @param pNode This is the target
 			 */
 			void setTarget(Ogre::SceneNode* pNode)
 			{

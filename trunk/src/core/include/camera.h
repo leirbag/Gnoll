@@ -61,7 +61,8 @@ namespace Gnoll
 		public:
 			/**
 			 * This is the constructor.
-			 * @param _instance This is the instance name; the Camera's name
+			 * @param instanceName This is the instance name
+			 * @param pSM This is a pointer to the scenemanager
 			 */
 			Camera(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : PersistentObject(instanceName)
 			{
@@ -80,12 +81,13 @@ namespace Gnoll
 			/**
 			 * This update the View.
 			 * Method virtual pure
+			 * @param time This is the time between 2 frames
 			 */
 			virtual void update(float time) = 0;
 
 			/**
 			 * Get the look at of the current camera
-			 * @return the position of the look at
+			 * @return the current direction of the camera
 			 */
 			virtual Ogre::Vector3 getLookAt()
 			{
@@ -94,6 +96,7 @@ namespace Gnoll
 
 			/**
 			 * Set the look at to the current camera
+			 * @param vLookAt This is the position to look at
 			 */
 			virtual void setLookAt(const Ogre::Vector3& vLookAt)
 			{
@@ -101,8 +104,8 @@ namespace Gnoll
 			}
 
 			/**
-			 * Get the up of the current camera
-			 * @return the position of the up
+			 * Get the vector up of the current camera
+			 * @return the position of the vector up
 			 */
 			virtual Ogre::Vector3 getUp()
 			{
@@ -120,6 +123,7 @@ namespace Gnoll
 
 			/**
 			 * Set the eye to the current camera
+			 * @param vEye This is the position of the camera
 			 */
 			virtual void setEye(const Ogre::Vector3& vEye)
 			{
@@ -128,6 +132,7 @@ namespace Gnoll
 
 			/**
 			 * Set the near distance to the current camera
+			 * @param distance This is the near distance
 			 */
 			virtual void setNearDistance(float distance)
 			{
@@ -136,6 +141,7 @@ namespace Gnoll
 
 			/**
 			 * Set the far distance to the current camera
+			 * @param distance This is the far distance
 			 */
 			virtual void setFarDistance(float distance)
 			{
@@ -144,6 +150,7 @@ namespace Gnoll
 
 			/**
 			 * Set the far distance to the current camera
+			 * @param angle This is the FOV in radian of the camera
 			 */
 			virtual void setFov(float angle)
 			{

@@ -19,7 +19,7 @@
 
 
 /*-------------------------------cmessage----------------------------------*\
-|   This is a free fly camera                                               |
+|   This is a third person camera                                           |
 |                                                                           |
 |   Changelog :                                                             |
 |               10/06/2007 - Gabriel - Initial release                      |
