@@ -28,11 +28,13 @@
 |                                  - CTimerModule renamed to CTimeModule    |
 |                                  - Rename timeout to delayed event        |
 |                                  - Rename periodic timeout to periodic    |
-|                                      event                                |
+|                                     event                                 |
 |               09/30/2007 - Paf   - Fix namespace (replace Core by Time)   |
 |               10/06/2007 - Gabriel   - Fix conflict between map and       |
-|                                        multimap that generated an error   |
-|                                        on VS2005                          |
+|                                         multimap that generated an error  |
+|                                         on VS2005                         |
+|               11/16/2007 - Paf   - Remove all references to               |
+|                                     CGenericMessageManager                |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -48,7 +50,7 @@
 #include "itimer.h"
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
 //#include <OgreLogManager.h>
 
 

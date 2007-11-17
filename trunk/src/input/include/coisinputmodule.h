@@ -28,7 +28,7 @@
 
 #include "cinputmodule.h"
 #include "coisinputmanager.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include <OgreRenderWindow.h>

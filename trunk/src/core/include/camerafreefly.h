@@ -18,18 +18,20 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
+/*----------------------------CameraFreeFly--------------------------------*\
 |   This is a free fly camera                                               |
 |                                                                           |
 |   Changelog :                                                             |
 |               08/31/2007 - Gabriel - Initial release                      |
 |               06/10/2007 - Gabriel - Add hack to enable key repeat        |
 |                                    - Add management of mouse for the      |
-|									   rotation                             |
+|									   rotation                                      |
 |               10/10/2007 - Gabriel - Change all variables for listener    |
 |                                      by a map.                            |
-|									   Add time to the transformation       |
+|									   Add time to the transformation                |
 |               10/30/2007 - Gabriel - add time to update()                 |
+|               11/16/2007 - Paf - Remove all references to                 |
+|                                   CGenericMessageManager                  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -41,8 +43,8 @@
 
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/cmessagemodule.h"
 
 #ifndef __CAMERAFREEFLY_H__
 #define __CAMERAFREEFLY_H__
@@ -85,12 +87,14 @@ namespace Gnoll
 			 */
 			virtual ~CameraFreeFly()
 			{
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerStrafe, CMessageType("GRAPHIC_FRAME_RENDERED") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
+				CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+
+				messageManager->delListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
+				messageManager->delListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+				messageManager->delListener ( m_listenerStrafe, CMessageType("GRAPHIC_FRAME_RENDERED") );
+				messageManager->delListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+				messageManager->delListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+				messageManager->delListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
 			}
 
 			/**

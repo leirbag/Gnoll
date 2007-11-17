@@ -18,15 +18,17 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
-|   This is a third person camera                                           |
+/*----------------------------CameraThirdPerson----------------------------*\
+|   This is a free fly camera                                               |
 |                                                                           |
 |   Changelog :                                                             |
 |               10/06/2007 - Gabriel - Initial release                      |
 |               19/06/2007 - Gabriel - Change all variables for listener    |
-|                                      by a map.                            |
-|									   Add limitation of rotation           |
-|									   Add time to the transformation       |
+|                                       by a map.                           |
+|                                      Add limitation of rotation           |
+|                                      Add time to the transformation       |
+|               11/16/2007 - Paf - Remove all references to                 |
+|                                   CGenericMessageManager                  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -47,17 +49,24 @@ namespace Gnoll
 			m_fLimitRotX     = m_fLimitRotY     = m_fLimitRotZ     = 0.0f;
 
 			// Add listener
+			CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+			
 			m_listenerKeyUp = shared_ptr<CMessageListener>(new Gnoll::Core::CtpKeyUp);
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+			messageManager->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+
 			m_listenerKeyDown = shared_ptr<CMessageListener>(new Gnoll::Core::CtpKeyDown);
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+			messageManager->addListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+
 
 			m_listenerMove = shared_ptr<CMessageListener>(new Gnoll::Core::MoveCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageManager->addListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
+
 			m_listenerRotate = shared_ptr<CMessageListener>(new Gnoll::Core::RotateCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageManager->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+
 			m_listenerMouseRotate = shared_ptr<CMessageListener>(new Gnoll::Core::MouseRotateCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
+			messageManager->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
+
 
 			// Creation of controller
 			g_mapCtpKeys["MoveUp"]         = false;

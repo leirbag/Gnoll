@@ -23,6 +23,8 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               06/23/2006 - Paf - Initial release                          |
+|               11/16/2007 - Paf - Remove all references to                 |
+|                                   CGenericMessageManager                  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -71,7 +73,7 @@ void CSDLInputModule::process()
 
 				  shared_ptr<CMessage>  mymessage (new CMessage(keydown, texte ));
 
-				  if (CGenericMessageManager::getInstance().queueMessage(mymessage) == true)
+				  if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
 				  	  cout << "Message de quittage ajoute" << endl;
 				}
 				break;
@@ -82,7 +84,7 @@ void CSDLInputModule::process()
 
 				shared_ptr<CMessage>  mymessage (new CMessage(keydown, texte ));
 
-				if (CGenericMessageManager::getInstance().queueMessage(mymessage) == true)
+				if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
 					cout << "Message ajoute" << endl;
 
 				cout << "Je suis quand meme passe par la" << endl;
@@ -110,3 +112,5 @@ CSDLInputModule::~CSDLInputModule()
 {
 
 }
+
+

@@ -24,16 +24,14 @@
 |   Changelog :                                                             |
 |               05/26/2006 - Paf - Initial release                          |
 |               07/08/2007 - Paf - Update                                   |
+|               11/16/2007 - Paf - Remove all references to                 |
+|                                   CGenericMessageManager                  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
-#include "../include/cmessage.h"
-#include "../include/cmessagetype.h"
-#include "../include/cmessagemanager.h"
-#include "../include/cgenericmessagemanager.h"
-#include "../include/cmessagelistener.h"
+#include "../include/cmessagemodule.h"
 
 
 #include <boost/shared_ptr.hpp>
@@ -43,6 +41,8 @@
 
 using namespace boost;
 using namespace std;
+using namespace Gnoll::Core;
+
 
 /**
  * An idiot message listener 
@@ -83,7 +83,8 @@ class MyMessageListener : public CMessageListener
 int main()
 {
 	// A message manager 
-	CGenericMessageManager mymanager;
+	CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
+	CMessageManager* mymanager = messageModule->getMessageManager();
 
 	// A message type called "string" 
 	CMessageType mytype("string");
@@ -99,23 +100,23 @@ int main()
 	 * Each of them are handle by the listener thanks to the message manager
 	 */
 
-	if (mymanager.addListener ( mylistener, mytype ) == true)
+	if (mymanager->addListener ( mylistener, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
 	shared_ptr<boost::any> texte (new boost::any(string("blablabla..."))) ;
 
 	shared_ptr<CMessage>  mymessage (new CMessage(mytype, texte ));
 
-	if (mymanager.queueMessage(mymessage) == true)
+	if (mymanager->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
-	if (mymanager.queueMessage(mymessage) == true)
+	if (mymanager->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
-	if (mymanager.queueMessage(mymessage) == true)
+	if (mymanager->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
-	mymanager.process();
+	messageModule->process();
 
 
 
@@ -126,13 +127,13 @@ int main()
 	 *  which care about this message type
 	 */
 
-	if (mymanager.delListener ( mylistener, mytype ) == true)
+	if (mymanager->delListener ( mylistener, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (mymanager.queueMessage(mymessage) == true)
+	if (mymanager->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
-	mymanager.process();
+	messageModule->process();
 
 
 
@@ -141,18 +142,18 @@ int main()
 	 * We re-add the listener, send some messages and abort all of them.
 	 */
 
-	if (mymanager.addListener ( mylistener, mytype ) == true)
+	if (mymanager->addListener ( mylistener, mytype ) == true)
 		cout << "Listener ajoute" << endl;
-	if (mymanager.queueMessage(mymessage) == true)
+	if (mymanager->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
-	if (mymanager.queueMessage(mymessage) == true)
+	if (mymanager->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
-	if	(mymanager.abortMessage(mytype, true) == true) 
+	if	(mymanager->abortMessage(mytype, true) == true) 
 		cout << "Message annule" << endl;
 
-	mymanager.process();
+	messageModule->process();
 
 
 
@@ -162,18 +163,19 @@ int main()
     * -> No one cares about this message
 	 */
 
-	if (mymanager.delListener ( mylistener, mytype ) == true)
+	if (mymanager->delListener ( mylistener, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (mymanager.queueMessage(mymessage) == true)
+	if (mymanager->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
-	mymanager.process();
+	messageModule->process();
 
 
 
 
 	// Bye bye 
 	cout << "Au revoir !" << endl;
+	messageModule->destroy();
 	return 0;
 }

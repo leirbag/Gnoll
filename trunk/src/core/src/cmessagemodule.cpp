@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2006 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,66 +18,59 @@
  ***************************************************************************/
 
 
-/*---------------------------csdlinputmodule.h------------------------------*\
-|   The game input module that use SDL                                       |
-|                                                                            |
-|   Changelog :                                                              |
-|               06/23/2006 - Paf - Initial release                           |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
+/*-----------------------------CMessageModule------------------------------*\
+|   This is the message module                                              |
+|                                                                           |
+|   Changelog :                                                             |
+|               11/13/2007 - Paf - Initial release                          |
+|                                                                           |
+\*-------------------------------------------------------------------------*/
 
-#include "cinputmodule.h"
-#include "../../core/include/cmessagemodule.h"
-#include <SDL/SDL.h>
-#include <boost/shared_ptr.hpp>
-#include <string>
 
-#ifndef __CSDLINPUTMODULE_H__
-#define __CSDLINPUTMODULE_H__
+#include "../include/cmessagemodule.h"
 
 
 using namespace std;
 using namespace boost;
 
 
-/**
- *	The game module that use SDL. 
- */ 
-class CSDLInputModule
+namespace Gnoll
 {
-	private:
 
-		/**
-		 * The events which will be processed
-		 */
-		SDL_Event m_event;
+	namespace Core
+	{
+	
+		CMessageManager* CMessageModule::getMessageManager()
+		{
+			/**
+			 * The default Message Manager is CGenericMessageManager
+			 */
+			return m_messageManager.get();
+		}
 
-	public:
-		
-		/**
-		 * A constructor
-		 */
-		CSDLInputModule();
 
-		/**
-		 * @copydoc CModule::init
-		 */
-		virtual void init();
+		CMessageModule::CMessageModule() : m_messageManager( new CGenericMessageManager() )
+		{
+		}
 
-		/**
-		 * @copydoc CModule::process
-		 */
-		virtual void process();
+		void CMessageModule::init() 
+		{
+		}
 
-		/**
-		 * @copydoc CModule::exit 
-		 */
-		virtual void exit();
+		void CMessageModule::process() 
+		{
+			m_messageManager->process();
+		}
 
-		/**
-		 * @copydoc CModule::~CModule
-		 */
-		virtual ~CSDLInputModule();
-};
+		void CMessageModule::exit() 
+		{
+		}
+	
+		CMessageModule::~CMessageModule()
+		{
+		}
 
-#endif // __CSDLINPUTMODULE_H__
+	}
+
+}
+

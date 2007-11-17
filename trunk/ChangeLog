@@ -1,3 +1,27 @@
+2007-11-16  Paf <paf@tuxfamily.org>
+	* src/input/include/csdlinputmodule.h: Remove all \r
+	* src/input/include/coisinputmodule.h: Remove all \r
+	* src/input/src/coisinputmanager.cpp: Remove all references to CGenericMessageManager
+	* src/input/src/csdlinputmodule.cpp: Remove all references to CGenericMessageManager
+	* src/main.cpp: Remove all references to CGenericMessageManager 
+	* src/core/tests/testmsg.cpp: Remove all references to CGenericMessageManager
+	* src/core/include/cmessagemodule.h: Initial release
+	* src/core/include/cmessagemanager.h: Remove all \r
+	* src/core/include/cmodule.h: Remove all \r
+	* src/core/include/singleton.h: Remove all \r
+	* src/core/include/camerafixe.h: Remove all \r
+	* src/core/include/camerafreefly.h: Remove all references to CGenericMessageManager 
+	* src/core/include/camerathirdperson.h: Remove all references to CGenericMessageManager
+	* src/core/include/cgenericmessagemanager.h: Remove Singleton inheritance
+	* src/core/src/camerafreefly.cpp: Remove all references to CGenericMessageManager
+	* src/core/src/camerathirdperson.cpp: Remove all references to CGenericMessageManager
+	* src/core/src/cmessagemodule.cpp: Initial release
+	* src/core/Makefile: Update targets
+	* src/graphic/include/cgraphicmodule.h: Remove all \r 
+	* src/time/tests/testtimer.cpp: Remove all references to CGenericMessageManager
+	* src/time/include/ctimemodule.h: Remove all references to CGenericMessageManager
+	* src/time/src/ctimemodule.cpp: Remove all references to CGenericMessageManager
+
 2007-11-12  Gabriel <contact@huau-gabriel.fr>
 	* src/core/include/camerafirstperson.h: Initial release, add time to update() 
 	* src/core/include/camerafirstperson.cpp: Initial release, add time to update() 

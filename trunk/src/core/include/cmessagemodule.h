@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2006 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,60 +18,91 @@
  ***************************************************************************/
 
 
-/*---------------------------------integer---------------------------------*\
-|   This is a fixed camera                                                  |
+/*-----------------------------CMessageModule------------------------------*\
+|   This is the message module                                              |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/30/2007 - Gabriel - Initial release                      |
-|               10/30/2007 - Gabriel - add time to update()                 |
+|               11/13/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
-#include "camera.h" 
+#ifndef __CMESSAGEMODULE_H__
+#define __CMESSAGEMODULE_H__
 
-#ifndef __CAMERAFIXE_H__
-#define __CAMERAFIXE_H__
+#include "../include/cmodule.h"
+#include "../include/cmessagemanager.h"
+#include "../include/cgenericmessagemanager.h"
+#include "../include/singleton.h"
+
+
+using namespace std;
+using namespace boost;
+
 
 namespace Gnoll
 {
 
-	namespace Core 
+	namespace Core
 	{
 
 		/**
-		*	This is the interface of all Sources.</br>
-		*   This class cannot be instanciable.
-		*/ 
-		class CameraFixe : public Gnoll::Core::Camera
+		 *	The game messaging module. 
+		 */ 
+		class CMessageModule: public CModule, public Singleton<CMessageModule>
 		{
-		public:
+			private:
 
-			/**
-			 * This is the constructor.
-			 * @param _instance This is the instance name; the Camera's name
-			 */
-			CameraFixe(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
-			{
-			}
+				/**
+				 * Pointer to the Message Manager
+				 */
+				shared_ptr<CMessageManager> m_messageManager;
 
-			/**
-			 * This is the destructor
-			 */
-			virtual ~CameraFixe()
-			{
-			}
 
-			/**
-			 * This update the View.
-			 * @param time This is the time between 2 frames
-			 */
-			virtual void update(float time)
-			{
-			}
-				
+			public:
+
+				/**
+				 * Default constructor
+				 */
+				CMessageModule();
+	
+
+				/**
+				 * Return the default message manager</br>
+				 *   So if one write a new implementation of a CMessageManager, there would be
+				 *   only one line to replace
+				 * @Return Default message manager
+				 */
+				CMessageManager* getMessageManager();
+
+
+				/**
+				 * @copydoc CModule::init
+				 */
+				virtual void init(); 
+
+
+				/**
+				 * @copydoc CModule::process
+				 */
+				virtual void process();
+
+
+				/**
+				 * @copydoc CModule::exit 
+				 */
+				virtual void exit();
+	
+
+				/**
+				 * @copydoc CModule::~CModule
+				 */
+				virtual ~CMessageModule();
+
 		};
-	};
-};
+	}
 
-#endif // __CAMERAFIXE_H__
+}
+
+
+#endif // __CMESSAGEMODULE_H__

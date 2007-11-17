@@ -18,16 +18,18 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
-|   This is a third person camera                                           |
+/*---------------------------CameraThirdPerson-----------------------------*\
+|   This is a free fly camera                                               |
 |                                                                           |
 |   Changelog :                                                             |
 |               10/06/2007 - Gabriel - Initial release                      |
 |               19/06/2007 - Gabriel - Change all variables for listener    |
-|                                      by a map.                            |
-|									   Add limitation of rotation           |
-|									   Add time to the transformation       |
+|                                       by a map.                           |
+|                                      Add limitation of rotation           |
+|                                      Add time to the transformation       |
 |               10/30/2007 - Gabriel - add time to update()                 |
+|               11/16/2007 - Paf - Remove all references to                 |
+|                                   CGenericMessageManager                  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -39,8 +41,7 @@
 
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
 
 #ifndef __CAMERATHIRDPERSON_H__
 #define __CAMERATHIRDPERSON_H__
@@ -70,6 +71,7 @@ namespace Gnoll
 			shared_ptr<CMessageListener> m_listenerKeyDown;
 
 		public:
+
 			/**
 			 * This is the constructor.
 			 * @param _instance This is the instance name; the Camera's name
@@ -81,16 +83,17 @@ namespace Gnoll
 			 */
 			virtual ~CameraThirdPerson()
 			{
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
+				CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+
+				messageManager->delListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
+				messageManager->delListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+				messageManager->delListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+				messageManager->delListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+				messageManager->delListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
 			}
 
 			/**
 			 * This update the View.
-			 * @param time This is the time between 2 frames
 			 */
 			virtual void update(float time)
 			{
@@ -145,7 +148,7 @@ namespace Gnoll
 
 			/**
 			 * This rotate the camera around the axis X
-			 * @param angle The angle to rotate
+			 * @param angle The angle to rotate in degree
 			 */
 			virtual void rotateAxisX(float angle);
 

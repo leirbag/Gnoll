@@ -25,19 +25,23 @@
 |               06/23/2006 - Paf - Initial release                          |
 |               05/09/2007 - Paf - Adapt everything to the new interface of |
 |                                   CMessage                                |
-|               11/3/2006 - Gabriel - change numKeyBoards() to              |
+|               11/3/2007 - Gabriel - change numKeyBoards() to              |
 |                                     numKeyboards()                        |
+|               11/16/2007 - Paf - Remove all references to                 |
+|                                    CGenericMessageManager                 |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 #include "../include/cinputmouseevents.h"
 #include "../include/coisinputmanager.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include <iostream>
 
+
+using namespace Gnoll::Core;
 
 COISInputManager::COISInputManager( ) :
     mInputSystem( 0 ) , mKeyboard( 0 ), mMouse( 0 ), mMouseButtonsState( 0 )
@@ -134,7 +138,7 @@ bool COISInputManager::keyPressed( const OIS::KeyEvent &e )
 	shared_ptr<boost::any> kc (new boost::any(OIS::KeyCode(e.key)) ) ;
 	shared_ptr<CMessage>  mymessage (new CMessage(keydown, kc ));
 
-	if (CGenericMessageManager::getInstancePtr()->queueMessage(mymessage) == true)
+	if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
 	return true;
@@ -147,7 +151,7 @@ bool COISInputManager::keyReleased( const OIS::KeyEvent &e )
 	shared_ptr<boost::any> kc (new boost::any(OIS::KeyCode(e.key)) ) ;
 	shared_ptr<CMessage>  mymessage (new CMessage(keyup, kc ));
 
-	if (CGenericMessageManager::getInstancePtr()->queueMessage(mymessage) == true)
+	if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
 
@@ -166,7 +170,7 @@ bool COISInputManager::mouseMoved( const OIS::MouseEvent &arg )
 	shared_ptr<boost::any> data ( new boost::any(mouseE) )  ;
 	shared_ptr<CMessage>  mymessage (new CMessage(mouseMoved, data ));
 
-	if (CGenericMessageManager::getInstancePtr()->queueMessage(mymessage) == true)
+	if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
 		cout << "Message ajoute" << endl;
 
 
@@ -195,7 +199,7 @@ bool COISInputManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButto
 			shared_ptr<boost::any> button (new boost::any(MouseButton(static_cast<MouseButton>(i)))  )  ;
 			shared_ptr<CMessage>  mymessage (new CMessage(mousePressed, button ));
 
-			if (CGenericMessageManager::getInstancePtr()->queueMessage(mymessage) == true)
+			if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
 				cout << "Message ajoute" << endl;
 		}
 
@@ -230,7 +234,7 @@ bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButt
 			shared_ptr<boost::any> button (new boost::any(MouseButton(static_cast<MouseButton>(i)) ) )  ;
 			shared_ptr<CMessage>  mymessage (new CMessage(mouseReleased, button ));
 
-			if (CGenericMessageManager::getInstancePtr()->queueMessage(mymessage) == true)
+			if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
 				cout << "Message ajoute" << endl;
 		}
 
@@ -241,3 +245,5 @@ bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButt
 
     return true;
 }
+
+

@@ -31,7 +31,9 @@
 |                                      event                                |
 |               09/30/2007 - Paf   - Fix namespace (replace Core by Time)   |
 |               10/06/2007 - Gabriel - Fix error on windows because of      |
-|                                      missing header "OgrePlatform.h"      |
+|                                       missing header "OgrePlatform.h"     |
+|               11/16/2007 - Paf   - Remove all references to               |
+|                                     CGenericMessageManager                |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -47,6 +49,7 @@
 
 
 using namespace std;
+using namespace Gnoll::Core;
 
 
 namespace Gnoll
@@ -101,7 +104,7 @@ namespace Gnoll
 		{
 			bool result = true;
 
-			CGenericMessageManager* messageManager = CGenericMessageManager::getInstancePtr();
+			CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
 			
 			if (messageManager->addListener ( _listener, _type ) != true)
 			{
@@ -122,7 +125,7 @@ namespace Gnoll
 			{
 				if(it->first < m_timer->getMsecs())
 				{
-					CGenericMessageManager::getInstancePtr()->trigger(it->second);
+					CMessageModule::getInstancePtr()->getMessageManager()->trigger(it->second);
 
 					// Delete this timer
 					msgMapIter tmp = it;
@@ -155,7 +158,7 @@ namespace Gnoll
 					itPeriodic++;
 					m_timersPeriodic.erase(tmp);
 
-					CGenericMessageManager::getInstancePtr()->trigger(msg);
+					CMessageModule::getInstancePtr()->getMessageManager()->trigger(msg);
 				}
 				else
 				{
@@ -174,7 +177,7 @@ namespace Gnoll
 			 * Removing all registered listeners
 			 */
 
-			CGenericMessageManager* messageManager = CGenericMessageManager::getInstancePtr();
+			CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
 
 			for(list< pair< shared_ptr<CMessageListener>, CMessageType> >::iterator it = m_listListeners.begin(); it != m_listListeners.end(); it++)
 			{

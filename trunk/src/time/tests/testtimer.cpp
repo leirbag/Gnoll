@@ -18,12 +18,14 @@
  ***************************************************************************/
 
 
-/*------------------------------testmsg.cpp--------------------------------*\
+/*-----------------------------testtimer.cpp-------------------------------*\
 |   This program show how to use messages and a message manager             |
 |                                                                           |
 |   Changelog :                                                             |
 |               08/30/2007 - Paf - Initial release                          |
 |               09/23/2007 - Paf - Update class names                       |
+|               11/16/2007 - Paf - Remove all references to                 |
+|                                   CGenericMessageManager                  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -32,7 +34,7 @@
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
 #include "../../core/include/cmessagemanager.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../include/ctimemodule.h"
 #include "../include/itimer.h"
@@ -48,6 +50,7 @@
 using namespace boost;
 using namespace std;
 using namespace Gnoll::Time;
+using namespace Gnoll::Core;
 
 /**
  * An idiot message listener 
@@ -88,7 +91,8 @@ int main()
 {
 
 	// A message manager 
-	CGenericMessageManager* myManager = CGenericMessageManager::getInstancePtr();
+	CMessageModule* messageModule = CMessageModule::getInstancePtr();
+	CMessageManager* myManager = messageModule->getMessageManager();
 	CTimeModule* myTimeModule = CTimeModule::getInstancePtr();
 
 	// A message type called "string" 
@@ -98,6 +102,9 @@ int main()
 	// A simple listener
 	shared_ptr<CMessageListener> mylistener(new MyMessageListener);
 
+
+	// Initialization of the message module
+	messageModule->init();
 
 	// Initialization of the time module
 	myTimeModule->init();
@@ -189,7 +196,7 @@ int main()
 	// A simple loop
 	for (unsigned long i = 0; i < 999999999; i++)
 	{
-		myManager->process();
+		messageModule->process();
 		myTimeModule->process();
 	}
 
@@ -200,13 +207,12 @@ int main()
 
 
 	myTimeModule->exit();
+	messageModule->exit();
 
-
-	myTimeModule->exit();
-	myManager->destroy();
 
 
 	// Bye bye 
 	cout << "Au revoir !" << endl;
+
 	return 0;
 }

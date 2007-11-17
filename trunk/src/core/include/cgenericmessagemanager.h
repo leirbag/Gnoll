@@ -18,11 +18,12 @@
  ***************************************************************************/
 
 
-/*------------------------cgenericmessagemanager---------------------------*\
+/*------------------------CGenericMessageManager---------------------------*\
 |   This is a generic message manager                                       |
 |                                                                           |
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
+|               11/16/2007 - Paf - Remove Singleton<> inheritance           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -50,7 +51,7 @@ using namespace boost;
  *	A generic message manager.
  *	This is an implementation of a messages manager
  */ 
-class CGenericMessageManager: public CMessageManager, public Singleton<CGenericMessageManager>
+class CGenericMessageManager: public CMessageManager
 {
 	private :
 

@@ -38,6 +38,8 @@
 |               05/09/2007 - Paf - Adapt everything to the new interface of |
 |                                   CMessage                                |
 |               09/30/2007 - Paf - Add Time Module                          |
+|               11/16/2007 - Paf - Remove all references to                 |
+|                                   CGenericMessageManager                  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -46,7 +48,7 @@
 #include "core/include/cmessage.h"
 #include "core/include/cmessagetype.h"
 #include "core/include/cmessagemanager.h"
-#include "core/include/cgenericmessagemanager.h"
+#include "core/include/cmessagemodule.h"
 #include "core/include/cmessagelistener.h"
 #include "core/include/camerafreefly.h"
 
@@ -584,8 +586,11 @@ int main()
 	CGraphicModule* graphicmanager = CGraphicModule::getInstancePtr();
 	COISInputModule inputmanager;
 	CTimeModule timeModule;
+	CMessageModule* messageModule = CMessageModule::getInstancePtr();
 
+	CMessageManager* messageManager = messageModule->getMessageManager();
 
+	messageModule->init();
 	graphicmanager->init();
 	inputmanager.init();
 	timeModule.init();
@@ -594,42 +599,43 @@ int main()
 	 * We add a listner and send some messages
 	 * Each of them are handle by the listener thanks to the message manager
 	 */
-	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener6, alltype ) == true)
+	if (messageManager()->addListener ( mylistener6, alltype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener, mytype ) == true)
+	if (messageManager()->addListener ( mylistener, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener2, mytype ) == true)
+	if (messageManager()->addListener ( mylistener2, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener3, framerendered ) == true)
+	if (messageManager()->addListener ( mylistener3, framerendered ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener4, mytype2 ) == true)
+	if (messageManager()->addListener ( mylistener4, mytype2 ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener5, mytype ) == true)
+	if (messageManager()->addListener ( mylistener5, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener7, mptype ) == true)
+	if (messageManager()->addListener ( mylistener7, mptype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->addListener ( mylistener8, mrtype ) == true)
+	if (messageManager()->addListener ( mylistener8, mrtype ) == true)
 		cout << "Listener ajoute" << endl;
+
+
+
+
 
 	while (done == false)
 	{
 
 		inputmanager.process();
-		CGenericMessageManager::getInstancePtr()->process();
+		messageModule->process();
 		graphicmanager->process();
 		timeModule.process();
 		
 	}
-
-
-
 
 
 
@@ -639,28 +645,28 @@ int main()
 	 *  which care about this message type
 	 */
 
-	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener, mytype ) == true)
+	if (messageManager()->delListener ( mylistener, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener2, mytype ) == true)
+	if (messageManager()->delListener ( mylistener2, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener3, framerendered ) == true)
+	if (messageManager()->delListener ( mylistener3, framerendered ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener4, mytype2 ) == true)
+	if (messageManager()->delListener ( mylistener4, mytype2 ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener5, mytype ) == true)
+	if (messageManager()->delListener ( mylistener5, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener6, alltype ) == true)
+	if (messageManager()->delListener ( mylistener6, alltype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener7, mptype ) == true)
+	if (messageManager()->delListener ( mylistener7, mptype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (CGenericMessageManager::getInstancePtr()->delListener ( mylistener8, mrtype ) == true)
+	if (messageManager()->delListener ( mylistener8, mrtype ) == true)
 		cout << "Listener supprime" << endl;
 
 	 
@@ -671,6 +677,7 @@ int main()
 	timeModule.exit();
 	inputmanager.exit();
 	graphicmanager->exit();
+	messageModule->exit();
 
 	// Bye bye 
 	cout << "Au revoir !" << endl;
