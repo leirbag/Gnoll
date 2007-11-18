@@ -36,7 +36,7 @@
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
 #include "../../core/include/cmessagemanager.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
 
 #ifndef __CAMERAFIRSTPERSON_H__
 #define __CAMERAFIRSTPERSON_H__
@@ -71,7 +71,7 @@ namespace Gnoll
 			 */
 			virtual ~CameraFirstPerson()
 			{
-				CGenericMessageManager::getInstancePtr()->delListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+				CMessageModule::getInstancePtr()->getMessageManager()->delListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
 			}
 
 			/**

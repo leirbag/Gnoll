@@ -63,7 +63,7 @@
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
 #include "../../core/include/cmessagemanager.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagelistener.h"
 
 using namespace Ogre;
@@ -286,7 +286,7 @@ void CGraphicModule::process()
 			);
 	shared_ptr<CMessage>  mymessage (new CMessage(framerendered, tempTime));
 
-	if (CGenericMessageManager::getInstancePtr()->queueMessage(mymessage) == false)
+	if (Gnoll::Core::CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == false)
 		cout << "Message pas ajoute !!!" << endl;
 	
 	m_lastframe = newframe;

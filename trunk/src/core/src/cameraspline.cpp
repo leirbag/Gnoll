@@ -42,7 +42,7 @@ Gnoll::Core::CameraSpline::CameraSpline(const Glib::ustring& instanceName, Ogre:
 	m_pAnimState = pSM->createAnimationState(instanceName);
 
 	m_listenerUpdate = shared_ptr<CMessageListener>(new Gnoll::Core::UpdateCameraSplineListener(this));
-    CGenericMessageManager::getInstancePtr()->addListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+	CMessageModule::getInstancePtr()->getMessageManager()->addListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
 }
 
 void Gnoll::Core::CameraSpline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)

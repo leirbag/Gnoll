@@ -38,7 +38,7 @@
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
 #include "../../core/include/cmessagemanager.h"
-#include "../../core/include/cgenericmessagemanager.h"
+#include "../../core/include/cmessagemodule.h"
 
 #ifndef __CAMERASPLINE_H__
 #define __CAMERASPLINE_H__

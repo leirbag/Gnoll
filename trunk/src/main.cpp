@@ -599,28 +599,28 @@ int main()
 	 * We add a listner and send some messages
 	 * Each of them are handle by the listener thanks to the message manager
 	 */
-	if (messageManager()->addListener ( mylistener6, alltype ) == true)
+	if (messageManager->addListener ( mylistener6, alltype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (messageManager()->addListener ( mylistener, mytype ) == true)
+	if (messageManager->addListener ( mylistener, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (messageManager()->addListener ( mylistener2, mytype ) == true)
+	if (messageManager->addListener ( mylistener2, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (messageManager()->addListener ( mylistener3, framerendered ) == true)
+	if (messageManager->addListener ( mylistener3, framerendered ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (messageManager()->addListener ( mylistener4, mytype2 ) == true)
+	if (messageManager->addListener ( mylistener4, mytype2 ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (messageManager()->addListener ( mylistener5, mytype ) == true)
+	if (messageManager->addListener ( mylistener5, mytype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (messageManager()->addListener ( mylistener7, mptype ) == true)
+	if (messageManager->addListener ( mylistener7, mptype ) == true)
 		cout << "Listener ajoute" << endl;
 
-	if (messageManager()->addListener ( mylistener8, mrtype ) == true)
+	if (messageManager->addListener ( mylistener8, mrtype ) == true)
 		cout << "Listener ajoute" << endl;
 
 
@@ -645,28 +645,28 @@ int main()
 	 *  which care about this message type
 	 */
 
-	if (messageManager()->delListener ( mylistener, mytype ) == true)
+	if (messageManager->delListener ( mylistener, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (messageManager()->delListener ( mylistener2, mytype ) == true)
+	if (messageManager->delListener ( mylistener2, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (messageManager()->delListener ( mylistener3, framerendered ) == true)
+	if (messageManager->delListener ( mylistener3, framerendered ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (messageManager()->delListener ( mylistener4, mytype2 ) == true)
+	if (messageManager->delListener ( mylistener4, mytype2 ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (messageManager()->delListener ( mylistener5, mytype ) == true)
+	if (messageManager->delListener ( mylistener5, mytype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (messageManager()->delListener ( mylistener6, alltype ) == true)
+	if (messageManager->delListener ( mylistener6, alltype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (messageManager()->delListener ( mylistener7, mptype ) == true)
+	if (messageManager->delListener ( mylistener7, mptype ) == true)
 		cout << "Listener supprime" << endl;
 
-	if (messageManager()->delListener ( mylistener8, mrtype ) == true)
+	if (messageManager->delListener ( mylistener8, mrtype ) == true)
 		cout << "Listener supprime" << endl;
 
 	 
