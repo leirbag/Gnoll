@@ -24,10 +24,12 @@
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
 |               11/16/2007 - Paf - Remove Singleton<> inheritance           |
+|               11/19/2007 - Paf - Add a mutex                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
 #include <string>
 #include <set>
 #include <map>
@@ -54,6 +56,11 @@ using namespace boost;
 class CGenericMessageManager: public CMessageManager
 {
 	private :
+
+		/**
+		 * Mutex
+		 */
+		boost::mutex m_mutex;
 
 		/**
 		 * A set of message types

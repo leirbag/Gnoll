@@ -27,12 +27,14 @@
 |               08/13/2007 - Paf - Update comments, implement method save() |
 |               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
 |               10/17/2007 - Paf - Add a new method isInstanceInCache()     |
+|               11/19/2007 - Paf - Add a mutex                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
 #include <map>
 #include <set>
 #include <vector>
@@ -77,6 +79,7 @@ namespace Gnoll {
 				 * Last time this ressource has been accessed
 				 */
 				time_t m_lastTime;
+
 
 			public:
 
@@ -178,6 +181,10 @@ namespace Gnoll {
 				*/
 				unsigned int m_maxCache;
 
+				/**
+				 * Mutex
+				 */
+				boost::mutex m_mutex;
 
 		
 			protected:
@@ -209,6 +216,9 @@ namespace Gnoll {
 				shared_ptr<ISource> findLoadSource( string _instance)
 				{
 
+					boost::mutex::scoped_lock lock(m_mutex);
+
+
 					set< shared_ptr<ISource> >::iterator iter = m_loadSources.begin();
 					while (iter != m_loadSources.end())
 					{
@@ -233,6 +243,9 @@ namespace Gnoll {
 				shared_ptr<ISource> findSaveSource( string _instance)
 				{
 	
+					boost::mutex::scoped_lock lock(m_mutex);
+
+
 					set< shared_ptr<ISource> >::iterator iter = m_saveSources.begin();
 					while (iter != m_saveSources.end())
 					{
@@ -274,6 +287,7 @@ namespace Gnoll {
 				 */ 
 				void addLoadSource(shared_ptr<ISource> _source)
 				{
+					boost::mutex::scoped_lock lock(m_mutex);
 					m_loadSources.insert(_source);
 				}
 
@@ -283,6 +297,7 @@ namespace Gnoll {
 				 */ 
 				void addSaveSource(shared_ptr<ISource> _source)
 				{
+					boost::mutex::scoped_lock lock(m_mutex);
 					m_saveSources.insert(_source);
 				}
 
@@ -294,6 +309,7 @@ namespace Gnoll {
 				 */
 				bool isInstanceInCache(string _instance)
 				{
+					boost::mutex::scoped_lock lock(m_mutex);
 					CacheIterator iter = m_cache.find(_instance);
 
 					// There is no such instance in the cache
@@ -312,6 +328,8 @@ namespace Gnoll {
 				 */
 				shared_ptr<T> load(string _instance)
 				{
+					boost::mutex::scoped_lock lock(m_mutex);
+
 					// First we check if this instance exists in the cache
 					CacheIterator iter = m_cache.find(_instance);
 
@@ -394,6 +412,8 @@ namespace Gnoll {
 				 */
 				bool save(string _instance)
 				{
+					boost::mutex::scoped_lock lock(m_mutex);
+
 					// First we check if this instance exists in the cache
 					CacheIterator iter = m_cache.find(_instance);
 
@@ -448,6 +468,8 @@ namespace Gnoll {
 				*/
 				void release (string _instance)
 				{
+					boost::mutex::scoped_lock lock(m_mutex);
+
 					RessourceVectorIterator it = m_LRUIndex[_instance];
 
 					m_LRUIndex.erase(_instance);

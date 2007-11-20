@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
+|               11/19/2007 - Paf - Add a mutex                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 #include <iostream>
@@ -34,6 +35,8 @@
 
 bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype )
 {
+	boost::mutex::scoped_lock lock(m_mutex);
+
 
 	if ( validateType( messagetype ) == false )
 		return false;
@@ -86,6 +89,8 @@ bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler,
 		
 bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype )
 {
+	boost::mutex::scoped_lock lock(m_mutex);
+
 	if ( validateType( messagetype ) == false )
 		return false;
 
@@ -159,6 +164,7 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 
 bool CGenericMessageManager::trigger ( shared_ptr<CMessage> message )
 {
+	boost::mutex::scoped_lock lock(m_mutex);
 
 	if ( validateType( message->getType() ) == false )
 		return false;
@@ -201,6 +207,8 @@ bool CGenericMessageManager::trigger ( shared_ptr<CMessage> message )
 
 bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 {
+	boost::mutex::scoped_lock lock(m_mutex);
+
 	if ( validateType( message->getType() ) == false )
 		return false;
 
@@ -233,6 +241,8 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 
 bool CGenericMessageManager::abortMessage ( CMessageType messagetype, bool alloftype )
 {
+	boost::mutex::scoped_lock lock(m_mutex);
+
 	if ( validateType( messagetype ) == false )
 		return false;
 
@@ -278,6 +288,7 @@ bool CGenericMessageManager::validateType( CMessageType messagetype )
 
 void CGenericMessageManager::process( )
 {
+	boost::mutex::scoped_lock lock(m_mutex);
 
 	/*
 	 * We can't process an active message queue because a handler could create a

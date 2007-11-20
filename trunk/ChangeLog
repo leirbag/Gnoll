@@ -1,3 +1,9 @@
+2007-11-19  Paf <paf@tuxfamily.org>
+	* trunk/src/core/include/basemanager.h: Add mutexes
+	* trunk/src/core/include/cgenericmessagemanager.h: Add mutexes
+	* trunk/src/core/src/cgenericmessagemanager.cpp: Add mutexes
+	* trunk/src/core/Makefile: Update Makefile (add -lboost_thread)
+
 2007-11-16  Paf <paf@tuxfamily.org>
 	* src/input/include/csdlinputmodule.h: Remove all \r
 	* src/input/include/coisinputmodule.h: Remove all \r
