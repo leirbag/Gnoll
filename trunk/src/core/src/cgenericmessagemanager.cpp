@@ -23,7 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
-|               11/19/2007 - Paf - Add a mutex                              |
+|               11/19/2007 - Paf - Add mutexes                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 #include <iostream>
@@ -35,7 +35,6 @@
 
 bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype )
 {
-	boost::mutex::scoped_lock lock(m_mutex);
 
 
 	if ( validateType( messagetype ) == false )
@@ -44,20 +43,22 @@ bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler,
 
 	/*
 	 * If this new listener handle message types that are unknown, 
-	 * this new message type is added to the set m_messagetypes.
+	 * this new message type is added to the set m_messageTypes.
 	 * If it fails, it returns false
 	 */
-
-	if ( m_messagetypes.find(messagetype) == m_messagetypes.end() )
 	{
+		boost::mutex::scoped_lock lock(m_messageTypesMutex);
 
-		pair<set<CMessageType>::iterator,bool> result = m_messagetypes.insert(messagetype);
+		if ( m_messageTypes.find(messagetype) == m_messageTypes.end() )
+		{
 
-		if ( ( result.second == false ) ||  ( result.first == m_messagetypes.end() ) )
-			return false;
+			pair<set<CMessageType>::iterator,bool> result = m_messageTypes.insert(messagetype);
 
+			if ( ( result.second == false ) ||  ( result.first == m_messageTypes.end() ) )
+				return false;
+
+		}
 	}
-
 
 	/*
 	 * Each tupple (handler, message type) must be unique.
@@ -66,11 +67,15 @@ bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler,
 
 	bool found = false;
 
-	for (multimap< CMessageType, shared_ptr<CMessageListener> >::iterator it = m_listeners.lower_bound(messagetype);
-       ( (it != m_listeners.upper_bound(messagetype) ) && (found == false) ); ++it)
 	{
-		if ( (*it).second == handler )
-			found = true;
+		boost::mutex::scoped_lock lock(m_listenersMutex);
+
+		for (multimap< CMessageType, shared_ptr<CMessageListener> >::iterator it = m_listeners.lower_bound(messagetype);
+			( (it != m_listeners.upper_bound(messagetype) ) && (found == false) ); ++it)
+		{
+			if ( (*it).second == handler )
+				found = true;
+		}
 	}
 
 	if (found == true)
@@ -80,8 +85,10 @@ bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler,
 	/*
 	 * Finally the new listener is added :)
 	 */
-
-	m_listeners.insert(pair< CMessageType, shared_ptr<CMessageListener> >(messagetype, handler));
+	{
+		boost::mutex::scoped_lock lock(m_listenersMutex);
+		m_listeners.insert(pair< CMessageType, shared_ptr<CMessageListener> >(messagetype, handler));
+	}
 	return true;
 
 }
@@ -89,7 +96,6 @@ bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler,
 		
 bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype )
 {
-	boost::mutex::scoped_lock lock(m_mutex);
 
 	if ( validateType( messagetype ) == false )
 		return false;
@@ -98,15 +104,18 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 	 * If this listener handle message types that are unknown, 
 	 * it returns false because it's impossible to have it also in the listener's multimap.
 	 */
-
-	if ( m_messagetypes.find(messagetype) == m_messagetypes.end() )
 	{
+		boost::mutex::scoped_lock lock(m_messageTypesMutex);
 
-		pair<set<CMessageType>::iterator,bool> result = m_messagetypes.insert(messagetype);
+		if ( m_messageTypes.find(messagetype) == m_messageTypes.end() )
+		{
 
-		if ( ( result.second == false ) ||  ( result.first == m_messagetypes.end() ) )
-			return false;
+			pair<set<CMessageType>::iterator,bool> result = m_messageTypes.insert(messagetype);
 
+			if ( ( result.second == false ) ||  ( result.first == m_messageTypes.end() ) )
+				return false;
+
+		}
 	}
 
 
@@ -115,23 +124,26 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 	 */
 
 	bool found = false;
-	multimap< CMessageType, shared_ptr<CMessageListener> >::iterator result = m_listeners.end();
 
-	for (multimap< CMessageType, shared_ptr<CMessageListener> >::iterator it = m_listeners.lower_bound(messagetype);
-       ( (it != m_listeners.upper_bound(messagetype) ) && (found == false) ); ++it)
 	{
-		if ( (*it).second == handler )
+		boost::mutex::scoped_lock lock(m_listenersMutex);
+		multimap< CMessageType, shared_ptr<CMessageListener> >::iterator result = m_listeners.end();
+
+		for (multimap< CMessageType, shared_ptr<CMessageListener> >::iterator it = m_listeners.lower_bound(messagetype);
+			( (it != m_listeners.upper_bound(messagetype) ) && (found == false) ); ++it)
 		{
-			found = true;
-			result = it;
+			if ( (*it).second == handler )
+			{
+				found = true;
+				result = it;
+			}
 		}
+
+		if (found == false)
+			return false;
+
+		m_listeners.erase( result );
 	}
-
-	if (found == false)
-		return false;
-
-	m_listeners.erase( result );
-
 
 
 
@@ -140,21 +152,24 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 	 * If this listener was the last one to handle its message type, 
 	 * the message type has to be deleted from the set of message types.
 	 */
-
-	if ( m_listeners.find(messagetype) == m_listeners.end() )
 	{
-
-		set<CMessageType>::iterator result = m_messagetypes.find(messagetype);
-
-		if ( result != m_messagetypes.end() )
+		boost::mutex::scoped_lock lock(m_listenersMutex);
+		if ( m_listeners.find(messagetype) == m_listeners.end() )
 		{
-			m_messagetypes.erase(result);
-		}
-		else
-			// message type not found
-			return false;
-	}
 
+			boost::mutex::scoped_lock lock(m_messageTypesMutex);
+
+			set<CMessageType>::iterator result = m_messageTypes.find(messagetype);
+
+			if ( result != m_messageTypes.end() )
+			{
+				m_messageTypes.erase(result);
+			}
+			else
+				// message type not found
+				return false;
+		}
+	}
 
 
 	return true;
@@ -164,7 +179,7 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 
 bool CGenericMessageManager::trigger ( shared_ptr<CMessage> message )
 {
-	boost::mutex::scoped_lock lock(m_mutex);
+	boost::mutex::scoped_lock lock(m_listenersMutex);
 
 	if ( validateType( message->getType() ) == false )
 		return false;
@@ -207,8 +222,6 @@ bool CGenericMessageManager::trigger ( shared_ptr<CMessage> message )
 
 bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 {
-	boost::mutex::scoped_lock lock(m_mutex);
-
 	if ( validateType( message->getType() ) == false )
 		return false;
 
@@ -216,24 +229,33 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 	/*
 	 * The message type has to be registered
 	 */
+	{
+		boost::mutex::scoped_lock lock(m_messageTypesMutex);
 
-	if ( m_messagetypes.find(message->getType()) == m_messagetypes.end() )
-		return false;
-
+		if ( m_messageTypes.find(message->getType()) == m_messageTypes.end() )
+			return false;
+	}
 
 	/*
 	 * If there is no one to listen...
-	 */
+	 */	
+	{	
+		boost::mutex::scoped_lock lock(m_listenersMutex);
 
-	if ( m_listeners.find(message->getType()) == m_listeners.end() )
-		return false;
+		if ( m_listeners.find(message->getType()) == m_listeners.end() )
+			return false;
+	}
 
 
 	/*
 	 * Finally the message is enqueue
 	 */
+	{
+		boost::mutex::scoped_lock lockAQ(m_activeQueueMutex);
+		boost::mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
-	m_messages[m_activequeue].push_back(message);
+		m_messages[m_activeQueue].push_back(message);
+	}
 	return true;
 
 }
@@ -241,7 +263,8 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 
 bool CGenericMessageManager::abortMessage ( CMessageType messagetype, bool alloftype )
 {
-	boost::mutex::scoped_lock lock(m_mutex);
+	boost::mutex::scoped_lock lockAQ(m_activeQueueMutex);
+	boost::mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
 	if ( validateType( messagetype ) == false )
 		return false;
@@ -253,13 +276,13 @@ bool CGenericMessageManager::abortMessage ( CMessageType messagetype, bool allof
 
 	bool result = false;
 	bool noincr = false;
-	for ( list< shared_ptr<CMessage> >::iterator it = m_messages[m_activequeue].begin(); it != m_messages[m_activequeue].end() && (result == false); noincr ? it : it++)
+	for ( list< shared_ptr<CMessage> >::iterator it = m_messages[m_activeQueue].begin(); it != m_messages[m_activeQueue].end() && (result == false); noincr ? it : it++)
 	{
 		noincr = false;
 		if ( (*it)->getType() == messagetype )
 		{
-			m_messages[m_activequeue].erase(it);
-			it = m_messages[m_activequeue].begin();
+			m_messages[m_activeQueue].erase(it);
+			it = m_messages[m_activeQueue].begin();
 			noincr = true;
 
 			if ( alloftype == false )
@@ -288,7 +311,8 @@ bool CGenericMessageManager::validateType( CMessageType messagetype )
 
 void CGenericMessageManager::process( )
 {
-	boost::mutex::scoped_lock lock(m_mutex);
+	boost::mutex::scoped_lock lockAQ(m_activeQueueMutex);
+	boost::mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
 	/*
 	 * We can't process an active message queue because a handler could create a
@@ -296,8 +320,8 @@ void CGenericMessageManager::process( )
 	 * So it would turn into an infinite loop.
 	 */
 
-	unsigned int queuetoprocess = m_activequeue;
-	m_activequeue = (m_activequeue + 1) % NUMQUEUE;
+	unsigned int queuetoprocess = m_activeQueue;
+	m_activeQueue = (m_activeQueue + 1) % NUMQUEUE;
 
 
 
@@ -309,6 +333,9 @@ void CGenericMessageManager::process( )
 
 	for ( list< shared_ptr<CMessage> >::iterator itmsg = m_messages[queuetoprocess].begin(); itmsg != m_messages[queuetoprocess].end(); itmsg++ )
 	{
+
+		boost::mutex::scoped_lock lock(m_listenersMutex);
+
 
 		for (multimap< CMessageType, shared_ptr<CMessageListener> >::iterator it = m_listeners.lower_bound(anytype);
    	    it != m_listeners.upper_bound(anytype) ; ++it)
@@ -340,4 +367,5 @@ void CGenericMessageManager::process( )
 
 	m_messages[queuetoprocess].erase( m_messages[queuetoprocess].begin(), m_messages[queuetoprocess].end() );
 }
+
 

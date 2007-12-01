@@ -82,7 +82,7 @@ using namespace boost;
 /**
  *	The game graphic module. 
  */ 
-class CGraphicModule: public CModule, public Singleton<CGraphicModule>
+class CGraphicModule: public CModule, public Gnoll::Core::Singleton<CGraphicModule>
 {
 
 	private:

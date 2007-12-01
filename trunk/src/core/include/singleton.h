@@ -23,8 +23,11 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               06/23/2006 - Paf - Initial release                          |
-|               13/07/2007 - Yellow - 'Singleton' ambiguous symbol, change  |
-|               to '::Singleton'                                            |
+|               07/13/2007 - Yellow - 'Singleton' ambiguous symbol, change  |
+|                                       to '::Singleton'                    |
+|               11/27/2007 - Paf - Singleton is now part of the namespace   |
+|                                    Gnoll::Core                            |
+|                                  Add a mutex to make it thread friendly   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -33,58 +36,82 @@
 #ifndef __SINGLETON_H__
 #define __SINGLETON_H__
 
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
 
-
-/**
- *	Interface of all game modules. 
- */ 
-template <typename T> class Singleton
+namespace Gnoll
 {
-	private:
 
-		static T* m_instance;
+	namespace Core
+	{
+
+
+		/**
+		 *	Interface of all game modules. 
+		 */ 
+		template <typename T> class Singleton
+		{
+			private:
+
+				/**
+				 * Instance pointer
+				 */
+				static T* m_instance;
+		
+				/**
+				 * Mutex
+				 */
+				static boost::mutex m_mutex;
+
 	
 
-	public:
+			public:
 
-		/**
-		 * A constructor
-		 */
-		Singleton() {}
+				/**
+				 * A constructor
+				 */
+				Singleton() {}
 
-		/**
-		 * A virtual destructor
-		 */
-		virtual ~Singleton() {};
+				/**
+				 * A virtual destructor
+				 */
+				virtual ~Singleton() {};
 
-		/**
-		 * This returns a pointer to the singleton
-		 */
-		static T* getInstancePtr() 
-		{ 
-			if (m_instance == 0)
-				m_instance = new T;
+				/**
+				 * This returns a pointer to the singleton
+				 */
+				static T* getInstancePtr() 
+				{ 
+					boost::mutex::scoped_lock lock(m_mutex);
 
-			return m_instance;
-		}
+					if (m_instance == 0)
+						m_instance = new T;
 
-		/**
-		 * This destroys the singleton
-		 */
-		static void destroy()
-		{
+					return m_instance;
+				}
+
+				/**
+				 * This destroys the singleton
+				 */
+				static void destroy()
+				{
+					boost::mutex::scoped_lock lock(m_mutex);
 			
-			if (m_instance != 0)
-			{
-				delete m_instance;
-				m_instance = 0;
-			}			
+					if (m_instance != 0)
+					{
+						delete m_instance;
+						m_instance = 0;
+					}			
 		
-		}
+				}
 
-};
+		};
 
-template <typename T> T *::Singleton<T>::m_instance = 0;
+		template <typename T> T * Singleton<T>::m_instance = 0;
+		template <typename T> boost::mutex Singleton<T>::m_mutex;
+
+	}
+}
 
 
 #endif // __SINGLETON_H__

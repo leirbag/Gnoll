@@ -101,7 +101,9 @@ namespace Gnoll
 		}
 
 		bool CTimeModule::addListener(shared_ptr<CMessageListener> _listener, CMessageType _type)
-		{
+		{	
+			boost::mutex::scoped_lock lock(m_listListenersMutex);
+
 			bool result = true;
 
 			CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
@@ -118,9 +120,12 @@ namespace Gnoll
 			return result;
 		}
 
-		void CTimeModule::process()
+		void CTimeModule::processTimers()
 		{
+			boost::mutex::scoped_lock lock(m_timersMutex);
+
 			msgMapIter it = m_timers.begin();
+
 			while(it != m_timers.end())
 			{
 				if(it->first < m_timer->getMsecs())
@@ -137,10 +142,15 @@ namespace Gnoll
 					it++;
 				}
 			}
+		}
 
+		void CTimeModule::processPeriodicTimers()
+		{
+			boost::mutex::scoped_lock lock(m_timersPeriodicMutex);
 
 			pair<unsigned long int, shared_ptr<CMessage> > p;
 			perMsgMapIter itPeriodic = m_timersPeriodic.begin();
+
 			while ( itPeriodic != m_timersPeriodic.end() )
 			{
 				if(itPeriodic->first < m_timer->getMsecs())
@@ -159,12 +169,27 @@ namespace Gnoll
 					m_timersPeriodic.erase(tmp);
 
 					CMessageModule::getInstancePtr()->getMessageManager()->trigger(msg);
+
 				}
 				else
 				{
+
 					itPeriodic++;
+
 				}
+
 			}
+
+		}
+
+
+		void CTimeModule::process()
+		{
+
+			processTimers();
+
+			processPeriodicTimers();
+
 		}
 
 
@@ -195,12 +220,16 @@ namespace Gnoll
 
 		void CTimeModule::addDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg)
 		{
+			boost::mutex::scoped_lock lock(m_timersMutex);
+
 			m_timers.insert(pair<unsigned long int, shared_ptr<CMessage> >(m_timer->getMsecs() + delay, msg));
 		}
 
 
 		void CTimeModule::delDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg)
 		{
+			boost::mutex::scoped_lock lock(m_timersMutex);
+
 			for(msgMapIter it = m_timers.begin(); it != m_timers.end(); it++)
 			{
 				if(it->first == delay && it->second == msg)
@@ -213,6 +242,8 @@ namespace Gnoll
 
 		void CTimeModule::addPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
 		{
+			boost::mutex::scoped_lock lock(m_timersPeriodicMutex);
+
 			pair<unsigned long int, shared_ptr<CMessage> > p(period, msg);
 			m_timersPeriodic.insert(pair<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >(m_timer->getMsecs() + delay, p));
 		}
@@ -220,6 +251,7 @@ namespace Gnoll
 
 		void CTimeModule::delPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
 		{
+			boost::mutex::scoped_lock lock(m_timersPeriodicMutex);
 	 
 			pair<unsigned long int, shared_ptr<CMessage> > p(period, msg);
 	
@@ -235,12 +267,16 @@ namespace Gnoll
 
 		unsigned long int CTimeModule::getMsecs()
 		{
+			boost::mutex::scoped_lock lock(m_timerMutex);
+
 			return m_timer->getMsecs();
 		}
 
 
 		void CTimeModule::resetTimer(bool resTimeouts)
 		{
+			boost::mutex::scoped_lock lock(m_timerMutex);
+
 			m_timer->reset();
 		
 			if(resTimeouts)
@@ -252,6 +288,8 @@ namespace Gnoll
 
 		shared_ptr<ITimer> CTimeModule::createTimer()
 		{
+
+			boost::mutex::scoped_lock lock(m_timerMutex);
 
 			shared_ptr<ITimer> timer;
 			/**

@@ -1,3 +1,13 @@
+2007-11-30  Paf <paf@tuxfamily.org>
+	* src/core/include/singleton.h: Singleton is now part of the namespace
+	Gnoll::Core. Add also a mutex to make it thread friendly
+	* src/core/include/cgenericmessagemanager.h: Make NUMQUEUE a static const,
+	CGenericMessageManager has now several mutexes
+	* src/core/src/cgenericmessagemanager.cpp: CGenericMessageManager has now several mutexes
+	* src/time/include/ctimemodule.h: Add some mutexes to make it thread friendly
+	* src/time/src/ctimemodule.cpp: Add some mutexes to make it thread friendly
+	* Makefile.am: Add boost::Thread library
+
 2007-11-19  Paf <paf@tuxfamily.org>
 	* trunk/src/core/include/basemanager.h: Add mutexes
 	* trunk/src/core/include/cgenericmessagemanager.h: Add mutexes

@@ -35,6 +35,8 @@
 |                                         on VS2005                         |
 |               11/16/2007 - Paf   - Remove all references to               |
 |                                     CGenericMessageManager                |
+|               11/30/2007 - Paf   - Add some mutexes to make it thread     |
+|                                     friendly                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -47,6 +49,8 @@
 
 #include <map>
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+
 #include "itimer.h"
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
@@ -70,7 +74,7 @@ namespace Gnoll
 	namespace Time
 	{
 
-		class CTimeModule : public CModule, public Singleton<CTimeModule>
+		class CTimeModule : public CModule, public Gnoll::Core::Singleton<CTimeModule>
 		{
 			public:
 				/**
@@ -158,12 +162,26 @@ namespace Gnoll
 				 */
 	  			shared_ptr<ITimer> m_timer;
 
+
+				/**
+				 * Mutex dedicated to m_timers
+				 */
+				boost::mutex m_timerMutex;
+
+
 		 		/**
 				 *	Map of delayed events.</br>
 				 *	Key : When an event will happen (in milliseconds) </br>
 			 	 *	Value : Message to send when the delay expires
 				 */
 				multimap<unsigned long int, shared_ptr<CMessage> > m_timers;
+
+
+				/**
+				 * Mutex dedicated to m_timers
+				 */
+				boost::mutex m_timersMutex;
+
 
 				/**
 				 *	Map of periodic events
@@ -174,9 +192,21 @@ namespace Gnoll
 
 
 				/**
+				 * Mutex dedicated to m_timersPeriodic
+				 */
+				boost::mutex m_timersPeriodicMutex;
+
+
+				/**
 				 * A list of listeners and the type of messages they are listening to
 				 */
 				list< pair< shared_ptr<CMessageListener>, CMessageType > > m_listListeners;
+
+
+				/**
+				 * Mutex dedicated to m_listListeners
+				 */
+				boost::mutex m_listListenersMutex;
 
 
 				/**
@@ -184,6 +214,18 @@ namespace Gnoll
 				 * This list of listeners is managed by the module
 				 */
 				bool addListener(shared_ptr<CMessageListener> _listener, CMessageType _type);
+
+				
+				/**
+				 * Process timers
+				 */
+				void processTimers();
+
+
+				/**
+				 * Process periodic timers
+				 */
+				void processPeriodicTimers();
 
 		};
 	}

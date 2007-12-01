@@ -24,7 +24,7 @@
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
 |               11/16/2007 - Paf - Remove Singleton<> inheritance           |
-|               11/19/2007 - Paf - Add a mutex                              |
+|               11/19/2007 - Paf - Add mutexes                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -58,36 +58,61 @@ class CGenericMessageManager: public CMessageManager
 	private :
 
 		/**
-		 * Mutex
-		 */
-		boost::mutex m_mutex;
+		 * Total number of message queues
+ 		*/
+		static const unsigned int NUMQUEUE = 2;
+
+
+
 
 		/**
 		 * A set of message types
 		 */
-		set<CMessageType> m_messagetypes;  
+		set<CMessageType> m_messageTypes;  
+
+
+		/**
+		 * Mutex locking access to m_messageTypes
+		 */
+		boost::mutex m_messageTypesMutex;
+
 
 		/**
 		 * A map which holds the listners related to a message type
 		 */
 		multimap< CMessageType, shared_ptr<CMessageListener> > m_listeners;
 
+
+		/**
+		 * Mutex locking access to m_listeners
+		 */
+		boost::mutex m_listenersMutex;
+
+
 		/**
 		 * There is two lists of messages. Only one is active at a time.<br>
 		 * There is two lists of message in order to blocks infinites messages
 		 * (a message which create another message and so on...)
 		 */
-		list< shared_ptr<CMessage> > m_messages[2];
+		list< shared_ptr<CMessage> > m_messages[NUMQUEUE];
+
+
+		/**
+		 * Mutex locking access to m_messages[]
+		 */
+		boost::mutex m_messagesMutex[NUMQUEUE];
+
 
 		/**
 		 * The index of the active message queue
 		 */
-		unsigned int m_activequeue;
+		unsigned int m_activeQueue;
+
 
 		/**
-		 * Total number of message queues
- 		*/
-		const unsigned int NUMQUEUE;
+		 * Mutex locking access to m_activeQueue
+		 */
+		boost::mutex m_activeQueueMutex;
 
 
 
@@ -96,7 +121,7 @@ class CGenericMessageManager: public CMessageManager
 		/**
 		 * This is a constructor
 		 */
-		CGenericMessageManager(): m_activequeue(0), NUMQUEUE(2) {}
+		CGenericMessageManager(): m_activeQueue(0) {}
 
 		/**
 		 * This is a destructor
