@@ -26,6 +26,7 @@
 |               07/20/2007 - Paf - Initial release                          |
 |               08/16/2007 - Paf - Update comments                          |
 |               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               12/15/2007 - Paf - Add BaseManager policy                   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -52,7 +53,7 @@ namespace Gnoll {
 		 * PersistentObjectManager is a singleton managing PersistentObject instances.</br>
 		 * It can load/save from any Source and provide a cache to improve performance (using LRU)
 		 */
-		class PersistentObjectManager : public BaseManager<PersistentObject>, public Singleton<PersistentObjectManager>
+		class PersistentObjectManager : public BaseManager<PersistentObject, ObjectNotFoundNewObject<PersistentObject> >, public Singleton<PersistentObjectManager>
 		{
 
 			private:

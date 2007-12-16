@@ -17,9 +17,16 @@ AC_PROG_MAKE_SET
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lOIS':
+
+AC_CHECK_FUNCS([gettimeofday]) 
+AC_CHECK_HEADERS([stddef.h]) 
+AC_CHECK_HEADERS([sys/time.h])
+AC_HEADER_TIME 
+
+
 AC_CHECK_LIB([OIS], [main])
 
-PKG_CHECK_MODULES(OGRE, [OGRE >= 1.2])
+PKG_CHECK_MODULES(OGRE, [OGRE >= 1.4])
 AC_SUBST(OGRE_CFLAGS)
 AC_SUBST(OGRE_LIBS)
 

@@ -28,13 +28,19 @@
 |               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
 |               10/17/2007 - Paf - Add a new method isInstanceInCache()     |
 |               11/19/2007 - Paf - Add a mutex                              |
+|               12/15/2007 - Paf - Replace boost::mutex by                  |
+|                                    boost::recursive_mutex                 |
+|                                  Add method                               |
+|                                    saveObj(string _instanceName, T _obj)  |
+|                                  Add a policy for objects not found       |
+|                                    when saving                            |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
 #include <boost/shared_ptr.hpp>
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 #include <map>
 #include <set>
 #include <vector>
@@ -56,6 +62,37 @@ using namespace boost;
 namespace Gnoll {
 
 	namespace Core {
+
+
+		/**
+		 * Policy for BaseManager when loading a non-existing ressource </br>
+		 * -> Throwing an error
+		 */
+		template <class T> class ObjectNotFoundError
+		{
+			public:
+				shared_ptr<T> objectNotFoundIssue( string _instance )
+				{
+					return shared_ptr<T>();
+				}
+		};
+
+		
+		/**
+		 * Policy for BaseManager when loading a non-existing ressource </br>
+		 * -> Creating a new ressource
+		 * Pre-condition : T must have a constructor with instance name as parameter
+		 */
+		template <class T> class ObjectNotFoundNewObject
+		{
+			public:
+				shared_ptr<T> objectNotFoundIssue( string _instance)
+				{
+					return shared_ptr<T>( new T(_instance) );
+				}
+		};
+
+
 
 		/**
 		 *	This is a ressource template.</br>
@@ -144,7 +181,7 @@ namespace Gnoll {
 		/**
 		 * This a base manager that can manage any kind of objects.
 		 */
-		template <class T> class BaseManager
+		template <class T, class ObjectNotFoundPolicy = ObjectNotFoundError<T> > class BaseManager : public ObjectNotFoundPolicy
 		{
 
 			private:
@@ -184,7 +221,7 @@ namespace Gnoll {
 				/**
 				 * Mutex
 				 */
-				boost::mutex m_mutex;
+				boost::recursive_mutex m_mutex;
 
 		
 			protected:
@@ -209,14 +246,14 @@ namespace Gnoll {
 				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<T> _obj) = 0;
 
 				/**
-				 * This method trys to find a suitable source to load an instance
+				 * This method tries to find a suitable source to load an instance
 				 * @param _instance Instance name
 				 * @return A smart pointer to a source able to load the instance passed as a parameter
 				 */
 				shared_ptr<ISource> findLoadSource( string _instance)
 				{
 
-					boost::mutex::scoped_lock lock(m_mutex);
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
 
 
 					set< shared_ptr<ISource> >::iterator iter = m_loadSources.begin();
@@ -236,14 +273,14 @@ namespace Gnoll {
 				}
 
 				/**
-				 * This method trys to find a suitable source to save an instance
+				 * This method tries to find a suitable source to save an instance
 				 * @param _instance Instance name
 				 * @return A smart pointer to a source able to save the instance passed as a parameter
 				 */
 				shared_ptr<ISource> findSaveSource( string _instance)
 				{
 	
-					boost::mutex::scoped_lock lock(m_mutex);
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
 
 
 					set< shared_ptr<ISource> >::iterator iter = m_saveSources.begin();
@@ -287,7 +324,7 @@ namespace Gnoll {
 				 */ 
 				void addLoadSource(shared_ptr<ISource> _source)
 				{
-					boost::mutex::scoped_lock lock(m_mutex);
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
 					m_loadSources.insert(_source);
 				}
 
@@ -297,7 +334,7 @@ namespace Gnoll {
 				 */ 
 				void addSaveSource(shared_ptr<ISource> _source)
 				{
-					boost::mutex::scoped_lock lock(m_mutex);
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
 					m_saveSources.insert(_source);
 				}
 
@@ -309,7 +346,7 @@ namespace Gnoll {
 				 */
 				bool isInstanceInCache(string _instance)
 				{
-					boost::mutex::scoped_lock lock(m_mutex);
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
 					CacheIterator iter = m_cache.find(_instance);
 
 					// There is no such instance in the cache
@@ -328,7 +365,7 @@ namespace Gnoll {
 				 */
 				shared_ptr<T> load(string _instance)
 				{
-					boost::mutex::scoped_lock lock(m_mutex);
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
 
 					// First we check if this instance exists in the cache
 					CacheIterator iter = m_cache.find(_instance);
@@ -347,7 +384,7 @@ namespace Gnoll {
 						// NULL is returned
 						if (source.get() == NULL)
 						{
-							return shared_ptr<T>();
+							return this->objectNotFoundIssue(_instance);
 						}
 
 						// First we need a stream
@@ -410,9 +447,46 @@ namespace Gnoll {
 				 * @param _instance Instance name
 				 * @return The successfulness of this operation
 				 */
-				bool save(string _instance)
+				bool saveObj(string _instance, shared_ptr<T> _obj)
 				{
-					boost::mutex::scoped_lock lock(m_mutex);
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
+
+					// We need to find a suitable source to load the instance
+					shared_ptr<ISource> source = findSaveSource(_instance);
+
+					// If no source is able to retrieve this instance
+					// NULL is returned
+					if (source.get() == NULL)
+					{
+						return false;
+					}
+
+					// We need a stream to save this object
+					shared_ptr<IStream> stream = source->saveStream(_instance);
+
+					// Then we save the object to the stream
+					// This method has to be implemented by any class that inherits from BaseManager
+					// (that's why there is 'Base' in the name)
+					this->saveImpl(stream, _obj);
+
+					stream->close();
+
+
+					// Everything is a success.
+					return true;
+
+				}
+
+
+
+				/**
+				 * This method saves an object from its instance name
+				 * @param _instance Instance name
+				 * @return The successfulness of this operation
+				 */
+				bool save(string _instance, shared_ptr<T> _obj = shared_ptr<T>())
+				{
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
 
 					// First we check if this instance exists in the cache
 					CacheIterator iter = m_cache.find(_instance);
@@ -420,8 +494,13 @@ namespace Gnoll {
 					// There is no such instance in the cache
 					if (iter == m_cache.end())
 					{
-
-						return false;
+						if (_obj.get() == 0)
+						{
+							return false;
+						} else 
+						{
+							return saveObj(_instance, _obj);
+						}
 
 					} else { 
 						// An instance has been found in the cache
@@ -468,7 +547,7 @@ namespace Gnoll {
 				*/
 				void release (string _instance)
 				{
-					boost::mutex::scoped_lock lock(m_mutex);
+					boost::recursive_mutex::scoped_lock lock(m_mutex);
 
 					RessourceVectorIterator it = m_LRUIndex[_instance];
 

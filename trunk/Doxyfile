@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = Viracocha
+PROJECT_NAME           = Gnoll
 PROJECT_NUMBER         = 
 OUTPUT_DIRECTORY       = ./doc/code
 CREATE_SUBDIRS         = NO

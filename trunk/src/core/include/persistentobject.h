@@ -31,6 +31,8 @@
 |               10/11/2007 - Paf - Add method getAttributesNames()          |
 |               						- Make const_iterator on attributes        |
 |               						    possible                               |
+|               12/15/2007 - Paf - Add policies when an attribute is not    |
+|                                    not found                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -65,6 +67,30 @@ namespace Gnoll
 		 */
 		class List;
 
+		
+		template <class T> class ErrorPolicyExceptions
+		{
+			public:
+			
+				static shared_ptr<T> attributeNotFound( const Glib::ustring _name )
+				{
+					throw("Attribut [" + _name + "] non trouve !");
+				}
+		
+		};
+
+		template <class T> class NicePolicyExceptions
+		{
+			public:
+			
+				static shared_ptr<T> attributeNotFound( const Glib::ustring _name )
+				{
+					return shared_ptr<T>( new T() );
+				}
+		
+		};
+
+
 
 		/**
 		 *	This is a Persistent Object.
@@ -92,7 +118,7 @@ namespace Gnoll
 				 */
 				Glib::ustring m_instance;
 
-
+						
 			public:
 
 
@@ -121,14 +147,17 @@ namespace Gnoll
 				 * @param _name The name of the attribute we want
 				 * @return The attribute
 				 */
-				template< class T > shared_ptr<T> getAttribute( const Glib::ustring _name  )
+				template< class T > 
+						shared_ptr<T> getAttribute( const Glib::ustring _name  )
 				{
+					typedef  NicePolicyExceptions<T> ErrorPolicy;
+	
 	
 					mapAttributes::iterator iter = m_attributes.find(_name);
 	
 					// If there is no attribute with such a name, throw an exception.
 					if( iter == m_attributes.end() ) {
-						throw(Glib::ustring("Attribut [") + _name + Glib::ustring("] non trouve !"));
+						return ErrorPolicy::attributeNotFound(_name);						
 					}
 
 

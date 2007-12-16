@@ -15,3 +15,6 @@ testpo:
 
 testmt:
 	g++ -g -Wall -o tests/testmt tests/testmt.cpp src/cworker.cpp src/cpoolthreads.cpp src/cthreadstopper.cpp -lboost_thread
+
+testcpo:
+	g++ -g -Wall -o tests/testcpo src/persistentobject.cpp src/cderivablepersistentobject.cpp tests/testcpo.cpp src/sourcefile.cpp src/filestream.cpp src/persistentobjectmanager.cpp src/attributehandlerregistry.cpp src/list.cpp src/string.cpp src/inherits.cpp src/inheritsattributehandler.cpp `pkg-config --cflags --libs libxml++-2.6` `pkg-config --cflags --libs glibmm-2.4`  -lboost_filesystem -lboost_thread -I /usr/include/OGRE/

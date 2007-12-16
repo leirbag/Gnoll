@@ -1,3 +1,18 @@
+2007-12-15  Paf <paf@tuxfamily.org>
+	* Doxyfile: Replace 'Viracocha' by 'Gnoll'
+	* configure.ac: Add more tests
+	* src/core/tests/testcpo.cpp: Initial release of a test program using
+	CPersistentObectProxy
+	* src/core/include/cpersistentobjectproxy.h: Initial release
+	* src/core/include/basemanager.h: replace boost::mutex by
+	boost::recursive_mutex; add method saveObj(string _instanceName, T _obj);
+	Add a policy for objects not found when saving
+	* src/core/include/persistentobjectmanager.h: Add BaseManager policy 
+	* src/core/include/persistentobject.h: Add policies when an attribute is
+	not found
+   * src/core/src/cpersistentobjectproxy.cpp: Initial release
+	* src/core/Makefile: Add a new target testcpo to compile src/core/tests/testcpo.cpp 
+
 2007-11-30  Paf <paf@tuxfamily.org>
 	* src/core/include/singleton.h: Singleton is now part of the namespace
 	Gnoll::Core. Add also a mutex to make it thread friendly
