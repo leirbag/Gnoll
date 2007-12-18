@@ -42,7 +42,7 @@ namespace Gnoll
 			m_fLimitRotX     = m_fLimitRotY     = m_fLimitRotZ     = 0.0f;
 
 			m_listenerUpdate = shared_ptr<CMessageListener>(new Gnoll::Core::UpdateCameraFirstPersonListener(static_cast<Gnoll::Core::CameraFirstPerson*>(this)));
-			CGenericMessageManager::getInstancePtr()->addListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			CMessageModule::getInstancePtr()->getMessageManager()->addListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
 		}
 
 		void CameraFirstPerson::setTarget(Ogre::SceneNode* pNode)
@@ -108,3 +108,4 @@ namespace Gnoll
 		}
 	};
 };
+

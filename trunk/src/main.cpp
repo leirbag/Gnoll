@@ -52,6 +52,10 @@
 #include "core/include/cmessagelistener.h"
 #include "core/include/camerafreefly.h"
 
+#include "core/include/isource.h"
+#include "core/include/persistentobjectmanager.h"
+#include "core/include/sourcefile.h"
+
 #include "input/include/coisinputmodule.h"
 #include "input/include/cinputmouseevents.h"
 #include "graphic/include/cgraphicmodule.h"
@@ -564,6 +568,7 @@ int main()
 {
 	srand ( time(NULL) );
 
+
 	// A message type called "string" 
 	CMessageType mytype("KEYBOARD_KEYDOWN");
 	CMessageType mytype2("KEYBOARD_KEYUP");
@@ -582,7 +587,18 @@ int main()
 	shared_ptr<CMessageListener> mylistener6(new AllMessageListener);	
 	shared_ptr<CMessageListener> mylistener7(new MousePressedListener);
 	shared_ptr<CMessageListener> mylistener8(new MousePressedListener);
- 
+
+
+	shared_ptr<ISource> loadChannel(new SourceFile(".", false));
+	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
+
+	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+
+	pom->addLoadSource(loadChannel);
+	pom->addSaveSource(saveChannel);
+
+
+
 	CGraphicModule* graphicmanager = CGraphicModule::getInstancePtr();
 	COISInputModule inputmanager;
 	CTimeModule timeModule;

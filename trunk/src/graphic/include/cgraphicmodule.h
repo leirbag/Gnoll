@@ -29,6 +29,7 @@
 |                                   now both Windows and GNU/Linux plateforms|
 |               04/25/2007 - Paf - Added CEGUI                               |	
 |               05/09/2007 - Paf - Use boost::any due to a change in CMessage|	
+|               12/17/2007 - Paf - Add private method loadOgreResourcesPath()|
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -101,6 +102,12 @@ class CGraphicModule: public CModule, public Gnoll::Core::Singleton<CGraphicModu
 
 		CMessageType framerendered;
 		shared_ptr<boost::any> data;
+
+	
+		/**
+		 * Load resources path
+		 */
+		void loadOgreResourcesPath();
 
 	public:
 

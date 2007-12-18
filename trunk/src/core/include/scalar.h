@@ -35,6 +35,7 @@
 |                                - Add insertion and extraction operators   |
 |                                - getValue() method is now const           |
 |                                - Add attribute type getter and setter     |
+|               12/17/2007 - Paf - Add default values to constructor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -81,7 +82,7 @@ namespace Gnoll
 				 * @param _attributeType Type name of the value to hold
 				 * @param _value Value to hold
 				 */
-				Scalar(string _attributeType, T _value) : m_element(_value), m_attributeType(_attributeType) {};
+				Scalar(string _attributeType = "FixMe: No attributeType", T _value = T()) : m_element(_value), m_attributeType(_attributeType) {};
 
 
 				/**

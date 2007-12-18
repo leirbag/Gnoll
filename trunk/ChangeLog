@@ -1,3 +1,32 @@
+2007-12-17  Paf <paf@tuxfamily.org>
+	* src/core/include/attributehandlerregistry.h: Remove \r
+	* src/core/include/cpersistentobjectproxy.h: Remove \r
+	* src/core/include/string.h: Remove \r
+	* src/core/include/scalar.h: Add default values to constructor
+	* src/core/include/persistentobjectmanager.h: Fix comments
+	* src/core/include/camera.h: Camera inherits of CPersistentObjectProxy
+	instead of PersistentObject
+	* src/core/src/persistentobject.cpp: Remove \r
+	* src/core/src/camerafirstperson.cpp: Replace CGenericMessageManager by
+	CMessageModule
+	* src/core/src/attributehandlerregistry.cpp: Add an attribute handler for
+	CMeshPageRenderer
+	* src/core/Makefile: Update targets
+	* src/graphic/include/cgraphicmodule.h: Put resource path loading in a private method
+	* src/graphic/src/cgraphicmodule.cpp: Put resource path loading in a
+	private method and use PersistentObject instead of Ogre resource.cfg to
+	load these resources paths              
+	* src/scene: Initial release
+	* src/scene/include : Initial release
+	* src/scene/include/cscenemanager.h: Initial release
+	* src/scene/include/ipagerenderer.h: Initial release
+	* src/scene/include/cpage.h: Initial release
+	* src/scene/include/cmeshpagerenderer.h: Initial release
+	* src/scene/src/cpage.cpp: Initial release
+	* src/scene/src/cmeshpagerenderer.cpp: Initial release
+	* src/scene/src/cscenemanager.cpp: Initial release
+	* Makefile.am: Update source files
+
 2007-12-15  Paf <paf@tuxfamily.org>
 	* Doxyfile: Replace 'Viracocha' by 'Gnoll'
 	* configure.ac: Add more tests
@@ -10,7 +39,7 @@
 	* src/core/include/persistentobjectmanager.h: Add BaseManager policy 
 	* src/core/include/persistentobject.h: Add policies when an attribute is
 	not found
-   * src/core/src/cpersistentobjectproxy.cpp: Initial release
+	* src/core/src/cpersistentobjectproxy.cpp: Initial release
 	* src/core/Makefile: Add a new target testcpo to compile src/core/tests/testcpo.cpp 
 
 2007-11-30  Paf <paf@tuxfamily.org>

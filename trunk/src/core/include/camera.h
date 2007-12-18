@@ -24,6 +24,9 @@
 |   Changelog :                                                             |
 |               08/30/2007 - Gabriel - Initial release                      |
 |               10/30/2007 - Gabriel - add time to update()                 |
+|               12/17/2007 - Paf - Camera inherits from                     | 
+|                                    CPersistentObjectProxy instead of      |
+|                                    PersistentObject                       |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -32,7 +35,7 @@
 #include <OgreVector3.h>
 #include <OgreCamera.h>
 #include <OgreSceneManager.h>
-#include "persistentobject.h" 
+#include "cpersistentobjectproxy.h" 
 
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
@@ -47,7 +50,7 @@ namespace Gnoll
 		*	This is the interface of all Sources.</br>
 		*   This class cannot be instanciable.
 		*/ 
-		class Camera : public PersistentObject
+		class Camera : public CPersistentObjectProxy
 		{
 		protected:
 			/**
@@ -64,7 +67,7 @@ namespace Gnoll
 			 * @param instanceName This is the instance name
 			 * @param pSM This is a pointer to the scenemanager
 			 */
-			Camera(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : PersistentObject(instanceName)
+			Camera(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : CPersistentObjectProxy(instanceName)
 			{
 				m_ogreCamera = pSM->createCamera(instanceName);
 				m_pSM = pSM;

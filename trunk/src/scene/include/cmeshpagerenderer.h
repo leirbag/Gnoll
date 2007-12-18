@@ -18,52 +18,87 @@
  ***************************************************************************/
 
 
-/*---------------------------------string----------------------------------*\
-|   This is a string attribute for PersistentObject                         |
+/*--------------------------CMeshPageRenderer------------------------------*\
+|   This is a page renderer for pages made of a mesh                        |
 |                                                                           |
 |   Changelog :                                                             |
-|               09/26/2007 - Paf - Initial release                          |
-|               10/03/2007 - Paf - Add some operators                       |
-|                                - Put definitions in string.cpp            |
+|               12/04/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
+#ifndef __CMESHPAGERENDERER_H__
+#define __CMESHPAGERENDERER_H__
 
-#ifndef __STRING_H__
-#define __STRING_H__
+
+#include <boost/shared_ptr.hpp>
+#include <libxml++/libxml++.h>
+#include <glibmm/ustring.h>
 
 
-#include "iattribute.h" 
-#include "scalar.h" 
-#include <string> 
+#include "../../core/include/iattribute.h"
+#include "ipagerenderer.h"
+#include <string>
+
 
 using namespace std;
 using namespace boost;
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 
-		/**
-		 *	This is a simple attribute. 
-		 */ 
-		class String : public Scalar<string>
+		class CMeshPageRenderer : public IPageRenderer
 		{
+
+			private:
+			
+				string m_meshName;
+			
+				CPage*  m_parentPage;
+				
 			public:
-	
+
+			
 				/**
-		   	 * Constructor
-				 * @param _value Initialiazion of the String value
+				 * This is a constructor
 				 */
-				String(string _value = "");
+				CMeshPageRenderer();
+
+				
+				/**
+				 * This is a destructor
+				 */
+				virtual ~CMeshPageRenderer();
 
 
 				/**
-				 * Destructor
+				 * Page Renderer initialization
 				 */
-				virtual ~String();
+				void init( CPage* _parentPage );
+				
+				
+				/**
+				 * Update method
+				 */		
+				void update();
+
+				
+				/**
+				 * Page Renderer exits
+				 */
+				 void exit();
+				
+				
+				/**
+				 * This method serialize the object. <br/>
+				 * It has to be implemented by all classes that inherits from this class.
+				 *
+				 * @return This return the object as a XML tree 
+				 */
+				virtual shared_ptr<xmlpp::Document> serializeXML();		
 
 
 				/**
@@ -71,46 +106,12 @@ namespace Gnoll
 				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
 				 * It has to be implemented by all classes that inherits from this class.
 				 *
-			  	 * @param _element This is the XML tree containing the state of this object
+				 * @param _element This is the XML tree containing the state of this object
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element );
-
-
-				/**
-				 * Overloading of the conversion string -> String operator
-				 * @param _rValue Value to convert from
-				 * @return Converted value 
-				 */
-			 	virtual Scalar<string> const &operator=(string _rValue);
-
-
-				/**
-				 * Overloading of the conversion String -> string operator
-				 * @return Converted value 
-				 */
-		  		virtual operator string();
-
-
+				virtual void deSerializeXML( xmlpp::Element* _element );		
 
 		};
-
-
-		/**
- 		 * Overloading of the inserting operator
-		 * @param _stream Stream to insert the value to
-		 * @return Stream
-		 */
-		ostream &operator<<(ostream & _stream, String const & _str);
-
-
-		/**
-		 * Overloading of the extraction operator
-		 * @param _stream Streaim to extract the value from
-		 * @return Stream
-		 */
-		istream &operator>>(istream &_stream, String &_str);
-
 	}
 }
 
-#endif // __STRING_H__
+#endif // __CMESHPAGERENDERER_H__

@@ -30,6 +30,8 @@
 |                                - Add double attribute handler             |
 |               09/28/2007 - Paf - Add list attribute handler               |
 |               10/17/2007 - Paf - Add inherits attribute handler           |
+|               12/17/2007 - Paf - Add attribute handler for                |
+|                                    CMeshPageRenderer                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -46,6 +48,7 @@
 #include "../include/double.h"
 #include "../include/list.h"
 #include "../include/inherits.h"
+#include "../../scene/include/cmeshpagerenderer.h"
 
 
 
@@ -65,6 +68,7 @@ namespace Gnoll
 			this->registerHandler(string("double"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Double>()));
 			this->registerHandler(string("list"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<List>()));
 			this->registerHandler(string("inherits"), shared_ptr<IAttributeHandler>(new InheritsAttributeHandler()));
+			this->registerHandler(string("CMeshPageRenderer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CMeshPageRenderer>()));
 
 		}
 

@@ -23,21 +23,29 @@
 |                                                                           |
 |   Changelog :                                                             |
 |          06/24/2006 - Paf - Initial release                               |
+|                                                                           |
 |          03/25/2007 - Paf - Rename CGraphicModule::getGLXWindow() to      |
 |                              CGraphicModule::getWindowHandle()            |
 |                           - CGraphicModule::getWindowHandle() handles     |
 |                              now both Windows and GNU/Linux               |
 |                                  plateforms                               |
+|                                                                           |
 |          04/01/2007 - WT  - Add a new SceneNode for the camera            |
+|                                                                           |
 |          04/01/2007 - Paf - Change the window creation code to display    |
 |                              the PACKAGE_STRING constant defined in       |
 |                              config.h                                     |
+|                                                                           |
 |          04/05/2007 - Paf - Lower the camera's height                     |
+|                                                                           |
 |          04/25/2007 - Paf - Added CEGUI objects                           |
+|                                                                           |
 |          04/29/2007 - WT  - Add to the gui the current FPS and the        |
 |                               number of triangles curently displayed      |
+|                                                                           |
 |          05/09/2007 - Paf - Everything related to CMessage has been       |
 |                               updated                                     |
+|                                                                           |
 |          05/27/2007 - Paf - r40 - Replace SHADOWTYPE_STENCIL_MODULATIVE   |
 |                               by SHADOWTYPE_TEXTURE_MODULATIVE            |
 |                             r41 - Improvement of the shadows by tweaking  |
@@ -47,6 +55,11 @@
 |                                 the camera                                |
 |                                                                           |
 |          06/10/2007 - Gabriel - Add thirdperson camera to test            |
+|                                                                           |
+|          12/17/2007 - Paf - Put resource path loading in a private method |
+|                               and use PersistentObject instead of         |
+|                               Ogre resource.cfg to load these resources   |
+|                               paths                                       |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -66,6 +79,10 @@
 #include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagelistener.h"
 
+#include "../../core/include/persistentobject.h"
+#include "../../core/include/persistentobjectmanager.h"
+
+
 using namespace Ogre;
 
 
@@ -83,6 +100,53 @@ LogManager::getSingleton().logMessage("GRApHICMANAGER : " + string(gni) );*/
 
 }
 
+void CGraphicModule::loadOgreResourcesPath()
+{
+
+	Gnoll::Core::PersistentObjectManager *pom = Gnoll::Core::PersistentObjectManager::getInstancePtr();
+
+	// Load resource paths from config file
+	shared_ptr<Gnoll::Core::PersistentObject> resources = pom->load("ogre_resources");
+
+
+	typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+
+	Gnoll::Core::List attributesNames = resources->getAttributesNames();
+	
+	/**
+	 * For each resource type (zip, filesystem...)
+	 */
+	for (ListIterator itAttrs = attributesNames.begin(); itAttrs != attributesNames.end(); itAttrs++)
+	{
+		
+		if (shared_ptr<Gnoll::Core::String> attrName = dynamic_pointer_cast<Gnoll::Core::String>(*itAttrs))
+		{
+
+			/**
+			 * Get a list of resources for this resource type
+			 */
+			shared_ptr< Gnoll::Core::List > listResources = resources->getAttribute< Gnoll::Core::List > (string(*attrName));
+
+			for (ListIterator itRes = listResources->begin(); itRes != listResources->end(); itRes++)
+			{
+
+				/**
+				 * Add each resource path
+				 */
+				if (shared_ptr<Gnoll::Core::String> res = dynamic_pointer_cast<Gnoll::Core::String>(*itRes))
+				{
+            	ResourceGroupManager::getSingleton().addResourceLocation(
+               	 string(*res), (*attrName));
+				}
+			}
+		}
+	}
+
+
+	// Initialise, parse scripts etc
+	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
+}
 
 void CGraphicModule::init()
 {
@@ -114,30 +178,15 @@ void CGraphicModule::init()
 	mSceneMgr->setShadowTextureSize(2048);
 	mSceneMgr->setShadowTextureCount(4);
 
-	// Load resource paths from config file
-	ConfigFile cf;
-	cf.load("resources.cfg");
 
-    // Go through all sections & settings in the file
-    ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
-    String secName, typeName, archName;
-    while (seci.hasMoreElements())
-    {
-        secName = seci.peekNextKey();
-        ConfigFile::SettingsMultiMap *settings = seci.getNext();
-        ConfigFile::SettingsMultiMap::iterator i;
-        for (i = settings->begin(); i != settings->end(); ++i)
-        {
-            typeName = i->first;
-            archName = i->second;
-            ResourceGroupManager::getSingleton().addResourceLocation(
-                archName, typeName, secName);
-        }
-    }
+	/**
+	 * Extract all ogre resources location 
+	 * and add them to Ogre resource manager
+	 */
+	loadOgreResourcesPath();
 
-	// Initialise, parse scripts etc
-	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
 
     // Create a skybox
     mSceneMgr->setSkyDome(true, "Examples/CloudySky", 1, 15);//setSkyBox(true, "Examples/SpaceSkyBox", 50 );
