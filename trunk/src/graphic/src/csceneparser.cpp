@@ -24,7 +24,13 @@
 |   Changelog :                                                             |
 |               01/07/2007 - Paf - Initial release                          |
 |               03/25/2007 - Paf - Add "visible" attribute to "mesh" node   |
-|               13/07/2007 - Yellow - Change Glib::ustring to std::string   |
+|               07/13/2007 - Yellow - Change Glib::ustring to std::string   |
+|               12/20/2007 - Paf - Add "sky" node parsing                   |
+|               12/21/2007 - Paf - Revert Yellow's previous change, because |
+|                                    that was breaking all the parsing steps|
+|                                    since on_start_element() signature     |
+|                                    has changed                            |
+|                                - Add terrain parsing                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -58,16 +64,19 @@ void CSceneParser::on_end_document()
 	Ogre::LogManager::getSingleton().logMessage("Finished to parse the scene..." );
 }
 
-void CSceneParser::on_start_element(const std::string& name,
+void CSceneParser::on_start_element(const Glib::ustring& name,
                                    const AttributeList& attributes)
 {
-  std::cout << "node name=" << name << std::endl;
 
-  // Print attributes:
-  for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
-  {
-    std::cout << "  Attribute " << iter->name << " = " << iter->value << std::endl;
-  }
+	Ogre::LogManager::getSingleton().logMessage("On Start Element..." );
+
+	std::cout << "node name=" << name << std::endl;
+
+	// Print attributes:
+	for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
+	{
+		std::cout << "  Attribute " << iter->name << " = " << iter->value << std::endl;
+	}
 
 
 	m_currentnodetype.push(name);
@@ -75,7 +84,7 @@ void CSceneParser::on_start_element(const std::string& name,
 
 	if (name == "node")
 	{
-		std::string nodename;
+		Glib::ustring nodename;
 
 		for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
 		{
@@ -143,8 +152,8 @@ void CSceneParser::on_start_element(const std::string& name,
 
 	} else if (name == "mesh")
 	{
-		std::string filename;
-		std::string entname;
+		Glib::ustring filename;
+		Glib::ustring entname;
 		bool visible = true;
 
 		for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
@@ -165,7 +174,7 @@ void CSceneParser::on_start_element(const std::string& name,
 
 		Ogre::SceneNode * parent = m_nodes.top();
 
-		std::string entnodename = entname + "_node";
+		Glib::ustring entnodename = entname + "_node";
 		Ogre::SceneNode* entnode = parent->createChildSceneNode(entnodename);
 		Ogre::SceneManager* sm = m_root->getSceneManager("TSM");
 		if (visible)
@@ -175,12 +184,59 @@ void CSceneParser::on_start_element(const std::string& name,
 		}
 		m_nodes.push(entnode);
 
+	}else if (name == "sky")
+	{
+		Glib::ustring typeSky;
+		Glib::ustring materialName;
+
+		Ogre::LogManager::getSingleton().logMessage("Sky node parsing..." );
+
+		// Parse attributes
+		for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
+		{
+			if (iter->name == "type")
+			{
+				typeSky = iter->value;			
+				Ogre::LogManager::getSingleton().logMessage("Type of sky : " + typeSky );
+			}
+
+			if (iter->name == "material")
+			{
+				materialName = iter->value;			
+				Ogre::LogManager::getSingleton().logMessage("Sky material : " + materialName );
+			}
+		}
+
+
+		if (typeSky == "dome")
+		{
+			Ogre::SceneManager* sm = m_root->getSceneManager("TSM");
+
+			sm->setSkyDome(true, materialName); //, 1, 15);//setSkyBox(true, "Examples/SpaceSkyBox", 50 );
+
+			Ogre::LogManager::getSingleton().logMessage("Setting " + typeSky + " sky");
+		}
+	} else if (name == "worldgeometry")
+	{
+		Ogre::SceneManager* sm = m_root->getSceneManager("TSM");
+		std::string configTerrain;	
+
+		// Parse attributes
+		for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
+		{
+			if (iter->name == "cfgfile")
+			{
+				configTerrain = iter->value;			
+				sm->setWorldGeometry( configTerrain );
+				Ogre::LogManager::getSingleton().logMessage("Terrain cfg file : " + configTerrain );
+			}
+		}
 	}
 
 
 }
 
-void CSceneParser::on_end_element(const std::string& name)
+void CSceneParser::on_end_element(const Glib::ustring& name)
 {
 	m_currentnodetype.pop();
 
@@ -192,25 +248,25 @@ void CSceneParser::on_end_element(const std::string& name)
 
 }
 
-void CSceneParser::on_characters(const std::string& text)
+void CSceneParser::on_characters(const Glib::ustring& text)
 {
 }
 
-void CSceneParser::on_comment(const std::string& text)
+void CSceneParser::on_comment(const Glib::ustring& text)
 {
 }
 
-void CSceneParser::on_warning(const std::string& text)
+void CSceneParser::on_warning(const Glib::ustring& text)
 {
-	Ogre::LogManager::getSingleton().logMessage("Warning : " + std::string(text) );
+	Ogre::LogManager::getSingleton().logMessage("Warning : " + Glib::ustring(text) );
 }
 
-void CSceneParser::on_error(const std::string& text)
+void CSceneParser::on_error(const Glib::ustring& text)
 {
-	Ogre::LogManager::getSingleton().logMessage("Error : " + std::string(text) );
+	Ogre::LogManager::getSingleton().logMessage("Error : " + Glib::ustring(text) );
 }
 
-void CSceneParser::on_fatal_error(const std::string& text)
+void CSceneParser::on_fatal_error(const Glib::ustring& text)
 {
-	Ogre::LogManager::getSingleton().logMessage("Fatal error : " + std::string(text) );
+	Ogre::LogManager::getSingleton().logMessage("Fatal error : " + Glib::ustring(text) );
 }

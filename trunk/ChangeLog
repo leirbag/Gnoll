@@ -1,3 +1,11 @@
+2007-12-21  Paf <paf@tuxfamily.org>
+	* src/graphic/include/csceneparser.h: Revert the replacement of
+	Glib::ustring by std::string. It was breaking inheritance.
+	* src/graphic/src/cgraphicmodule.cpp: Moved SkyDome and Terrain loading to
+	scene parser
+	* src/graphic/src/csceneparser.cpp: Add Terrain and SkyDome nodes parsing;
+	Revert the replacement of Glib::ustring by std::string
+
 2007-12-17  Paf <paf@tuxfamily.org>
 	* src/core/include/attributehandlerregistry.h: Remove \r
 	* src/core/include/cpersistentobjectproxy.h: Remove \r

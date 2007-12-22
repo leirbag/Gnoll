@@ -23,7 +23,11 @@
 |                                                                            |
 |   Changelog :                                                              |
 |               01/07/2007 - Paf - Initial release                           |
-|               13/07/2007 - Yellow - Change Glib::ustring to std::string    |
+|               07/13/2007 - Yellow - Change Glib::ustring to std::string    |
+|               12/21/2007 - Paf - Revert Yellow's previous change, because  |
+|                                    that was breaking all the parsing steps |
+|                                    since on_start_element() signature      |
+|                                    has changed                             |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -60,20 +64,20 @@ class  CSceneParser : public xmlpp::SaxParser
 		//overrides:
 		virtual void on_start_document();
 		virtual void on_end_document();
-		virtual void on_start_element(const std::string& name,
+		virtual void on_start_element(const Glib::ustring& name,
 												const AttributeList& properties);
-		virtual void on_end_element(const std::string& name);
-		virtual void on_characters(const std::string& characters);
-		virtual void on_comment(const std::string& text);
-		virtual void on_warning(const std::string& text);
-		virtual void on_error(const std::string& text);
-		virtual void on_fatal_error(const std::string& text);
+		virtual void on_end_element(const Glib::ustring& name);
+		virtual void on_characters(const Glib::ustring& characters);
+		virtual void on_comment(const Glib::ustring& text);
+		virtual void on_warning(const Glib::ustring& text);
+		virtual void on_error(const Glib::ustring& text);
+		virtual void on_fatal_error(const Glib::ustring& text);
 
 	private:
 
 		Ogre::Root *m_root;
 
-		stack<std::string> m_currentnodetype;
+		stack<Glib::ustring> m_currentnodetype;
 		stack<Ogre::SceneNode*> m_nodes;
 		Ogre::SceneNode *m_parentnode;
 };

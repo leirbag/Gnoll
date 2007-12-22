@@ -61,6 +61,9 @@
 |                               Ogre resource.cfg to load these resources   |
 |                               paths                                       |
 |                                                                           |
+|          12/21/2007 - Paf - Moved SkyDome and Terrain loading to scene    |
+|                               parser                                      |
+|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../../core/include/camera.h"
@@ -187,24 +190,20 @@ void CGraphicModule::init()
 	loadOgreResourcesPath();
 
 
+	ISceneFactory * sf = new CSceneFactoryStd("scene.xml", this->mRoot);
+	sf->loadScene();
 
-    // Create a skybox
-    mSceneMgr->setSkyDome(true, "Examples/CloudySky", 1, 15);//setSkyBox(true, "Examples/SpaceSkyBox", 50 );
 
 
     // Create a light
-    Light* l = mSceneMgr->createLight("MainLight");
+	Light* l = mSceneMgr->createLight("MainLight");
     // Accept default settings: point light, white diffuse, just set position
     // NB I could attach the light to a SceneNode if I wanted it to move automatically with
     //  other objects, but I don't
-    l->setPosition(699,380,485);
+	l->setPosition(699,380,485);
 	l->setType( Light::LT_POINT );
 
-    std::string terrain_cfg("terrain.cfg");
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-        terrain_cfg = mResourcePath + terrain_cfg;
-#endif
-	mSceneMgr -> setWorldGeometry( terrain_cfg );
+
 	// Infinite far plane?
 	if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
 	{
@@ -257,9 +256,6 @@ void CGraphicModule::init()
 
 	m_timer = new Timer();
 	m_lastframe = m_timer->getMilliseconds ();
-
-	ISceneFactory * sf = new CSceneFactoryStd("test.xml", this->mRoot);
-	sf->loadScene();
 
 	// Set up GUI system
 	mGUIRenderer = new CEGUI::OgreCEGUIRenderer(mwindow, Ogre::RENDER_QUEUE_OVERLAY, false, 3000, mSceneMgr);
