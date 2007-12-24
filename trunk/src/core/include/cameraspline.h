@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               27/06/2007 - Gabriel - Initial release                      |
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -89,7 +90,7 @@ namespace Gnoll
 			 * This is the constructor.
 			 * @param _instance This is the instance name; the Camera's name
 			 */
-			CameraSpline(const Glib::ustring& instanceName, Ogre::SceneManager* pSM);
+			CameraSpline(const Glib::ustring& instanceName);
 
 			/**
 			 * This is the destructor

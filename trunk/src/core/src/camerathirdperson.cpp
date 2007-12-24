@@ -29,6 +29,7 @@
 |                                      Add time to the transformation       |
 |               11/16/2007 - Paf - Remove all references to                 |
 |                                   CGenericMessageManager                  |
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -40,7 +41,7 @@ namespace Gnoll
 	namespace Core 
 	{
 
-		CameraThirdPerson::CameraThirdPerson(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
+		CameraThirdPerson::CameraThirdPerson(const Glib::ustring& instanceName) : Gnoll::Core::Camera(instanceName)
 		{
 			// Initialize attributs
 			m_pNode = NULL;

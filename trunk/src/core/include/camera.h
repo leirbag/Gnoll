@@ -24,7 +24,8 @@
 |   Changelog :                                                             |
 |               08/30/2007 - Gabriel - Initial release                      |
 |               10/30/2007 - Gabriel - add time to update()                 |
-|               12/17/2007 - Paf - Camera inherits of CPersistentObjectProxy|                                                            |
+|               12/17/2007 - Paf - Camera inherits of CPersistentObjectProxy|      
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 \*-------------------------------------------------------------------------*/
 
 
@@ -67,11 +68,6 @@ namespace Gnoll
 			Ogre::Camera* m_ogreCamera;
 
 			/**
-			* This is a pointer to the scenemanager
-			*/ 
-			Ogre::SceneManager* m_pSM;
-
-			/**
 			* This is the instance name
 			*/ 
 			Glib::ustring m_name;
@@ -82,7 +78,7 @@ namespace Gnoll
 			 * @param instanceName This is the instance name
 			 * @param pSM This is a pointer to the scenemanager
 			 */
-			Camera(const Glib::ustring& instanceName, Ogre::SceneManager* pSM);
+			Camera(const Glib::ustring& instanceName);
 
 			/**
 			 * This is the destructor

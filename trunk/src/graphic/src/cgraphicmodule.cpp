@@ -164,7 +164,7 @@ void CGraphicModule::init()
 	mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 	// Create and configure the camera
-	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraThirdPerson("camTP", mSceneMgr);
+	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraThirdPerson("camTP");
 
 	//pCamera->setEye(Vector3(780, 25, 590));
 	//pCamera->setLookAt(Vector3(0, 10, 0));

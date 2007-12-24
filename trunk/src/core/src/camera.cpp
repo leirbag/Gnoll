@@ -24,19 +24,22 @@
 |   Changelog :                                                             |
 |               08/30/2007 - Gabriel - Initial release                      |
 |               10/30/2007 - Gabriel - add time to update()                 |
+|               12/24/2007 - Gabriel - pass by GraphicModule to get         |
+|                                      the scenemanager and delete          |
+|                                      scenemanager from constructor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camera.h"
+#include "../../graphic/include/cgraphicmodule.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		Camera::Camera(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : PersistentObject(instanceName)
+		Camera::Camera(const Glib::ustring& instanceName) : CPersistentObjectProxy(instanceName)
 		{
-			m_ogreCamera = pSM->createCamera(instanceName);
-			m_pSM = pSM;
+			m_ogreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
 			m_name = instanceName;
 		}
 

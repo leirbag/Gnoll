@@ -25,13 +25,14 @@
 |               08/31/2007 - Gabriel - Initial release                      |
 |               06/10/2007 - Gabriel - Add hack to enable key repeat        |
 |                                    - Add management of mouse for the      |
-|									   rotation                                      |
+|									   rotation                             |
 |               10/10/2007 - Gabriel - Change all variables for listener    |
 |                                      by a map.                            |
-|									   Add time to the transformation                |
+|									   Add time to the transformation       |
 |               10/30/2007 - Gabriel - add time to update()                 |
 |               11/16/2007 - Paf - Remove all references to                 |
 |                                   CGenericMessageManager                  |
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -71,7 +72,7 @@ namespace Gnoll
 			 * This is the constructor.
 			 * @param _instance This is the instance name; the Camera's name
 			 */
-			CameraFreeFly(const Glib::ustring& instanceName, Ogre::SceneManager* pSM);
+			CameraFreeFly(const Glib::ustring& instanceName);
 
 			/**
 			 * This is the destructor

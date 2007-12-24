@@ -1,4 +1,16 @@
 2007-12-24  Gabriel <contact@huau-gabriel.fr>
+	* src/core/include/camera.h: delete scenemanager from Ctor 
+	* src/core/include/camera.cpp: pass by GraphicModule to get the scenemanager and delete scenemanager from constructor 
+	* src/core/include/camerafirstperson.h: delete scenemanager from Ctor 
+	* src/core/include/camerafirstperson.cpp: delete scenemanager from Ctor
+	* src/core/include/camerafreefly.h: delete scenemanager from Ctor 
+	* src/core/include/camerafreefly.cpp: delete scenemanager from Ctor
+	* src/core/include/cameraspline.h: delete scenemanager from Ctor 
+	* src/core/include/cameraspline.cpp: delete scenemanager from Ctor
+	* src/core/include/camerathirdperson.h: delete scenemanager from Ctor 
+	* src/core/include/camerathirdperson.cpp: delete scenemanager from Ctor
+
+2007-12-24  Gabriel <contact@huau-gabriel.fr>
 	* src/core/include/camerafirstpersonlistener.h: Initial release
 	* src/core/include/camerafirstpersonlistener.cpp: Initial release 
 	* src/core/include/camerafreeflylistener.h: Initial release

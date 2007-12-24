@@ -30,6 +30,7 @@
 |               10/30/2007 - Gabriel - add time to update()                 |
 |               11/16/2007 - Paf - Remove all references to                 |
 |                                   CGenericMessageManager                  |
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -70,7 +71,7 @@ namespace Gnoll
 			 * This is the constructor.
 			 * @param _instance This is the instance name; the Camera's name
 			 */
-			CameraThirdPerson(const Glib::ustring& instanceName, Ogre::SceneManager* pSM);
+			CameraThirdPerson(const Glib::ustring& instanceName);
 
 			/**
 			 * This is the destructor

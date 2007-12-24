@@ -23,18 +23,21 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               27/06/2007 - Gabriel - Initial release                      |
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/cameraspline.h"
+#include "../../graphic/include/cgraphicmodule.h"
 
 namespace Gnoll
 {
 
 	namespace Core 
 	{
-		CameraSpline::CameraSpline(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Camera(instanceName, pSM)
+		CameraSpline::CameraSpline(const Glib::ustring& instanceName) : Camera(instanceName)
 		{
+			Ogre::SceneManager* pSM = CGraphicModule::getInstancePtr()->getSceneManager();
 			Ogre::SceneNode* camNode = pSM->getRootSceneNode()->createChildSceneNode();
 			camNode->attachObject(m_ogreCamera);
 

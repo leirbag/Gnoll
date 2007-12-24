@@ -24,6 +24,7 @@
 |   Changelog :                                                             |
 |               08/30/2007 - Gabriel - Initial release                      |
 |               10/30/2007 - Gabriel - add time to update()                 |
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -50,7 +51,7 @@ namespace Gnoll
 			 * This is the constructor.
 			 * @param _instance This is the instance name; the Camera's name
 			 */
-			CameraFixe(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM) {}
+			CameraFixe(const Glib::ustring& instanceName) : Gnoll::Core::Camera(instanceName) {}
 
 			/**
 			 * This is the destructor

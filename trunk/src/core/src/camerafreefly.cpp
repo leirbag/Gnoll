@@ -32,6 +32,7 @@
 |               19/06/2007 - Gabriel - Change all variables for listener    |
 |               11/16/2007 - Paf - Remove all references to                 |
 |                                   CGenericMessageManager                  |
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -43,7 +44,7 @@ namespace Gnoll
 	namespace Core 
 	{
 
-		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
+		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName) : Gnoll::Core::Camera(instanceName)
 		{
 			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
 

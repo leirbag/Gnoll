@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               10/06/2007 - Gabriel - Initial release                      |
+|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -34,7 +35,7 @@ namespace Gnoll
 
 	namespace Core 
 	{
-		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
+		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName) : Gnoll::Core::Camera(instanceName)
 		{
 			// Initialize attributs
 			m_pTarget = NULL;
