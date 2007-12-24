@@ -27,7 +27,6 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-
 #include "camera.h" 
 
 #ifndef __CAMERAFIXE_H__
@@ -51,24 +50,18 @@ namespace Gnoll
 			 * This is the constructor.
 			 * @param _instance This is the instance name; the Camera's name
 			 */
-			CameraFixe(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
-			{
-			}
+			CameraFixe(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM) {}
 
 			/**
 			 * This is the destructor
 			 */
-			virtual ~CameraFixe()
-			{
-			}
+			virtual ~CameraFixe() {}
 
 			/**
 			 * This update the View.
 			 * @param time This is the time between 2 frames
 			 */
-			virtual void update(float time)
-			{
-			}
+			virtual void update(float time) {}
 				
 		};
 	};

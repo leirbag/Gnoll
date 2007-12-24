@@ -35,13 +35,7 @@
 
 #include <OgreVector3.h>
 #include "camera.h" 
-#include "../../core/include/cmessagelistener.h"
-#include "../../input/include/coisinputmodule.h"
-#include "../../input/include/cinputmouseevents.h"
-
-#include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemodule.h"
+#include "camerathirdpersonlistener.h"
 
 #ifndef __CAMERATHIRDPERSON_H__
 #define __CAMERATHIRDPERSON_H__
@@ -81,28 +75,12 @@ namespace Gnoll
 			/**
 			 * This is the destructor
 			 */
-			virtual ~CameraThirdPerson()
-			{
-				CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
-
-				messageManager->delListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
-				messageManager->delListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
-				messageManager->delListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
-				messageManager->delListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
-				messageManager->delListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
-			}
+			virtual ~CameraThirdPerson();
 
 			/**
 			 * This update the View.
 			 */
-			virtual void update(float time)
-			{
-				if(m_pNode == NULL)
-					return;
-
-				m_ogreCamera->setPosition(m_pNode->getPosition());
-				m_ogreCamera->moveRelative(m_pNode->getOrientation().zAxis() * m_fOffset);
-			}
+			virtual void update(float time);
 
 			/**
 			 * This set a pointer to the target node
@@ -164,216 +142,6 @@ namespace Gnoll
 			 */
 			virtual void rotateAxisZ(float angle);
 				
-		};
-
-		// Map for the key listener
-		static std::map<std::string, bool> g_mapCtpKeys;
-
-		class CtpKeyUp : public CMessageListener
-		{
-			public:
-				
-				/**
-				 * This is a constructor
-				 */
-				CtpKeyUp() 
-				{
-				}
-
-				/**
-				 * This is a destructor
-				 */
-				virtual ~CtpKeyUp() 
-				{
-				}
-
-				/**
-				 * This method is called in order to process a message
-				 * @param message The message this method will have to process
-				 */
-				virtual void handle ( shared_ptr<CMessage> message ) 
-				{ 
-					OIS::KeyCode key = message->getData<OIS::KeyCode>();
-
-					if(key == OIS::KC_UP)
-						g_mapCtpKeys["MoveUp"] = false;
-
-					if(key == OIS::KC_DOWN)
-						g_mapCtpKeys["MoveDown"] = false;
-
-					if(key == OIS::KC_E)
-						g_mapCtpKeys["RotateUp"] = false;
-
-					if(key == OIS::KC_D)
-						g_mapCtpKeys["RotateDown"] = false;
-
-					if(key == OIS::KC_S)
-						g_mapCtpKeys["RotateLeft"] = false;
-
-					if(key == OIS::KC_F)
-						g_mapCtpKeys["RotateRight"] = false;
-				}
-		};
-
-		class CtpKeyDown : public CMessageListener
-		{
-			public:
-				
-				/**
-				 * This is a constructor
-				 */
-				CtpKeyDown() 
-				{
-				}
-
-				/**
-				 * This is a destructor
-				 */
-				virtual ~CtpKeyDown() 
-				{
-				}
-
-				/**
-				 * This method is called in order to process a message
-				 * @param message The message this method will have to process
-				 */
-				virtual void handle ( shared_ptr<CMessage> message ) 
-				{ 
-					OIS::KeyCode key = message->getData<OIS::KeyCode>();
-
-					if(key == OIS::KC_UP)
-						g_mapCtpKeys["MoveUp"] = true;
-
-					if(key == OIS::KC_DOWN)
-						g_mapCtpKeys["MoveDown"] = true;
-
-					if(key == OIS::KC_E)
-						g_mapCtpKeys["RotateUp"] = true;
-
-					if(key == OIS::KC_D)
-						g_mapCtpKeys["RotateDown"] = true;
-
-					if(key == OIS::KC_S)
-						g_mapCtpKeys["RotateLeft"] = true;
-
-					if(key == OIS::KC_F)
-						g_mapCtpKeys["RotateRight"] = true;
-				}
-		};
-
-		class MoveCameraThirdPersonListener : public CMessageListener
-		{
-			private:
-				Gnoll::Core::CameraThirdPerson* m_pInstanceCam;
-
-			public:
-				
-				/**
-				 * This is a constructor
-				 */
-				MoveCameraThirdPersonListener(Gnoll::Core::CameraThirdPerson* pInstanceCam) 
-				{
-					m_pInstanceCam = pInstanceCam;
-				}
-
-				/**
-				 * This is a destructor
-				 */
-				virtual ~MoveCameraThirdPersonListener() 
-				{
-					delete m_pInstanceCam;
-				}
-
-				/**
-				 * This method is called in order to process a message
-				 * @param message The message this method will have to process
-				 */
-				virtual void handle ( shared_ptr<CMessage> message ) 
-				{ 
-					m_pInstanceCam->update(0);
-				}
-		};
-
-		class RotateCameraThirdPersonListener : public CMessageListener
-		{
-			private:
-				Gnoll::Core::CameraThirdPerson* m_pInstanceCam;
-
-			public:
-				
-				/**
-				 * This is a constructor
-				 */
-				RotateCameraThirdPersonListener(Gnoll::Core::CameraThirdPerson* pInstanceCam) 
-				{
-					m_pInstanceCam = pInstanceCam;
-				}
-
-				/**
-				 * This is a destructor
-				 */
-				virtual ~RotateCameraThirdPersonListener() 
-				{
-					delete m_pInstanceCam;
-				}
-
-				/**
-				 * This method is called in order to process a message
-				 * @param message The message this method will have to process
-				 */
-				virtual void handle ( shared_ptr<CMessage> message ) 
-				{ 
-					unsigned long temp = message->getData<unsigned long>();
-					float lasttime = temp / 1000.0f;
-
-					if(g_mapCtpKeys["RotateLeft"])
-						m_pInstanceCam->rotateAxisY(1.0f * lasttime);
-
-					if(g_mapCtpKeys["RotateRight"])
-						m_pInstanceCam->rotateAxisY(-1.0f * lasttime);
-
-					if(g_mapCtpKeys["RotateUp"])
-						m_pInstanceCam->rotateAxisX(1.0f * lasttime);
-
-					if(g_mapCtpKeys["RotateDown"])
-						m_pInstanceCam->rotateAxisX(-1.0f * lasttime);
-				}
-		};
-
-		class MouseRotateCameraThirdPersonListener : public CMessageListener
-		{
-			private:
-				Gnoll::Core::CameraThirdPerson* m_pInstanceCam;
-
-			public:
-				
-				/**
-				 * This is a constructor
-				 */
-				MouseRotateCameraThirdPersonListener(Gnoll::Core::CameraThirdPerson* pInstanceCam) 
-				{
-					m_pInstanceCam = pInstanceCam;
-				}
-
-				/**
-				 * This is a destructor
-				 */
-				virtual ~MouseRotateCameraThirdPersonListener() 
-				{
-					delete m_pInstanceCam;
-				}
-
-				/**
-				 * This method is called in order to process a message
-				 * @param message The message this method will have to process
-				 */
-				virtual void handle ( shared_ptr<CMessage> message ) 
-				{ 
-					MouseEvent event = message->getData<MouseEvent>();
-
-					m_pInstanceCam->rotateAxisY(-(event.relX / 20.0f) * 3.14 / 180);
-					m_pInstanceCam->rotateAxisX(-(event.relY / 20.0f) * 3.14 / 180);
-				}
 		};
 	};
 };

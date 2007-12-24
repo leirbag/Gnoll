@@ -49,23 +49,23 @@ namespace Gnoll
 			m_fLimitRotX     = m_fLimitRotY     = m_fLimitRotZ     = 0.0f;
 
 			// Add listener
-			CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
 			
 			m_listenerKeyUp = shared_ptr<CMessageListener>(new Gnoll::Core::CtpKeyUp);
-			messageManager->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+			messageModule->getMessageManager()->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
 
 			m_listenerKeyDown = shared_ptr<CMessageListener>(new Gnoll::Core::CtpKeyDown);
-			messageManager->addListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+			messageModule->getMessageManager()->addListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
 
 
 			m_listenerMove = shared_ptr<CMessageListener>(new Gnoll::Core::MoveCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			messageManager->addListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->addListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
 
 			m_listenerRotate = shared_ptr<CMessageListener>(new Gnoll::Core::RotateCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			messageManager->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
 
 			m_listenerMouseRotate = shared_ptr<CMessageListener>(new Gnoll::Core::MouseRotateCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			messageManager->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
+			messageModule->getMessageManager()->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
 
 
 			// Creation of controller
@@ -76,6 +76,25 @@ namespace Gnoll
 			g_mapCtpKeys["RotateDown"]     = false;
 			g_mapCtpKeys["RotateLeft"]     = false;
 			g_mapCtpKeys["RotateRight"]    = false;
+		}
+
+		CameraThirdPerson::~CameraThirdPerson()
+		{
+			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
+			messageModule->getMessageManager()->delListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->delListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->delListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+			messageModule->getMessageManager()->delListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+			messageModule->getMessageManager()->delListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
+		}
+
+		void CameraThirdPerson::update(float time)
+		{
+			if(m_pNode == NULL)
+				return;
+
+			m_ogreCamera->setPosition(m_pNode->getPosition());
+			m_ogreCamera->moveRelative(m_pNode->getOrientation().zAxis() * m_fOffset);
 		}
 
 		void CameraThirdPerson::setTarget(Ogre::SceneNode* pNode)

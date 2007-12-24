@@ -1,3 +1,14 @@
+2007-12-24  Gabriel <contact@huau-gabriel.fr>
+	* src/core/include/camerafirstpersonlistener.h: Initial release
+	* src/core/include/camerafirstpersonlistener.cpp: Initial release 
+	* src/core/include/camerafreeflylistener.h: Initial release
+	* src/core/include/camerafreeflylistener.cpp: Initial release
+	* src/core/include/camerathirdpersonlistener.h: Initial release
+	* src/core/include/camerathirdpersonlistener.cpp: Initial release
+	* src/core/include/camerasplinelistener.h: Initial release
+	* src/core/include/camerasplinelistener.cpp: Initial release
+	* src/core/include/cgraphicmodule.cpp: Change spline camera to third person camera
+
 2007-12-21  Paf <paf@tuxfamily.org>
 	* src/graphic/include/csceneparser.h: Revert the replacement of
 	Glib::ustring by std::string. It was breaking inheritance.

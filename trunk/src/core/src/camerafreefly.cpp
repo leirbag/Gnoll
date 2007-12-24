@@ -45,28 +45,27 @@ namespace Gnoll
 
 		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
 		{
-			CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
+
+			m_listenerKeyUp = shared_ptr<CMessageListener>(new KeyUp);
+			messageModule->getMessageManager()->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+
+			m_listenerKeyDown = shared_ptr<CMessageListener>(new KeyDown);
+			messageModule->getMessageManager()->addListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
 
 
-			m_listenerKeyUp = shared_ptr<CMessageListener>(new Gnoll::Core::KeyUp);
-			messageManager->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+			m_listenerMove = shared_ptr<CMessageListener>(new MoveCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
+			messageModule->getMessageManager()->addListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
 
-			m_listenerKeyDown = shared_ptr<CMessageListener>(new Gnoll::Core::KeyDown);
-			messageManager->addListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+			m_listenerRotate = shared_ptr<CMessageListener>(new RotateCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
+			messageModule->getMessageManager()->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
 
-
-			m_listenerMove = shared_ptr<CMessageListener>(new Gnoll::Core::MoveCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			messageManager->addListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
-
-			m_listenerRotate = shared_ptr<CMessageListener>(new Gnoll::Core::RotateCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			messageManager->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
-
-			m_listenerMouseRotate = shared_ptr<CMessageListener>(new Gnoll::Core::MouseRotateCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			messageManager->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
+			m_listenerMouseRotate = shared_ptr<CMessageListener>(new MouseRotateCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
+			messageModule->getMessageManager()->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
 
 
 			m_listenerStrafe = shared_ptr<CMessageListener>(new Gnoll::Core::StrafeCameraFreeFlyListener(static_cast<Gnoll::Core::CameraFreeFly*>(this)));
-			messageManager->addListener ( m_listenerStrafe, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->addListener ( m_listenerStrafe, CMessageType("GRAPHIC_FRAME_RENDERED") );
 
 			// Add key listener
 			g_mapCffKeys["MoveUp"] = false;
@@ -81,6 +80,17 @@ namespace Gnoll
 			g_mapCffKeys["RotateDown"] = false;
 			g_mapCffKeys["RotateLeft"] = false;
 			g_mapCffKeys["RotateRight"] = false;
+		}
+
+		CameraFreeFly::~CameraFreeFly()
+		{
+			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
+			messageModule->getMessageManager()->delListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->delListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->delListener ( m_listenerStrafe, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->delListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
+			messageModule->getMessageManager()->delListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
+			messageModule->getMessageManager()->delListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
 		}
 
 		void CameraFreeFly::move(const Ogre::Vector3& dir)

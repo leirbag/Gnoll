@@ -27,37 +27,53 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camerafirstperson.h"
+#include "../include/cmessagemodule.h"
 
 namespace Gnoll
 {
 
 	namespace Core 
 	{
-
 		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
 		{
 			// Initialize attributs
-			m_pNode = NULL;
+			m_pTarget = NULL;
 			m_fAmountDegreeX = m_fAmountDegreeY = m_fAmountDegreeZ = 0.0f;
 			m_fLimitRotX     = m_fLimitRotY     = m_fLimitRotZ     = 0.0f;
 
+			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
 			m_listenerUpdate = shared_ptr<CMessageListener>(new Gnoll::Core::UpdateCameraFirstPersonListener(static_cast<Gnoll::Core::CameraFirstPerson*>(this)));
-			CMessageModule::getInstancePtr()->getMessageManager()->addListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->addListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+		}
+
+		CameraFirstPerson::~CameraFirstPerson()
+		{
+			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
+			messageModule->getMessageManager()->delListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+		}
+
+		void CameraFirstPerson::update(float time)
+		{
+			if(m_pTarget == NULL)
+				return;
+
+			m_ogreCamera->setPosition(m_pTarget->getPosition());
+			m_ogreCamera->setDirection(-m_pTarget->getOrientation().zAxis());
 		}
 
 		void CameraFirstPerson::setTarget(Ogre::SceneNode* pNode)
 		{
-			m_pNode = pNode;
-			if(m_pNode == NULL)
+			m_pTarget = pNode;
+			if(m_pTarget == NULL)
 				return;
 
-			m_ogreCamera->setOrientation(m_pNode->getWorldOrientation());
+			m_ogreCamera->setOrientation(m_pTarget->getWorldOrientation());
 			update(0);
 		}
 
 		Ogre::SceneNode* CameraFirstPerson::getTarget()
 		{
-			return m_pNode;
+			return m_pTarget;
 		}
 
 		void CameraFirstPerson::setLimitRotationX(float angle)
@@ -108,4 +124,3 @@ namespace Gnoll
 		}
 	};
 };
-

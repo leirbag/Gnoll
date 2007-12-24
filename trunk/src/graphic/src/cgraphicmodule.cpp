@@ -64,6 +64,9 @@
 |          12/21/2007 - Paf - Moved SkyDome and Terrain loading to scene    |
 |                               parser                                      |
 |                                                                           |
+|		   12/24/2007 - Gabriel - change spline camera to third person      |
+|                                 camera                                    |
+|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../../core/include/camera.h"
@@ -161,7 +164,7 @@ void CGraphicModule::init()
 	mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 	// Create and configure the camera
-	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraSpline("camSpline", mSceneMgr);
+	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraThirdPerson("camTP", mSceneMgr);
 
 	//pCamera->setEye(Vector3(780, 25, 590));
 	//pCamera->setLookAt(Vector3(0, 10, 0));
@@ -288,14 +291,10 @@ void CGraphicModule::init()
 	eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 	eb->setAlwaysOnTop(true);
 
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->setLenght(10);
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(30, 10,  10), 0);
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(100, 50,  100), 3);
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(300, 30,  300), 6);
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->addPoint(Ogre::Vector3(30, 10,  10), 8);
-	// start() or stop(), choose or die !
-	static_cast<Gnoll::Core::CameraSpline*>(pCamera)->start();
+	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
+	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setOffset(100.0f);
+	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setLimitRotationX(180.0f);
+	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setLimitRotationY(180.0f);
 }
 
 

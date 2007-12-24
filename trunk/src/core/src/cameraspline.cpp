@@ -28,37 +28,95 @@
 
 #include "../include/cameraspline.h"
 
-Gnoll::Core::CameraSpline::CameraSpline(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Gnoll::Core::Camera(instanceName, pSM)
+namespace Gnoll
 {
-	Ogre::SceneNode* camNode = pSM->getRootSceneNode()->createChildSceneNode();
-	camNode->attachObject(m_ogreCamera);
 
-	m_lenght  = 0;
-	m_pTarget = NULL;
-	m_pAnim = pSM->createAnimation(instanceName, 10);
-	m_pAnim->setInterpolationMode(Ogre::Animation::IM_SPLINE);
-	m_pNodeAT = m_pAnim->createNodeTrack(0, camNode);
+	namespace Core 
+	{
+		CameraSpline::CameraSpline(const Glib::ustring& instanceName, Ogre::SceneManager* pSM) : Camera(instanceName, pSM)
+		{
+			Ogre::SceneNode* camNode = pSM->getRootSceneNode()->createChildSceneNode();
+			camNode->attachObject(m_ogreCamera);
 
-	m_pAnimState = pSM->createAnimationState(instanceName);
+			m_lenght  = 0;
+			m_pTarget = NULL;
+			m_pAnim = pSM->createAnimation(instanceName, 10);
+			m_pAnim->setInterpolationMode(Ogre::Animation::IM_SPLINE);
+			m_pNodeAT = m_pAnim->createNodeTrack(0, camNode);
 
-	m_listenerUpdate = shared_ptr<CMessageListener>(new Gnoll::Core::UpdateCameraSplineListener(this));
-	CMessageModule::getInstancePtr()->getMessageManager()->addListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
-}
+			m_pAnimState = pSM->createAnimationState(instanceName);
 
-void Gnoll::Core::CameraSpline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)
-{
-	if(frame > m_lenght)
-		return;
+			m_listenerUpdate = shared_ptr<CMessageListener>(new Gnoll::Core::UpdateCameraSplineListener(this));
+			CMessageModule::getInstancePtr()->getMessageManager()->addListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
+		}
 
-	Ogre::TransformKeyFrame* key = m_pNodeAT->createNodeKeyFrame(frame);
-	key->setTranslate(vec3);
-	m_mapAnim[frame] = vec3;
-}
+		void CameraSpline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)
+		{
+			if(frame > m_lenght)
+				return;
 
-const Ogre::Vector3* Gnoll::Core::CameraSpline::getPoint(unsigned long frame)
-{
-	if(frame > m_lenght)
-		return NULL;
+			Ogre::TransformKeyFrame* key = m_pNodeAT->createNodeKeyFrame(frame);
+			key->setTranslate(vec3);
+			m_mapAnim[frame] = vec3;
+		}
 
-	return &m_mapAnim[frame];
+		const Ogre::Vector3* CameraSpline::getPoint(unsigned long frame)
+		{
+			if(frame > m_lenght)
+				return NULL;
+
+			return &m_mapAnim[frame];
+		}
+
+		void CameraSpline::update(float time)
+		{
+			if(m_pAnimState->getEnabled())
+					m_pAnimState->addTime(time);
+		}
+
+		void CameraSpline::setTarget(Ogre::SceneNode* pNode)
+		{
+			if(pNode != NULL)
+					m_pTarget = pNode;
+				else
+					return;
+
+				m_ogreCamera->setAutoTracking(true, pNode);
+		}
+
+		Ogre::SceneNode* CameraSpline::getTarget()
+		{
+			return m_pTarget;
+		}
+
+		void CameraSpline::setLenght(unsigned long lenght)
+		{
+			m_lenght = lenght;
+		}
+
+		unsigned long CameraSpline::getLenght()
+		{
+			return m_lenght;
+		}
+
+		void CameraSpline::start()
+		{
+			m_pAnimState->setEnabled(true);
+		}
+
+		void CameraSpline::stop()
+		{
+			m_pAnimState->setEnabled(false);
+		}
+
+		void CameraSpline::setLoop(bool loop)
+		{
+			m_pAnimState->setLoop(loop);
+		}
+
+		float CameraSpline::getCurrentKeyFrame()
+		{
+			return m_pAnimState->getTimePosition();;
+		}
+	}
 }

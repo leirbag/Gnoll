@@ -31,14 +31,7 @@
 #include <OgreAnimation.h>
 #include <OgreAnimationState.h> 
 #include "camera.h" 
-#include "../../core/include/cmessagelistener.h"
-#include "../../input/include/coisinputmodule.h"
-#include "../../input/include/cinputmouseevents.h"
-
-#include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
-#include "../../core/include/cmessagemodule.h"
+#include "camerasplinelistener.h"
 
 #ifndef __CAMERASPLINE_H__
 #define __CAMERASPLINE_H__
@@ -48,8 +41,6 @@ namespace Gnoll
 
 	namespace Core 
 	{
-
-		class UpdateCameraSplineListener;
 		/**
 		*	This is the interface of all Sources.</br>
 		*   This class cannot be instanciable.
@@ -57,12 +48,39 @@ namespace Gnoll
 		class CameraSpline : public Gnoll::Core::Camera
 		{
 		private:
+			/**
+			* This is the lenght (in key) of the animation
+			*/
 			unsigned long m_lenght;
+
+			/**
+			* This is the target (NULL if no target)
+			*/
 			Ogre::SceneNode* m_pTarget;
+
+			/**
+			* This is a pointer to the animation
+			*/
 			Ogre::Animation* m_pAnim;
+
+			/**
+			* This is a pointer to the animation track
+			*/
 			Ogre::NodeAnimationTrack* m_pNodeAT;
+
+			/**
+			* This is a pointer to the animation state
+			*/
 			Ogre::AnimationState* m_pAnimState;
+
+			/**
+			* This is the storage of position of all key
+			*/
 			std::map<unsigned long, Ogre::Vector3> m_mapAnim;
+
+			/**
+			* This is the listener
+			*/
 			shared_ptr<CMessageListener> m_listenerUpdate;
 
 		public:
@@ -76,42 +94,25 @@ namespace Gnoll
 			/**
 			 * This is the destructor
 			 */
-			virtual ~CameraSpline()
-			{
-			}
+			virtual ~CameraSpline() {}
 
 			/**
 			 * This update the View.
 			 * @param time This is the time between 2 frames
 			 */
-			virtual void update(float time)
-			{
-				if(m_pAnimState->getEnabled())
-					m_pAnimState->addTime(time);
-			}
+			virtual void update(float time);
 
 			/**
 			 * This set a pointer to the target node
 			 * @param pNode This is the target
 			 */
-			void setTarget(Ogre::SceneNode* pNode)
-			{
-				if(pNode != NULL)
-					m_pTarget = pNode;
-				else
-					return;
-
-				m_ogreCamera->setAutoTracking(true, pNode);
-			}
+			void setTarget(Ogre::SceneNode* pNode);
 
 			/**
 			 * This return a pointer to the target node
 			 * @return node
 			 */
-			Ogre::SceneNode* getTarget()
-			{
-				return m_pTarget;
-			}
+			Ogre::SceneNode* getTarget();
 
 			/**
 			 * This add a point at a frame of the animation
@@ -131,89 +132,35 @@ namespace Gnoll
 			 * This specify the lenght (in key frame) of the animation
 			 * @param lenght number of key frame
 			 */
-			void setLenght(unsigned long lenght)
-			{
-				m_lenght = lenght;
-			}
+			void setLenght(unsigned long lenght);
 
 			/**
 			 * This return the number of key frame
 			 * @return number of key frame
 			 */
-			unsigned long getLenght()
-			{
-				return m_lenght;
-			}
+			unsigned long getLenght();
 
 			/**
 			 * This start the animation of camera
 			 */
-			void start()
-			{
-				m_pAnimState->setEnabled(true);
-			}
+			void start();
 
 			/**
 			 * This stop the animation of camera
 			 */
-			void stop()
-			{
-				m_pAnimState->setEnabled(false);
-			}
+			void stop();
 
 			/**
 			 * This set the status "loop" or not to the animation
 			 * @param loop specify if loop or not
 			 */
-			void setLoop(bool loop)
-			{
-				m_pAnimState->setLoop(loop);
-			}
+			void setLoop(bool loop);
 
 			/**
 			 * This return the current key frame
 			 * @return the current key frame
 			 */
-			float getCurrentKeyFrame()
-			{
-				return m_pAnimState->getTimePosition();
-			}
-		};
-
-		class UpdateCameraSplineListener : public CMessageListener
-		{
-			private:
-				Gnoll::Core::CameraSpline* m_pInstanceCam;
-
-			public:
-				
-				/**
-				 * This is a constructor
-				 */
-				UpdateCameraSplineListener(Gnoll::Core::CameraSpline* pInstanceCam) 
-				{
-					m_pInstanceCam = pInstanceCam;
-				}
-
-				/**
-				 * This is a destructor
-				 */
-				virtual ~UpdateCameraSplineListener() 
-				{
-					delete m_pInstanceCam;
-				}
-
-				/**
-				 * This method is called in order to process a message
-				 * @param message The message this method will have to process
-				 */
-				virtual void handle ( shared_ptr<CMessage> message ) 
-				{ 
-					unsigned long temp = message->getData<unsigned long>();
-					float lasttime = temp / 1000.0f;
-
-					m_pInstanceCam->update(lasttime);
-				}
+			float getCurrentKeyFrame();
 		};
 	};
 };

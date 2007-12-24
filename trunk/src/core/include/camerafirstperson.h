@@ -29,21 +29,15 @@
 
 #include <OgreVector3.h>
 #include "camera.h" 
-#include "../../core/include/cmessagelistener.h"
-#include "../../input/include/coisinputmodule.h"
-#include "../../input/include/cinputmouseevents.h"
-
-#include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
-#include "../../core/include/cmessagemodule.h"
+#include "persistentobject.h" 
+#include "singleton.h"
+#include "camerafirstpersonlistener.h"
 
 #ifndef __CAMERAFIRSTPERSON_H__
 #define __CAMERAFIRSTPERSON_H__
 
 namespace Gnoll
 {
-
 	namespace Core 
 	{
 		/**
@@ -53,8 +47,20 @@ namespace Gnoll
 		class CameraFirstPerson : public Gnoll::Core::Camera
 		{
 		private:
-			Ogre::SceneNode* m_pNode;
+			/**
+			* This is the target
+			*/
+			Ogre::SceneNode* m_pTarget;
+
+			/**
+			* This is the current amount (in degree) of
+			* rotation on each axe
+			*/
 			float            m_fAmountDegreeX, m_fAmountDegreeY, m_fAmountDegreeZ;
+
+			/**
+			* This is the rotation limite on each axe
+			*/
 			float            m_fLimitRotX, m_fLimitRotY, m_fLimitRotZ;
 
 			shared_ptr<CMessageListener> m_listenerUpdate;
@@ -69,23 +75,13 @@ namespace Gnoll
 			/**
 			 * This is the destructor
 			 */
-			virtual ~CameraFirstPerson()
-			{
-				CMessageModule::getInstancePtr()->getMessageManager()->delListener ( m_listenerUpdate, CMessageType("GRAPHIC_FRAME_RENDERED") );
-			}
+			virtual ~CameraFirstPerson();
 
 			/**
 			 * This update the View
 			 * @param time This is the time between 2 frames
 			 */
-			virtual void update(float time)
-			{
-				if(m_pNode == NULL)
-					return;
-
-				m_ogreCamera->setPosition(m_pNode->getPosition());
-				m_ogreCamera->setDirection(-m_pNode->getOrientation().zAxis());
-			}
+			virtual void update(float time);
 
 			/**
 			 * This set a pointer to the target node
@@ -134,40 +130,6 @@ namespace Gnoll
 			 * @param angle The angle to rotate in degree
 			 */
 			virtual void rotateAxisZ(float angle);
-				
-		};
-
-		class UpdateCameraFirstPersonListener : public CMessageListener
-		{
-			private:
-				Gnoll::Core::CameraFirstPerson* m_pInstanceCam;
-
-			public:
-				
-				/**
-				 * This is a constructor
-				 */
-				UpdateCameraFirstPersonListener(Gnoll::Core::CameraFirstPerson* pInstanceCam) 
-				{
-					m_pInstanceCam = pInstanceCam;
-				}
-
-				/**
-				 * This is a destructor
-				 */
-				virtual ~UpdateCameraFirstPersonListener() 
-				{
-					delete m_pInstanceCam;
-				}
-
-				/**
-				 * This method is called in order to process a message
-				 * @param message The message this method will have to process
-				 */
-				virtual void handle ( shared_ptr<CMessage> message ) 
-				{ 
-					m_pInstanceCam->update(0);
-				}
 		};
 	};
 };
