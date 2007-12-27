@@ -60,6 +60,7 @@
 #include "input/include/cinputmouseevents.h"
 #include "graphic/include/cgraphicmodule.h"
 #include "time/include/ctimemodule.h"
+#include "sound/include/csoundmodule.h"
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>
@@ -74,6 +75,7 @@ using namespace boost;
 using namespace std;
 using namespace Gnoll::Core;
 using namespace Gnoll::Time;
+using namespace Gnoll::Sound;
 
 bool done = false;
 
@@ -417,6 +419,13 @@ class keydown : public CMessageListener
 				state = "Walk";
 
 			}
+			if (temp2 == OIS::KC_B)
+			{
+				shared_ptr<boost::any> sound_instance (new boost::any(string("boing.ogg")));
+				shared_ptr<CMessage> message (new CMessage(*(new CMessageType("PLAY_SOUND")), sound_instance ));
+	
+				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
+			}
 
 
 		}
@@ -603,6 +612,7 @@ int main()
 	COISInputModule inputmanager;
 	CTimeModule timeModule;
 	CMessageModule* messageModule = CMessageModule::getInstancePtr();
+	CSoundModule * soundmanager = CSoundModule::getInstancePtr();
 
 	CMessageManager* messageManager = messageModule->getMessageManager();
 
@@ -610,6 +620,7 @@ int main()
 	graphicmanager->init();
 	inputmanager.init();
 	timeModule.init();
+	soundmanager->init();
 
 	/*
 	 * We add a listner and send some messages
@@ -650,6 +661,7 @@ int main()
 		messageModule->process();
 		graphicmanager->process();
 		timeModule.process();
+		soundmanager->process();
 		
 	}
 
@@ -694,6 +706,7 @@ int main()
 	inputmanager.exit();
 	graphicmanager->exit();
 	messageModule->exit();
+	soundmanager->exit();
 
 	// Bye bye 
 	cout << "Au revoir !" << endl;
