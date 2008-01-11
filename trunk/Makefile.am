@@ -4,3 +4,9 @@ gnoll_SOURCES= src/main.cpp src/input/src/coisinputmodule.cpp src/core/src/cgene
 AM_LDFLAGS =  `pkg-config OGRE --libs`  `pkg-config OIS --libs`  `pkg-config libxml++-2.6 --libs` `pkg-config CEGUI-OGRE --libs` -lboost_filesystem -lboost_thread -lopenal -lalut -lvorbis -lvorbisfile -lvorbisenc -logg -lsndfile
 
 AM_CPPFLAGS=  `pkg-config OGRE --cflags ` `pkg-config OIS --cflags` `pkg-config libxml++-2.6 --cflags` `pkg-config CEGUI-OGRE --cflags` 
+
+
+EXTRA_DIST=data/*
+	
+install-data-am:
+	cp -r data/ $(prefix)
