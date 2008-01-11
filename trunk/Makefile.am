@@ -9,4 +9,4 @@ AM_CPPFLAGS=  `pkg-config OGRE --cflags ` `pkg-config OIS --cflags` `pkg-config 
 EXTRA_DIST=data/*
 	
 install-data-am:
-	cp -r data/ $(prefix)
+	cp -r data/ $(datadir)
