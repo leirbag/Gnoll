@@ -47,7 +47,7 @@ bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler,
 	 * If it fails, it returns false
 	 */
 	{
-		boost::mutex::scoped_lock lock(m_messageTypesMutex);
+		boost::recursive_mutex::scoped_lock lock(m_messageTypesMutex);
 
 		if ( m_messageTypes.find(messagetype) == m_messageTypes.end() )
 		{
@@ -68,7 +68,7 @@ bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler,
 	bool found = false;
 
 	{
-		boost::mutex::scoped_lock lock(m_listenersMutex);
+		boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 
 		for (multimap< CMessageType, shared_ptr<CMessageListener> >::iterator it = m_listeners.lower_bound(messagetype);
 			( (it != m_listeners.upper_bound(messagetype) ) && (found == false) ); ++it)
@@ -86,7 +86,7 @@ bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler,
 	 * Finally the new listener is added :)
 	 */
 	{
-		boost::mutex::scoped_lock lock(m_listenersMutex);
+		boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 		m_listeners.insert(pair< CMessageType, shared_ptr<CMessageListener> >(messagetype, handler));
 	}
 	return true;
@@ -105,7 +105,7 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 	 * it returns false because it's impossible to have it also in the listener's multimap.
 	 */
 	{
-		boost::mutex::scoped_lock lock(m_messageTypesMutex);
+		boost::recursive_mutex::scoped_lock lock(m_messageTypesMutex);
 
 		if ( m_messageTypes.find(messagetype) == m_messageTypes.end() )
 		{
@@ -126,7 +126,7 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 	bool found = false;
 
 	{
-		boost::mutex::scoped_lock lock(m_listenersMutex);
+		boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 		multimap< CMessageType, shared_ptr<CMessageListener> >::iterator result = m_listeners.end();
 
 		for (multimap< CMessageType, shared_ptr<CMessageListener> >::iterator it = m_listeners.lower_bound(messagetype);
@@ -153,11 +153,11 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 	 * the message type has to be deleted from the set of message types.
 	 */
 	{
-		boost::mutex::scoped_lock lock(m_listenersMutex);
+		boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 		if ( m_listeners.find(messagetype) == m_listeners.end() )
 		{
 
-			boost::mutex::scoped_lock lock(m_messageTypesMutex);
+			boost::recursive_mutex::scoped_lock lock(m_messageTypesMutex);
 
 			set<CMessageType>::iterator result = m_messageTypes.find(messagetype);
 
@@ -179,7 +179,7 @@ bool CGenericMessageManager::delListener ( shared_ptr<CMessageListener> handler,
 
 bool CGenericMessageManager::trigger ( shared_ptr<CMessage> message )
 {
-	boost::mutex::scoped_lock lock(m_listenersMutex);
+	boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 
 	if ( validateType( message->getType() ) == false )
 		return false;
@@ -230,7 +230,7 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 	 * The message type has to be registered
 	 */
 	{
-		boost::mutex::scoped_lock lock(m_messageTypesMutex);
+		boost::recursive_mutex::scoped_lock lock(m_messageTypesMutex);
 
 		if ( m_messageTypes.find(message->getType()) == m_messageTypes.end() )
 			return false;
@@ -240,7 +240,7 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 	 * If there is no one to listen...
 	 */	
 	{	
-		boost::mutex::scoped_lock lock(m_listenersMutex);
+		boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 
 		if ( m_listeners.find(message->getType()) == m_listeners.end() )
 			return false;
@@ -251,8 +251,8 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 	 * Finally the message is enqueue
 	 */
 	{
-		boost::mutex::scoped_lock lockAQ(m_activeQueueMutex);
-		boost::mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
+		boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
+		boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
 		m_messages[m_activeQueue].push_back(message);
 	}
@@ -263,8 +263,8 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 
 bool CGenericMessageManager::abortMessage ( CMessageType messagetype, bool alloftype )
 {
-	boost::mutex::scoped_lock lockAQ(m_activeQueueMutex);
-	boost::mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
+	boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
+	boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
 	if ( validateType( messagetype ) == false )
 		return false;
@@ -311,8 +311,8 @@ bool CGenericMessageManager::validateType( CMessageType messagetype )
 
 void CGenericMessageManager::process( )
 {
-	boost::mutex::scoped_lock lockAQ(m_activeQueueMutex);
-	boost::mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
+	boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
+	boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
 	/*
 	 * We can't process an active message queue because a handler could create a
@@ -334,7 +334,7 @@ void CGenericMessageManager::process( )
 	for ( list< shared_ptr<CMessage> >::iterator itmsg = m_messages[queuetoprocess].begin(); itmsg != m_messages[queuetoprocess].end(); itmsg++ )
 	{
 
-		boost::mutex::scoped_lock lock(m_listenersMutex);
+		boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 
 
 		for (multimap< CMessageType, shared_ptr<CMessageListener> >::iterator it = m_listeners.lower_bound(anytype);

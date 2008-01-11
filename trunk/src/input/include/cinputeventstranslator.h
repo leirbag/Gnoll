@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2008 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,51 +18,96 @@
  ***************************************************************************/
 
 
-/*-------------------------cinputmouseevents.h------------------------------*\
-|   Mouse events                                                             |
+/*-------------------------CInputEventsTranslator.h-------------------------*\
+|   This translate input events to action events used by game logic          |
 |                                                                            |
 |   Changelog :                                                              |
-|               10/20/2006 - Paf - Initial release                           |
+|               01/08/2008 - Paf - Initial release                           |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
 
-#ifndef __CINPUTMOUSEEVENTS_H__
-#define __CINPUTMOUSEEVENTS_H__
+
+#ifndef __CINPUTEVENTSTRANSLATOR_H__
+#define __CUNPUTEVENTSTRANSLATOR_H__
 
 
-const unsigned int MAX_MOUSE_BUTTONS = 8;
 
-enum MouseButton
+#include <boost/shared_ptr.hpp>
+
+#include "../../core/include/cmodule.h"
+#include "../../core/include/singleton.h"
+#include "../../core/include/persistentobject.h"
+
+#include "../../core/include/cmessagelistener.h"
+
+
+
+using namespace boost;
+using namespace Gnoll::Core;
+
+
+namespace Gnoll
 {
-	Left = 0, Right, Middle,
-	Button3, Button4,	Button5, Button6,	Button7
-};
 
-
-struct MouseEvent
-{
-	int abX, abY, abZ, relX, relY, relZ;
-
-	// Indicates if this Axis only supports Absolute (ie JoyStick)
-	bool absOnly;
-
-	MouseEvent(int _abX = 0, int _abY = 0, int _abZ = 0,
-				  int _relX = 0, int _relY = 0, int _relZ = 0,
-				  bool _absOnly = 0) 
+	namespace Input
 	{
-		abX = _abX;
-		abY = _abY;
-		abZ = _abZ;
+
+		/**
+		 *	Interface of all game modules. 
+		 */ 
+		class CInputEventsTranslator: public CModule, public Gnoll::Core::Singleton<CInputEventsTranslator>
+		{
+
+			private:
+
+				/**
+				 * Translator for keyboard generated messages
+				 */
+				shared_ptr<CMessageListener> keyboardEventsTranslator;
+
+
+			public:
+
+				/**
+				 * @copydoc CModule::init
+				 */
+				virtual void init();
 		
-		relX = _relX;
-		relY = _relY;
-		relZ = _relZ;
+				/**
+				 * @copydoc CModule::process
+				 */
+				virtual void process();
 
-		absOnly = _absOnly;
+				/**
+				 * @copydoc CModule::exit 
+				 */
+				virtual void exit();
+
+				/**
+				 * @copydoc CModule::~CModule
+				 */
+				virtual ~CInputEventsTranslator();
+		
+				/**
+				 * @copydoc CModule::CModule
+				 */
+				CInputEventsTranslator();
+
+				/**
+				 * Activate keyboard events translation
+				 */
+				void activateKeyboardTranslation();
+
+				/**
+				 * Deactivate keyboard events translation
+				 */
+				void deactivateKeyboardTranslation();
+		};
+
 	}
+}
 
-};
+#endif // __CINPUTEVENTSTRANSLATOR_H__
 
 
-#endif // __CINPUTMOUSEEVENTS_H__

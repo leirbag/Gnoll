@@ -193,7 +193,7 @@ void CGraphicModule::init()
 	loadOgreResourcesPath();
 
 
-	ISceneFactory * sf = new CSceneFactoryStd("scene.xml", this->mRoot);
+	shared_ptr<ISceneFactory> sf ( new CSceneFactoryStd("scene.xml", this->mRoot) );
 	sf->loadScene();
 
 
@@ -229,26 +229,29 @@ void CGraphicModule::init()
 		pCamera->getEye().z));
 	}
 
+	//mSceneMgr->destroyQuery(raySceneQuery);
 
 	Entity *ent1 = mSceneMgr->createEntity( "Robot", "ninja.mesh" );
 	SceneNode *node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "RobotNode");
 
-	raySceneQuery = mSceneMgr->createRayQuery(
+	RaySceneQuery* raySceneQuery2 = mSceneMgr->createRayQuery(
 	Ray(Vector3(780,2500,590) , Vector3::NEGATIVE_UNIT_Y));
 
-    updateRay.setOrigin( Vector3(780,2500,590) );
-    updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
-    raySceneQuery->setRay(updateRay);
-    qryResult = raySceneQuery->execute();
-    i = qryResult.begin();
-    if (i != qryResult.end() && i->worldFragment)
-    {
-        node1->setPosition(780, 
-            i->worldFragment->singleIntersection.y , 
-            590);
-    }
+	updateRay.setOrigin( Vector3(780,2500,590) );
+	updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
+	raySceneQuery2->setRay(updateRay);
+  	qryResult = raySceneQuery2->execute();
+ 	i = qryResult.begin();
+	if (i != qryResult.end() && i->worldFragment)
+	{
+		node1->setPosition(780, 
+			i->worldFragment->singleIntersection.y , 
+			590);
+	}
 
-	//delete raySceneQuery;
+	mSceneMgr->destroyQuery(raySceneQuery2);
+
+
 	node1->scale(0.2, 0.2, 0.2);
 	node1->attachObject( ent1 );
 	ent1->setCastShadows( true );

@@ -29,7 +29,7 @@
 \*-------------------------------------------------------------------------*/
 
 #include <boost/shared_ptr.hpp>
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 #include <string>
 #include <set>
 #include <map>
@@ -74,7 +74,7 @@ class CGenericMessageManager: public CMessageManager
 		/**
 		 * Mutex locking access to m_messageTypes
 		 */
-		boost::mutex m_messageTypesMutex;
+		boost::recursive_mutex m_messageTypesMutex;
 
 
 		/**
@@ -86,7 +86,7 @@ class CGenericMessageManager: public CMessageManager
 		/**
 		 * Mutex locking access to m_listeners
 		 */
-		boost::mutex m_listenersMutex;
+		boost::recursive_mutex m_listenersMutex;
 
 
 		/**
@@ -100,7 +100,7 @@ class CGenericMessageManager: public CMessageManager
 		/**
 		 * Mutex locking access to m_messages[]
 		 */
-		boost::mutex m_messagesMutex[NUMQUEUE];
+		boost::recursive_mutex m_messagesMutex[NUMQUEUE];
 
 
 		/**
@@ -112,7 +112,7 @@ class CGenericMessageManager: public CMessageManager
 		/**
 		 * Mutex locking access to m_activeQueue
 		 */
-		boost::mutex m_activeQueueMutex;
+		boost::recursive_mutex m_activeQueueMutex;
 
 
 

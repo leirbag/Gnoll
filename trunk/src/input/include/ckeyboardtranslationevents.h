@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2008 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,47 +18,43 @@
  ***************************************************************************/
 
 
-/*--------------------------coisinputmodule.cpp----------------------------*\
-|   The game input module that use OIS                                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               06/23/2006 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+/*-----------------------CKeyboardTranslationEvents.h-----------------------*\
+|   Translaiton event                                                        |
+|                                                                            |
+|   Changelog :                                                              |
+|               01/09/2008 - Paf - Initial release                           |
+|                                                                            |
+\*--------------------------------------------------------------------------*/
 
 
-#include "../include/coisinputmodule.h"
-#include "../include/coisinputmanager.h"
-#include <iostream>
+#ifndef __CKEYBOARDTRANSLATIONEVENTS_H__
+#define __CKEYBOARDTRANSLATIONEVENTS_H__
 
+#include <string>
 
-COISInputModule::COISInputModule()
+namespace Gnoll
 {
 
+	namespace Input
+	{
+
+		const string ACTION_EVENT_TYPE("INPUT_ACTION_EVENT");
+
+		struct ActionEvent
+		{
+			string action;
+			float intensity;
+
+			ActionEvent( string _action, float _intensity) : 
+						action(_action),
+						intensity(_intensity)
+			{
+			}
+
+		};
+
+	}
 }
 
 
-void COISInputModule::init()
-{
-	inputmanager = shared_ptr<COISInputManager>(new COISInputManager());
-	inputmanager->initialise( );
-
-}
-
-
-void COISInputModule::process()
-{	
-	inputmanager->capture();
-}
-
-
-void COISInputModule::exit()
-{
-
-}
-
-
-COISInputModule::~COISInputModule()
-{
-
-}
+#endif // __CKEYBOARDTRANSLATIONEVENTS_H__

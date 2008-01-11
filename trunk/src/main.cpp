@@ -58,6 +58,7 @@
 
 #include "input/include/coisinputmodule.h"
 #include "input/include/cinputmouseevents.h"
+#include "input/include/cinputeventstranslator.h"
 #include "graphic/include/cgraphicmodule.h"
 #include "time/include/ctimemodule.h"
 #include "sound/include/csoundmodule.h"
@@ -76,6 +77,7 @@ using namespace std;
 using namespace Gnoll::Core;
 using namespace Gnoll::Time;
 using namespace Gnoll::Sound;
+using namespace Gnoll::Input;
 
 bool done = false;
 
@@ -269,22 +271,23 @@ class robotcontroler : public CMessageListener
 
 			Vector3 pos = robotnode->getPosition();
 			pos.y = 2500;
-        RaySceneQuery* raySceneQuery = scenetemp->createRayQuery(
-            Ray(pos, Vector3::NEGATIVE_UNIT_Y));
+ 			RaySceneQuery* raySceneQuery = scenetemp->createRayQuery(
+																			Ray(pos, Vector3::NEGATIVE_UNIT_Y));
 			Ray updateRay;
   
-        updateRay.setOrigin( pos );
-        updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
-        raySceneQuery->setRay(updateRay);
-        RaySceneQueryResult& qryResult = raySceneQuery->execute();
-        RaySceneQueryResult::iterator i = qryResult.begin();
-        if (i != qryResult.end() && i->worldFragment)
-        {
-            robotnode->setPosition(pos.x, 
-                i->worldFragment->singleIntersection.y , 
-                pos.z);
-        }
-
+			updateRay.setOrigin( pos );
+			updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
+			raySceneQuery->setRay(updateRay);
+			RaySceneQueryResult& qryResult = raySceneQuery->execute();
+			RaySceneQueryResult::iterator i = qryResult.begin();
+			if (i != qryResult.end() && i->worldFragment)
+			{
+				robotnode->setPosition(pos.x, 
+												i->worldFragment->singleIntersection.y , 
+												pos.z);
+			}
+		
+			scenetemp->destroyQuery(raySceneQuery);
 
 		}
 };
@@ -613,6 +616,8 @@ int main()
 	CTimeModule timeModule;
 	CMessageModule* messageModule = CMessageModule::getInstancePtr();
 	CSoundModule * soundmanager = CSoundModule::getInstancePtr();
+	CInputEventsTranslator* inputEventsTranslator = CInputEventsTranslator::getInstancePtr();
+
 
 	CMessageManager* messageManager = messageModule->getMessageManager();
 
@@ -621,6 +626,8 @@ int main()
 	inputmanager.init();
 	timeModule.init();
 	soundmanager->init();
+	inputEventsTranslator->init();
+
 
 	/*
 	 * We add a listner and send some messages
@@ -658,11 +665,11 @@ int main()
 	{
 
 		inputmanager.process();
+		inputEventsTranslator->process();
 		messageModule->process();
 		graphicmanager->process();
 		timeModule.process();
 		soundmanager->process();
-		
 	}
 
 
@@ -704,6 +711,7 @@ int main()
 
 	timeModule.exit();
 	inputmanager.exit();
+	inputEventsTranslator->exit();
 	graphicmanager->exit();
 	messageModule->exit();
 	soundmanager->exit();

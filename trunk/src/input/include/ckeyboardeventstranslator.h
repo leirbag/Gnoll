@@ -1,5 +1,5 @@
 /**************************************************************************
-*   Copyright (C) 2006 by Puzzle Team                                     *
+*   Copyright (C) 2008 by Paf                                             *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -18,31 +18,74 @@
 ***************************************************************************/
 
 
-/*---------------------------------integer---------------------------------*\
-|   This is the listener for camera first person                            |
+/*-----------------------CKeyboardEventsTranslator-------------------------*\
+|   This is translate keyboard events to action events                      |
 |                                                                           |
 |   Changelog :                                                             |
-|               11/20/2007 - Gabriel - Initial release                      |
+|               01/08/2008 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#include "../include/camerafirstpersonlistener.h"
-#include "../include/camerafirstperson.h"
+#ifndef __CKEYBOARDEVENTSTRANSLATOR_H__
+#define __CKEYBOARDEVENTSTRANSLATOR_H__
+
+#include <boost/shared_ptr.hpp>
+
+#include "../../core/include/persistentobject.h"
+#include "../../core/include/cmessagelistener.h"
+#include "../../core/include/cmessage.h"
+
+
+using namespace boost;
+
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Input 
 	{
-		UpdateCameraFirstPersonListener::UpdateCameraFirstPersonListener(Gnoll::Core::CameraFirstPerson* pInstanceCam) 
-		{
-			m_pInstanceCam = pInstanceCam;
-		}
 
-		void UpdateCameraFirstPersonListener::handle ( shared_ptr<CMessage> message ) 
-		{ 
-			m_pInstanceCam->update(0);
-		}
-	}
-}
+		class CKeyboardEventsTranslator : public CMessageListener
+		{
+
+			private:
+
+				/**
+				 * PersistentObject that contains a translation map for events from keyboard
+				 */
+				shared_ptr<Gnoll::Core::PersistentObject> keyboardEventTranslationMap;
+
+				/**
+				 * CMessageType for KeyUp messages
+				 */
+				CMessageType keyUp;
+
+				/**
+				 * CMessageType for KeyDown messages
+				 */
+				CMessageType keyDown;
+
+
+			public:
+
+				/**
+				* This is a constructor
+				*/
+				CKeyboardEventsTranslator();
+
+				/**
+				* This is a destructor
+				*/
+				virtual ~CKeyboardEventsTranslator(); 
+
+				/**
+				* This method is called in order to process a message
+				* @param message The message this method will have to process
+				*/
+				virtual void handle ( shared_ptr<CMessage> message );
+		};
+	};
+};
+
+#endif // __CKEYBOARDEVENTSTRANSLATOR_H__
 
 
