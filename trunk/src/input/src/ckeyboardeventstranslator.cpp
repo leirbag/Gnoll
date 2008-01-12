@@ -31,7 +31,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include "../include/ckeyboardeventstranslator.h"
-#include "../include/ckeyboardtranslationevents.h"
+#include "../include/ctranslationevents.h"
 #include "../../core/include/persistentobjectmanager.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../include/cinputmouseevents.h"

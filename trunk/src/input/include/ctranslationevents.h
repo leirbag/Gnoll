@@ -18,17 +18,18 @@
  ***************************************************************************/
 
 
-/*-----------------------CKeyboardTranslationEvents.h-----------------------*\
-|   Translaiton event                                                        |
+/*--------------------------CTranslationEvents.h----------------------------*\
+|   Translation event                                                        |
 |                                                                            |
 |   Changelog :                                                              |
 |               01/09/2008 - Paf - Initial release                           |
+|               01/11/2008 - Paf - Renamed file to ctranslationevents.h      |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
 
-#ifndef __CKEYBOARDTRANSLATIONEVENTS_H__
-#define __CKEYBOARDTRANSLATIONEVENTS_H__
+#ifndef __CTRANSLATIONEVENTS_H__
+#define __CTRANSLATIONEVENTS_H__
 
 #include <string>
 
@@ -38,8 +39,16 @@ namespace Gnoll
 	namespace Input
 	{
 
+
+		/**
+		 * Message type for action events
+		 */
 		const string ACTION_EVENT_TYPE("INPUT_ACTION_EVENT");
 
+
+		/**
+		 * Action events
+		 */
 		struct ActionEvent
 		{
 			string action;
@@ -57,4 +66,4 @@ namespace Gnoll
 }
 
 
-#endif // __CKEYBOARDTRANSLATIONEVENTS_H__
+#endif // __CTRANSLATIONEVENTS_H__

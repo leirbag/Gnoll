@@ -1,3 +1,60 @@
+2008-01-12  Paf <paf@tuxfamily.org>
+	* src/input/include/cmousemotioneventstranslator.h: Initial release
+	* src/input/include/cinputeventstranslator.h: Add code for using
+	CMouseMotionEventsTranslator
+	* src/input/include/ckeyboardtranslationevents.h : Renamed to
+	src/input/include/ctranslationevents.h; Add some comments
+	* src/input/include/coisinputmanager.h: Remove \r
+	* src/input/src/cmousemotioneventstranslator.cpp: Initial release
+	* src/input/src/cinputeventstranslator.cpp: Add code for using
+	CMouseMotionEventsTranslator
+	* src/input/src/ckeyboardeventstranslator.cpp:­Rename
+	ckeyboardtranslationevents.h to ctranslationevents.h
+	* src/main.cpp: Use boost::program_option to parse parameters. Option
+	currently implemented provide a way to add new loading/saving path for
+	PersistentObject objects
+	* src/core/include/camerafirstpersonlistener.h: Remove \r
+	* src/core/include/camerafirstperson.h: Remove \r
+	* src/core/src/camerathirdpersonlistene.cpp: Remove \r and add some empty
+	lines at the end of the file
+	* Makefile.am: Create a launch script at installation time. So the data
+	path can be passed as an argument to gnoll at launch time
+
+2008-01-10  Paf <paf@tuxfamily.org>
+	* src/input/include/cinputmouseevents.h: Remove \r
+	* src/input/include/cinputeventstranslator.h: Initial release
+	* src/input/include/ckeyboardeventstranslator.h: Initial release
+	* src/input/include/ckeyboardtranslationevents.h: Initial release
+	* src/input/src/cinputeventstranslator.cpp: Initial release
+	* src/input/src/ckeyboardeventstranslator.cpp: Initial release
+	* src/input/src/coisinputmodule.cpp: Remove \r
+	* src/main.cpp: Add new module CInputEventsTranslator
+	* src/core/include/cmessagetype.h: Remove \r
+	* src/core/include/cgenericmessagemanager.h: Replace boost::mutex by
+	boost::recursive_mutex. The program would get stuck if a CMessageListener
+	would try to send a new message since CGenericMessageManager's mutexes
+	would already be locked
+	* src/core/src/cameraspline.cpp: Add empty lines at the end of this file
+	* src/core/src/camerasplinelistener.cpp: Add empty lines at the end of this
+	file
+	* src/core/src/camerafreeflylistener.cpp: Add empty lines at the end of
+	this file
+	* src/core/src/cgenericmessagemanager.cpp: Replace boost::mutex by
+	boost::recursive_mutex. The program would get stuck if a CMessageListener
+	would try to send a new message since CGenericMessageManager's mutexes
+	would already be locked
+	* src/core/src/camerathirdpersonlistener.cpp: Add empty lines at the end of
+	this file
+	* src/core/src/camerafirstperson.cpp: Add empty lines at the end of this
+	file
+	* src/core/src/camera.cpp: Add empty lines at the end of this file
+	* src/core/src/camerafirstpersonlistener.cpp: Add empty lines at the end of
+	this file
+	* src/graphic/src/cgraphicmodule.cpp: Destroy a RayQuery after being used;
+	Use a shared_ptr<ISceneFactory instead of a ISceneFactory*. There was bug,
+	there was no delete
+	* Makefile.am: Update source files list
+
 2007-12-24  Gabriel <contact@huau-gabriel.fr>
 	* src/core/include/camera.h: delete scenemanager from Ctor 
 	* src/core/include/camera.cpp: pass by GraphicModule to get the scenemanager and delete scenemanager from constructor 

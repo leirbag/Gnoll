@@ -68,11 +68,13 @@
 #include <list>
 #include <stdlib.h>
 #include <time.h>
+#include <boost/program_options.hpp>
 
 #include <Ogre.h>
 #include <OgreLogManager.h>
 
 using namespace boost;
+using namespace boost::program_options;
 using namespace std;
 using namespace Gnoll::Core;
 using namespace Gnoll::Time;
@@ -257,17 +259,6 @@ class robotcontroler : public CMessageListener
 			SceneManager* scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 			Ogre::SceneNode* robotnode = scenetemp->getSceneNode("RobotNode");
 
-
-/*			if (temp2 == OIS::KC_LEFT) {
-				direction -= Degree(5.0);
-				robotnode->setOrientation(Quaternion(-Radian(direction), Vector3(0.0, 1.0, 0.0)));
-			}
-
-			if (temp2 == OIS::KC_RIGHT) {
-				direction += Degree(5.0);
-				robotnode->setOrientation(Quaternion(-Radian(direction), Vector3(0.0, 1.0, 0.0)));
-			}
-*/
 
 			Vector3 pos = robotnode->getPosition();
 			pos.y = 2500;
@@ -576,9 +567,109 @@ class AnimationListener : public CMessageListener
 };
 
 
-int main()
+
+void analyzeArguments (int argc, char* argv[])
+{
+
+	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+
+	// Declare the supported options.
+	options_description desc("Allowed options");
+	desc.add_options()
+	    ("help,h", "produce help message")
+	    ("load-source-directory", value< vector<string> >()->composing(), "Add a directory as a load source")
+	    ("save-source-directory", value< vector<string> >()->composing(), "Add a directory as a save source")
+	;
+
+	variables_map vm;
+	store(parse_command_line(argc, argv, desc), vm);
+	notify(vm);    
+
+
+	/**
+	 * If help is required
+	 *  -> Display usage
+	 *  -> Exit
+	 */
+	if (vm.count("help"))
+	{
+	    cout << desc << "\n";
+	    exit(1);
+	}
+
+	/**
+	 * If a loading source has to be added
+	 */
+	if (vm.count("load-source-directory"))
+	{
+		cout << "Adding new load source directory : " << endl ;
+
+		vector<string> lsd = vm["load-source-directory"].as< vector<string> >();
+		for (vector<string>::iterator it = lsd.begin(); it != lsd.end(); it++)
+		{
+			cout << *it << "." << endl;
+
+			shared_ptr<ISource> userLoadChannel(new SourceFile(*it, false));
+			pom->addLoadSource(userLoadChannel);
+		}
+	}
+
+
+	/**
+	 * If a saving source has to be added
+	 */
+	if (vm.count("save-source-directory"))
+	{
+		cout << "Adding new save source directory : " << endl ;
+
+		vector<string> lsd = vm["save-source-directory"].as< vector<string> >();
+		for (vector<string>::iterator it = lsd.begin(); it != lsd.end(); it++)
+		{
+			cout << *it << "." << endl;
+
+			shared_ptr<ISource> userLoadChannel(new SourceFile( *it, false ));
+			shared_ptr<ISource> userSaveChannel(new SourceFile( *it, true  ));
+			pom->addSaveSource(userSaveChannel);
+		}
+	}
+
+
+}
+
+
+
+int main(int argc, char* argv[])
 {
 	srand ( time(NULL) );
+
+
+	// The very first thing to do is to add the current directory in PersistentObjectManager's list of repositories
+	// In case some modules would need to load some config files
+	shared_ptr<ISource> loadChannel(new SourceFile(".", false));
+	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
+
+	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+
+	pom->addLoadSource(loadChannel);
+	pom->addSaveSource(saveChannel);
+
+
+
+
+	/**
+	 * Analyze of program parameters
+	 */
+
+	analyzeArguments (argc, argv);
+
+
+
+
+
+	/**
+	 * Now program options have been parsed,
+	 * program is initialized
+	 */
 
 
 	// A message type called "string" 
@@ -599,16 +690,6 @@ int main()
 	shared_ptr<CMessageListener> mylistener6(new AllMessageListener);	
 	shared_ptr<CMessageListener> mylistener7(new MousePressedListener);
 	shared_ptr<CMessageListener> mylistener8(new MousePressedListener);
-
-
-	shared_ptr<ISource> loadChannel(new SourceFile(".", false));
-	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
-
-	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
-
-	pom->addLoadSource(loadChannel);
-	pom->addSaveSource(saveChannel);
-
 
 
 	CGraphicModule* graphicmanager = CGraphicModule::getInstancePtr();

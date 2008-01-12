@@ -29,6 +29,7 @@
 
 #include "../include/cinputeventstranslator.h"
 #include "../include/ckeyboardeventstranslator.h"
+#include "../include/cmousemotioneventstranslator.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessagemodule.h"
 #include <iostream>
@@ -52,6 +53,7 @@ namespace Gnoll
 		{
 
 			activateKeyboardTranslation();
+			activateMouseMotionTranslation();
 
 		}
 
@@ -64,6 +66,7 @@ namespace Gnoll
 		void CInputEventsTranslator::exit()
 		{
 			deactivateKeyboardTranslation();
+			deactivateMouseMotionTranslation();
 		}
 
 
@@ -109,6 +112,40 @@ namespace Gnoll
 
 			if (messageManager->delListener ( keyboardEventsTranslator, keyUp ) == true)
 				cout << "KeyboardEventsTranslator listener removed" << endl;
+		
+		}
+
+
+		void CInputEventsTranslator::activateMouseMotionTranslation()
+		{
+		
+			CMessageType mouseMoved("MOUSE_MOVED");
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+
+			mouseMotionEventsTranslator = shared_ptr<CMessageListener> ( new CMouseMotionEventsTranslator() );
+
+			if (messageManager->addListener ( mouseMotionEventsTranslator, mouseMoved ) == true)
+				cout << "mouseMotionEventsTranslator listener installed" << endl;
+
+		}
+
+
+		void CInputEventsTranslator::deactivateMouseMotionTranslation()
+		{
+		
+			CMessageType mouseMoved("MOUSE_MOVED");
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+			if (messageManager->delListener ( mouseMotionEventsTranslator, mouseMoved ) == true)
+				cout << "mouseMotionEventsTranslator listener removed" << endl;
+
+			if (messageManager->delListener ( mouseMotionEventsTranslator, mouseMoved ) == true)
+				cout << "mouseMotionEventsTranslator listener removed" << endl;
 		
 		}
 
