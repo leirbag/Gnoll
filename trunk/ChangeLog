@@ -1,4 +1,8 @@
 2008-01-12  Paf <paf@tuxfamily.org>
+	* src/core/src/camerathirdpersonlistene.cpp: Remove this file. It's a typo
+	from src/core/src/camerathirdpersonlistener.cpp
+
+2008-01-12  Paf <paf@tuxfamily.org>
 	* src/input/include/cmousemotioneventstranslator.h: Initial release
 	* src/input/include/cinputeventstranslator.h: Add code for using
 	CMouseMotionEventsTranslator
