@@ -34,6 +34,8 @@
 |                                    saveObj(string _instanceName, T _obj)  |
 |                                  Add a policy for objects not found       |
 |                                    when saving                            |
+|		01/09/2008 - Soax - Add a parameter _instance to loadImpl   |
+|				      and saveImpl			    |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -46,7 +48,7 @@
 #include <vector>
 #include <time.h>
 #include <algorithm>
-
+#include <iostream>
 #include "isource.h"
 #include "iattribute.h"
 
@@ -233,7 +235,7 @@ namespace Gnoll {
 				 * @param _stream Stream from which the ressource will be extracted
 				 * @return Smart pointer to the newly created object
 				 */
-				virtual shared_ptr<T> loadImpl( shared_ptr<IStream> _stream) = 0;
+				virtual shared_ptr<T> loadImpl( shared_ptr<IStream> _stream, string _instance) = 0;
 
 				/**
 				 * This is a virtual pure method that is going to be implemented by classes that inherits from this class.
@@ -243,7 +245,7 @@ namespace Gnoll {
 				 * @param _obj Smart pointer to the object to be saved
 				 * @return The successfulness of this operation
 				 */
-				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<T> _obj) = 0;
+				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<T> _obj, string _instance) = 0;
 
 				/**
 				 * This method tries to find a suitable source to load an instance
@@ -252,7 +254,6 @@ namespace Gnoll {
 				 */
 				shared_ptr<ISource> findLoadSource( string _instance)
 				{
-
 					boost::recursive_mutex::scoped_lock lock(m_mutex);
 
 
@@ -393,7 +394,7 @@ namespace Gnoll {
 						// Then we load the object from the stream
 						// This method has to be implemented by any class that inherits from BaseManager
 						// (that's why there is 'Base' in the name)
-						shared_ptr<T> object = this->loadImpl(stream);
+						shared_ptr<T> object = this->loadImpl(stream, _instance);
 			
 						stream->close();
 
@@ -467,7 +468,7 @@ namespace Gnoll {
 					// Then we save the object to the stream
 					// This method has to be implemented by any class that inherits from BaseManager
 					// (that's why there is 'Base' in the name)
-					this->saveImpl(stream, _obj);
+					this->saveImpl(stream, _obj, _instance);
 
 					stream->close();
 
@@ -528,7 +529,7 @@ namespace Gnoll {
 						// Then we save the object to the stream
 						// This method has to be implemented by any class that inherits from BaseManager
 						// (that's why there is 'Base' in the name)
-						this->saveImpl(stream, res.getObject());
+						this->saveImpl(stream, res.getObject(), _instance);
 
 						stream->close();
 

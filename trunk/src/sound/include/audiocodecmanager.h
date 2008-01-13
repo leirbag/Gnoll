@@ -55,7 +55,7 @@ namespace Gnoll {
 				AudioCodecManager();
 				~AudioCodecManager();
 				void addAudioCodec(shared_ptr<AudioCodecHandler>);
-				shared_ptr<Sound> decodeStream(shared_ptr<IStream>);
+				shared_ptr<Sound> decodeStream(shared_ptr<IStream>, string);
 		
 		};
 	}

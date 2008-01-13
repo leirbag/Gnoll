@@ -38,10 +38,7 @@ namespace Gnoll {
 
 		CSoundModule::CSoundModule()
 		{
-			//Initialise les écouteurs d'événements
-			// --> Evenement Demande de lecture d'un son
-			shared_ptr<CMessageListener> playListener (new SoundPlayListener(sound_queue));
-			CMessageModule().getInstancePtr()->getMessageManager()->addListener(playListener, *(new CMessageType("PLAY_SOUND")));
+			
 		}
 		
 		CSoundModule::~CSoundModule()
@@ -51,7 +48,13 @@ namespace Gnoll {
 		
 		void CSoundModule::init()
 		{
-			std::cout << "Initialisation du module de Son " << endl;
+		        //Initialise les listeners
+			// Play Listener--> Evenement Demande de lecture d'un son
+			play_listener = shared_ptr<CMessageListener>(new SoundPlayListener(sound_queue));
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			messageModule->getMessageManager()->addListener(play_listener, CMessageType("PLAY_SOUND"));
+
+			
 			//Device par default ... à voir une eventuelle modif
 			device = alcOpenDevice(NULL);
 			
@@ -88,8 +91,11 @@ namespace Gnoll {
 				//cout << "A lire: " << (*sound_queue)[i];
 				//Charge ce son 
 				currentSound = sMgr->load((*sound_queue)[i]);
-				//Le joue
-				currentSound->play();
+				if (!currentSound)
+				cout << "Impossible de trouver " << (*sound_queue)[i] << " dans les paths existants !" << endl;
+				else
+					//Le joue
+					currentSound->play();
 			}
 			sound_queue->clear();
 		
@@ -97,6 +103,10 @@ namespace Gnoll {
 		
 		void CSoundModule::exit()
 		{
+			//Supprime le listener
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			messageModule->getMessageManager()->delListener(play_listener, CMessageType("PLAY_SOUND"));
+		
 			alcMakeContextCurrent(NULL);
 			alcDestroyContext(context);
 			alcCloseDevice(device);		

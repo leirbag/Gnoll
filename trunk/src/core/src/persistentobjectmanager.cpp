@@ -50,7 +50,7 @@ namespace Gnoll {
 		}
 
 
-		shared_ptr<PersistentObject> PersistentObjectManager::loadImpl( shared_ptr<IStream> _stream)
+		shared_ptr<PersistentObject> PersistentObjectManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
 		{
 
 			// First : Stream -> XML
@@ -87,7 +87,7 @@ namespace Gnoll {
 			return po;
 		}
 
-		bool PersistentObjectManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<PersistentObject> _obj)
+		bool PersistentObjectManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<PersistentObject> _obj, string _instance)
 		{
 			shared_ptr<xmlpp::Document> output = _obj->serializeXML();
 			string outputString = output->write_to_string_formatted();

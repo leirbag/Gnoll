@@ -58,6 +58,7 @@ namespace Gnoll {
 				
 				//Liste des son à jouer
 				static vector< string > * sound_queue;
+				shared_ptr<CMessageListener> play_listener;
 				
 			public:
 		

@@ -225,7 +225,6 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 	if ( validateType( message->getType() ) == false )
 		return false;
 
-
 	/*
 	 * The message type has to be registered
 	 */
@@ -235,7 +234,7 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 		if ( m_messageTypes.find(message->getType()) == m_messageTypes.end() )
 			return false;
 	}
-
+	
 	/*
 	 * If there is no one to listen...
 	 */	
@@ -246,7 +245,6 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 			return false;
 	}
 
-
 	/*
 	 * Finally the message is enqueue
 	 */
@@ -255,7 +253,7 @@ bool CGenericMessageManager::queueMessage ( shared_ptr<CMessage> message )
 		boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
 		m_messages[m_activeQueue].push_back(message);
-	}
+		}
 	return true;
 
 }

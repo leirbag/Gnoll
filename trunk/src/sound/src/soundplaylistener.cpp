@@ -1,4 +1,6 @@
 #include "../include/soundplaylistener.h"
+#include <iostream>
+using namespace std;
 
 namespace Gnoll
 {

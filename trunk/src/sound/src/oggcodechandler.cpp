@@ -43,7 +43,6 @@ namespace Gnoll
 		//Créé l'objet Sound et rempli son tampon audio avec le contenu du flux (décodé) -> Retourne l'objet Sound
 		shared_ptr<Sound> OggCodecHandler::handle(shared_ptr<IStream> _stream)
 		{
-			cout << "coucou" << endl;
 			shared_ptr<Sound> _sound(new Sound);
 			
 			//Format du fichier

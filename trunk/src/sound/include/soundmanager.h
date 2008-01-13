@@ -52,15 +52,15 @@ using namespace Gnoll::Core;
 namespace Gnoll {
 	namespace Sound {
 	
-		class SoundManager : public BaseManager<Sound>, public Singleton<SoundManager>
+	class SoundManager : public BaseManager<Sound, ObjectNotFoundError<Sound> >, public Singleton<SoundManager>
 		{
 			private:
 			
 			protected:
 
-				virtual shared_ptr<Sound> loadImpl( shared_ptr<IStream> _stream);
+				virtual shared_ptr<Sound> loadImpl( shared_ptr<IStream> _stream, string _instance);
 
-				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<Sound> _obj);
+				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<Sound> _obj, string _instance);
 
 			public:
 	

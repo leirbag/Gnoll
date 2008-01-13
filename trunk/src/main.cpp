@@ -415,9 +415,11 @@ class keydown : public CMessageListener
 			}
 			if (temp2 == OIS::KC_B)
 			{
+				CMessageType soundLaunched("PLAY_SOUND");
+
 				shared_ptr<boost::any> sound_instance (new boost::any(string("sound/boing.ogg")));
-				shared_ptr<CMessage> message (new CMessage(*(new CMessageType("PLAY_SOUND")), sound_instance ));
-	
+
+				shared_ptr<CMessage> message (new CMessage(soundLaunched, sound_instance));
 				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
 			}
 
@@ -742,9 +744,6 @@ int main(int argc, char* argv[])
 
 	if (messageManager->addListener ( mylistener8, mrtype ) == true)
 		cout << "Listener ajoute" << endl;
-
-
-
 
 
 	while (done == false)

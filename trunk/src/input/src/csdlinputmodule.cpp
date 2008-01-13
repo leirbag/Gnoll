@@ -1,4 +1,4 @@
-/***************************************************************************
+r/***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

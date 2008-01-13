@@ -63,7 +63,7 @@ namespace Gnoll {
 				 * @param _stream Stream from which the ressource will be extracted
 				 * @return Smart pointer to the newly created object
 				 */
-				virtual shared_ptr<PersistentObject> loadImpl( shared_ptr<IStream> _stream);
+				virtual shared_ptr<PersistentObject> loadImpl( shared_ptr<IStream> _stream, string _instance);
 
 				/**
 				 * This method saves a PersistentObject to a stream
@@ -71,7 +71,7 @@ namespace Gnoll {
 				 * @param _obj Smart pointer to the object to be saved
 				 * @return The successfulness of this operation
 				 */
-				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<PersistentObject> _obj);
+				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<PersistentObject> _obj, string _instance);
 
 			public:
 

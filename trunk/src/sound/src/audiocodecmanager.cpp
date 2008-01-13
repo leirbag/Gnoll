@@ -53,9 +53,9 @@ namespace Gnoll
 		}
 			
 		
-		shared_ptr<Sound> AudioCodecManager::decodeStream(shared_ptr<IStream> _stream)	
+		shared_ptr<Sound> AudioCodecManager::decodeStream(shared_ptr<IStream> _stream, string _instance)	
 		{
-			/*string type;
+			string type;
 			//Récupère le type du fichier à partir de l'extension
 			size_t pos = _instance.find_last_of('.') + 1;
 		
@@ -67,10 +67,11 @@ namespace Gnoll
 				return list_codec[type]->handle(_stream);
 			else
 			{
-				return list_codec["default"]->handle(_stream);
-			}*/
+				cout << "Codec par defaut (ogg pour le moment)" << endl;
+				return list_codec["ogg"]->handle(_stream);
+			}
 			
-			return list_codec["ogg"]->handle(_stream);
+			//return list_codec["ogg"]->handle(_stream);
 		}		
 		
 	}
