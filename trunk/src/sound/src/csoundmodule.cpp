@@ -70,14 +70,12 @@ namespace Gnoll {
 			alListenerfv(AL_VELOCITY,    listenerVel);
 			alListenerfv(AL_ORIENTATION, listenerOri);
 			//-----------------------
-			
-			// A REDEFINIR, en utilisant un fichier de configuration
-			//Récupère l'instance du SoundManager, et ajoute le répertoire par default
+		
+
+			/**
+			 * Initialize the sound manager
+			 */	
 			sMgr = SoundManager::getInstancePtr();
-			shared_ptr<ISource> defaultFolder (new SourceFile("./"));
-			sMgr->addLoadSource(defaultFolder);
-			shared_ptr<ISource> soundFolder (new SourceFile("./data/sound/"));
-			sMgr->addLoadSource(soundFolder);
 		}
 		
 		void CSoundModule::process()

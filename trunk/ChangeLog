@@ -1,4 +1,10 @@
 2008-01-12  Paf <paf@tuxfamily.org>
+	* src/main.cpp: SoundManager paths can also be initialized through command
+	line parameters
+	* src/sound/src/csoundmodule.cpp: Delete default repositories
+	initialization
+
+2008-01-12  Paf <paf@tuxfamily.org>
 	* src/core/src/camerathirdpersonlistene.cpp: Remove this file. It's a typo
 	from src/core/src/camerathirdpersonlistener.cpp
 

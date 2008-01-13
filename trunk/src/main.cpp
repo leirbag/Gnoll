@@ -415,7 +415,7 @@ class keydown : public CMessageListener
 			}
 			if (temp2 == OIS::KC_B)
 			{
-				shared_ptr<boost::any> sound_instance (new boost::any(string("boing.ogg")));
+				shared_ptr<boost::any> sound_instance (new boost::any(string("sound/boing.ogg")));
 				shared_ptr<CMessage> message (new CMessage(*(new CMessageType("PLAY_SOUND")), sound_instance ));
 	
 				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
@@ -572,6 +572,7 @@ void analyzeArguments (int argc, char* argv[])
 {
 
 	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+	SoundManager *soundManager = SoundManager::getInstancePtr();
 
 	// Declare the supported options.
 	options_description desc("Allowed options");
@@ -611,6 +612,7 @@ void analyzeArguments (int argc, char* argv[])
 
 			shared_ptr<ISource> userLoadChannel(new SourceFile(*it, false));
 			pom->addLoadSource(userLoadChannel);
+			soundManager->addLoadSource(userLoadChannel);
 		}
 	}
 
@@ -627,9 +629,9 @@ void analyzeArguments (int argc, char* argv[])
 		{
 			cout << *it << "." << endl;
 
-			shared_ptr<ISource> userLoadChannel(new SourceFile( *it, false ));
 			shared_ptr<ISource> userSaveChannel(new SourceFile( *it, true  ));
 			pom->addSaveSource(userSaveChannel);
+			soundManager->addSaveSource(userSaveChannel);
 		}
 	}
 
@@ -649,10 +651,13 @@ int main(int argc, char* argv[])
 	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
 
 	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+	SoundManager *soundManager = SoundManager::getInstancePtr();
 
 	pom->addLoadSource(loadChannel);
 	pom->addSaveSource(saveChannel);
 
+	soundManager->addLoadSource(loadChannel);
+	soundManager->addSaveSource(saveChannel);
 
 
 
