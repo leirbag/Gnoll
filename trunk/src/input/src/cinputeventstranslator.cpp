@@ -30,6 +30,7 @@
 #include "../include/cinputeventstranslator.h"
 #include "../include/ckeyboardeventstranslator.h"
 #include "../include/cmousemotioneventstranslator.h"
+#include "../include/cmousebuttoneventstranslator.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessagemodule.h"
 #include <iostream>
@@ -54,6 +55,7 @@ namespace Gnoll
 
 			activateKeyboardTranslation();
 			activateMouseMotionTranslation();
+			activateMouseButtonTranslation();
 
 		}
 
@@ -67,6 +69,7 @@ namespace Gnoll
 		{
 			deactivateKeyboardTranslation();
 			deactivateMouseMotionTranslation();
+			deactivateMouseButtonTranslation();
 		}
 
 
@@ -148,6 +151,45 @@ namespace Gnoll
 				cout << "mouseMotionEventsTranslator listener removed" << endl;
 		
 		}
+
+
+		void CInputEventsTranslator::activateMouseButtonTranslation()
+		{
+		
+			CMessageType mousePressed("MOUSE_PRESSED");
+			CMessageType mouseReleased("MOUSE_RELEASED");
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+
+			mouseButtonEventsTranslator = shared_ptr<CMessageListener> ( new CMouseButtonEventsTranslator() );
+
+			if (messageManager->addListener ( mouseButtonEventsTranslator, mousePressed ) == true)
+				cout << "mouseButtonEventsTranslator listener installed for MOUSE_PRESSED" << endl;
+
+			if (messageManager->addListener ( mouseButtonEventsTranslator, mouseReleased ) == true)
+				cout << "mouseButtonEventsTranslator listener installed for MOUSE_RELEASED" << endl;
+		}
+
+
+		void CInputEventsTranslator::deactivateMouseButtonTranslation()
+		{
+		
+			CMessageType mousePressed("MOUSE_PRESSED");
+			CMessageType mouseReleased("MOUSE_RELEASED");
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+			if (messageManager->delListener ( mouseButtonEventsTranslator, mousePressed ) == true)
+				cout << "mouseButtonEventsTranslator listener removed for MOUSE_PRESSED" << endl;
+
+			if (messageManager->delListener ( mouseButtonEventsTranslator, mouseReleased ) == true)
+				cout << "mouseButtonEventsTranslator listener removed for MOUSE_RELEASED" << endl;
+		
+		}
+
 
 	}
 }

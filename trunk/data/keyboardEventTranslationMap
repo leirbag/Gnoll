@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<persistentobject instance="eventTranslationMap">
+  <attribute name="200">
+      <string value="ACTION_STEP_FORWARD"/>
+  </attribute>
+  <attribute name="203">
+      <string value="ACTION_ROTATE_LEFT"/>
+  </attribute>
+  <attribute name="205">
+      <string value="ACTION_ROTATE_RIGHT"/>
+  </attribute>
+  <attribute name="31">
+      <string value="ACTION_ROTATE_LEFT"/>
+  </attribute>
+  <attribute name="33">
+      <string value="ACTION_ROTATE_RIGHT"/>
+  </attribute>
+  <attribute name="208">
+      <string value="ACTION_STEP_BACKWARD"/>
+  </attribute>
+  <attribute name="18">
+      <string value="ACTION_ROTATE_UP"/>
+  </attribute>
+  <attribute name="32">
+      <string value="ACTION_ROTATE_DOWN"/>
+  </attribute>
+  <attribute name="16">
+      <string value="ACTION_QUIT"/>
+  </attribute>
+</persistentobject>

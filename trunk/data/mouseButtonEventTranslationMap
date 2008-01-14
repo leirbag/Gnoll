@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<persistentobject instance="eventTranslationMap">
+  <attribute name="0">
+      <string value="ACTION_ATTACK"/>
+  </attribute>
+  <attribute name="1">
+      <string value="ACTION_DEFEND"/>
+  </attribute>
+</persistentobject>

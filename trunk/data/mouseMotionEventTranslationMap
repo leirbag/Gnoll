@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<persistentobject instance="eventTranslationMap">
+  <attribute name="-X">
+      <string value="ACTION_ROTATE_CAMERA_LEFT"/>
+  </attribute>
+  <attribute name="+X">
+      <string value="ACTION_ROTATE_CAMERA_RIGHT"/>
+  </attribute>
+  <attribute name="-Y">
+      <string value="ACTION_ROTATE_CAMERA_DOWN"/>
+  </attribute>
+  <attribute name="+Y">
+      <string value="ACTION_ROTATE_CAMERA_UP"/>
+  </attribute>
+  <attribute name="-Z">
+      <string value="ACTION_ZOOM_CAMERA_OUT"/>
+  </attribute>
+  <attribute name="+Z">
+      <string value="ACTION_ZOOM_CAMERA_IN"/>
+  </attribute>
+</persistentobject>

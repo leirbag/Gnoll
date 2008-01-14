@@ -1,4 +1,16 @@
 2008-01-13  Paf <paf@tuxfamily.org>
+	* src/input/include/cinputeventstranslator.h: Add
+	CMouseButtonEventsTranslator listener for translating mouse button events
+	* src/input/include/cmousebuttoneventstranslator.h: Initial release
+	* src/input/src/cinputeventstranslator.cpp: Add
+	CMouseButtonEventsTranslator listener for translating mouse button events
+	* src/input/src/cmousebuttoneventstranslator.cpp: Initial release
+	* Makefile.am: Update list of source files
+	* data/keyboardEventTranslationMap: Initial release
+	* data/mouseButtonEventTranslationMap: Initial release
+	* data/mouseMotionEventTranslationMap: Initial release
+
+2008-01-13  Paf <paf@tuxfamily.org>
 	* src/input/include/cmousemotioneventstranslator.h: Add sendZMotionEvents()
 	to take Z axis in account
 	* src/input/src/cmousemotioneventstranslator.cpp: Add sendZMotionEvents()

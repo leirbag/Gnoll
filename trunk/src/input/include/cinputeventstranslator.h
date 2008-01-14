@@ -73,6 +73,12 @@ namespace Gnoll
 				shared_ptr<CMessageListener> mouseMotionEventsTranslator;
 
 
+				/**
+				 * Translator for mouse button generated messages
+				 */
+				shared_ptr<CMessageListener> mouseButtonEventsTranslator;
+
+
 
 			public:
 
@@ -120,6 +126,16 @@ namespace Gnoll
 				 * Deactivate mouse motion events translation
 				 */
 				void deactivateMouseMotionTranslation();
+
+				/**
+				 * Activate mouse button events translation
+				 */
+				void activateMouseButtonTranslation();
+
+				/**
+				 * Deactivate mouse button events translation
+				 */
+				void deactivateMouseButtonTranslation();
 		};
 
 	}
