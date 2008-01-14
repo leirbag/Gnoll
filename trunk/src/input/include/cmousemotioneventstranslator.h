@@ -23,6 +23,8 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               01/11/2008 - Paf - Initial release                          |
+|               01/13/2008 - Paf - Add sendZMotionEvents() to take Z axis   |
+|                                    in account                             |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -94,6 +96,13 @@ namespace Gnoll
 				 * @param _mouseEvent Contains mouse motion information
 				 */
 				void sendYMotionEvents(MouseEvent _mouseEvent);
+
+
+				/**
+				 * Extract Z mouse motion and convert it to an INPUT_ACTION_EVENT
+				 * @param _mouseEvent Contains mouse motion information
+				 */
+				void sendZMotionEvents(MouseEvent _mouseEvent);
 
 
 			public:

@@ -23,6 +23,8 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               01/11/2008 - Paf - Initial release                          |
+|               01/13/2008 - Paf - Add sendZMotionEvents() to take Z axis   |
+|                                    in account                             |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -142,6 +144,8 @@ namespace Gnoll
 			}
 
 		}
+
+
 		void CMouseMotionEventsTranslator::sendYMotionEvents(MouseEvent _mouseEvent)
 		{
 			string event("");
@@ -168,6 +172,34 @@ namespace Gnoll
 
 		}
 
+
+		void CMouseMotionEventsTranslator::sendZMotionEvents(MouseEvent _mouseEvent)
+		{
+			string event("");
+			float intensity = 0.0f;
+
+			if (_mouseEvent.relZ != 0)	
+			{
+				if (_mouseEvent.relZ > 0)
+				{
+					event = "+Z";
+
+				} else
+				{
+					event = "-Z";
+				}
+
+				intensity = _mouseEvent.relZ;
+			}
+
+			if (event != "")
+			{
+				sendActionEventForEventAndIntensity(event, intensity);
+			}
+
+		}
+
+
 		void CMouseMotionEventsTranslator::handle ( shared_ptr<CMessage> message )
 		{
 
@@ -179,6 +211,7 @@ namespace Gnoll
 
 			sendXMotionEvents( mouseMotionEvent );
 			sendYMotionEvents( mouseMotionEvent );
+			sendZMotionEvents( mouseMotionEvent );
 
 		}
 	};

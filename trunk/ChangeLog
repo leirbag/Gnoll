@@ -1,3 +1,9 @@
+2008-01-13  Paf <paf@tuxfamily.org>
+	* src/input/include/cmousemotioneventstranslator.h: Add sendZMotionEvents()
+	to take Z axis in account
+	* src/input/src/cmousemotioneventstranslator.cpp: Add sendZMotionEvents()
+	to take Z axis in account
+
 2008-01-12  Paf <paf@tuxfamily.org>
 	* src/main.cpp: SoundManager paths can also be initialized through command
 	line parameters
