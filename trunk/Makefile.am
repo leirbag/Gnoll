@@ -27,7 +27,7 @@ install-data-am:
 	for file in `find $(srcdir)/data/ `; \
 	do  \
 	echo $${file}; \
-	destinationfile=`echo $${file} | sed -e "s|$(srcdir)/data|$(datadir)|" `; \
+	destinationfile=`echo $${file} | sed -e "s|$(srcdir)/data|$(pkgdatadir)|" `; \
 	destinationdir=`dirname "$${destinationfile}"`; \
 	test -z "$${destinationdir}" || mkdir -p -- "$${destinationdir}"; \
 	$(INSTALL) $${file} $${destinationfile} \
@@ -37,7 +37,7 @@ install-data-am:
 	## Data directory to PersistentObject repositories
 	echo -e "#!/bin/sh \n\
 	\n \
-	$(bindir)/gnoll --load-source-directory=$(datadir) --save-source-directory=$(datadir)" > $(bindir)/launch-gnoll
+	$(bindir)/gnoll --load-source-directory=$(pkgdatadir) --save-source-directory=$(pkgdatadir)" > $(bindir)/launch-gnoll
 	chmod +x $(bindir)/launch-gnoll
 
 	## Replace tokens for files in config/ and copy the file to $DATADIR
@@ -46,11 +46,11 @@ install-data-am:
 	do  \
 	filename=`basename $${file}` ; \
 	filename=`echo $${filename} | sed -e s/\.template// ` ; \
-	sed -e "s|\*DATADIR\*|$${datadir}|g" $${file} > $(datadir)/$${filename} \
+	sed -e "s|\*DATADIR\*|$${pkgdatadir}|g" $${file} > $(pkgdatadir)/$${filename} \
 	; done
 
 
-uninstall-info-am:
+uninstall-hook:
 	
 	## First delete all files
 	for file in `find $(srcdir)/data/ -type f `; \
