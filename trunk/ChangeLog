@@ -1,3 +1,22 @@
+2008-01-16  Paf <paf@tuxfamily.org>
+	* config: Initial release
+	* config/ogre_resources.template: Initial release
+	* src/main.cpp: Comment unused code
+	* src/core/include/camerafreefly.h: Remove unused ';'
+	* src/core/include/camerafreeflylistener.h: Remove unused ';'
+	* src/core/include/camera.h: Remove unused ';'
+	* src/sound/include/audiocodechandler.h: getFileType() should be virtual
+pure
+	* src/sound/src/csoundmodule.cpp: Fix comparison between two unsigned
+	integers
+	* src/sound/src/soundmanager.cpp: saveImpl() should return something
+	* src/sound/src/oggcodechandler.cpp: buffer shoudl be dynamically
+	allocated
+	* src/sound/src/sound.cpp: Fix comparison between two unsigned integers
+	* src/graphic/src/cgraphicmodule.cpp: Fix config path
+	* src/graphic/src/csceneparser.cpp: Fix unitialized variables
+	* Makefile.am: Add installation and uninstall hooks
+
 2008-01-13  Paf <paf@tuxfamily.org>
 	* src/input/include/cinputeventstranslator.h: Add
 	CMouseButtonEventsTranslator listener for translating mouse button events

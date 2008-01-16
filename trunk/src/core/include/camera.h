@@ -146,7 +146,7 @@ namespace Gnoll
 			 */
 			virtual Ogre::Camera& getOgreCamera();
 		};
-	};
-};
+	}
+}
 
 #endif // __CAMERA_H__

@@ -97,7 +97,7 @@ void CSceneParser::on_start_element(const Glib::ustring& name,
 
 	} else if (name == "position")
 	{
-		float x, y, z;
+		float x = 0.0f, y = 0.0f, z = 0.0f;
 
 		for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
 		{
@@ -114,7 +114,7 @@ void CSceneParser::on_start_element(const Glib::ustring& name,
 
 	} else if (name == "rotation")
 	{
-		float x, y, z;
+		float x = 0.0f, y = 0.0f, z = 0.0f;
 
 		for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
 		{
@@ -134,7 +134,7 @@ void CSceneParser::on_start_element(const Glib::ustring& name,
 
 	} else if (name == "scale")
 	{
-		float x, y, z;
+		float x = 0.0f, y = 0.0f, z = 0.0f;
 
 		for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
 		{

@@ -23,6 +23,7 @@
 |                                                                            |
 |   Changelog :                                                              |
 |               11/06/2007 - Soax - Initial release                          |
+|               01/16/2007 - Paf - getFileType() should be virtual pure      |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -59,7 +60,7 @@ namespace Gnoll {
 				virtual ~AudioCodecHandler(){};
 				
 				virtual shared_ptr<Sound> handle(shared_ptr<IStream>) = 0;
-				virtual string getFileType(){};
+				virtual string getFileType() = 0;
 		};
 	}
 }

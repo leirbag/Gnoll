@@ -55,7 +55,7 @@ namespace Gnoll {
 		
 		bool SoundManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<Sound> _obj, string _instance)
 		{
-		
+			return false;	
 		}
 
 	}

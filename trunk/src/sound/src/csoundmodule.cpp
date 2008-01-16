@@ -29,7 +29,7 @@
 
 
 #include "../include/csoundmodule.h"
-#include "../../config.h"
+#include "config.h"
 
 
 namespace Gnoll {
@@ -86,7 +86,7 @@ namespace Gnoll {
 			shared_ptr<Sound> currentSound;
 			
 			//Parcours la liste des sons dont la lecture a été demandée
-			for (int i = 0; i < sound_queue->size(); i++)
+			for (unsigned int i = 0; i < sound_queue->size(); i++)
 			{
 				//cout << "A lire: " << (*sound_queue)[i];
 				//Charge ce son 

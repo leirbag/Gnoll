@@ -120,7 +120,7 @@ namespace Gnoll
 			virtual void strafeUp(float distance);
 				
 		};
-	};
-};
+	}
+}
 
 #endif // __CAMERAFREEFLY_H__

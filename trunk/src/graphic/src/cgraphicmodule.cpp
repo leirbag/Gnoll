@@ -64,7 +64,7 @@
 |          12/21/2007 - Paf - Moved SkyDome and Terrain loading to scene    |
 |                               parser                                      |
 |                                                                           |
-|		   12/24/2007 - Gabriel - change spline camera to third person      |
+|		   12/24/2007 - Gabriel - change spline camera to third person        |
 |                                 camera                                    |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
@@ -77,7 +77,7 @@
 #include "../../core/include/cameraspline.h"
 
 #include "../include/cgraphicmodule.h"
-#include "../../config.h"
+#include "config.h"
 
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"

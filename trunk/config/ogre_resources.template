@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<persistentobject instance="ogre_resources">
+  <attribute name="FileSystem">
+    <list>
+      <string value="*DATADIR*"/>
+      <string value="*DATADIR*/"/>
+      <string value="*DATADIR*/fonts"/>
+      <string value="*DATADIR*/programs"/>
+      <string value="*DATADIR*/materials/scripts"/>
+      <string value="*DATADIR*/materials/textures"/>
+      <string value="*DATADIR*/models"/>
+      <string value="*DATADIR*/overlays"/>
+      <string value="*DATADIR*/materials/particle"/>
+      <string value="*DATADIR*/materials/gui"/>
+      <string value="*DATADIR*/configs"/>
+      <string value="*DATADIR*/imagesets"/>
+      <string value="*DATADIR*/layouts"/>
+      <string value="*DATADIR*/looknfeel"/>
+      <string value="*DATADIR*/lua_scripts"/>
+      <string value="*DATADIR*/schemes"/>
+    </list>
+  </attribute>
+  <attribute name="Zip">
+    <list>
+      <string value="*DATADIR*/packs/OgreCore.zip"/>
+      <string value="*DATADIR*/packs/cubemap.zip"/>
+      <string value="*DATADIR*/packs/cubemapsJS.zip"/>
+      <string value="*DATADIR*/packs/dragon.zip"/>
+      <string value="*DATADIR*/packs/fresneldemo.zip"/>
+      <string value="*DATADIR*/packs/ogretestmap.zip"/>
+      <string value="*DATADIR*/packs/skybox.zip"/>
+    </list>
+  </attribute>
+</persistentobject>

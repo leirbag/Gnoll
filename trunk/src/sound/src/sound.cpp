@@ -18,8 +18,8 @@
 ***************************************************************************/
 
 
-/*--------------------------------sound.cpp----------------------------------*\
-|   This is a simple sound                                              |
+/*--------------------------------sound.cpp--------------------------------*\
+|   This is a simple sound                                                  |
 |                                                                           |
 |   Changelog :                                                             |
 |               11/06/2007 - Soax - Initial release                         |
@@ -71,7 +71,7 @@ namespace Gnoll {
 				return;
 							
 			ALint status;
-			for (int i = 0; i < source_list.size(); i++)
+			for (unsigned int i = 0; i < source_list.size(); i++)
 			{
 			        ALuint t_source = source_list[i];
 				alGetSourcei(t_source, AL_SOURCE_STATE, &status);
@@ -105,7 +105,7 @@ namespace Gnoll {
 		Sound::~Sound()
 		{
 		        //Supprime la liste des sources encore en lecture
-			for (int i = 0; i < source_list.size(); i++)
+			for (unsigned int i = 0; i < source_list.size(); i++)
 			{
 				alSourcei(source_list[i], AL_BUFFER, 0);
 				alDeleteSources(1, &(source_list[i]));

@@ -118,18 +118,20 @@ namespace Gnoll
 			
 		size_t vorbisRead(void * ptr, size_t size, size_t nmemb, void * datasource)
 		{
-			char buffer[size * nmemb];
+			char *buffer = new char[size * nmemb];
 			IStream * stream;
 			size_t res;
 			
 			stream = (IStream *)datasource;
 			
 			if (stream->eof())
+				delete[] buffer;
 				return 0;
 			
 			res = stream->read(buffer, size * nmemb);
 			memcpy(ptr, buffer, res);
 				
+			delete[] buffer;
 			return res;	
 		}
 	}

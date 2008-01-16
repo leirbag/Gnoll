@@ -190,7 +190,7 @@ namespace Gnoll
 			*/
 			virtual void handle ( shared_ptr<CMessage> message );
 		};
-	};
-};
+	}
+}
 
 #endif // __CAMERAFREEFLYLISTENER_H__
