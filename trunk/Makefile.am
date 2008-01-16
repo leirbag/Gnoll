@@ -32,14 +32,12 @@ install-data-am:
 	test -z "$${destinationdir}" || mkdir -p -- "$${destinationdir}"; \
 	$(INSTALL) $${file} $${destinationfile} \
 	; done
-
 	## Creating launch script that will add
 	## Data directory to PersistentObject repositories
 	echo -e "#!/bin/sh \n\
 	\n \
 	$(bindir)/gnoll --load-source-directory=$(pkgdatadir) --save-source-directory=$(pkgdatadir)" > $(bindir)/launch-gnoll
 	chmod +x $(bindir)/launch-gnoll
-
 	## Replace tokens for files in config/ and copy the file to $DATADIR
 	## Remove any trailing '.template' filename extension if there is any
 	for file in `find $(srcdir)/config/ -type f `; \
@@ -55,13 +53,13 @@ uninstall-hook:
 	## First delete all files
 	for file in `find $(srcdir)/data/ -type f `; \
 	do  \
-	filetoerase=` echo $${file} | sed -e "s|$(srcdir)/data|$(datadir)|" `; \
+	filetoerase=` echo $${file} | sed -e "s|$(srcdir)/data|$(pkgdatadir)|" `; \
 	rm -f "$${filetoerase}";  \
 	done
 	## Then delete all non-empty directories
 	for file in `find $(srcdir)/data/ -depth -type d `; \
 	do  \
-	filetoerase=` echo $${file} | sed -e "s|$(srcdir)/data|$(datadir)|" `; \
+	filetoerase=` echo $${file} | sed -e "s|$(srcdir)/data|$(pkgdatadir)|" `; \
 	rmdir --ignore-fail-on-non-empty "$${filetoerase}";  \
 	done
 	## Delete launcher
@@ -69,7 +67,15 @@ uninstall-hook:
 	## Finally delete all files from config
 	for file in `find $(srcdir)/config/ -type f `; \
 	do  \
-	filetoerase=` echo $${file} | sed -e "s|$(srcdir)/config|$(datadir)|" -e s/\.template// `; \
+	filetoerase=` echo $${file} | sed -e "s|$(srcdir)/config|$(pkgdatadir)|" -e s/\.template// `; \
 	rm -f "$${filetoerase}";  \
 	done
+
+
+
+distuninstallcheck:
+		@:
+
+
+
 
