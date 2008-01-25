@@ -1,4 +1,4 @@
-2008-01-16  Paf <paf@tuxfamily.org>
+2008-01-16  Bruno Mahé <paf@tuxfamily.org>
 	* config: Initial release
 	* config/ogre_resources.template: Initial release
 	* src/main.cpp: Comment unused code
@@ -17,7 +17,7 @@ pure
 	* src/graphic/src/csceneparser.cpp: Fix unitialized variables
 	* Makefile.am: Add installation and uninstall hooks
 
-2008-01-13  Paf <paf@tuxfamily.org>
+2008-01-13  Bruno Mahé <paf@tuxfamily.org>
 	* src/input/include/cinputeventstranslator.h: Add
 	CMouseButtonEventsTranslator listener for translating mouse button events
 	* src/input/include/cmousebuttoneventstranslator.h: Initial release
@@ -29,23 +29,23 @@ pure
 	* data/mouseButtonEventTranslationMap: Initial release
 	* data/mouseMotionEventTranslationMap: Initial release
 
-2008-01-13  Paf <paf@tuxfamily.org>
+2008-01-13  Bruno Mahé <paf@tuxfamily.org>
 	* src/input/include/cmousemotioneventstranslator.h: Add sendZMotionEvents()
 	to take Z axis in account
 	* src/input/src/cmousemotioneventstranslator.cpp: Add sendZMotionEvents()
 	to take Z axis in account
 
-2008-01-12  Paf <paf@tuxfamily.org>
+2008-01-12  Bruno Mahé <paf@tuxfamily.org>
 	* src/main.cpp: SoundManager paths can also be initialized through command
 	line parameters
 	* src/sound/src/csoundmodule.cpp: Delete default repositories
 	initialization
 
-2008-01-12  Paf <paf@tuxfamily.org>
+2008-01-12  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/src/camerathirdpersonlistene.cpp: Remove this file. It's a typo
 	from src/core/src/camerathirdpersonlistener.cpp
 
-2008-01-12  Paf <paf@tuxfamily.org>
+2008-01-12  Bruno Mahé <paf@tuxfamily.org>
 	* src/input/include/cmousemotioneventstranslator.h: Initial release
 	* src/input/include/cinputeventstranslator.h: Add code for using
 	CMouseMotionEventsTranslator
@@ -67,7 +67,7 @@ pure
 	* Makefile.am: Create a launch script at installation time. So the data
 	path can be passed as an argument to gnoll at launch time
 
-2008-01-10  Paf <paf@tuxfamily.org>
+2008-01-10 Bruno Mahé <paf@tuxfamily.org>
 	* src/input/include/cinputmouseevents.h: Remove \r
 	* src/input/include/cinputeventstranslator.h: Initial release
 	* src/input/include/ckeyboardeventstranslator.h: Initial release
@@ -125,7 +125,7 @@ pure
 	* src/core/include/camerasplinelistener.cpp: Initial release
 	* src/core/include/cgraphicmodule.cpp: Change spline camera to third person camera
 
-2007-12-21  Paf <paf@tuxfamily.org>
+2007-12-21  Bruno Mahé <paf@tuxfamily.org>
 	* src/graphic/include/csceneparser.h: Revert the replacement of
 	Glib::ustring by std::string. It was breaking inheritance.
 	* src/graphic/src/cgraphicmodule.cpp: Moved SkyDome and Terrain loading to
@@ -133,7 +133,7 @@ pure
 	* src/graphic/src/csceneparser.cpp: Add Terrain and SkyDome nodes parsing;
 	Revert the replacement of Glib::ustring by std::string
 
-2007-12-17  Paf <paf@tuxfamily.org>
+2007-12-17  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/attributehandlerregistry.h: Remove \r
 	* src/core/include/cpersistentobjectproxy.h: Remove \r
 	* src/core/include/string.h: Remove \r
@@ -162,7 +162,7 @@ pure
 	* src/scene/src/cscenemanager.cpp: Initial release
 	* Makefile.am: Update source files
 
-2007-12-15  Paf <paf@tuxfamily.org>
+2007-12-15  Bruno Mahé <paf@tuxfamily.org>
 	* Doxyfile: Replace 'Viracocha' by 'Gnoll'
 	* configure.ac: Add more tests
 	* src/core/tests/testcpo.cpp: Initial release of a test program using
@@ -177,7 +177,7 @@ pure
 	* src/core/src/cpersistentobjectproxy.cpp: Initial release
 	* src/core/Makefile: Add a new target testcpo to compile src/core/tests/testcpo.cpp 
 
-2007-11-30  Paf <paf@tuxfamily.org>
+2007-11-30  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/singleton.h: Singleton is now part of the namespace
 	Gnoll::Core. Add also a mutex to make it thread friendly
 	* src/core/include/cgenericmessagemanager.h: Make NUMQUEUE a static const,
@@ -187,13 +187,13 @@ pure
 	* src/time/src/ctimemodule.cpp: Add some mutexes to make it thread friendly
 	* Makefile.am: Add boost::Thread library
 
-2007-11-19  Paf <paf@tuxfamily.org>
+2007-11-19  Bruno Mahé <paf@tuxfamily.org>
 	* trunk/src/core/include/basemanager.h: Add mutexes
 	* trunk/src/core/include/cgenericmessagemanager.h: Add mutexes
 	* trunk/src/core/src/cgenericmessagemanager.cpp: Add mutexes
 	* trunk/src/core/Makefile: Update Makefile (add -lboost_thread)
 
-2007-11-16  Paf <paf@tuxfamily.org>
+2007-11-16  Bruno Mahé <paf@tuxfamily.org>
 	* src/input/include/csdlinputmodule.h: Remove all \r
 	* src/input/include/coisinputmodule.h: Remove all \r
 	* src/input/src/coisinputmanager.cpp: Remove all references to CGenericMessageManager
@@ -221,7 +221,7 @@ pure
 	* src/core/include/camerafirstperson.h: Initial release, add time to update() 
 	* src/core/include/camerafirstperson.cpp: Initial release, add time to update() 
 
-2007-11-09  Paf <paf@tuxfamily.org>
+2007-11-09  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testmt.cpp: Initial release. Test program for threads pool
 	* src/core/include/cthread.h: Initial release. Thread abstraction
 	* src/core/include/cworker.h: Initial release. A worker is what is running
@@ -243,7 +243,7 @@ pure
 	* src/core/include/cameraspline.cpp: Initial release
 	* src/core/include/coisinputmanager.cpp: change numKeyBoards() to numKeyboards()
 
-2007-10-27  Paf <paf@tuxfamily.org>
+2007-10-27  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/cgraphicmodule.cpp: Upgrade to Ogre 1.4
 
 2007-12-19  Gabriel <countag@wanadoo.fr>
@@ -252,7 +252,7 @@ pure
 	* src/core/include/camerafreefly.h: add map for the key listener, add time for the transformation
 	* src/core/include/camerafreefly.cpp: add map for the key listener, add time for the transformation
 
-2007-10-17  Paf <paf@tuxfamily.org>
+2007-10-17  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Update test program
 	* src/core/tests/zelda2: Initial release
 	* src/core/include/attributehandlerregistry.h: Some includes have been moved
@@ -270,7 +270,7 @@ pure
 	* src/core/Makefile : Update source files to compile
 	* Makefile.am : Update source files to compile
 
-2007-10-12  Paf <paf@tuxfamily.org>
+2007-10-12  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/attributehandlerregistry.h: Move #define statements
 	* src/core/include/genericattributehandler.h: Move #define statements; Add
 	parameter PersistentObject* to methood handle()
@@ -288,13 +288,13 @@ pure
 	* src/core/include/camerathirperson.cpp: Initial release
 	* src/core/include/cgraphicmodule.cpp: Fix Add thirdperson camera to test 
 
-2007-10-11  Paf <paf@tuxfamily.org>
+2007-10-11  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/persistentobject.h: Add method getAttributesNames(); Make
 	const_iterator on attributes possible                  
 	* src/core/src/persistentobject.cpp: Add method getAttributesNames(); Make
 	const_iterator on attributes possible                  
 
-2007-10-06  Paf <paf@tuxfamily.org>
+2007-10-06  Bruno Mahé <paf@tuxfamily.org>
 	* src/main.cpp: Fix case issue in includes
 	* src/core/include/cameraFixe.h: Renamed to src/core/include/camerafixe.h
 	* src/core/include/cameraFreeFly.h: Renamed to src/core/include/camerafreefly.h
@@ -309,7 +309,7 @@ pure
 	* src/core/include/ctimermodule.h: Fix conflict between map and multimap that generated an error on VS2005 
 	* src/core/include/cgraphicmodule.h: Fix namespace (Viracocha to Gnoll) for the camera
 
-2007-10-03  Paf <paf@tuxfamily.org>
+2007-10-03  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated regarding operators changes in class
 	Scalar<T>
 	*  src/core/include/string.h: Add some operators and put class definition in string.cpp
@@ -326,7 +326,7 @@ pure
 	* src/core/src/cgraphicmodule.cpp: Change ogre camera to our camera
 	* update namespace Viracocha to Gnoll
 
-2007-09-30  Paf <paf@tuxfamily.org>
+2007-09-30  Bruno Mahé <paf@tuxfamily.org>
 	* src/main.cpp: Add namespace to Gnoll::Time
 	* src/time/tests/testtimer.cpp: Fix namespace to Gnoll::Time
 	* src/time/include/itimer.h: Fix namespace to Gnoll::Time
@@ -346,7 +346,7 @@ pure
 	* src/time/src/cdestroydelayedeventlistener.cpp: Fix namespace to Gnoll::Time
 	* src/time/src/ccreateperiodiceventlistener.cpp: Fix namespace to Gnoll::Time
 
-2007-09-30  Paf <paf@tuxfamily.org>
+2007-09-30  Bruno Mahé <paf@tuxfamily.org>
 	* src/input/src/coisinputmanager.cpp: Replace getInstance() by
 	getInstancePtr()
 	* src/main.cpp: Replace getInstance() by getInstancePtr()
@@ -363,11 +363,11 @@ pure
 	getInstancePtr()
 	* Makefile.am: Add free fly camera source file
 
-2007-09-29  Paf <paf@tuxfamily.org>
+2007-09-29  Bruno Mahé <paf@tuxfamily.org>
 	* src/main.cpp: Add CTimeModule
 	* Makefile.am: Add Time module and PersistentObject source files
 
-2007-09-28  Paf <paf@tuxfamily.org>
+2007-09-28  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to test List attributes
 	* src/core/tests/zelda: Add a new list attribute
 	* src/core/include/attributehandlerregistry.h: Add list.h
@@ -380,7 +380,7 @@ pure
 	* src/core/Makefile: Makefile updated for target testpo so it can use the
 	new List attribute
 
-2007-09-26  Paf <paf@tuxfamily.org>
+2007-09-26  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to test Double attributes
 	* src/core/tests/zelda: Add a new Double attribute
 	* src/core/include/attributehandlerregistry.h: Add double.h
@@ -391,7 +391,7 @@ pure
 	* src/core/src/attributehandlerregistry.cpp: Associate by default double
 	attributes to nodes of type "double"
 
-2007-09-26  Paf <paf@tuxfamily.org>
+2007-09-26  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to test String attributes
 	* src/core/tests/zelda: Add a new String attribute
 	* src/core/include/attributehandlerregistry.h: Add string.h header
@@ -400,7 +400,7 @@ pure
 	* src/core/src/attributehandlerregistry.cpp: Associate by default string
 	attributes to nodes of type "string"
 
-2007-09-25  Paf <paf@tuxfamily.org>
+2007-09-25  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Update example
 	* src/core/tests/zelda: Fix attribute type ("scalar" -> "float")
 	* src/core/include/attributehandlerregistry.h:  Add float.h; Replace namespace Viracocha by Gnoll
@@ -427,7 +427,7 @@ pure
 	Gnoll; Add float attribute handler
 	* src/core/src/filestream.cpp: Replace namespace Viracocha by Gnoll
 
-2007-09-23  Paf <paf@tuxfamily.org>
+2007-09-23  Bruno Mahé <paf@tuxfamily.org>
 	* src/time/include/ctimermodule.h: Renamed to src/time/include/ctimemodule.h
 	* src/time/src/ctimermodule.cpp: Renamed to src/core/src/ctimemodule.cpp,
 	update to rename timeout -> delayed event and periodic timeout -> periodic
@@ -449,12 +449,12 @@ pure
 	* src/time/src/cdestroytimerlistener.cpp: Renamed to
 	src/time/src/cdestroydelayedeventlistener.cpp
 
-2007-09-23  Paf <paf@tuxfamily.org>
+2007-09-23  Bruno Mahé <paf@tuxfamily.org>
 	* src/time/include/ctimermodule.h: Add CTimerModule::createTimer() method
 	* src/time/src/ctimermodule.cpp: Add CTimerModule::createTimer() method.
 	CTimerModule constructor uses this new method
 
-2007-09-20  Paf <paf@tuxfamily.org>
+2007-09-20  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/Makefile: Removed timer module target
 	* src/time/Makefile: Removed all targets but the timer module example
 	* src/time/include/itimer.h: File moved to src/time/include/
@@ -466,7 +466,7 @@ pure
 	* src/time/include/cdestroyperiodictimerlistener.h: Update includes
 	* src/time/include/cdestroytimerlistener.h: Update includes
 
-2007-09-20  Paf <paf@tuxfamily.org>
+2007-09-20  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testtimer.cpp: File moved to src/time/tests/
 	* src/core/include/clinuxtimer.h: File moved to src/time/include/
 	* src/core/include/ctimermessages.h: File moved to src/time/include/
@@ -485,7 +485,7 @@ pure
 	* src/core/src/ccreateperiodictimerlistener.cpp: File moved to src/time/src/
 	* src/time/Makefile: File copied to src/time/
 
-2007-09-20  Paf <paf@tuxfamily.org>
+2007-09-20  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testtimer.cpp: File added
 	* src/core/include/itimer.h: Cosmetic change
 	* src/core/include/clinuxtimer.h: File added
@@ -512,14 +512,14 @@ pure
 	* src/core/src/cogretimer.cpp: File added
 	* src/core/src/ctimermodule.cpp: File added
 
-2007-08-29  Paf <paf@tuxfamily.org>
+2007-08-29  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/src/sourcefile.cpp: Fix a bug found by Soax
 
-2007-08-24  Paf <paf@tuxfamily.org>
+2007-08-24  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/Makefile: Add boost::filesystem library
 	* src/core/include/sourcefile.h: Replace dirent.h use by boost::filesystem
 
-2007-08-23  Paf <paf@tuxfamily.org>
+2007-08-23  Bruno Mahé <paf@tuxfamily.org>
 	* README: Replace references to Viracocha by Gnoll
 	* src/core/tests/testpo.cpp: Update tests coverage
 	* src/core/include/sourcefile.h: Update class regarding new method added to
@@ -532,19 +532,19 @@ pure
 	* src/core/src/sourcefile.cpp: Update methods accordingly to the new
 	interface of the class ISource and thus SourceFile
 
-2007-08-21  Paf <paf@tuxfamily.org>
+2007-08-21  Bruno Mahé <paf@tuxfamily.org>
 	* doc/design/architecture.odt: Update design document about PersistentObject, BaseManager, IStream and ISource
 
-2007-08-19  Paf <paf@tuxfamily.org>
+2007-08-19  Bruno Mahé <paf@tuxfamily.org>
 	* configure.ac: Project name and contact address updated
 
-2007-08-18  Paf <paf@tuxfamily.org>
+2007-08-18  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/src/persistentobjectmanager.cpp: Update comments
 	* src/core/src/sourcefile.cpp: Implement SourceFile::isFetchable() method
 	* src/core/src/persistentobject.cpp: Update comments
 	* src/core/src/filestream.cpp: Update comments
 
-2007-08-16  Paf <paf@tuxfamily.org>
+2007-08-16  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/integer.h: Update comments
 	* src/core/include/istream.h: Update comments
 	* src/core/include/scalar.h: Update comments
@@ -555,20 +555,20 @@ pure
 	* src/core/include/persistentobject.h: Update comments
 	* src/core/include/sourcefile.h: Update comments
 
-2007-08-14  Paf <paf@tuxfamily.org>
+2007-08-14  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/genericattributehandler.h: Update comments
 	* src/core/include/iattribute.h: Update comments
 
-2007-08-13  Paf <paf@tuxfamily.org>
+2007-08-13  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/basemanager.h: Update comments and implement the save()
 	method
 	* src/core/include/filestream.h: Update comments
 
-2007-08-11  Paf <paf@tuxfamily.org>
+2007-08-11  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/attributehandlerregistry.h: Update comments and remove
 	the unused libxml++ header
 
-2007-08-09  Paf <paf@tuxfamily.org>
+2007-08-09  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/zelda: File added
 	* src/core/include/attributehandlerregistry.h: File added
 	* src/core/include/integer.h: File added
@@ -595,7 +595,7 @@ pure
 	* src/graphic/src/cgraphicmodule.cpp
 	* src/core/src/basemanager.cpp: File removed
 
-2007-07-18  Paf <paf@tuxfamily.org>
+2007-07-18  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/tests/testpo.cpp: Updated to play with FileSource and
 	IStream classes
 	* src/core/include/scalar.h: Change Glib::ustring to std::string
@@ -613,7 +613,7 @@ pure
 	* src/graphic/src/csceneparser.cpp: Change Glib::ustring to std::string
 	* src/graphic/src/csceneparser.h: Change Glib::ustring to std::string
 
-2007-07-10  Paf <paf@tuxfamily.org>
+2007-07-10  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/iattribute.h: Some doxygen comments have been
 	added, serializeXML() now returns a shared_ptr<xmlpp::Document>
 	* src/core/include/persistentobject.h: Some doxygen comments have been added
@@ -622,7 +622,7 @@ pure
 	* src/core/tests/testpo.cpp: Updated to serialize a PersistentObject
 	* src/core/include/ctransition.h: Virtual destructor added
 
-2007-07-09  Paf <paf@tuxfamily.org>
+2007-07-09  Bruno Mahé <paf@tuxfamily.org>
 	* src/core/include/persistentobject.h,
 	src/core/src/persistentobject.cpp:  Files added. This is a PersistentObject as
 	described in the design document.
@@ -634,10 +634,10 @@ pure
 	* src/core/Makefile: Makefile of core test cases has been updated to
 	build the PersistentObject test case.
 
-2007-07-08  Paf <paf@tuxfamily.org>
+2007-07-08  Bruno Mahé <paf@tuxfamily.org>
 	* testmsg.cpp:  Update example
 
-2007-05-27  Paf <paf@tuxfamily.org>
+2007-05-27  Bruno Mahé <paf@tuxfamily.org>
 	* CGraphicModule.cpp: CGraphicModule::init() -> Replace
 	SHADOWTYPE_STENCIL_MODULATIVE by
 	SHADOWTYPE_TEXTURE_MODULATIVE
@@ -649,7 +649,7 @@ pure
 	CGraphicModule::Process() -> Add to the gui the current FPS and the
 	number of triangles currently displayed
 
-2007-04-25  Paf <paf@tuxfamily.org>
+2007-04-25  Bruno Mahé <paf@tuxfamily.org>
 	* CGraphicModule.h: CEGUI headers and 3 related attributes added
 	* CGraphicModule.cpp: CGraphicModule::~CGraphicModule() ->
 	Delete CEGUI related variables
@@ -661,19 +661,19 @@ pure
 	* configure.ac: CEGUI parameters added
 	* README: CEGUI dependency added
 
-2007-04-08  Paf <paf@tuxfamily.org>
+2007-04-08  Bruno Mahé <paf@tuxfamily.org>
 	* main.cpp: Each time the user press 'r' a robot is removed
 
-2007-04-07  Paf <paf@tuxfamily.org>
+2007-04-07  Bruno Mahé <paf@tuxfamily.org>
 	* main.cpp: Each time the user press 'a' a new robot is added to the
 	scene. Add (unsigned int) objcnt in order to know how many robot have
 	been loaded.
 
-2007-04-05  Paf <paf@tuxfamily.org>
+2007-04-05  Bruno Mahé <paf@tuxfamily.org>
 	* README: Licence updated (music are now under Free Art)
 	* configure.ac: Changed to version 0.1.3
 
-2007-04-05  Paf <paf@tuxfamily.org>
+2007-04-05  Bruno Mahé <paf@tuxfamily.org>
 	* src/main.cpp: Added A new constant called vtourne. This constant is
 	the rotation speed of the robot
 			Added smooth turns to the robot
@@ -681,18 +681,18 @@ pure
 	oder to make the scene look better
 			
 
-2007-04-04  Paf <paf@tuxfamily.org>
+2007-04-04  Bruno Mahé <paf@tuxfamily.org>
 	* src/main.cpp: Increase the robot speed
 	* src/main.cpp: Increase the robot speed
 			Add the ability to turn to the robot
 	* src/graphic/src/cgraphicmodule.cpp : Fix the lookAt vector of the
 	camera. The vector is now centered on the robot.
 
-2007-04-02  Paf <paf@tuxfamily.org>
+2007-04-02  Bruno Mahé <paf@tuxfamily.org>
 	* src/main.cpp: Fix the camera message listener so only the camera
 	will move. Add vertical movements to the camera. 
 
-2007-04-01  Paf <paf@tuxfamily.org>
+2007-04-01  Bruno Mahé <paf@tuxfamily.org>
 	* src/graphic/src/cgraphicmodule.cpp: Change the window creation code to 
 	display the PACKAGE_STRING constant defined in config.h
 	* README: Informations updated
@@ -704,11 +704,11 @@ pure
 	* src/main.cpp: add a new MouseEvent Listener to make the camera moves
 	when the mouse moves
 
-2007-03-31  Paf <paf@tuxfamily.org>
+2007-03-31  Bruno Mahé <paf@tuxfamily.org>
 	* Tab/space issue fixed in src/graphic/src/cgraphicmodule
 	* Version number updated in configure.ac
 
-2007-03-25  Paf <paf@tuxfamily.org>
+2007-03-25  Bruno Mahé <paf@tuxfamily.org>
 	* Rename CGraphicModule::getGLXWindow() to CGraphicModule::getWindowHandle()
 	* CGraphicModule::getWindowHandle() handles now both Windows and
 	GNU/Linux plateforms
@@ -717,18 +717,18 @@ pure
 	* Add a new boolean "visible" attribute to "mesh" nodes to the scen
 	format
 
-2007-03-13  Paf <paf@tuxfamily.org>
+2007-03-13  Bruno Mahé <paf@tuxfamily.org>
 	* Doxygen configuration file updated
 	* Work In Progress version of the technical design document uploaded
 	(doc/design/architecture.odt)
 
-2007-03-12  Paf <paf@tuxfamily.org>
+2007-03-12  Bruno Mahé <paf@tuxfamily.org>
 	* Autotools scripts updated
 	* Main function moved from src/input/test/testsdl.cpp to src/main.cpp
 	* Generated config.h moved from ./config.h to src/config.h
 
-2007-03-12  Paf <paf@tuxfamily.org>
+2007-03-12  Bruno Mahé <paf@tuxfamily.org>
 	* Makefile replaced by autotools
 
-2007-03-09  Paf <paf@tuxfamily.org>
+2007-03-09  Bruno Mahé <paf@tuxfamily.org>
 	* Viracocha project started
