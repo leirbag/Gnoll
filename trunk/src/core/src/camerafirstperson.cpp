@@ -64,10 +64,10 @@ namespace Gnoll
 
 		void CameraFirstPerson::setTarget(Ogre::SceneNode* pNode)
 		{
-			m_pTarget = pNode;
-			if(m_pTarget == NULL)
+			if(pNode == NULL)
 				return;
 
+			m_pTarget = pNode;
 			m_ogreCamera->setOrientation(m_pTarget->getWorldOrientation());
 			update(0);
 		}

@@ -30,6 +30,7 @@
 |               11/16/2007 - Paf - Remove all references to                 |
 |                                   CGenericMessageManager                  |
 |               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
+|               01/10/2008 - Gabriel - fix a bug with the update            |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -71,7 +72,7 @@ namespace Gnoll
 
 			// Creation of controller
 			g_mapCtpKeys["MoveUp"]         = false;
-			g_mapCtpKeys["ctpKeyMoveDown"] = false;
+			g_mapCtpKeys["MoveDown"]       = false;
 
 			g_mapCtpKeys["RotateUp"]       = false;
 			g_mapCtpKeys["RotateDown"]     = false;
@@ -91,21 +92,16 @@ namespace Gnoll
 
 		void CameraThirdPerson::update(float time)
 		{
-			if(m_pNode == NULL)
-				return;
-
 			m_ogreCamera->setPosition(m_pNode->getPosition());
-			m_ogreCamera->moveRelative(m_pNode->getOrientation().zAxis() * m_fOffset);
+			m_ogreCamera->move(-m_ogreCamera->getDirection() * m_fOffset);
 		}
 
 		void CameraThirdPerson::setTarget(Ogre::SceneNode* pNode)
 		{
-			m_pNode = pNode;
-			if(m_pNode == NULL)
+			if(pNode == NULL)
 				return;
 
-			m_ogreCamera->setOrientation (m_pNode->getWorldOrientation());
-			update(0);
+			m_pNode = pNode;
 		}
 
 		Ogre::SceneNode* CameraThirdPerson::getTarget()
@@ -116,7 +112,6 @@ namespace Gnoll
 		void CameraThirdPerson::setOffset(float offset)
 		{
 			m_fOffset = offset;
-			update(0);
 		}
 
 		float CameraThirdPerson::getOffset()

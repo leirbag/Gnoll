@@ -77,7 +77,7 @@
 #include "../../core/include/cameraspline.h"
 
 #include "../include/cgraphicmodule.h"
-#include "config.h"
+#include "../../config.h"
 
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
