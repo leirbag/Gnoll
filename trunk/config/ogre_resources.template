@@ -6,6 +6,7 @@
       <string value="*DATADIR*/"/>
       <string value="*DATADIR*/fonts"/>
       <string value="*DATADIR*/programs"/>
+      <string value="*DATADIR*/gui"/>
       <string value="*DATADIR*/materials/scripts"/>
       <string value="*DATADIR*/materials/textures"/>
       <string value="*DATADIR*/models"/>
