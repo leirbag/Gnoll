@@ -44,7 +44,7 @@ install-data-am:
 	do  \
 	filename=`basename $${file}` ; \
 	filename=`echo $${filename} | sed -e s/\.template// ` ; \
-	sed -e "s|\*DATADIR\*|$${pkgdatadir}|g" $${file} > $(pkgdatadir)/$${filename} \
+	sed -e "s|\*DATADIR\*|$(pkgdatadir)|g" $${file} > $(pkgdatadir)/$${filename} \
 	; done
 
 
