@@ -6,15 +6,25 @@
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/Button">
+        <PropertyDefinition name="NormalTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="HoverTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="PushedTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="DisabledTextColour" initialValue="FF7F7F7F" redrawOnWrite="true" />
         <PropertyDefinition name="VertLabelFormatting" initialValue="CentreAligned" />
         <PropertyDefinition name="HorzLabelFormatting" initialValue="CentreAligned" />
+        <PropertyDefinition name="NormalImage" initialValue="" redrawOnWrite="true" />
+        <PropertyDefinition name="HoverImage" initialValue="" redrawOnWrite="true" />
+        <PropertyDefinition name="PushedImage" initialValue="" redrawOnWrite="true" />
+        <PropertyDefinition name="DisabledImage" initialValue="" redrawOnWrite="true" />
+        <PropertyDefinition name="VertImageFormatting" initialValue="Stretched" redrawOnWrite="true" />
+        <PropertyDefinition name="HorzImageFormatting" initialValue="Stretched" redrawOnWrite="true" />
         <ImagerySection name="label">
             <TextComponent>
                 <Area>
-                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
-                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
-                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
-                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                    <Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge"><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width"><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height"><UnifiedDim scale="1" type="Height" /></Dim>
                 </Area>
                 <VertFormatProperty name="VertLabelFormatting" />
                 <HorzFormatProperty name="HorzLabelFormatting" />
@@ -23,15 +33,26 @@
         <ImagerySection name="normal">
             <FrameComponent>
                 <Area>
-                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
-                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
-                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
-                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                    <Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge"><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width"><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height"><UnifiedDim scale="1" type="Height" /></Dim>
                 </Area>
                 <Image type="LeftEdge" imageset="TaharezLook" image="ButtonLeftNormal" />
                 <Image type="RightEdge" imageset="TaharezLook" image="ButtonRightNormal" />
                 <Image type="Background" imageset="TaharezLook" image="ButtonMiddleNormal" />
             </FrameComponent>
+            <ImageryComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <ImageProperty name="NormalImage" />
+                <VertFormatProperty name="VertImageFormatting" />
+                <HorzFormatProperty name="HorzImageFormatting" />
+            </ImageryComponent>
         </ImagerySection>
         <ImagerySection name="hover">
             <FrameComponent>
@@ -45,6 +66,17 @@
                 <Image type="RightEdge" imageset="TaharezLook" image="ButtonRightHighlight" />
                 <Image type="Background" imageset="TaharezLook" image="ButtonMiddleHighlight" />
             </FrameComponent>
+            <ImageryComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <ImageProperty name="HoverImage" />
+                <VertFormatProperty name="VertImageFormatting" />
+                <HorzFormatProperty name="HorzImageFormatting" />
+            </ImageryComponent>
         </ImagerySection>
         <ImagerySection name="pushed">
             <FrameComponent>
@@ -58,6 +90,17 @@
                 <Image type="RightEdge" imageset="TaharezLook" image="ButtonRightPushed" />
                 <Image type="Background" imageset="TaharezLook" image="ButtonMiddlePushed" />
             </FrameComponent>
+            <ImageryComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <ImageProperty name="PushedImage" />
+                <VertFormatProperty name="VertImageFormatting" />
+                <HorzFormatProperty name="HorzImageFormatting" />
+            </ImageryComponent>
         </ImagerySection>
         <StateImagery name="Normal">
             <Layer>
@@ -83,6 +126,14 @@
                 </Section>
             </Layer>
         </StateImagery>
+        <StateImagery name="PushedOff">
+            <Layer>
+                <Section section="hover" />
+                <Section section="label">
+                    <ColourProperty name="HoverTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
         <StateImagery name="Disabled">
             <Layer>
                 <Section section="normal">
@@ -94,13 +145,17 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/RadioButton
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/RadioButton">
+		<PropertyDefinition name="NormalTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="HoverTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="PushedTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="DisabledTextColour" initialValue="FF7F7F7F" redrawOnWrite="true" />
         <ImagerySection name="label">
             <TextComponent>
                 <Area>
@@ -216,13 +271,17 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/Checkbox
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/Checkbox">
+		<PropertyDefinition name="NormalTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="HoverTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="PushedTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="DisabledTextColour" initialValue="FF7F7F7F" redrawOnWrite="true" />
         <ImagerySection name="label">
             <TextComponent>
                 <Area>
@@ -338,13 +397,17 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/Editbox
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/Editbox">
+        <PropertyDefinition name="NormalTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="SelectedTextColour" initialValue="FF000000" redrawOnWrite="true" />
+        <PropertyDefinition name="ActiveSelectionColour" initialValue="FF607FFF" redrawOnWrite="true" />
+        <PropertyDefinition name="InactiveSelectionColour" initialValue="FF808080" redrawOnWrite="true" />
         <Property name="MouseCursorImage" value="set:TaharezLook image:MouseTextBar" />
         <NamedArea name="TextArea">
             <Area>
@@ -425,14 +488,14 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/Titlebar
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/Titlebar">
-        <Property name="CaptionColour" value="FFFFFFFF" />
+        <PropertyDefinition name="CaptionColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
         <ImagerySection name="main">
             <ImageryComponent>
                 <Area>
@@ -554,13 +617,15 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/FrameWindow
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/FrameWindow">
+        <PropertyLinkDefinition name="CaptionColour" widget="__auto_titlebar__" targetProperty="CaptionColour" initialValue="FFFFFFFF" />
+        <PropertyLinkDefinition name="TitlebarFont" widget="__auto_titlebar__" targetProperty="Font" />
         <Property name="NSSizingCursorImage" value="set:TaharezLook image:MouseNoSoCursor" />
         <Property name="EWSizingCursorImage" value="set:TaharezLook image:MouseEsWeCursor" />
         <Property name="NWSESizingCursorImage" value="set:TaharezLook image:MouseNwSeCursor" />
@@ -658,7 +723,6 @@
                 <Dim type="Height" ><ImageDim imageset="TaharezLook" image="NewCloseButtonNormal" dimension="Width" /></Dim>
             </Area>
             <Property name="AlwaysOnTop" value="True" />
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:NewCloseButtonNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:NewCloseButtonHover" />
             <Property name="PushedImage" value="set:TaharezLook image:NewCloseButtonPressed" />
@@ -796,7 +860,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/ProgressBar
@@ -868,7 +932,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/AlternateProgressBar
@@ -1039,7 +1103,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/VUMeter (progress bar)
@@ -1110,7 +1174,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/SliderThumb
@@ -1167,7 +1231,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/Slider
@@ -1219,7 +1283,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/HorizontalScrollbarThumb
@@ -1276,7 +1340,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/HorizontalScrollbar
@@ -1297,7 +1361,7 @@
                 <Dim type="BottomEdge" ><UnifiedDim scale="1.0" type="BottomEdge" /></Dim>
             </Area>
         </NamedArea>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_incbtn__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_incbtn__">
             <Area>
                 <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
@@ -1305,19 +1369,17 @@
                 <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
             </Area>
             <HorzAlignment type="RightAligned" />
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:MiniHorzScrollRightNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:MiniHorzScrollRightHover" />
             <Property name="PushedImage" value="set:TaharezLook image:MiniHorzScrollRightNormal" />
         </Child>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_decbtn__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_decbtn__">
             <Area>
                 <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="Width" ><ImageDim imageset="TaharezLook" image="MiniHorzScrollLeftNormal" dimension="Width" /></Dim>
                 <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
             </Area>
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:MiniHorzScrollLeftNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:MiniHorzScrollLeftHover" />
             <Property name="PushedImage" value="set:TaharezLook image:MiniHorzScrollLeftNormal" />
@@ -1329,6 +1391,7 @@
                 <Dim type="Width" ><UnifiedDim scale="0.1" type="Width" /></Dim>
                 <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
             </Area>
+            <Property name="UnifiedMinSize" value="{{0,25},{0,0}}" />
         </Child>
         <ImagerySection name="main">
             <ImageryComponent>
@@ -1362,7 +1425,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/VerticalScrollbarThumb
@@ -1419,7 +1482,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/VerticalScrollbar
@@ -1441,7 +1504,7 @@
                 </Dim>
             </Area>
         </NamedArea>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_incbtn__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_incbtn__">
             <Area>
                 <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
@@ -1449,19 +1512,17 @@
                 <Dim type="Height" ><ImageDim imageset="TaharezLook" image="MiniVertScrollDownNormal" dimension="Height" /></Dim>
             </Area>
             <VertAlignment type="BottomAligned" />
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:MiniVertScrollDownNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:MiniVertScrollDownHover" />
             <Property name="PushedImage" value="set:TaharezLook image:MiniVertScrollDownNormal" />
         </Child>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_decbtn__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_decbtn__">
             <Area>
                 <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
                 <Dim type="Height" ><ImageDim imageset="TaharezLook" image="MiniVertScrollUpNormal" dimension="Height" /></Dim>
             </Area>
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:MiniVertScrollUpNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:MiniVertScrollUpHover" />
             <Property name="PushedImage" value="set:TaharezLook image:MiniVertScrollUpNormal" />
@@ -1473,6 +1534,7 @@
                 <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
                 <Dim type="Height" ><UnifiedDim scale="0.1" type="Height" /></Dim>
             </Area>
+            <Property name="UnifiedMinSize" value="{{0,0},{0,25}}" />
         </Child>
         <ImagerySection name="main">
             <ImageryComponent>
@@ -1506,7 +1568,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/Listbox
@@ -1643,7 +1705,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/ComboDropList
@@ -1780,13 +1842,17 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/ComboEditbox
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/ComboEditbox">
+        <PropertyDefinition name="NormalTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="SelectedTextColour" initialValue="FF000000" redrawOnWrite="true" />
+        <PropertyDefinition name="ActiveSelectionColour" initialValue="FF607FFF" redrawOnWrite="true" />
+        <PropertyDefinition name="InactiveSelectionColour" initialValue="FF808080" redrawOnWrite="true" />
         <Property name="MouseCursorImage" value="set:TaharezLook image:MouseTextBar" />
         <NamedArea name="TextArea">
             <Area>
@@ -1866,13 +1932,17 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/Combobox
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/Combobox">
+        <PropertyLinkDefinition name="NormalEditTextColour" widget="__auto_editbox__" targetProperty="NormalTextColour" initialValue="FFFFFFFF" />
+        <PropertyLinkDefinition name="SelectedEditTextColour" widget="__auto_editbox__" targetProperty="SelectedTextColour" initialValue="FF000000" />
+        <PropertyLinkDefinition name="ActiveEditSelectionColour" widget="__auto_editbox__" targetProperty="ActiveSelectionColour" initialValue="FF6060FF" />
+        <PropertyLinkDefinition name="InactiveEditSelectionColour" widget="__auto_editbox__" targetProperty="InactiveSelectionColour" initialValue="FF808080" />
         <Child  type="TaharezLook/ComboEditbox" nameSuffix="__auto_editbox__">
             <Area>
                 <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
@@ -1905,7 +1975,7 @@
                 <Dim type="BottomEdge" ><UnifiedDim scale="1" type="BottomEdge" /></Dim>
             </Area>
         </Child>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_button__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_button__">
             <Area>
                 <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
@@ -1913,7 +1983,6 @@
                 <Dim type="Height" ><WidgetDim widget="__auto_editbox__" dimension="Height" /></Dim>
             </Area>
             <HorzAlignment type="RightAligned" />
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:ComboboxListButtonNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:ComboboxListButtonHover" />
             <Property name="PushedImage" value="set:TaharezLook image:ComboboxListButtonNormal" />
@@ -1921,7 +1990,7 @@
         <StateImagery name="Enabled" />
         <StateImagery name="Disabled" />
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/Spinner
@@ -1942,7 +2011,7 @@
                 <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
             </Area>
         </Child>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_incbtn__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_incbtn__">
             <Area>
                 <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
@@ -1950,12 +2019,11 @@
                 <Dim type="Height" ><UnifiedDim scale="0.5" type="Height" /></Dim>
             </Area>
             <HorzAlignment type="RightAligned" />
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:VertScrollUpNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:VertScrollUpHover" />
             <Property name="PushedImage" value="set:TaharezLook image:VertScrollUpNormal" />
         </Child>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_decbtn__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_decbtn__">
             <Area>
                 <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="TopEdge" ><UnifiedDim scale="0.5" type="TopEdge" /></Dim>
@@ -1963,7 +2031,6 @@
                 <Dim type="Height" ><UnifiedDim scale="0.5" type="Height" /></Dim>
             </Area>
             <HorzAlignment type="RightAligned" />
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:VertScrollDownNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:VertScrollDownHover" />
             <Property name="PushedImage" value="set:TaharezLook image:VertScrollDownNormal" />
@@ -1971,7 +2038,7 @@
         <StateImagery name="Enabled" />
         <StateImagery name="Disabled" />
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/StaticShared
@@ -1995,6 +2062,7 @@
                 <Image type="RightEdge" imageset="TaharezLook" image="StaticRight" />
                 <Image type="TopEdge" imageset="TaharezLook" image="StaticTop" />
                 <Image type="BottomEdge" imageset="TaharezLook" image="StaticBottom" />
+                <ColourRectProperty name="FrameColours" />
             </FrameComponent>
         </ImagerySection>
         <ImagerySection name="background">
@@ -2018,48 +2086,82 @@
                     </Dim>
                 </Area>
                 <Image imageset="TaharezLook" image="StaticBackdrop" />
+                <!--<ColourRectProperty name="BackgroundColours" />-->
+                <Colours topLeft="FFFFFFFF" topRight="FFFFFFFF" bottomLeft="FFFFFFFF" bottomRight="FFFFFFFF" />
+                <VertFormat type="Stretched" />
+                <HorzFormat type="Stretched" />
+            </ImageryComponent>
+        </ImagerySection>
+        <ImagerySection name="background_noframe">
+            <ImageryComponent>
+                <Area>
+                    <Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge"><AbsoluteDim value="0" /></Dim>
+                    <Dim type="RightEdge"><UnifiedDim scale="1" type="RightEdge" /></Dim>
+                    <Dim type="BottomEdge"><UnifiedDim scale="1" type="BottomEdge" /></Dim>
+                </Area>
+                <Image imageset="TaharezLook" image="StaticBackdrop" />
+                <!--<ColourRectProperty name="BackgroundColours" />-->
+                <Colours topLeft="FFFFFFFF" topRight="FFFFFFFF" bottomLeft="FFFFFFFF" bottomRight="FFFFFFFF" />
                 <VertFormat type="Stretched" />
                 <HorzFormat type="Stretched" />
             </ImageryComponent>
         </ImagerySection>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/StaticImage
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/StaticImage">
-        <Property name="FrameEnabled" value="True" />
+		<PropertyDefinition name="ImageColours" initialValue="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" redrawOnWrite="true" />
+		<PropertyDefinition name="FrameColours" initialValue="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" redrawOnWrite="true" />
+		<PropertyDefinition name="BackgroundColours" initialValue="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="VertFormatting" initialValue="Stretched" redrawOnWrite="true" />
+        <PropertyDefinition name="HorzFormatting" initialValue="Stretched" redrawOnWrite="true" />
         <Property name="BackgroundEnabled" value="True" />
-        <NamedArea name="WithFrameImageRenderArea">
-            <Area>
-                <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="StaticLeft" dimension="Width" /></Dim>
-                <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="StaticTop" dimension="Height" /></Dim>
-                <Dim type="RightEdge" >
-                    <UnifiedDim scale="1" type="RightEdge">
-                        <DimOperator op="Subtract">
-                            <ImageDim imageset="TaharezLook" image="StaticRight" dimension="Width" />
-                        </DimOperator>
-                    </UnifiedDim>
-                </Dim>
-                <Dim type="BottomEdge" >
-                    <UnifiedDim scale="1" type="BottomEdge">
-                        <DimOperator op="Subtract">
-                            <ImageDim imageset="TaharezLook" image="StaticBottom" dimension="Height" />
-                        </DimOperator>
-                    </UnifiedDim>
-                </Dim>
-            </Area>
-        </NamedArea>
-        <NamedArea name="NoFrameImageRenderArea">
-            <Area>
-                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
-                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
-                <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
-                <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
-            </Area>
-        </NamedArea>
+        <Property name="FrameEnabled" value="True" />
+        <ImagerySection name="image_withframe">
+            <ImageryComponent>
+                <Area>
+					<Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="StaticLeft" dimension="Width" /></Dim>
+					<Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="StaticTop" dimension="Height" /></Dim>
+					<Dim type="RightEdge" >
+						<UnifiedDim scale="1" type="RightEdge">
+							<DimOperator op="Subtract">
+								<ImageDim imageset="TaharezLook" image="StaticRight" dimension="Width" />
+							</DimOperator>
+						</UnifiedDim>
+					</Dim>
+					<Dim type="BottomEdge" >
+						<UnifiedDim scale="1" type="BottomEdge">
+							<DimOperator op="Subtract">
+								<ImageDim imageset="TaharezLook" image="StaticBottom" dimension="Height" />
+							</DimOperator>
+						</UnifiedDim>
+					</Dim>
+				</Area>
+                <ImageProperty name="Image" />
+                <ColourRectProperty name="ImageColours" />
+                <VertFormatProperty name="VertFormatting" />
+                <HorzFormatProperty name="HorzFormatting" />
+            </ImageryComponent>
+        </ImagerySection>
+        <ImagerySection name="image_noframe">
+            <ImageryComponent>
+                <Area>
+					<Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+					<Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+					<Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+					<Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+				</Area>
+                <ImageProperty name="Image" />
+                <ColourRectProperty name="ImageColours" />
+                <VertFormatProperty name="VertFormatting" />
+                <HorzFormatProperty name="HorzFormatting" />
+            </ImageryComponent>
+        </ImagerySection>
         <StateImagery name="Enabled" />
         <StateImagery name="Disabled" />
         <StateImagery name="EnabledFrame">
@@ -2072,27 +2174,49 @@
                 <Section look="TaharezLook/StaticShared" section="frame" />
             </Layer>
         </StateImagery>
-        <StateImagery name="EnabledBackground">
+        <StateImagery name="WithFrameEnabledBackground">
             <Layer>
                 <Section look="TaharezLook/StaticShared" section="background" />
             </Layer>
         </StateImagery>
-        <StateImagery name="DisabledBackground">
+        <StateImagery name="WithFrameDisabledBackground">
             <Layer>
                 <Section look="TaharezLook/StaticShared" section="background" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="NoFrameEnabledBackground">
+            <Layer>
+                <Section look="TaharezLook/StaticShared" section="background_noframe" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="NoFrameDisabledBackground">
+            <Layer>
+                <Section look="TaharezLook/StaticShared" section="background_noframe" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="WithFrameImage">
+            <Layer>
+                <Section section="image_withframe" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="NoFrameImage">
+            <Layer>
+                <Section section="image_noframe" />
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/StaticText
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/StaticText">
+		<PropertyDefinition name="FrameColours" initialValue="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" redrawOnWrite="true" />
+		<PropertyDefinition name="BackgroundColours" initialValue="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" redrawOnWrite="true" />
         <Property name="FrameEnabled" value="True" />
         <Property name="BackgroundEnabled" value="True" />
-        <NamedArea name="TextRenderArea">
+        <NamedArea name="WithFrameTextRenderArea">
             <Area>
                 <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="StaticLeft" dimension="Width" /></Dim>
                 <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="StaticTop" dimension="Height" /></Dim>
@@ -2112,7 +2236,7 @@
                 </Dim>
             </Area>
         </NamedArea>
-        <NamedArea name="TextRenderAreaHScroll">
+        <NamedArea name="WithFrameTextRenderAreaHScroll">
             <Area>
                 <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="StaticLeft" dimension="Width" /></Dim>
                 <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="StaticTop" dimension="Height" /></Dim>
@@ -2132,7 +2256,7 @@
                 </Dim>
             </Area>
         </NamedArea>
-        <NamedArea name="TextRenderAreaVScroll">
+        <NamedArea name="WithFrameTextRenderAreaVScroll">
             <Area>
                 <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="StaticLeft" dimension="Width" /></Dim>
                 <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="StaticTop" dimension="Height" /></Dim>
@@ -2152,10 +2276,66 @@
                 </Dim>
             </Area>
         </NamedArea>
-        <NamedArea name="TextRenderAreaHVScroll">
+        <NamedArea name="WithFrameTextRenderAreaHVScroll">
             <Area>
                 <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="StaticLeft" dimension="Width" /></Dim>
                 <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="StaticTop" dimension="Height" /></Dim>
+                <Dim type="RightEdge" >
+                    <UnifiedDim scale="1" type="RightEdge">
+                        <DimOperator op="Subtract">
+                            <WidgetDim widget="__auto_vscrollbar__" dimension="Width" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+                <Dim type="BottomEdge" >
+                    <UnifiedDim scale="1" type="BottomEdge">
+                        <DimOperator op="Subtract">
+                            <WidgetDim widget="__auto_hscrollbar__" dimension="Height" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+            </Area>
+        </NamedArea>
+        <NamedArea name="NoFrameTextRenderArea">
+            <Area>
+                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="RightEdge" ><UnifiedDim scale="1" type="RightEdge" /></Dim>
+                <Dim type="BottomEdge" ><UnifiedDim scale="1" type="BottomEdge" /></Dim>
+            </Area>
+        </NamedArea>
+        <NamedArea name="NoFrameTextRenderAreaHScroll">
+            <Area>
+                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="RightEdge" ><UnifiedDim scale="1" type="RightEdge" /></Dim>
+                <Dim type="BottomEdge" >
+                    <UnifiedDim scale="1" type="BottomEdge">
+                        <DimOperator op="Subtract">
+                            <WidgetDim widget="__auto_hscrollbar__" dimension="Height" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+            </Area>
+        </NamedArea>
+        <NamedArea name="NoFrameTextRenderAreaVScroll">
+            <Area>
+                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="RightEdge" >
+                    <UnifiedDim scale="1" type="RightEdge">
+                        <DimOperator op="Subtract">
+                            <WidgetDim widget="__auto_vscrollbar__" dimension="Width" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+                <Dim type="BottomEdge" ><UnifiedDim scale="1" type="BottomEdge" /></Dim>
+            </Area>
+        </NamedArea>
+        <NamedArea name="NoFrameTextRenderAreaHVScroll">
+            <Area>
+                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
                 <Dim type="RightEdge" >
                     <UnifiedDim scale="1" type="RightEdge">
                         <DimOperator op="Subtract">
@@ -2202,18 +2382,28 @@
                 <Section look="TaharezLook/StaticShared" section="frame" />
             </Layer>
         </StateImagery>
-        <StateImagery name="EnabledBackground">
+        <StateImagery name="WithFrameEnabledBackground">
             <Layer>
                 <Section look="TaharezLook/StaticShared" section="background" />
             </Layer>
         </StateImagery>
-        <StateImagery name="DisabledBackground">
+        <StateImagery name="WithFrameDisabledBackground">
             <Layer>
                 <Section look="TaharezLook/StaticShared" section="background" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="NoFrameEnabledBackground">
+            <Layer>
+                <Section look="TaharezLook/StaticShared" section="background_noframe" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="NoFrameDisabledBackground">
+            <Layer>
+                <Section look="TaharezLook/StaticShared" section="background_noframe" />
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/ListHeaderSegment
@@ -2398,7 +2588,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/ListHeader
@@ -2409,7 +2599,7 @@
         <StateImagery name="Enabled" />
         <StateImagery name="Disabled" />
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/MultiColumnList
@@ -2560,13 +2750,17 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/MultiLineEditbox
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/MultiLineEditbox">
+        <PropertyDefinition name="NormalTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="SelectedTextColour" initialValue="FF000000" redrawOnWrite="true" />
+        <PropertyDefinition name="ActiveSelectionColour" initialValue="FF607FFF" redrawOnWrite="true" />
+        <PropertyDefinition name="InactiveSelectionColour" initialValue="FF808080" redrawOnWrite="true" />
         <Property name="MouseCursorImage" value="set:TaharezLook image:MouseTextBar" />
         <Property name="SelectionBrushImage" value="set:TaharezLook image:MultiLineEditboxSelectionBrush" />
         <NamedArea name="TextArea">
@@ -2717,7 +2911,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/Tooltip
@@ -2801,7 +2995,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/ScrollablePane
@@ -2885,13 +3079,18 @@
         <StateImagery name="Enabled" />
         <StateImagery name="Disabled" />
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/TabButton
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/TabButton">
+        <PropertyDefinition name="NormalTextColour" initialValue="FFC0C0C0" redrawOnWrite="true" />
+        <PropertyDefinition name="HoverTextColour" initialValue="FFE0E0E0" redrawOnWrite="true" />
+        <PropertyDefinition name="PushedTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="SelectedTextColour" initialValue="FFE0E0E0" redrawOnWrite="true" />
+        <PropertyDefinition name="DisabledTextColour" initialValue="FF7F7F7F" redrawOnWrite="true" />
         <ImagerySection name="label">
             <TextComponent>
                 <Area>
@@ -2904,7 +3103,7 @@
                 <HorzFormat type="CentreAligned" />
             </TextComponent>
         </ImagerySection>
-        <ImagerySection name="normal">
+        <ImagerySection name="top_normal">
             <FrameComponent>
                 <Area>
                     <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
@@ -2915,6 +3114,25 @@
                 <Image type="TopLeftCorner" imageset="TaharezLook" image="TabButtonUpperLeftNormal" />
                 <Image type="TopRightCorner" imageset="TaharezLook" image="TabButtonUpperRightNormal" />
                 <Image type="BottomLeftCorner" imageset="TaharezLook" image="TabButtonLowerLeftNormal" />
+                <Image type="BottomRightCorner" imageset="TaharezLook" image="TabButtonLowerRight2Normal" />
+                <Image type="LeftEdge" imageset="TaharezLook" image="TabButtonLeftNormal" />
+                <Image type="RightEdge" imageset="TaharezLook" image="TabButtonRightNormal" />
+                <Image type="TopEdge" imageset="TaharezLook" image="TabButtonUpperNormal" />
+                <Image type="BottomEdge" imageset="TaharezLook" image="TabButtonLowerNormal" />
+                <Image type="Background" imageset="TaharezLook" image="TabButtonMiddleNormal" />
+            </FrameComponent>
+        </ImagerySection>
+        <ImagerySection name="bot_normal">
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <Image type="TopLeftCorner" imageset="TaharezLook" image="TabButtonUpperLeft2Normal" />
+                <Image type="TopRightCorner" imageset="TaharezLook" image="TabButtonUpperRightNormal" />
+                <Image type="BottomLeftCorner" imageset="TaharezLook" image="TabButtonLowerLeftNormal" />
                 <Image type="BottomRightCorner" imageset="TaharezLook" image="TabButtonLowerRightNormal" />
                 <Image type="LeftEdge" imageset="TaharezLook" image="TabButtonLeftNormal" />
                 <Image type="RightEdge" imageset="TaharezLook" image="TabButtonRightNormal" />
@@ -2923,7 +3141,45 @@
                 <Image type="Background" imageset="TaharezLook" image="TabButtonMiddleNormal" />
             </FrameComponent>
         </ImagerySection>
-        <ImagerySection name="selected">
+        <ImagerySection name="top_hover">
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <Image type="TopLeftCorner" imageset="TaharezLook" image="TabButtonUpperLeftNormal" />
+                <Image type="TopRightCorner" imageset="TaharezLook" image="TabButtonUpperRightNormal" />
+                <Image type="BottomLeftCorner" imageset="TaharezLook" image="TabButtonLowerLeftNormal" />
+                <Image type="BottomRightCorner" imageset="TaharezLook" image="TabButtonLowerRight2Normal" />
+                <Image type="LeftEdge" imageset="TaharezLook" image="TabButtonLeftNormal" />
+                <Image type="RightEdge" imageset="TaharezLook" image="TabButtonRightNormal" />
+                <Image type="TopEdge" imageset="TaharezLook" image="TabButtonUpperNormal" />
+                <Image type="BottomEdge" imageset="TaharezLook" image="TabButtonLowerNormal" />
+                <Image type="Background" imageset="TaharezLook" image="TabButtonMiddleNormal" />
+            </FrameComponent>
+        </ImagerySection>
+        <ImagerySection name="bot_hover">
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <Image type="TopLeftCorner" imageset="TaharezLook" image="TabButtonUpperLeft2Normal" />
+                <Image type="TopRightCorner" imageset="TaharezLook" image="TabButtonUpperRightNormal" />
+                <Image type="BottomLeftCorner" imageset="TaharezLook" image="TabButtonLowerLeftNormal" />
+                <Image type="BottomRightCorner" imageset="TaharezLook" image="TabButtonLowerRightNormal" />
+                <Image type="LeftEdge" imageset="TaharezLook" image="TabButtonLeftNormal" />
+                <Image type="RightEdge" imageset="TaharezLook" image="TabButtonRightNormal" />
+                <Image type="TopEdge" imageset="TaharezLook" image="TabButtonUpperNormal" />
+                <Image type="BottomEdge" imageset="TaharezLook" image="TabButtonLowerNormal" />
+                <Image type="Background" imageset="TaharezLook" image="TabButtonMiddleNormal" />
+            </FrameComponent>
+        </ImagerySection>
+        <ImagerySection name="top_selected">
             <FrameComponent>
                 <Area>
                     <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
@@ -2932,43 +3188,106 @@
                     <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
                 </Area>
                 <Image type="TopLeftCorner" imageset="TaharezLook" image="TabButtonUpperLeftSelected" />
-                <Image type="TopRightCorner" imageset="TaharezLook" image="TabButtonUpperRightSelected" />
-                <Image type="BottomLeftCorner" imageset="TaharezLook" image="TabButtonLowerLeftSelected" />
-                <Image type="BottomRightCorner" imageset="TaharezLook" image="TabButtonLowerRightSelected" />
-                <Image type="LeftEdge" imageset="TaharezLook" image="TabButtonLeftSelected" />
-                <Image type="RightEdge" imageset="TaharezLook" image="TabButtonRightSelected" />
                 <Image type="TopEdge" imageset="TaharezLook" image="TabButtonUpperSelected" />
-                <Image type="BottomEdge" imageset="TaharezLook" image="TabButtonLowerSelected" />
+                <Image type="TopRightCorner" imageset="TaharezLook" image="TabButtonUpperRightSelected" />
+                <Image type="LeftEdge" imageset="TaharezLook" image="TabButtonLeftSelected" />
                 <Image type="Background" imageset="TaharezLook" image="TabButtonMiddleSelected" />
+                <Image type="RightEdge" imageset="TaharezLook" image="TabButtonRightSelected" />
             </FrameComponent>
         </ImagerySection>
-        <StateImagery name="Normal">
+        <ImagerySection name="bot_selected">
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <Image type="LeftEdge" imageset="TaharezLook" image="TabButtonLeftSelected" />
+                <Image type="Background" imageset="TaharezLook" image="TabButtonMiddleSelected" />
+                <Image type="RightEdge" imageset="TaharezLook" image="TabButtonRightSelected" />
+                <Image type="BottomLeftCorner" imageset="TaharezLook" image="TabButtonLowerLeftNormal" />
+                <Image type="BottomEdge" imageset="TaharezLook" image="TabButtonLowerNormal" />
+                <Image type="BottomRightCorner" imageset="TaharezLook" image="TabButtonLowerRightNormal" />
+            </FrameComponent>
+        </ImagerySection>
+        <StateImagery name="TopNormal">
             <Layer>
-                <Section section="normal" />
+                <Section section="top_normal" />
                 <Section section="label">
                     <ColourProperty name="NormalTextColour" />
                 </Section>
             </Layer>
         </StateImagery>
-        <StateImagery name="Hover">
+        <StateImagery name="BottomNormal">
             <Layer>
-                <Section section="selected" />
+                <Section section="bot_normal" />
+                <Section section="label">
+                    <ColourProperty name="NormalTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="TopHover">
+            <Layer>
+                <Section section="top_hover" />
                 <Section section="label">
                     <ColourProperty name="HoverTextColour" />
                 </Section>
             </Layer>
         </StateImagery>
-        <StateImagery name="Selected">
+        <StateImagery name="BottomHover">
             <Layer>
-                <Section section="selected" />
+                <Section section="bot_hover" />
+                <Section section="label">
+                    <ColourProperty name="HoverTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="TopSelected">
+            <Layer>
+                <Section section="top_selected" />
+                <Section section="label">
+                    <ColourProperty name="SelectedTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="BottomSelected">
+            <Layer>
+                <Section section="bot_selected" />
+                <Section section="label">
+                    <ColourProperty name="SelectedTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="TopPushed">
+            <Layer>
+                <Section section="top_normal" />
                 <Section section="label">
                     <ColourProperty name="PushedTextColour" />
                 </Section>
             </Layer>
         </StateImagery>
-        <StateImagery name="Disabled">
+        <StateImagery name="BottomPushed">
             <Layer>
-                <Section section="normal">
+                <Section section="bot_normal" />
+                <Section section="label">
+                    <ColourProperty name="PushedTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="TopDisabled">
+            <Layer>
+                <Section section="top_normal">
+                    <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+                </Section>
+                <Section section="label">
+                    <ColourProperty name="DisabledTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="BottomDisabled">
+            <Layer>
+                <Section section="bot_normal">
                     <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
                 </Section>
                 <Section section="label">
@@ -2977,28 +3296,80 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
-        TaharezLook/TabPane
+        TaharezLook/TabContentPane
     ***************************************************
     -->
-    <WidgetLook name="TaharezLook/TabPane">
+    <WidgetLook name="TaharezLook/TabContentPane">
+        <PropertyDefinition name="EnableTop" initialValue="0" redrawOnWrite="true" layoutOnWrite="true" />
+        <PropertyDefinition name="EnableBottom" initialValue="0" redrawOnWrite="true" layoutOnWrite="true" />
         <ImagerySection name="normal">
             <FrameComponent>
                 <Area>
                     <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                     <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
                     <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
-                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                    <Dim type="BottomEdge" >
+                        <ImageDim imageset="TaharezLook" image="TabContentPaneUpperLeft" dimension="Height">
+                            <DimOperator op="Multiply">
+                                <PropertyDim name="EnableTop" />
+                            </DimOperator>
+                        </ImageDim>
+                    </Dim>
                 </Area>
-                <Image type="BottomLeftCorner" imageset="TaharezLook" image="TabPaneLowerLeft" />
-                <Image type="BottomRightCorner" imageset="TaharezLook" image="TabPaneLowerRight" />
-                <Image type="LeftEdge" imageset="TaharezLook" image="TabPaneLeft" />
-                <Image type="RightEdge" imageset="TaharezLook" image="TabPaneRight" />
-                <Image type="TopEdge" imageset="TaharezLook" image="TabControlButtonPaneFiller" />
-                <Image type="BottomEdge" imageset="TaharezLook" image="TabPaneLower" />
-                <Image type="Background" imageset="TaharezLook" image="TabPaneMiddle" />
+                <Image type="TopLeftCorner" imageset="TaharezLook" image="TabContentPaneUpperLeft" />
+                <Image type="TopEdge" imageset="TaharezLook" image="TabContentPaneUpper" />
+                <Image type="TopRightCorner" imageset="TaharezLook" image="TabContentPaneUpperRight" />
+            </FrameComponent>
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" >
+                        <ImageDim imageset="TaharezLook" image="TabContentPaneUpperLeft" dimension="Height">
+                            <DimOperator op="Multiply">
+                                <PropertyDim name="EnableTop" />
+                            </DimOperator>
+                        </ImageDim>
+                    </Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="BottomEdge" >
+                        <UnifiedDim scale="1" type="Height">
+                            <DimOperator op="Subtract">
+                                <ImageDim imageset="TaharezLook" image="TabContentPaneLowerLeft" dimension="Height">
+                                    <DimOperator op="Multiply">
+                                        <PropertyDim name="EnableBottom" />
+                                    </DimOperator>
+                                </ImageDim>
+                            </DimOperator>
+                        </UnifiedDim>
+                    </Dim>
+                </Area>
+                <Image type="LeftEdge" imageset="TaharezLook" image="TabContentPaneLeft" />
+                <Image type="Background" imageset="TaharezLook" image="TabContentPaneMiddle" />
+                <Image type="RightEdge" imageset="TaharezLook" image="TabContentPaneRight" />
+            </FrameComponent>
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" >
+                        <UnifiedDim scale="1" type="Height">
+                            <DimOperator op="Subtract">
+                                <ImageDim imageset="TaharezLook" image="TabContentPaneLowerLeft" dimension="Height">
+                                    <DimOperator op="Multiply">
+                                        <PropertyDim name="EnableBottom" />
+                                    </DimOperator>
+                                </ImageDim>
+                            </DimOperator>
+                        </UnifiedDim>
+                    </Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="BottomEdge" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <Image type="BottomLeftCorner" imageset="TaharezLook" image="TabContentPaneLowerLeft" />
+                <Image type="BottomEdge" imageset="TaharezLook" image="TabContentPaneLower" />
+                <Image type="BottomRightCorner" imageset="TaharezLook" image="TabContentPaneLowerRight" />
             </FrameComponent>
         </ImagerySection>
         <StateImagery name="Enabled">
@@ -3014,7 +3385,89 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
+    <!--
+    ***************************************************
+        TaharezLook/TabButtonPane
+    ***************************************************
+    -->
+    <WidgetLook name="TaharezLook/TabButtonPane">
+        <PropertyDefinition name="EnableTop" initialValue="1" redrawOnWrite="true" layoutOnWrite="true" />
+        <PropertyDefinition name="EnableBottom" initialValue="1" redrawOnWrite="true" layoutOnWrite="true" />
+        <ImagerySection name="normal">
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="BottomEdge" >
+                        <ImageDim imageset="TaharezLook" image="TabHorizontalFiller" dimension="Height">
+                            <DimOperator op="Multiply">
+                                <PropertyDim name="EnableTop" />
+                            </DimOperator>
+                        </ImageDim>
+                    </Dim>
+                </Area>
+                <Image type="TopEdge" imageset="TaharezLook" image="TabHorizontalFiller" />
+            </FrameComponent>
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" >
+                        <ImageDim imageset="TaharezLook" image="TabHorizontalFiller" dimension="Height">
+                            <DimOperator op="Multiply">
+                                <PropertyDim name="EnableTop" />
+                            </DimOperator>
+                        </ImageDim>
+                    </Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="BottomEdge" >
+                        <UnifiedDim scale="1" type="Height">
+                            <DimOperator op="Subtract">
+                                <ImageDim imageset="TaharezLook" image="TabHorizontalFiller" dimension="Height">
+                                    <DimOperator op="Multiply">
+                                        <PropertyDim name="EnableBottom" />
+                                    </DimOperator>
+                                </ImageDim>
+                            </DimOperator>
+                        </UnifiedDim>
+                    </Dim>
+                </Area>
+            </FrameComponent>
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" >
+                        <UnifiedDim scale="1" type="Height">
+                            <DimOperator op="Subtract">
+                                <ImageDim imageset="TaharezLook" image="TabHorizontalFiller" dimension="Height">
+                                    <DimOperator op="Multiply">
+                                        <PropertyDim name="EnableBottom" />
+                                    </DimOperator>
+                                </ImageDim>
+                            </DimOperator>
+                        </UnifiedDim>
+                    </Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="BottomEdge" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <Image type="BottomEdge" imageset="TaharezLook" image="TabHorizontalFiller" />
+            </FrameComponent>
+        </ImagerySection>
+        <StateImagery name="Enabled">
+            <Layer>
+                <Section section="normal" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="Disabled">
+            <Layer>
+                <Section section="normal">
+                    <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+                </Section>
+            </Layer>
+        </StateImagery>
+    </WidgetLook>
+
     <!--
     ***************************************************
         TaharezLook/TabControl
@@ -3022,32 +3475,183 @@
     -->
     <WidgetLook name="TaharezLook/TabControl">
         <Property name="TabButtonType" value="TaharezLook/TabButton" />
-        <Child  type="TaharezLook/TabPane" nameSuffix="__auto_TabPane__">
+        <Property name="TabTextPadding" value="{0,6}" />
+        <Child type="TaharezLook/TabContentPane" nameSuffix="__auto_TabPane__">
             <Area>
-                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
-                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
-                <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
-                <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                <Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+                <Dim type="RightEdge"><UnifiedDim scale="1" type="Width" /></Dim>
+                <Dim type="TopEdge">
+                    <PropertyDim widget="__auto_TabPane__" name="EnableBottom">
+                        <DimOperator op="Multiply">
+                            <PropertyDim name="TabHeight" type="Height" />
+                        </DimOperator>
+                    </PropertyDim>
+                </Dim>
+                <Dim type="Height">
+                    <UnifiedDim scale="1" type="Height">
+                        <DimOperator op="Subtract">
+                            <PropertyDim name="TabHeight" type="Height" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
             </Area>
         </Child>
-        <Child  type="DefaultWindow" nameSuffix="__auto_TabPane__Buttons">
+        <Child  type="TaharezLook/TabButtonPane" nameSuffix="__auto_TabPane__Buttons">
             <Area>
-                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
-                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
-                <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
-                <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                <Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+                <Dim type="RightEdge"><UnifiedDim scale="1" type="Width" /></Dim>
+                <Dim type="TopEdge">
+                    <PropertyDim widget="__auto_TabPane__Buttons" name="EnableTop">
+                        <DimOperator op="Multiply">
+                            <UnifiedDim scale="1" type="Height">
+                                <DimOperator op="Subtract">
+                                    <PropertyDim name="TabHeight" type="Height" />
+                                </DimOperator>
+                            </UnifiedDim>
+                        </DimOperator>
+                    </PropertyDim>
+                </Dim>
+                <Dim type="Height"><PropertyDim name="TabHeight" type="Height" /></Dim>
             </Area>
+        </Child>
+        <Child type="TaharezLook/SystemButton" nameSuffix="__auto_TabPane__ScrollLeft">
+            <Area>
+                <Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge">
+                    <WidgetDim widget="__auto_TabPane__Buttons" dimension="TopEdge" />
+                </Dim>
+                <Dim type="Width">
+                    <WidgetDim widget="__auto_TabPane__Buttons" dimension="Height">
+                        <DimOperator op="Multiply">
+                            <ImageDim imageset="TaharezLook" image="TabButtonScrollLeftNormal" dimension="Width">
+                                <DimOperator op="Divide">
+                                    <ImageDim imageset="TaharezLook" image="TabButtonScrollLeftNormal" dimension="Height" />
+                                </DimOperator>
+                            </ImageDim>
+                        </DimOperator>
+                    </WidgetDim>
+                </Dim>
+                <Dim type="BottomEdge">
+                    <WidgetDim widget="__auto_TabPane__Buttons" dimension="BottomEdge" />
+                </Dim>
+            </Area>
+            <Property name="AlwaysOnTop" value="True" />
+            <Property name="NormalImage" value="set:TaharezLook image:TabButtonScrollLeftNormal" />
+            <Property name="HoverImage" value="set:TaharezLook image:TabButtonScrollLeftHover" />
+            <Property name="PushedImage" value="set:TaharezLook image:TabButtonScrollLeftHover" />
+        </Child>
+        <Child type="TaharezLook/SystemButton" nameSuffix="__auto_TabPane__ScrollRight">
+            <Area>
+                <Dim type="Width">
+                    <WidgetDim widget="__auto_TabPane__Buttons" dimension="Height">
+                        <DimOperator op="Multiply">
+                            <ImageDim imageset="TaharezLook" image="TabButtonScrollRightNormal" dimension="Width">
+                                <DimOperator op="Divide">
+                                    <ImageDim imageset="TaharezLook" image="TabButtonScrollRightNormal" dimension="Height" />
+                                </DimOperator>
+                            </ImageDim>
+                        </DimOperator>
+                    </WidgetDim>
+                </Dim>
+                <Dim type="LeftEdge">
+                    <UnifiedDim scale="1" type="Width">
+                        <DimOperator op="Subtract">
+                            <WidgetDim widget="__auto_TabPane__ScrollRight" dimension="Width" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+                <Dim type="TopEdge">
+                    <WidgetDim widget="__auto_TabPane__Buttons" dimension="TopEdge" />
+                </Dim>
+                <Dim type="Height">
+                    <WidgetDim widget="__auto_TabPane__Buttons" dimension="Height" />
+                </Dim>
+            </Area>
+            <Property name="AlwaysOnTop" value="True" />
+            <Property name="NormalImage" value="set:TaharezLook image:TabButtonScrollRightNormal" />
+            <Property name="HoverImage" value="set:TaharezLook image:TabButtonScrollRightHover" />
+            <Property name="PushedImage" value="set:TaharezLook image:TabButtonScrollRightHover" />
         </Child>
         <StateImagery name="Enabled" />
         <StateImagery name="Disabled" />
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/MenuItem
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/MenuItem">
+        <PropertyDefinition name="NormalTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="DisabledTextColour" initialValue="FF7F7F7F" redrawOnWrite="true" />
+        <PropertyDefinition name="HoverColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="PushedColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="OpenedColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <Property name="WantsMultiClickEvents" value="False" />
+        <NamedArea name="ContentSize">
+            <Area>
+                <Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge"><AbsoluteDim value="0" /></Dim>
+                <Dim type="Width">
+                    <FontDim type="HorzExtent">
+                        <DimOperator op="Add">
+                            <ImageDim imageset="TaharezLook" image="MenuLeft" dimension="Width">
+                                <DimOperator op="Add">
+                                    <ImageDim imageset="TaharezLook" image="MenuRight" dimension="Width" />
+                                </DimOperator>
+                            </ImageDim>
+                        </DimOperator>
+                    </FontDim>
+                </Dim>
+                <Dim type="Height">
+                    <FontDim type="LineSpacing">
+                        <DimOperator op="Add">
+                            <ImageDim imageset="TaharezLook" image="MenuTop" dimension="Height">
+                                <DimOperator op="Add">
+                                    <ImageDim imageset="TaharezLook" image="MenuBottom" dimension="Height" />
+                                </DimOperator>
+                            </ImageDim>
+                        </DimOperator>
+                    </FontDim>
+                </Dim>
+            </Area>
+        </NamedArea>
+        <NamedArea name="HasPopupContentSize">
+            <Area>
+                <Dim type="LeftEdge"><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge"><AbsoluteDim value="0" /></Dim>
+                <Dim type="Width">
+                    <FontDim type="HorzExtent">
+                        <DimOperator op="Add">
+                            <ImageDim imageset="TaharezLook" image="MenuLeft" dimension="Width">
+                                <DimOperator op="Add">
+                                    <ImageDim imageset="TaharezLook" image="MenuRight" dimension="Width">
+                                        <DimOperator op="Add">
+                                            <ImageDim imageset="TaharezLook" image="PopupMenuArrowLeft" dimension="Width">
+                                                <DimOperator op="Multiply">
+                                                    <AbsoluteDim value="3" />
+                                                </DimOperator>
+                                            </ImageDim>
+                                        </DimOperator>
+                                    </ImageDim>
+                                </DimOperator>
+                            </ImageDim>
+                        </DimOperator>
+                    </FontDim>
+                </Dim>
+                <Dim type="Height">
+                    <FontDim type="LineSpacing">
+                        <DimOperator op="Add">
+                            <ImageDim imageset="TaharezLook" image="MenuTop" dimension="Height">
+                                <DimOperator op="Add">
+                                    <ImageDim imageset="TaharezLook" image="MenuBottom" dimension="Height" />
+                                </DimOperator>
+                            </ImageDim>
+                        </DimOperator>
+                    </FontDim>
+                </Dim>
+            </Area>
+        </NamedArea>
         <ImagerySection name="label">
             <TextComponent>
                 <Area>
@@ -3096,7 +3700,13 @@
                 <Area>
                     <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                     <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
-                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Width" >
+                        <UnifiedDim scale="1" type="Width">
+                            <DimOperator op="Subtract">
+                                <ImageDim imageset="TaharezLook" image="PopupMenuArrowRight" dimension="Width" />
+                            </DimOperator>
+                        </UnifiedDim>
+                    </Dim>
                     <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
                 </Area>
                 <Image imageset="TaharezLook" image="PopupMenuArrowRight" />
@@ -3109,7 +3719,13 @@
                 <Area>
                     <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
                     <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
-                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Width" >
+                        <UnifiedDim scale="1" type="Width">
+                            <DimOperator op="Subtract">
+                                <ImageDim imageset="TaharezLook" image="PopupMenuArrowLeft" dimension="Width" />
+                            </DimOperator>
+                        </UnifiedDim>
+                    </Dim>
                     <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
                 </Area>
                 <Image imageset="TaharezLook" image="PopupMenuArrowLeft" />
@@ -3119,31 +3735,45 @@
         </ImagerySection>
         <StateImagery name="EnabledNormal">
             <Layer>
-                <Section section="label" />
+                <Section section="label">
+                    <ColourProperty name="NormalTextColour" />
+                </Section>
             </Layer>
         </StateImagery>
         <StateImagery name="EnabledHover">
             <Layer>
-                <Section section="frame" />
-                <Section section="label" />
+                <Section section="frame">
+                    <ColourProperty name="HoverColour" />
+                </Section>
+                <Section section="label">
+                    <ColourProperty name="NormalTextColour" />
+                </Section>
             </Layer>
         </StateImagery>
         <StateImagery name="EnabledPushed">
             <Layer>
-                <Section section="frame" />
-                <Section section="label" />
+                <Section section="frame">
+                    <ColourProperty name="PushedColour" />
+                </Section>
+                <Section section="label">
+                    <ColourProperty name="NormalTextColour" />
+                </Section>
             </Layer>
         </StateImagery>
         <StateImagery name="EnabledPopupOpen">
             <Layer>
-                <Section section="frame" />
-                <Section section="label" />
+                <Section section="frame">
+                    <ColourProperty name="OpenedColour" />
+                </Section>
+                <Section section="label">
+                    <ColourProperty name="NormalTextColour" />
+                </Section>
             </Layer>
         </StateImagery>
         <StateImagery name="DisabledNormal">
             <Layer>
                 <Section section="label">
-                    <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+                    <ColourProperty name="DisabledTextColour" />
                 </Section>
             </Layer>
         </StateImagery>
@@ -3153,7 +3783,7 @@
                     <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
                 </Section>
                 <Section section="label">
-                    <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+                    <ColourProperty name="DisabledTextColour" />
                 </Section>
             </Layer>
         </StateImagery>
@@ -3163,7 +3793,7 @@
                     <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
                 </Section>
                 <Section section="label">
-                    <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+                    <ColourProperty name="DisabledTextColour" />
                 </Section>
             </Layer>
         </StateImagery>
@@ -3173,7 +3803,7 @@
                     <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
                 </Section>
                 <Section section="label">
-                    <Colours topLeft="FF7F7F7F" topRight="FF7F7F7F" bottomLeft="FF7F7F7F" bottomRight="FF7F7F7F" />
+                    <ColourProperty name="DisabledTextColour" />
                 </Section>
             </Layer>
         </StateImagery>
@@ -3188,28 +3818,50 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/PopupMenu
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/PopupMenu">
+        <PropertyDefinition name="BackgroundColours" initialValue="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="BorderWidth" initialValue="0" layoutOnWrite="true" />
         <NamedArea name="ItemRenderArea">
             <Area>
-                <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="PopupMenuFrameLeft" dimension="Width" /></Dim>
-                <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="PopupMenuFrameTop" dimension="Height" /></Dim>
+                <Dim type="LeftEdge" >
+                    <ImageDim imageset="TaharezLook" image="PopupMenuFrameLeft" dimension="Width">
+                        <DimOperator op="Add">
+                            <PropertyDim name="BorderWidth" />
+                        </DimOperator>
+                    </ImageDim>
+                </Dim>
+                <Dim type="TopEdge" >
+                    <ImageDim imageset="TaharezLook" image="PopupMenuFrameTop" dimension="Height">
+                        <DimOperator op="Add">
+                            <PropertyDim name="BorderWidth" />
+                        </DimOperator>
+                    </ImageDim>
+                </Dim>
                 <Dim type="RightEdge" >
                     <UnifiedDim scale="1" type="RightEdge">
                         <DimOperator op="Subtract">
-                            <ImageDim imageset="TaharezLook" image="PopupMenuFrameRight" dimension="Width" />
+                            <ImageDim imageset="TaharezLook" image="PopupMenuFrameRight" dimension="Width">
+                                <DimOperator op="Add">
+                                    <PropertyDim name="BorderWidth" />
+                                </DimOperator>
+                            </ImageDim>
                         </DimOperator>
                     </UnifiedDim>
                 </Dim>
                 <Dim type="BottomEdge" >
                     <UnifiedDim scale="1" type="BottomEdge">
                         <DimOperator op="Subtract">
-                            <ImageDim imageset="TaharezLook" image="PopupMenuFrameBottom" dimension="Height" />
+                            <ImageDim imageset="TaharezLook" image="PopupMenuFrameBottom" dimension="Height">
+                                <DimOperator op="Add">
+                                    <PropertyDim name="BorderWidth" />
+                                </DimOperator>
+                            </ImageDim>
                         </DimOperator>
                     </UnifiedDim>
                 </Dim>
@@ -3236,7 +3888,9 @@
         </ImagerySection>
         <StateImagery name="Enabled">
             <Layer>
-                <Section section="frame" />
+                <Section section="frame">
+                    <ColourRectProperty name="BackgroundColours" />
+                </Section>
             </Layer>
         </StateImagery>
         <StateImagery name="Disabled">
@@ -3247,29 +3901,51 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
-    
+
+
     <!--
     ***************************************************
         TaharezLook/Menubar
     ***************************************************
     -->
     <WidgetLook name="TaharezLook/Menubar">
+        <PropertyDefinition name="BackgroundColours" initialValue="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="BorderWidth" initialValue="5" layoutOnWrite="true" />
         <NamedArea name="ItemRenderArea">
             <Area>
-                <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="PopupMenuFrameLeft" dimension="Width" /></Dim>
-                <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="PopupMenuFrameTop" dimension="Height" /></Dim>
+                <Dim type="LeftEdge" >
+                    <ImageDim imageset="TaharezLook" image="PopupMenuFrameLeft" dimension="Width">
+                        <DimOperator op="Add">
+                            <PropertyDim name="BorderWidth" />
+                        </DimOperator>
+                    </ImageDim>
+                </Dim>
+                <Dim type="TopEdge" >
+                    <ImageDim imageset="TaharezLook" image="PopupMenuFrameTop" dimension="Height">
+                        <DimOperator op="Add">
+                            <PropertyDim name="BorderWidth" />
+                        </DimOperator>
+                    </ImageDim>
+                </Dim>
                 <Dim type="RightEdge" >
                     <UnifiedDim scale="1" type="RightEdge">
                         <DimOperator op="Subtract">
-                            <ImageDim imageset="TaharezLook" image="PopupMenuFrameRight" dimension="Width" />
+                            <ImageDim imageset="TaharezLook" image="PopupMenuFrameRight" dimension="Width">
+                                <DimOperator op="Add">
+                                    <PropertyDim name="BorderWidth" />
+                                </DimOperator>
+                            </ImageDim>
                         </DimOperator>
                     </UnifiedDim>
                 </Dim>
                 <Dim type="BottomEdge" >
                     <UnifiedDim scale="1" type="BottomEdge">
                         <DimOperator op="Subtract">
-                            <ImageDim imageset="TaharezLook" image="PopupMenuFrameBottom" dimension="Height" />
+                            <ImageDim imageset="TaharezLook" image="PopupMenuFrameBottom" dimension="Height">
+                                <DimOperator op="Add">
+                                    <PropertyDim name="BorderWidth" />
+                                </DimOperator>
+                            </ImageDim>
                         </DimOperator>
                     </UnifiedDim>
                 </Dim>
@@ -3296,7 +3972,9 @@
         </ImagerySection>
         <StateImagery name="Enabled">
             <Layer>
-                <Section section="frame" />
+                <Section section="frame">
+                    <ColourRectProperty name="BackgroundColours" />
+                </Section>
             </Layer>
         </StateImagery>
         <StateImagery name="Disabled">
@@ -3307,7 +3985,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/LargeVerticalScrollbarThumb
@@ -3364,7 +4042,7 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    
+
     <!--
     ***************************************************
         TaharezLook/LargeVerticalScrollbar
@@ -3404,7 +4082,7 @@
                 </Dim>
             </Area>
         </NamedArea>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_incbtn__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_incbtn__">
             <Area>
                 <Dim type="LeftEdge" ><UnifiedDim scale="0.25" type="LeftEdge" /></Dim>
                 <Dim type="TopEdge" >
@@ -3432,12 +4110,11 @@
                 </Dim>
             </Area>
             <VertAlignment type="BottomAligned" />
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:VertScrollDownNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:VertScrollDownHover" />
             <Property name="PushedImage" value="set:TaharezLook image:VertScrollDownNormal" />
         </Child>
-        <Child  type="TaharezLook/Button" nameSuffix="__auto_decbtn__">
+        <Child  type="TaharezLook/ImageButton" nameSuffix="__auto_decbtn__">
             <Area>
                 <Dim type="LeftEdge" ><UnifiedDim scale="0.25" type="LeftEdge" /></Dim>
                 <Dim type="TopEdge">
@@ -3460,7 +4137,6 @@
                     </UnifiedDim>
                 </Dim>
             </Area>
-            <Property name="UseStandardImagery" value="False" />
             <Property name="NormalImage" value="set:TaharezLook image:VertScrollUpNormal" />
             <Property name="HoverImage" value="set:TaharezLook image:VertScrollUpHover" />
             <Property name="PushedImage" value="set:TaharezLook image:VertScrollUpNormal" />
@@ -3543,4 +4219,316 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
+
+    <!--
+    ***************************************************
+        TaharezLook/ImageButton
+    ***************************************************
+    -->
+    <WidgetLook name="TaharezLook/ImageButton">
+        <PropertyDefinition name="NormalImage" initialValue="" redrawOnWrite="true" />
+        <PropertyDefinition name="HoverImage" initialValue="" redrawOnWrite="true" />
+        <PropertyDefinition name="PushedImage" initialValue="" redrawOnWrite="true" />
+        <PropertyDefinition name="DisabledImage" initialValue="" redrawOnWrite="true" />
+        <PropertyDefinition name="VertImageFormatting" initialValue="Stretched" redrawOnWrite="true" />
+        <PropertyDefinition name="HorzImageFormatting" initialValue="Stretched" redrawOnWrite="true" />
+        <ImagerySection name="normal">
+            <ImageryComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <ImageProperty name="NormalImage" />
+                <VertFormatProperty name="VertImageFormatting" />
+                <HorzFormatProperty name="HorzImageFormatting" />
+            </ImageryComponent>
+        </ImagerySection>
+        <ImagerySection name="hover">
+            <ImageryComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <ImageProperty name="HoverImage" />
+                <VertFormatProperty name="VertImageFormatting" />
+                <HorzFormatProperty name="HorzImageFormatting" />
+            </ImageryComponent>
+        </ImagerySection>
+        <ImagerySection name="pushed">
+            <ImageryComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <ImageProperty name="PushedImage" />
+                <VertFormatProperty name="VertImageFormatting" />
+                <HorzFormatProperty name="HorzImageFormatting" />
+            </ImageryComponent>
+        </ImagerySection>
+        <ImagerySection name="disabled">
+            <ImageryComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <ImageProperty name="DisabledImage" />
+                <VertFormatProperty name="VertImageFormatting" />
+                <HorzFormatProperty name="HorzImageFormatting" />
+            </ImageryComponent>
+        </ImagerySection>
+        <StateImagery name="Normal">
+            <Layer>
+                <Section section="normal" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="Hover">
+            <Layer>
+                <Section section="hover" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="Pushed">
+            <Layer>
+                <Section section="pushed" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="PushedOff">
+            <Layer>
+                <Section section="hover" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="Disabled">
+            <Layer>
+                <Section section="disabled" />
+            </Layer>
+        </StateImagery>
+    </WidgetLook>
+
+    <!--
+    ***************************************************
+        TaharezLook/ItemListbox
+    ***************************************************
+    -->
+    <WidgetLook name="TaharezLook/ItemListbox">
+        <NamedArea name="ItemRenderArea">
+            <Area>
+                <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="ListboxLeft" dimension="Width" /></Dim>
+                <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="ListboxTop" dimension="Height" /></Dim>
+                <Dim type="RightEdge" >
+                    <UnifiedDim scale="1" type="RightEdge">
+                        <DimOperator op="Subtract">
+                            <ImageDim imageset="TaharezLook" image="ListboxRight" dimension="Width" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+                <Dim type="BottomEdge" >
+                    <UnifiedDim scale="1" type="BottomEdge">
+                        <DimOperator op="Subtract">
+                            <ImageDim imageset="TaharezLook" image="ListboxBottom" dimension="Height" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+            </Area>
+        </NamedArea>
+        <NamedArea name="ItemRenderAreaHScroll">
+            <Area>
+                <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="ListboxLeft" dimension="Width" /></Dim>
+                <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="ListboxTop" dimension="Height" /></Dim>
+                <Dim type="RightEdge" >
+                    <UnifiedDim scale="1" type="RightEdge">
+                        <DimOperator op="Subtract">
+                            <ImageDim imageset="TaharezLook" image="ListboxRight" dimension="Width" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+                <Dim type="BottomEdge" >
+                    <UnifiedDim scale="1" offset="-12" type="BottomEdge" />
+                </Dim>
+            </Area>
+        </NamedArea>
+        <NamedArea name="ItemRenderAreaVScroll">
+            <Area>
+                <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="ListboxLeft" dimension="Width" /></Dim>
+                <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="ListboxTop" dimension="Height" /></Dim>
+                <Dim type="RightEdge" >
+                    <UnifiedDim scale="1" offset="-12" type="RightEdge" />
+                </Dim>
+                <Dim type="BottomEdge" >
+                    <UnifiedDim scale="1" type="BottomEdge">
+                        <DimOperator op="Subtract">
+                            <ImageDim imageset="TaharezLook" image="ListboxBottom" dimension="Height" />
+                        </DimOperator>
+                    </UnifiedDim>
+                </Dim>
+            </Area>
+        </NamedArea>
+        <NamedArea name="ItemRenderAreaHVScroll">
+            <Area>
+                <Dim type="LeftEdge" ><ImageDim imageset="TaharezLook" image="ListboxLeft" dimension="Width" /></Dim>
+                <Dim type="TopEdge" ><ImageDim imageset="TaharezLook" image="ListboxTop" dimension="Height" /></Dim>
+                <Dim type="RightEdge" >
+                    <UnifiedDim scale="1" offset="-12" type="RightEdge" />
+                </Dim>
+                <Dim type="BottomEdge" >
+                    <UnifiedDim scale="1" offset="-12" type="BottomEdge" />
+                </Dim>
+            </Area>
+        </NamedArea>
+        <Child  type="TaharezLook/HorizontalScrollbar" nameSuffix="__auto_hscrollbar__">
+            <Area>
+                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="Width" ><UnifiedDim scale="1" offset="-12" type="Width" /></Dim>
+                <Dim type="Height" ><AbsoluteDim value="12" /></Dim>
+            </Area>
+            <VertAlignment type="BottomAligned" />
+        </Child>
+        <Child  type="TaharezLook/VerticalScrollbar" nameSuffix="__auto_vscrollbar__">
+            <Area>
+                <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                <Dim type="Width" ><AbsoluteDim value="12" /></Dim>
+                <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+            </Area>
+            <HorzAlignment type="RightAligned" />
+        </Child>
+        <ImagerySection name="main">
+            <FrameComponent>
+                <Area>
+                    <Dim type="LeftEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="TopEdge" ><AbsoluteDim value="0" /></Dim>
+                    <Dim type="Width" ><UnifiedDim scale="1" type="Width" /></Dim>
+                    <Dim type="Height" ><UnifiedDim scale="1" type="Height" /></Dim>
+                </Area>
+                <Image type="TopLeftCorner" imageset="TaharezLook" image="ListboxTopLeft" />
+                <Image type="TopRightCorner" imageset="TaharezLook" image="ListboxTopRight" />
+                <Image type="BottomLeftCorner" imageset="TaharezLook" image="ListboxBottomLeft" />
+                <Image type="BottomRightCorner" imageset="TaharezLook" image="ListboxBottomRight" />
+                <Image type="LeftEdge" imageset="TaharezLook" image="ListboxLeft" />
+                <Image type="RightEdge" imageset="TaharezLook" image="ListboxRight" />
+                <Image type="TopEdge" imageset="TaharezLook" image="ListboxTop" />
+                <Image type="BottomEdge" imageset="TaharezLook" image="ListboxBottom" />
+                <Image type="Background" imageset="TaharezLook" image="ListboxBackdrop" />
+            </FrameComponent>
+        </ImagerySection>
+        <StateImagery name="Enabled">
+            <Layer>
+                <Section section="main" />
+            </Layer>
+        </StateImagery>
+        <StateImagery name="Disabled">
+            <Layer>
+                <Section section="main" />
+            </Layer>
+        </StateImagery>
+    </WidgetLook>
+
+
+    <!--
+    ***************************************************
+        TaharezLook/ListboxItem
+    ***************************************************
+    -->
+    <WidgetLook name="TaharezLook/ListboxItem">
+        <PropertyDefinition name="TextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="SelectedTextColour" initialValue="FFFFFFFF" redrawOnWrite="true" />
+        <PropertyDefinition name="SelectionBrush" initialValue="set:TaharezLook image:ListboxSelectionBrush" redrawOnWrite="true" />
+        <PropertyDefinition name="SelectionColour" initialValue="FF4444AA" redrawOnWrite="true" />
+        <Property name="Selectable" value="True" />
+        <NamedArea name="ContentSize">
+            <Area>
+                <Dim type="LeftEdge" >
+                    <AbsoluteDim value="0" />
+                </Dim>
+                <Dim type="TopEdge" >
+                    <AbsoluteDim value="0" />
+                </Dim>
+                <Dim type="Width" >
+                    <FontDim type="HorzExtent" padding="6" />
+                </Dim>
+                <Dim type="Height" >
+                    <FontDim type="LineSpacing" />
+                </Dim>
+            </Area>
+        </NamedArea>
+        <ImagerySection name="label">
+            <TextComponent>
+                <Area>
+                    <Dim type="TopEdge">
+                        <AbsoluteDim value="0" />
+                    </Dim>
+                    <Dim type="LeftEdge">
+                        <AbsoluteDim value="3" />
+                    </Dim>
+                    <Dim type="RightEdge">
+                        <UnifiedDim scale="1" offset="-3" type="RightEdge" />
+                    </Dim>
+                    <Dim type="BottomEdge">
+                        <UnifiedDim scale="1" type="BottomEdge" />
+                    </Dim>
+                </Area>
+            </TextComponent>
+        </ImagerySection>
+        <ImagerySection name="selection">
+            <ImageryComponent>
+                <Area>
+                    <Dim type="TopEdge">
+                        <AbsoluteDim value="0" />
+                    </Dim>
+                    <Dim type="LeftEdge">
+                        <AbsoluteDim value="0" />
+                    </Dim>
+                    <Dim type="RightEdge">
+                        <UnifiedDim scale="1" type="RightEdge" />
+                    </Dim>
+                    <Dim type="BottomEdge">
+                        <UnifiedDim scale="1" type="BottomEdge" />
+                    </Dim>
+                </Area>
+                <ImageProperty name="SelectionBrush" />
+                <ColourProperty name="SelectionColour" />
+                <VertFormat type="Stretched" />
+                <HorzFormat type="Stretched" />
+            </ImageryComponent>
+        </ImagerySection>
+        <StateImagery name="Enabled">
+            <Layer>
+                <Section section="label">
+                    <ColourProperty name="TextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="Disabled">
+            <Layer>
+                <Section section="label">
+                    <ColourProperty name="TextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="SelectedEnabled">
+            <Layer>
+                <Section section="selection" />
+                <Section section="label">
+                    <ColourProperty name="SelectedTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+        <StateImagery name="SelectedDisabled">
+            <Layer>
+                <Section section="selection" />
+                <Section section="label">
+                    <ColourProperty name="SelectedTextColour" />
+                </Section>
+            </Layer>
+        </StateImagery>
+    </WidgetLook>
+
 </Falagard>
+
