@@ -3,8 +3,7 @@ README
 
 Gnoll is a free (as free speech) 3D action/rpg game engine still at an early 
 development stage.
-The source code, sounds, music, models and textures are respectively diffused 
-under GPL and Free Art licences. 
+The source code is under GNU/GPL v2 or greater. 
 
 You can contact the development team at:
 Gnoll Devel <gnoll-devel@gna.org>
@@ -18,8 +17,19 @@ In order to build Gnoll you will need these packages :
 - g++
 - libxml++2.6
 - glibmm
-- Ogre 3d 1.2.x 
+- Ogre 3d 1.4.x 
 - CEGUI 0.5.0
+- OIS 1.0rc1
+- boost_filesystem
+- boost_thread
+- OpenAL
+- alut
+- vorbis
+- vorbisfile
+- ogg
+- sndfile
+- boost_program_options
+
 
 To build it, just launch these commands :
 ./bootstrap
@@ -27,8 +37,4 @@ To build it, just launch these commands :
 make
 make install
 
-
-Currently the game uses media from the Ogre 3D SDK. So you need also to get 
-the sdk and put the configuration files of Ogre 3D in the same directory than
-the game binairies. 
 
