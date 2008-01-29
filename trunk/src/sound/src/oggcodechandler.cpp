@@ -1,4 +1,4 @@
-/***************************************************************************
+/**************************************************************************
 *   Copyright (C) 2006 by Puzzle Team                                     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -18,8 +18,8 @@
 ***************************************************************************/
 
 
-/*---------------------------oggcodechandler.cpp-------------------------------*\
-|   The sound module                                                  |
+/*---------------------------oggcodechandler.cpp----------------------------*\
+|   Codec handler for Ogg files                                              |
 |                                                                            |
 |   Changelog :                                                              |
 |               11/06/2007 - Soax - Initial release                          |
@@ -34,10 +34,14 @@ namespace Gnoll
 {
 	namespace Sound 
 	{
-		OggCodecHandler::OggCodecHandler(){}
+		OggCodecHandler::OggCodecHandler()
+		{
+		}
 	
 		
-		OggCodecHandler::~OggCodecHandler(){}
+		OggCodecHandler::~OggCodecHandler()
+		{
+		}
 
 		
 		//Créé l'objet Sound et rempli son tampon audio avec le contenu du flux (décodé) -> Retourne l'objet Sound
@@ -51,24 +55,62 @@ namespace Gnoll
 			ALsizei sampleRate = 0;
 				
 			OggVorbis_File ogg_stream;
-				
 			
 			ov_callbacks vorbisCallbacks;
 			vorbisCallbacks.read_func = vorbisRead;
 			vorbisCallbacks.close_func = NULL;
 			vorbisCallbacks.seek_func = NULL;
 			vorbisCallbacks.tell_func = NULL;
-			
+		
+	
 			//Créé un flux ogg à partir du flux d'entrée
-			ov_open_callbacks(_stream.get(), &ogg_stream, NULL, 0, vorbisCallbacks);
+			int ovOpenCallbacksResult = ov_open_callbacks(_stream.get(), &ogg_stream, NULL, 0, vorbisCallbacks);
 				
+			if (ovOpenCallbacksResult != 0)
+			{
+				cout << "Error while calling ov_opencallbacks()" << endl;
+
+				switch (ovOpenCallbacksResult)
+				{
+					case OV_EREAD:
+						cout << "  ->  A read from media returned an error." << endl;
+						break;
+
+					case OV_ENOTVORBIS:
+						cout << "  ->  Bitstream does not contain any Vorbis data." << endl;
+						break;
+
+					case OV_EVERSION:
+						cout << "  ->  Vorbis version mismatch." << endl;
+						break;
+
+					case OV_EBADHEADER:
+						cout << "  ->  Invalid Vorbis bitstream header." << endl;
+						break;
+
+					case OV_EFAULT:
+						cout << "  ->  Internal logic fault; indicates a bug or heap/stack corruption." << endl;
+						break;
+
+					default:
+						cout << "  ->  Error unknown." << endl;
+						break;
+
+				}
+
+				if (_stream->eof())
+				{
+					cout << "ERROR : End of OGG stream" << endl;
+				}
+
+			}
 				
 			//Récupère les infos sur le flux (format audio)
 			vorbis_info* infos = ov_info(&ogg_stream, 0);
 				
-			if (infos->channels)
+			if (infos->channels == 1)
 				format = AL_FORMAT_MONO16;
-			else
+			else if (infos->channels == 2)
 				format = AL_FORMAT_STEREO16;
 				
 			sampleRate = infos->rate;
@@ -118,21 +160,54 @@ namespace Gnoll
 			
 		size_t vorbisRead(void * ptr, size_t size, size_t nmemb, void * datasource)
 		{
-			char *buffer = new char[size * nmemb];
+			/**
+			 * Size of the buffer
+			 */ 
+			const unsigned int maxSizeBuffer = 4096;
+
+			
+			char buffer [maxSizeBuffer];
 			IStream * stream;
 			size_t res;
-			
+		
 			stream = (IStream *)datasource;
-			
-			if (stream->eof())
-				delete[] buffer;
+
+			/**
+			 * Nothing to read
+			 */
+			if (stream->eof()) {
 				return 0;
+			}
+
+			/**
+			 * Number of bytes read
+			 */  
+			unsigned int i = 0;
+
+			/**
+			 * Size of the destination buffer
+			 */ 
+			unsigned int totalMem = size * nmemb;
+
+			bool endOfStream = false;
+
+			while ((i < totalMem) && (endOfStream == false))
+			{
+				res = stream->read(buffer, maxSizeBuffer);
 			
-			res = stream->read(buffer, size * nmemb);
-			memcpy(ptr, buffer, res);
-				
-			delete[] buffer;
-			return res;	
+				if (res == 0)	
+				{ 
+					endOfStream = true;
+
+				} else {
+			
+					memcpy((char*)ptr+i, buffer, res);
+					i += maxSizeBuffer;
+
+				}
+			}				
+
+			return i;	
 		}
 	}
 }
