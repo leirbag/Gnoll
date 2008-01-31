@@ -22,13 +22,13 @@ In order to build Gnoll you will need these packages :
 - OIS 1.0rc1
 - boost_filesystem
 - boost_thread
+- boost_program_options
 - OpenAL
 - alut
 - vorbis
 - vorbisfile
 - ogg
 - sndfile
-- boost_program_options
 
 
 To build it, just launch these commands :
