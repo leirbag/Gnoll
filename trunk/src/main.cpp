@@ -290,7 +290,6 @@ void deleteRobot(){
 		Ogre::SceneManager* sceneMgr = CGraphicModule::getInstancePtr()->getSceneManager();
 		Ogre::SceneNode *node = sceneMgr->getSceneNode(Ogre::StringConverter::toString(tempcnt));
 		node->detachObject(Ogre::StringConverter::toString(tempcnt));
-		//Ogre::Entity *ent = sceneMgr->getEntity(Ogre::StringConverter::toString(tempcnt));
 		sceneMgr->destroyEntity(Ogre::StringConverter::toString(tempcnt));
 		sceneMgr->destroySceneNode(Ogre::StringConverter::toString(tempcnt));
 		cout << "Objet supprime x: " << tempcnt <<endl;
