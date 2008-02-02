@@ -65,7 +65,7 @@ namespace Gnoll {
 			}
 						
 		
-			//Définit les propriétés du listener -- A REDEFINIR
+			//Listener properties -- To be redefined
 			ALfloat listenerPos[] = { 0.0, 0.0, 0.0 };
 			ALfloat listenerVel[] = { 0.0, 0.0, 0.0 };
 			ALfloat listenerOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
