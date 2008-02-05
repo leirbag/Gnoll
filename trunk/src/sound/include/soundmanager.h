@@ -1,5 +1,5 @@
-/***************************************************************************
-*   Copyright (C) 2006 by Puzzle Team                                     *
+/**************************************************************************
+*   Copyright (C) 2008 by Bruno Mahe, Gabriel, Soax                       *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               11/06/2007 - Soax - Initial release                         |
+|               02/04/2008 - Bruno Mahe - Add some doxygen comments         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -50,16 +51,26 @@ using namespace Gnoll::Core;
 
 
 namespace Gnoll {
+
 	namespace Sound {
 	
-	class SoundManager : public BaseManager<Sound, ObjectNotFoundError<Sound> >, public Singleton<SoundManager>
+		/**
+		 * Sound manager <br/>
+		 * * This singleton is in charge of loading and caching Sound objects
+		 */
+		class SoundManager : public BaseManager<Sound, ObjectNotFoundError<Sound> >, public Singleton<SoundManager>
 		{
-			private:
-			
+
 			protected:
 
+				/**
+				 * @copydoc BaseManager::loadImpl
+				 */
 				virtual shared_ptr<Sound> loadImpl( shared_ptr<IStream> _stream, string _instance);
 
+				/**
+				 * @copydoc BaseManager::saveImpl
+				 */
 				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<Sound> _obj, string _instance);
 
 			public:

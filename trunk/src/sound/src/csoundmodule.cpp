@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |          11/06/2007 - Soax - Initial release                              |
+|          02/04/2008 - Bruno Mahe - Update comments                        |
 |                                                                           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
@@ -34,12 +35,18 @@
 
 namespace Gnoll {
 	namespace Sound {
+
+		/**
+		 * Initialize static attribute
+		 */
 		vector <string> * CSoundModule::sound_queue = new vector <string>;
+
 
 		CSoundModule::CSoundModule()
 		{
 			
 		}
+
 		
 		CSoundModule::~CSoundModule()
 		{
@@ -48,14 +55,23 @@ namespace Gnoll {
 		
 		void CSoundModule::init()
 		{
-		        //Initialise les listeners
-			// Play Listener--> Evenement Demande de lecture d'un son
+
+			/**
+			 * Initialize listeners
+			 */
+
+			/**
+			 * SoudPlayListener is in charge of handling messages asking to play a sound
+			 */
 			play_listener = shared_ptr<CMessageListener>(new SoundPlayListener(sound_queue));
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			messageModule->getMessageManager()->addListener(play_listener, CMessageType("PLAY_SOUND"));
 
 			
-			//Device par default ... à voir une eventuelle modif
+			/**
+			 * Default OpenAL device
+			 * XXX Might need to be updated
+			 */
 			device = alcOpenDevice(NULL);
 			
 			if (device)
@@ -86,27 +102,39 @@ namespace Gnoll {
 			shared_ptr<Sound> currentSound;
 			
 			//Parcours la liste des sons dont la lecture a été demandée
+			/**
+			 * Go through the list of sound to play
+			 */
 			for (unsigned int i = 0; i < sound_queue->size(); i++)
 			{
-				//cout << "A lire: " << (*sound_queue)[i];
-				//Charge ce son 
+				/**
+				 * Load that sound
+				 * Since the SoundManager cache them, they should be loaded only once (except if
+				 * sound_queue->size is greater than the number of sound the SoundManager is caching)
+				 */
 				currentSound = sMgr->load((*sound_queue)[i]);
+
 				if (!currentSound)
-				cout << "Impossible de trouver " << (*sound_queue)[i] << " dans les paths existants !" << endl;
+					cout << "Impossible de trouver " << (*sound_queue)[i] << " dans les paths existants !" << endl;
 				else
-					//Le joue
 					currentSound->play();
 			}
+
 			sound_queue->clear();
 		
 		}
 		
 		void CSoundModule::exit()
 		{
-			//Supprime le listener
+			/**
+			 * Delete listeners
+			 */
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			messageModule->getMessageManager()->delListener(play_listener, CMessageType("PLAY_SOUND"));
-		
+
+			/**
+			 * Uninitialize OpenAL
+			 */
 			alcMakeContextCurrent(NULL);
 			alcDestroyContext(context);
 			alcCloseDevice(device);		

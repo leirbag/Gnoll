@@ -23,6 +23,7 @@
 |                                                                            |
 |   Changelog :                                                              |
 |               11/06/2007 - Soax - Initial release                          |
+|               02/04/2008 - Bruno Mahe - Update comments                    |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -44,14 +45,21 @@ namespace Gnoll
 		}
 
 		
-		//Créé l'objet Sound et rempli son tampon audio avec le contenu du flux (décodé) -> Retourne l'objet Sound
+		/**
+		 * Instanciate a new Sound object from the data extracted from the audio stream
+		 */
 		shared_ptr<Sound> OggCodecHandler::handle(shared_ptr<IStream> _stream)
 		{
 			shared_ptr<Sound> _sound(new Sound);
 			
-			//Format du fichier
+			/**
+			 * File format
+			 */
 			ALenum format = 0;
-			//Taux d'échnatillonage du fichier
+
+			/**
+			 * File sample rate
+			 */
 			ALsizei sampleRate = 0;
 				
 			OggVorbis_File ogg_stream;
@@ -63,7 +71,9 @@ namespace Gnoll
 			vorbisCallbacks.tell_func = NULL;
 		
 	
-			//Créé un flux ogg à partir du flux d'entrée
+			/**
+			 * Create an ogg stream from the input stream
+			 */
 			int ovOpenCallbacksResult = ov_open_callbacks(_stream.get(), &ogg_stream, NULL, 0, vorbisCallbacks);
 				
 			if (ovOpenCallbacksResult != 0)
@@ -105,7 +115,9 @@ namespace Gnoll
 
 			}
 				
-			//Récupère les infos sur le flux (format audio)
+			/**
+			 * Get audio stream information
+			 */
 			vorbis_info* infos = ov_info(&ogg_stream, 0);
 				
 			if (infos->channels == 1)
@@ -117,7 +129,9 @@ namespace Gnoll
 				
 				
 			
-			//Récupère les échantillons (ici l'intégralité)
+			/**
+			 * Get all samples
+			 */
 			ALsizei size_read  = 0;
 			ALsizei nb_read = 0;
 			char temp_buffer[SIZE_BUFFER];
@@ -137,15 +151,20 @@ namespace Gnoll
 			}
 			while (nb_read > 0);
 		
-			// Remplissage du tampon avec les données lues
+			/**
+			 * Fill out OpenAL sound buffer
+			 */
 			if (size_read > 0){
 				
 				alBufferData(_sound->getBuffer(), format, file_buffer, size_read, sampleRate);
 			}
-			//Ferme le flux
+
+			/**
+			 * Close ogg stream
+			 */
 			ov_clear(&ogg_stream);
 				
-			cout << "Ressource sonore créée" << endl;
+			cout << "Sound resource created" << endl;
 			return _sound;
 		}
 			

@@ -18,11 +18,12 @@
 ***************************************************************************/
 
 
-/*--------------------------------isource----------------------------------*\
-|   This is a sound                                |
+/*----------------------------------sound----------------------------------*\
+|   This is a sound                                                         |
 |                                                                           |
 |   Changelog :                                                             |
 |               11/06/2007 - Soax - Initial release                         |
+|               02/04/2008 - Bruno Mahe - Add some doxygen comments         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -39,20 +40,44 @@ using namespace std;
 namespace Gnoll {
 	namespace Sound {
 	
+		/**
+		 * Sound object
+		 */
 		class Sound
 		{	
+
 			protected :
+
+				/**
+				 * OpenAL buffer
+				 */
 				ALuint buffer;	
+
+				/**
+				 * List of OpenAL sources
+				 */
 				vector<ALuint> source_list;
 				
 			public :
 		
+				/**
+				 * Constructor
+				 */
 				Sound();
 			
+				/**
+				 * Destructor
+				 */
 				~Sound();
 				
+				/**
+				 * Play that sound
+				 */
 				void play();
 				
+				/**
+				 * Update that sound
+				 */
 				void update();
 				
 				//virtual void stop(int);
@@ -61,8 +86,19 @@ namespace Gnoll {
 				
 				//virtual bool isPlaying(){};
 				
+				/**
+				 * Accessor to the OpenAL buffer
+				 */
 				ALuint getBuffer(); 
+
+				/**
+				 * Mutator of the OpenAL buffer
+				 */
 				void setBuffer(ALuint);
+
+				/**
+				 * Delete the OpenAL buffer
+				 */
 				void delBuffer();
 		};
 	}

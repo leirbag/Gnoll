@@ -18,11 +18,12 @@
 ***************************************************************************/
 
 
-/*---------------------------csoundcmodule.h-------------------------------*\
-|   The sound module                                                  |
+/*----------------------------csoundcmodule.h-------------------------------*\
+|   The sound module                                                         |
 |                                                                            |
 |   Changelog :                                                              |
 |               11/06/2007 - Soax - Initial release                          |
+|               02/02/2008 - Bruno Mahe - Add some doxygen comments          |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -44,20 +45,41 @@ using namespace Gnoll::Core;
 using namespace Gnoll::Sound;
 using namespace std;
 
-/**
-*	The sound module
-*/ 
 namespace Gnoll {
+
 	namespace Sound {
+
+		/**
+		 *	The sound module
+		 */
 		class CSoundModule : public CModule, public Singleton<CSoundModule>
 		{
+
 			private :
+
+				/**
+				 * OpenAL device object
+				 */
 				ALCdevice * device;
+
+				/**
+				 * OpenAL context object
+				 */
 				ALCcontext * context;
+
+				/**
+				 * Sound manager
+				 */
 				SoundManager * sMgr;
 				
-				//Liste des son à jouer
+				/**
+				 * Playlist
+				 */
 				static vector< string > * sound_queue;
+
+				/**
+				 * Listener used to play sound
+				 */
 				shared_ptr<CMessageListener> play_listener;
 				
 			public:
@@ -87,9 +109,12 @@ namespace Gnoll {
 				*/
 				virtual ~CSoundModule();
 				
-				static void enqueueSound(const string);
-				
-		
+				/**
+				 * Add a sound to the playlist
+				 * @param _soundName Name of the sound to add to the playlist
+				 */
+				static void enqueueSound(const string _soundName);
+
 		};
 	}		
 }	

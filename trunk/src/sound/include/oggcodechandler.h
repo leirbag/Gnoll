@@ -1,4 +1,4 @@
-/***************************************************************************
+/**************************************************************************
 *   Copyright (C) 2006 by Puzzle Team                                     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -18,11 +18,12 @@
 ***************************************************************************/
 
 
-/*---------------------------oggcodechandler.h-------------------------------*\
-|   The Ogg Codec Handler                                                        |
+/*---------------------------oggcodechandler.h------------------------------*\
+|   The Ogg Codec Handler                                                    |
 |                                                                            |
 |   Changelog :                                                              |
 |               11/06/2007 - Soax - Initial release                          |
+|               02/04/2008 - Bruno Mahe - Add some doxygen comments          |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -42,21 +43,38 @@ namespace Gnoll
 {
 	namespace Sound 
 	{	
+
+		/**
+		 * Custom read function to make vorbislib able to extract data from a shared_ptr<IStream>
+		 */
 		size_t vorbisRead(void * ptr, size_t size, size_t nmemb, void * datasource);
 	
-	
+		/**
+		 * Audio codec handler able to decode vorbis streams
+		 */
 		class OggCodecHandler : public AudioCodecHandler
 		{
 					
-			private :
-				
-							
 			public :
-										
+
+				/**
+				 * Constructor
+				 */
 				OggCodecHandler();
+
+				/**
+				 * Destructor
+				 */
 				virtual ~OggCodecHandler();
-								
+
+				/**
+				 * @copydoc AudioCodecHandler::handle
+				 */
 				virtual shared_ptr<Sound> handle(shared_ptr<IStream>);
+
+				/**
+				 * @copydoc AudioCodecHandler::getFileType
+				 */
 				virtual string getFileType();
 		};
 	}

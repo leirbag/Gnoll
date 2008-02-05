@@ -23,7 +23,9 @@
 |                                                                            |
 |   Changelog :                                                              |
 |               11/06/2007 - Soax - Initial release                          |
-|               01/16/2007 - Paf - getFileType() should be virtual pure      |
+|               01/16/2007 - Bruno Mahe - getFileType() should be virtual    |
+|                                           pure                             |
+|               02/04/2008 - Bruno Mahe - Add some doxygen comments          |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -47,19 +49,37 @@ using namespace boost;
 
 namespace Gnoll {
 	namespace Sound {
-	
+
+		/**
+		 * Interface for audio codecs handles.
+		 * An audio codec handler is a class that will decode audio streams
+		 */
 		class AudioCodecHandler
 		{
 					
-			private :
-				
-							
 			public :
-										
+
+				/**
+				 * Constructor
+				 */
 				AudioCodecHandler(){};
+
+				/**
+				 * destructor
+				 */
 				virtual ~AudioCodecHandler(){};
 				
-				virtual shared_ptr<Sound> handle(shared_ptr<IStream>) = 0;
+				/**
+				 * Handler method
+				 * @param _stream Stream to decode
+				 * @return Sound object containing the decoded stream
+				 */
+				virtual shared_ptr<Sound> handle(shared_ptr<IStream> _stream) = 0;
+
+				/**
+				 * Audio codec that the class is handling (ogg...)
+				 * @return A string id to identify the codec handled by this class
+				 */
 				virtual string getFileType() = 0;
 		};
 	}

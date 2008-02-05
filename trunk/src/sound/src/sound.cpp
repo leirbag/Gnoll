@@ -23,15 +23,17 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               11/06/2007 - Soax - Initial release                         |
+|               02/04/2008 - Bruno Mahe - Update comments                   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/sound.h"
 #include <iostream>
 
+
 namespace Gnoll {
+
 	namespace Sound {
-		
 
 
 		Sound::Sound()
@@ -41,10 +43,16 @@ namespace Gnoll {
 		
 		void Sound::play()
 		{
-		        //A chaque nouvelle lecture, la liste de lecture (propre au son) est mise à jour
+
+			/**
+			 * Need to make sure everything is up to date
+			 */
 			update();
 		
-			//--Creation de la source A MODIFIER --
+			/**
+			 * Source creation
+			 * XXX To update
+			 */
 			ALuint source;
 			alGenSources(1, &source);
 			
@@ -57,14 +65,19 @@ namespace Gnoll {
 			alSourcefv(source, AL_VELOCITY, sourceVel);
 			// -----------
 			
-			//Lecture du son, et ajout à la liste de lecture
+			/**
+			 * The sound is played
+			 * The sound is also added to the play list
+			 */
 			alSourcei(source, AL_BUFFER, buffer);
 			alSourcePlay(source);
 			source_list.push_back(source);
 		}
 		
 		
-		//Nettoie la liste des sons de ceux qui sont terminés
+		/**
+		 * Update play list
+		 */
 		void Sound::update(){
 		        
 			if (source_list.empty())
@@ -91,11 +104,13 @@ namespace Gnoll {
 			return buffer;
 		}
 			
+
 		void Sound::delBuffer()
 		{
 			alDeleteBuffers(1, &buffer);
 		}	
-			
+
+
 		void Sound::setBuffer(ALuint _buffer)
 		{	
 			buffer = _buffer;
@@ -104,14 +119,21 @@ namespace Gnoll {
 
 		Sound::~Sound()
 		{
-		        //Supprime la liste des sources encore en lecture
+
+			/**
+			 * Delete sounds that are being played
+			 */
 			for (unsigned int i = 0; i < source_list.size(); i++)
 			{
 				alSourcei(source_list[i], AL_BUFFER, 0);
 				alDeleteSources(1, &(source_list[i]));
-			}	
-			//Supprime le tampon audio
+			}
+
+			/**
+			 * Delete audio buffer
+			 */
 			delBuffer();
+
 		}
 	}
 }

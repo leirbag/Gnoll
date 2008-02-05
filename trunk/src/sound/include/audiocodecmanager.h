@@ -22,7 +22,8 @@
 |   The Audio codec manager                                                  |
 |                                                                            |
 |   Changelog :                                                              |
-|               11/060/2007 - Soax - Initial release                         |
+|               11/06/2007 - Soax - Initial release                          |
+|               02/04/2008 - Bruno Mahe - Add some doxygen comments          |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -43,19 +44,44 @@
 namespace Gnoll {
 	namespace Sound {
 
+		/**
+		 * Singleton managing AudioCodecHandler classes
+		 */
 		class AudioCodecManager : public Singleton<AudioCodecManager>
 		{
 			
 			private :
 				
+				/**
+				 * Associative container to associate an audio codec to an handler
+				 */
 				map<string, shared_ptr<AudioCodecHandler> > list_codec;
 				
 			public :
 				
+				/**
+				 * Constructor
+				 */
 				AudioCodecManager();
+
+				/**
+				 * Destructor
+				 */
 				~AudioCodecManager();
-				void addAudioCodec(shared_ptr<AudioCodecHandler>);
-				shared_ptr<Sound> decodeStream(shared_ptr<IStream>, string);
+
+				/**
+				 * Add a new codec handler
+				 * @param _audiocodecHandler Audio codec to add
+				 */
+				void addAudioCodec(shared_ptr<AudioCodecHandler> _audioCodecHandler);
+
+				/**
+				 * Decode an audio stream and return a shared pointer to a Sound object
+				 * @param _stream Stream to decode
+				 * @param _streamName Name of the stream (file name...)
+				 * @return A shared pointer to a newly created Sound object from the decoded audio stream
+				 */
+				shared_ptr<Sound> decodeStream(shared_ptr<IStream> _stream, string _streamName);
 		
 		};
 	}

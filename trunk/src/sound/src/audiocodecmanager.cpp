@@ -1,4 +1,4 @@
-/***************************************************************************
+/**************************************************************************
 *   Copyright (C) 2006 by Puzzle Team                                     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -23,6 +23,7 @@
 |                                                                            |
 |   Changelog :                                                              |
 |               11/06/2007 - Soax - Initial release                          |
+|               02/04/2008 - Bruno Mahe - Update comments                    |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -35,9 +36,15 @@ namespace Gnoll
 	{
 		AudioCodecManager::AudioCodecManager()
 		{
-		        //Initialise la liste des codecHandler
+		   /**
+			 * Initialize list of AudioCodecHandler
+			 */
+
+			// OGG codec
 			shared_ptr<AudioCodecHandler> oggAch (new OggCodecHandler);
 			this->addAudioCodec(oggAch);
+
+			// Default codec
 			/*shared_ptr<AudioCodecHandler> defaultAch (new DefaultCodecHandler);
 			this->addAudioCodec(defaultAch);*/
 		}
@@ -56,8 +63,12 @@ namespace Gnoll
 		shared_ptr<Sound> AudioCodecManager::decodeStream(shared_ptr<IStream> _stream, string _instance)	
 		{
 			string type;
-			//Récupère le type du fichier à partir de l'extension
+
+			/**
+			 * Get audio codec from the file extension
+			 */
 			size_t pos = _instance.find_last_of('.') + 1;
+
 		
 			if ( pos != string::npos )
 				type = _instance.substr(pos);
