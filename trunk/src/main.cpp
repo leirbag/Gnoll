@@ -611,7 +611,7 @@ void analyzeArguments (int argc, char* argv[])
 		{
 			cout << *it << "." << endl;
 
-			shared_ptr<ISource> userLoadChannel(new SourceFile(*it, false));
+			shared_ptr<ISource> userLoadChannel(new SourceFile(*it, false, 10));
 			pom->addLoadSource(userLoadChannel);
 			soundManager->addLoadSource(userLoadChannel);
 		}
@@ -630,7 +630,7 @@ void analyzeArguments (int argc, char* argv[])
 		{
 			cout << *it << "." << endl;
 
-			shared_ptr<ISource> userSaveChannel(new SourceFile( *it, true  ));
+			shared_ptr<ISource> userSaveChannel(new SourceFile( *it, true, 10 ));
 			pom->addSaveSource(userSaveChannel);
 			soundManager->addSaveSource(userSaveChannel);
 		}

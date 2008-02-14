@@ -34,8 +34,11 @@
 |                                    saveObj(string _instanceName, T _obj)  |
 |                                  Add a policy for objects not found       |
 |                                    when saving                            |
-|		01/09/2008 - Soax - Add a parameter _instance to loadImpl   |
-|				      and saveImpl			    |
+|               01/09/2008 - Soax - Add a parameter _instance to loadImpl   |
+|                                    and saveImpl	                         |
+|               02/14/2008 - Bruno Mahe - Take in account a source priority |
+|                                    when looking for a suitable source for |
+|                                    loading or saving a resource           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -256,21 +259,41 @@ namespace Gnoll {
 				{
 					boost::recursive_mutex::scoped_lock lock(m_mutex);
 
+					shared_ptr<ISource> bestSource;
 
 					set< shared_ptr<ISource> >::iterator iter = m_loadSources.begin();
 					while (iter != m_loadSources.end())
 					{
 						shared_ptr<ISource> temp = *iter;
 
+						/**
+						 * Can the resource be loaded by this source ?
+						 */
 						if (temp->isFetchable(_instance))
 						{
-							return temp;
+							/**
+							 * Have we already found a potential source ?
+							 */
+							if (bestSource.get() == 0)
+							{
+								bestSource = temp;
+							} else
+							{
+								/**
+								 * We have two potential source.
+								 * So we compare their priorities
+								 */
+								if ( (*bestSource) < temp)
+								{
+									bestSource = temp;
+								}
+							}
 						}
 
 						iter++;
 					}
 
-					return shared_ptr<ISource>();
+					return bestSource;
 				}
 
 				/**
@@ -283,21 +306,41 @@ namespace Gnoll {
 	
 					boost::recursive_mutex::scoped_lock lock(m_mutex);
 
+					shared_ptr<ISource> bestSource;
 
 					set< shared_ptr<ISource> >::iterator iter = m_saveSources.begin();
 					while (iter != m_saveSources.end())
 					{
 						shared_ptr<ISource> temp = *iter;
 
+						/**
+						 * Can the resource be saved by this source ?
+						 */
 						if (temp->isFetchable(_instance))
 						{
-							return temp;
+							/**
+							 * Have we already found a potential source ?
+							 */
+							if (bestSource.get() == 0)
+							{
+								bestSource = temp;
+							} else
+							{
+								/**
+								 * We have two potential source.
+								 * So we compare their priorities
+								 */
+								if ( (*bestSource) < temp)
+								{
+									bestSource = temp;
+								}
+							}
 						}
 
 						iter++;
 					}
 
-					return shared_ptr<ISource>();
+					return bestSource;
 				}
 
 
