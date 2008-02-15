@@ -39,6 +39,9 @@
 |               02/14/2008 - Bruno Mahe - Take in account a source priority |
 |                                    when looking for a suitable source for |
 |                                    loading or saving a resource           |
+|               02/15/2008 - Bruno Mahe - ISource objects provide a new     |
+|                                    method to check if a source can        |
+|                                    find a writable stream                 |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -316,7 +319,7 @@ namespace Gnoll {
 						/**
 						 * Can the resource be saved by this source ?
 						 */
-						if (temp->isFetchable(_instance))
+						if (temp->isWritable(_instance))
 						{
 							/**
 							 * Have we already found a potential source ?

@@ -27,6 +27,9 @@
 |                                - Enclose ISource in Viracocha::Core       |
 |                                    namespace                              |
 |               08/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               02/15/2008 - Bruno Mahe - ISource objects provide a new     |
+|                                    method to check if a source can        |
+|                                    find a writable stream                 |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -91,11 +94,20 @@ namespace Gnoll
 				virtual shared_ptr<IStream> saveStream( const string _url) = 0;
 
 				/**
-				 *	This methods tells if a stream can be built from a given URL
+				 *	This methods tells if a readable stream can be built from a given URL
 				 *	@param _url URL to be tested
-				 *	@param True if a stream can be built from this URL
+				 *	@param True if a readable stream can be built from this URL
 				 */
 				virtual bool isFetchable( const string _url) = 0;
+
+
+				/**
+				 *	This methods tells if a writable stream can be built from a given URL
+				 *	@param _url URL to be tested
+				 *	@param True if a writable stream can be built from this URL
+				 */
+				virtual bool isWritable( const string _url) = 0;
+
 
 				/**
 				 * Comparison operator to compare two sources based on their priorities

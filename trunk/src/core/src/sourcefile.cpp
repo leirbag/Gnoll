@@ -27,12 +27,16 @@
 |               08/17/2007 - Paf - Update namespace                         |
 |               08/18/2007 - Paf - Implement SourceFile::isFetcheable()     |
 |               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               02/15/2008 - Bruno Mahe - ISource objects provide a new     |
+|                                    method to check if a source can        |
+|                                    find a writable stream                 |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 #include "../include/sourcefile.h"
 #include "boost/filesystem/path.hpp" 
+#include "boost/filesystem/convenience.hpp"
 #include "boost/filesystem/operations.hpp" 
 
 using namespace boost::filesystem;       
@@ -81,10 +85,28 @@ namespace Gnoll
 
 			result = exists( file );
 
+			if (m_overWrite)
+			{
+				return true;
+			}
+			return result;
+
+		}
+
+
+		bool SourceFile::isWritable( const string _url)
+		{
+
+			bool result;
+			path file( m_path);
+			file = file / _url;
+
+			result = exists( file.branch_path() );
+
 		 	return result;
 
 		}
-		
+
 
 		void SourceFile::setOverWrite(bool _mode)
 		{

@@ -25,6 +25,9 @@
 |               07/11/2007 - Paf - Initial release                          |
 |               08/17/2007 - Paf - Update comments                          |
 |               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
+|               02/15/2008 - Bruno Mahe - ISource objects provide a new     |
+|                                    method to check if a source can        |
+|                                    find a writable stream                 |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -82,6 +85,7 @@ namespace  Gnoll
 				 */ 
 				virtual shared_ptr<IStream> loadStream( const string _url);
 
+
 				/**
 				 * This loads a stream with writing permissions to a given URL
 				 * @param _url URL to save to
@@ -89,12 +93,22 @@ namespace  Gnoll
 				 */ 
 				virtual shared_ptr<IStream> saveStream( const string _url);
 
+
 				/**
 				 *	This methods tells if a stream can be built from a given URL
 				 *	@param _url URL to be tested
 				 *	@param True if a stream can be built from this URL
 				 */
 				virtual bool isFetchable( const string _url);
+
+
+				/**
+				 *	This methods tells if a writable stream can be built from a given URL
+				 *	@param _url URL to be tested
+				 *	@param True if a writable stream can be built from this URL
+				 */
+				virtual bool isWritable( const string _url);
+
 
 				/**
 				 * This methods set the overwriting mode
