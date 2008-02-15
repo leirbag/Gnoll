@@ -27,11 +27,17 @@
 |               12/24/2007 - Gabriel - pass by GraphicModule to get         |
 |                                      the scenemanager and delete          |
 |                                      scenemanager from constructor        |
+|               02/15/2008 - Bruno Mahe - Load/Save Camera's position       |
+|                                      and direction when (un-)initialized  |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camera.h"
 #include "../../graphic/include/cgraphicmodule.h"
+#include "../include/float.h"
+#include <OgreVector3.h>
+
+
 
 namespace Gnoll
 {
@@ -41,6 +47,99 @@ namespace Gnoll
 		{
 			m_ogreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
 			m_name = instanceName;
+
+			shared_ptr<Float> pos_x;
+			shared_ptr<Float> pos_y;
+			shared_ptr<Float> pos_z;
+
+
+			if (this->hasAttribute("pos_x"))
+			{
+				pos_x = this->getAttribute<Float>("pos_x");
+			} else
+			{
+				pos_x = shared_ptr<Float> (new Float(0.0f));
+			}
+
+			if (this->hasAttribute("pos_y"))
+			{
+				pos_y = this->getAttribute<Float>("pos_y");
+			} else
+			{
+				pos_y = shared_ptr<Float> (new Float(0.0f));
+			}
+
+			if (this->hasAttribute("pos_z"))
+			{
+				pos_z = this->getAttribute<Float>("pos_z");
+			} else
+			{
+				pos_z = shared_ptr<Float> (new Float(0.0f));
+			}
+
+			m_ogreCamera->setPosition(*pos_x, *pos_y, *pos_z);
+
+
+
+			shared_ptr<Float> dir_x;
+			shared_ptr<Float> dir_y;
+			shared_ptr<Float> dir_z;
+
+			if (this->hasAttribute("dir_x"))
+			{
+				dir_x = this->getAttribute<Float>("dir_x");
+			} else
+			{
+				dir_x = shared_ptr<Float> (new Float(0.0f));
+			}
+
+			if (this->hasAttribute("dir_y"))
+			{
+				dir_y = this->getAttribute<Float>("dir_y");
+			} else
+			{
+				dir_y = shared_ptr<Float> (new Float(0.0f));
+			}
+
+			if (this->hasAttribute("dir_z"))
+			{
+				dir_z = this->getAttribute<Float>("dir_z");
+			} else
+			{
+				dir_z = shared_ptr<Float> (new Float(0.0f));
+			}
+
+			m_ogreCamera->setDirection(*dir_x, *dir_y, *dir_z);
+
+		}
+
+		Camera::~Camera()
+		{
+
+			Ogre::Vector3 pos = m_ogreCamera->getPosition();
+
+			shared_ptr<Float> pos_x(new Float(pos.x));
+			this->setAttribute("pos_x", pos_x);
+
+			shared_ptr<Float> pos_y(new Float(pos.y));
+			this->setAttribute("pos_y", pos_y);
+
+			shared_ptr<Float> pos_z(new Float(pos.z));
+			this->setAttribute("pos_z", pos_z);
+
+
+
+
+			Ogre::Vector3 dir = m_ogreCamera->getDirection();
+
+			shared_ptr<Float> dir_x(new Float(dir.x));
+			this->setAttribute("dir_x", dir_x);
+
+			shared_ptr<Float> dir_y(new Float(dir.y));
+			this->setAttribute("dir_y", dir_y);
+
+			shared_ptr<Float> dir_z(new Float(dir.z));
+			this->setAttribute("dir_z", dir_z);
 		}
 
 		Ogre::Vector3 Camera::getLookAt()
