@@ -22,7 +22,8 @@
 |   This is a PersistentObject proxy                                        |
 |                                                                           |
 |   Changelog :                                                             |
-|               12/14/2007 - Paf - Initial release                          |
+|               12/14/2007 - Bruno Mahe - Initial release                   |
+|               02/15/2008 - Bruno Mahe - Make destructor virtual           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -80,7 +81,7 @@ namespace Gnoll
 				/**
 				 * This is a destructor
 				 */
-				~CPersistentObjectProxy ();
+				virtual ~CPersistentObjectProxy ();
 
 				/**
 				 * Save the instance
