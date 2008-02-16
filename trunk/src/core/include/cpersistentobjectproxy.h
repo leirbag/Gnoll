@@ -24,6 +24,8 @@
 |   Changelog :                                                             |
 |               12/14/2007 - Bruno Mahe - Initial release                   |
 |               02/15/2008 - Bruno Mahe - Make destructor virtual           |
+|               02/15/2008 - Bruno Mahe - Add a new method                  |
+|                                          getAttributeOrDefault()          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -104,6 +106,19 @@ namespace Gnoll
 				template< class T > shared_ptr<T> getAttribute( const Glib::ustring _name  )
 				{
 					return m_self->getAttribute<T>(_name);
+				}
+
+
+				/**
+				 * This return an attribute. If the attribute doesn't exists, it will<br/>
+				 * return a default value
+				 * @param _name The name of the attribute we want
+				 * @return The attribute if it exists, or a default value
+				 */
+				template< class T >
+						shared_ptr<T> getAttributeOrDefault( const Glib::ustring _name, shared_ptr<T> _defaultValue = shared_ptr<T>()  )
+				{
+					return m_self->getAttributeOrDefault<T>(_name, _defaultValue);
 				}
 
 		

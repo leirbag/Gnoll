@@ -29,6 +29,9 @@
 |                                      scenemanager from constructor        |
 |               02/15/2008 - Bruno Mahe - Load/Save Camera's position       |
 |                                      and direction when (un-)initialized  |
+|               02/15/2008 - Bruno Mahe - Replace                           |
+|                            CPersistentObjectProxy::getAttribute() by      |
+|                            CPersistentOBjectPRoxy::getAttributeOrDefault()|
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -48,66 +51,35 @@ namespace Gnoll
 			m_ogreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
 			m_name = instanceName;
 
+			/**
+			 * Extract Camera's position
+			 */
 			shared_ptr<Float> pos_x;
 			shared_ptr<Float> pos_y;
 			shared_ptr<Float> pos_z;
 
+			shared_ptr<Float> default_pos = shared_ptr<Float> (new Float(0.0f));
 
-			if (this->hasAttribute("pos_x"))
-			{
-				pos_x = this->getAttribute<Float>("pos_x");
-			} else
-			{
-				pos_x = shared_ptr<Float> (new Float(0.0f));
-			}
+			pos_x = this->getAttributeOrDefault<Float>("pos_x", default_pos);
+			pos_y = this->getAttributeOrDefault<Float>("pos_y", default_pos);
+			pos_z = this->getAttributeOrDefault<Float>("pos_z", default_pos);
 
-			if (this->hasAttribute("pos_y"))
-			{
-				pos_y = this->getAttribute<Float>("pos_y");
-			} else
-			{
-				pos_y = shared_ptr<Float> (new Float(0.0f));
-			}
-
-			if (this->hasAttribute("pos_z"))
-			{
-				pos_z = this->getAttribute<Float>("pos_z");
-			} else
-			{
-				pos_z = shared_ptr<Float> (new Float(0.0f));
-			}
 
 			m_ogreCamera->setPosition(*pos_x, *pos_y, *pos_z);
 
 
-
+			/**
+			 * Extract Camera's direction
+			 */
 			shared_ptr<Float> dir_x;
 			shared_ptr<Float> dir_y;
 			shared_ptr<Float> dir_z;
 
-			if (this->hasAttribute("dir_x"))
-			{
-				dir_x = this->getAttribute<Float>("dir_x");
-			} else
-			{
-				dir_x = shared_ptr<Float> (new Float(0.0f));
-			}
+			shared_ptr<Float> default_dir = shared_ptr<Float> (new Float(0.0f));
 
-			if (this->hasAttribute("dir_y"))
-			{
-				dir_y = this->getAttribute<Float>("dir_y");
-			} else
-			{
-				dir_y = shared_ptr<Float> (new Float(0.0f));
-			}
-
-			if (this->hasAttribute("dir_z"))
-			{
-				dir_z = this->getAttribute<Float>("dir_z");
-			} else
-			{
-				dir_z = shared_ptr<Float> (new Float(0.0f));
-			}
+			dir_x = this->getAttributeOrDefault<Float>("dir_x", default_dir);
+			dir_y = this->getAttributeOrDefault<Float>("dir_y", default_dir);
+			dir_z = this->getAttributeOrDefault<Float>("dir_z", default_dir);
 
 			m_ogreCamera->setDirection(*dir_x, *dir_y, *dir_z);
 

@@ -30,9 +30,11 @@
 |               08/10/2007 - Paf - Add Doxygen comments                     |
 |               10/11/2007 - Paf - Add method getAttributesNames()          |
 |               						- Make const_iterator on attributes        |
-|               						    possible                               |
+|                                    possible                               |
 |               12/15/2007 - Paf - Add policies when an attribute is not    |
 |                                    not found                              |
+|               02/15/2008 - Bruno Mahe - Add a new method                  |
+|                                    getAttributeOrDefault()                |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -166,6 +168,24 @@ namespace Gnoll
 				}
 
 	
+				/**
+				 * This return an attribute. If the attribute doesn't exists, it will<br/>
+				 * return a default value
+				 * @param _name The name of the attribute we want
+				 * @return The attribute if it exists, or a default value
+				 */
+				template< class T >
+						shared_ptr<T> getAttributeOrDefault( const Glib::ustring _name, shared_ptr<T> _defaultValue = shared_ptr<T>()  )
+				{
+					if (this->hasAttribute(_name));
+					{
+						return getAttribute<T>(_name);
+					}
+
+					return _defaultValue;
+				}
+
+
 				/**
 				 * Check if an attribute exists
 				 * @param _name Name of the attribute
