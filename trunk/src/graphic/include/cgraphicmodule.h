@@ -30,8 +30,16 @@
 |               04/25/2007 - Paf - Added CEGUI                               |	
 |               05/09/2007 - Paf - Use boost::any due to a change in CMessage|	
 |               12/17/2007 - Paf - Add private method loadOgreResourcesPath()|
+|               02/15/2008 - Bruno Mahe - Need to keep track of Camera's     |
+|                                  address, so it can be freed when exiting  |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
+
+
+
+#ifndef __CGRAPHICMODULE_H__
+#define __CGRAPHICMODULE_H__
+
 
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
@@ -62,6 +70,13 @@
 //regular mem handler
 #include <OgreMemoryMacros.h> 
 
+#include "../../core/include/camera.h"
+#include "../../core/include/camerafixe.h"
+#include "../../core/include/camerafreefly.h"
+#include "../../core/include/camerathirdperson.h"
+#include "../../core/include/camerafirstperson.h"
+#include "../../core/include/cameraspline.h"
+
 
 
 
@@ -76,8 +91,6 @@ using namespace std;
 using namespace boost;
 
 
-#ifndef __CGRAPHICMODULE_H__
-#define __CGRAPHICMODULE_H__
 
 
 /**
@@ -103,6 +116,7 @@ class CGraphicModule: public CModule, public Gnoll::Core::Singleton<CGraphicModu
 		CMessageType framerendered;
 		shared_ptr<boost::any> data;
 
+		Gnoll::Core::Camera* m_camera;
 	
 		/**
 		 * Load resources path

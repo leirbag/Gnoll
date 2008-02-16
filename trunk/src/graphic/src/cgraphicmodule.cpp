@@ -64,8 +64,11 @@
 |          12/21/2007 - Paf - Moved SkyDome and Terrain loading to scene    |
 |                               parser                                      |
 |                                                                           |
-|		   12/24/2007 - Gabriel - change spline camera to third person        |
+|          12/24/2007 - Gabriel - change spline camera to third person      |
 |                                 camera                                    |
+|                                                                           |
+|          02/15/2008 - Bruno Mahe - Need to keep track of camera's         |
+|                                  address, so it can be freed when exiting |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -164,19 +167,19 @@ void CGraphicModule::init()
 	mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 	// Create and configure the camera
-	Gnoll::Core::Camera* pCamera = new Gnoll::Core::CameraThirdPerson("camTP");
+	m_camera = new Gnoll::Core::CameraThirdPerson("camTP");
 
-	//pCamera->setEye(Vector3(780, 25, 590));
-	//pCamera->setLookAt(Vector3(0, 10, 0));
-	pCamera->setNearDistance(5);
-	pCamera->setFarDistance(1000);
+	//m_camera->setEye(Vector3(780, 25, 590));
+	//m_camera->setLookAt(Vector3(0, 10, 0));
+	m_camera->setNearDistance(5);
+	m_camera->setFarDistance(1000);
 
 	// Create one viewport, entire window
-	Viewport* vp = mwindow->addViewport(&pCamera->getOgreCamera());
+	Viewport* vp = mwindow->addViewport(&m_camera->getOgreCamera());
 	vp->setBackgroundColour(ColourValue(0.5,1,0));
 
 	// Alter the camera aspect ratio to match the viewport
-	pCamera->setFov( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
+	m_camera->setFov( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
 
 	mSceneMgr->setAmbientLight( ColourValue( 0.6, 0.6, 0.6 ) );
 	mSceneMgr->setShadowTechnique( SHADOWTYPE_TEXTURE_ADDITIVE );
@@ -210,23 +213,23 @@ void CGraphicModule::init()
 	// Infinite far plane?
 	if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
 	{
-		pCamera->setFarDistance(0);
+		m_camera->setFarDistance(0);
 	}
 
 	RaySceneQuery* raySceneQuery = mSceneMgr->createRayQuery(
-	Ray(pCamera->getEye(), Vector3::NEGATIVE_UNIT_Y));
+	Ray(m_camera->getEye(), Vector3::NEGATIVE_UNIT_Y));
 
 	Ray updateRay;
-	updateRay.setOrigin(pCamera->getEye());
+	updateRay.setOrigin(m_camera->getEye());
 	updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
 	raySceneQuery->setRay(updateRay);
 	RaySceneQueryResult& qryResult = raySceneQuery->execute();
 	RaySceneQueryResult::iterator i = qryResult.begin();
 	if (i != qryResult.end() && i->worldFragment)
 	{
-		pCamera->setEye(Vector3(pCamera->getEye().x, 
+		m_camera->setEye(Vector3(m_camera->getEye().x,
 		i->worldFragment->singleIntersection.y + 5, 
-		pCamera->getEye().z));
+		m_camera->getEye().z));
 	}
 
 	//mSceneMgr->destroyQuery(raySceneQuery);
@@ -294,10 +297,10 @@ void CGraphicModule::init()
 	eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 	eb->setAlwaysOnTop(true);
 
-	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
-	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setOffset(100.0f);
-	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setLimitRotationX(180.0f);
-	static_cast<Gnoll::Core::CameraThirdPerson*>(pCamera)->setLimitRotationY(180.0f);
+	static_cast<Gnoll::Core::CameraThirdPerson*>(m_camera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
+	static_cast<Gnoll::Core::CameraThirdPerson*>(m_camera)->setOffset(100.0f);
+	static_cast<Gnoll::Core::CameraThirdPerson*>(m_camera)->setLimitRotationX(180.0f);
+	static_cast<Gnoll::Core::CameraThirdPerson*>(m_camera)->setLimitRotationY(180.0f);
 }
 
 
@@ -342,6 +345,10 @@ void CGraphicModule::process()
 
 void CGraphicModule::exit()
 {
+	if (m_camera)
+	{
+		delete m_camera;
+	}
     delete m_timer;
 }
 
