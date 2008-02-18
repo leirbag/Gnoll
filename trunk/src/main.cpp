@@ -541,9 +541,9 @@ class AnimationListener : public CMessageListener
 
 
 				if (toucheavance)
-					robotnode->translate( Ogre::Vector3(0.0f, 0.0f, -1.0f), Ogre::Node::TS_LOCAL );
+					robotnode->translate( Ogre::Vector3(0.0f, 0.0f, -10.0f * (lasttime/1000.0f)), Ogre::Node::TS_LOCAL );
 				else if (toucherecule)
-					robotnode->translate( Ogre::Vector3(0.0f, 0.0f, 1.0f), Ogre::Node::TS_LOCAL );
+					robotnode->translate( Ogre::Vector3(0.0f, 0.0f, 10.0f * (lasttime/1000.0f)), Ogre::Node::TS_LOCAL );
 
 
 				Vector3 pos = robotnode->getPosition();
