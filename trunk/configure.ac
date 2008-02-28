@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.60)
-AC_INIT(Gnoll, 0.1.3, gnoll-devel@gna.org)
+AC_INIT(Gnoll, 0.1.4, gnoll-devel@gna.org)
 AC_CONFIG_SRCDIR([src/main.cpp])
 
 AM_INIT_AUTOMAKE
