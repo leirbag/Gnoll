@@ -1,0 +1,205 @@
+#/***************************************************************************
+# *   Copyright (C) 2008 by Bruno Mahe                                      *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU General Public License as published by  *
+# *   the Free Software Foundation; either version 2 of the License, or     *
+# *   (at your option) any later version.                                   *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU General Public License for more details.                          *
+# *                                                                         *
+# *   You should have received a copy of the GNU General Public License     *
+# *   along with this program; if not, write to the                         *
+# *   Free Software Foundation, Inc.,                                       *
+# *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+# ***************************************************************************/
+
+
+
+import os
+import sys
+
+import scons.BaseGnollInstaller
+
+
+
+def checkDoxygen(env, config):
+	return not env.Execute('doxygen --version')
+
+def buildDoxygenDoc(env, config):
+	env.Execute('doxygen')
+
+
+def print_config(config):
+
+	print
+	print
+	print "***************************************************************"
+	print "* Generating Configuration files with the following settings: *"
+	print "***************************************************************"
+	print
+
+	keys = config.keys()
+	keys.sort()
+	for key in keys:
+		print "    %-30s %s" % (key, config[key])
+	print
+	print
+
+
+def generateConfigFile(config, newSymbols, srcFile, destFile):
+
+	print_config(config)
+
+	for target, source in zip(destFile, srcFile):
+
+		print "Generating [%s] from [%s]" % (target, source)
+
+		config_h = file(str(target), "w")
+		config_h_in = file(str(source), "r")
+
+		config_h.write(config_h_in.read() % config)
+
+
+		config_h.write("\n")
+		config_h.write("\n")
+		config_h.write("/* Define various constants */")
+		config_h.write("\n")
+		config_h.write("\n")
+
+
+		symbols = newSymbols.keys()
+		symbols.sort()
+
+		for symbol in symbols:
+			config_h.write("#define %s   %s\n" %(symbol, newSymbols[symbol]))
+			config_h.write("\n")
+
+		config_h_in.close()
+		config_h.close()
+
+		print
+
+
+
+def main():
+
+
+	configProject = {
+				"DEBUG"  : "0",
+				"PACKAGE_NAME": '"Gnoll"',
+				"PACKAGE_VERSION": '"0.1.4"' ,
+				"PACKAGE_BUGREPORT": '"gnoll-devel@lists.gnoll.org"',
+				"PACKAGE_STRING": '"Gnoll 0.1.4"',
+				"PACKAGE_TARNAME": '"gnoll"'
+			}
+
+
+	opts = Options('gnoll.conf')
+	opts.Add(PathOption('prefix', 'Directory to install under', '/usr/share'))
+
+
+	# Do we want to compile in debug mode ?
+	if ARGUMENTS.get('debug', '0') == '1':
+		configProject['DEBUG'] = '1'
+
+
+
+	for target in BUILD_TARGETS:
+
+		print "Target [%s]" % (target)
+		env = Environment(ENV = os.environ)
+		config = env.Configure()
+		env.BuildDir("./objs/", "src")
+
+		env['install_prefix'] = ARGUMENTS.get('prefix')
+		if not env['install_prefix']:
+			env['install_prefix'] = "/usr/share/"
+
+		if env['install_prefix'][-1] != '/' :
+			env['install_prefix'] = env['install_prefix'] + '/'
+
+
+		env['install_bin'] = env['install_prefix'] + "bin/"
+		env['install_data'] = env['install_prefix'] + 'data/'
+		env['install_config'] = env['install_data']
+
+
+
+		opts.Update(env)
+		opts.Save('gnoll.conf', env)
+
+		print "install_prefix = [%s]" % (env['install_prefix'])
+
+		Help(opts.GenerateHelpText(env))
+
+
+
+
+		if target == 'gnoll':
+
+			gnollBuilder = None
+
+			if (env['PLATFORM'] == 'posix'):
+				from  scons.LinuxGnollBuilder import LinuxGnollBuilder
+				gnollBuilder = LinuxGnollBuilder()
+
+
+			if (gnollBuilder == None):
+				print "Sorry, your platform [%s] is not supported." % (env['PLATFORM'])
+				exit(-1)
+
+			# If debug is activated, add some flags to ad debugging symbols
+			if configProject['DEBUG'] == '1':
+				env.MergeFlags([ ' -g ', ' -pg '])
+
+
+			# Check if all libraries needed by Gnoll are installed and configured
+			gnollConfig = gnollBuilder.checkGnoll(env, config)
+
+			# Generate config.h file
+			generateConfigFile(configProject, gnollConfig, ['./src/config.h.in'], ['./src/config.h'])
+
+			# Build Gnoll
+			gnollBuilder.buildGnoll(env, config)
+
+
+
+		if target == 'doc':
+
+			if not checkDoxygen(env, config):
+				print "Doxygen utility not found."
+				exit(-1)
+			buildDoxygenDoc(env, config)
+
+
+		if target == 'install':
+
+			gnollInstaller = None
+
+			if (env['PLATFORM'] == 'posix'):
+				from  scons.LinuxGnollInstaller import LinuxGnollInstaller
+				gnollInstaller = LinuxGnollInstaller()
+
+
+			if gnollInstaller == None:
+				gnollInstaller = scons.BaseGnollInstaller.BaseGnollInstaller()
+
+
+
+			env.Alias('install_bin_gnoll', env.Install(env['install_bin'], 'gnoll'))
+			env.Alias('install_bin', ['install_bin_gnoll'])
+			env.Alias('install_data', env.InstallAs(env['install_data'], './data/'))
+			env.Alias('install', ['gnoll', 'install_bin', 'install_data'], )
+
+
+			if (gnollInstaller != None):
+				gnollInstaller.install(env, config)
+
+		config.Finish()
+
+
+main()

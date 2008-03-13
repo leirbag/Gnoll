@@ -2,34 +2,33 @@
 <persistentobject instance="ogre_resources">
   <attribute name="FileSystem">
     <list>
-      <string value="*DATADIR*"/>
-      <string value="*DATADIR*/"/>
-      <string value="*DATADIR*/fonts"/>
-      <string value="*DATADIR*/programs"/>
-      <string value="*DATADIR*/gui"/>
-      <string value="*DATADIR*/materials/scripts"/>
-      <string value="*DATADIR*/materials/textures"/>
-      <string value="*DATADIR*/models"/>
-      <string value="*DATADIR*/overlays"/>
-      <string value="*DATADIR*/materials/particle"/>
-      <string value="*DATADIR*/materials/gui"/>
-      <string value="*DATADIR*/configs"/>
-      <string value="*DATADIR*/imagesets"/>
-      <string value="*DATADIR*/layouts"/>
-      <string value="*DATADIR*/looknfeel"/>
-      <string value="*DATADIR*/lua_scripts"/>
-      <string value="*DATADIR*/schemes"/>
+      <string value="%(install_data)s"/>
+      <string value="%(install_data)sfonts"/>
+      <string value="%(install_data)sprograms"/>
+      <string value="%(install_data)sgui"/>
+      <string value="%(install_data)smaterials/scripts"/>
+      <string value="%(install_data)smaterials/textures"/>
+      <string value="%(install_data)smodels"/>
+      <string value="%(install_data)soverlays"/>
+      <string value="%(install_data)smaterials/particle"/>
+      <string value="%(install_data)smaterials/gui"/>
+      <string value="%(install_data)sconfigs"/>
+      <string value="%(install_data)simagesets"/>
+      <string value="%(install_data)slayouts"/>
+      <string value="%(install_data)slooknfeel"/>
+      <string value="%(install_data)slua_scripts"/>
+      <string value="%(install_data)sschemes"/>
     </list>
   </attribute>
   <attribute name="Zip">
     <list>
-      <string value="*DATADIR*/packs/OgreCore.zip"/>
-      <string value="*DATADIR*/packs/cubemap.zip"/>
-      <string value="*DATADIR*/packs/cubemapsJS.zip"/>
-      <string value="*DATADIR*/packs/dragon.zip"/>
-      <string value="*DATADIR*/packs/fresneldemo.zip"/>
-      <string value="*DATADIR*/packs/ogretestmap.zip"/>
-      <string value="*DATADIR*/packs/skybox.zip"/>
+      <string value="%(install_data)spacks/OgreCore.zip"/>
+      <string value="%(install_data)spacks/cubemap.zip"/>
+      <string value="%(install_data)spacks/cubemapsJS.zip"/>
+      <string value="%(install_data)spacks/dragon.zip"/>
+      <string value="%(install_data)spacks/fresneldemo.zip"/>
+      <string value="%(install_data)spacks/ogretestmap.zip"/>
+      <string value="%(install_data)spacks/skybox.zip"/>
     </list>
   </attribute>
 </persistentobject>
