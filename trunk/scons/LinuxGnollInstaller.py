@@ -62,4 +62,5 @@ class LinuxGnollInstaller (BaseGnollInstaller):
 
 
 	def install(self, env, config):
+		BaseGnollInstaller.install(self, env, config)
 		self.createLauncher(env, config)

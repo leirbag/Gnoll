@@ -31,7 +31,7 @@ class BaseGnollInstaller:
 		pass
 
 	def install(self, env, config):
-		pass
+		self.installConfig(env, config)
 
 
 	def parseConfigFile(self, env, config, filename):
@@ -66,9 +66,9 @@ class BaseGnollInstaller:
 	def installConfig(self, env, config):
 
 		files = self.gatherConfigFiles('config')
-		print files
+		print "Template(s) to parse : " + str(files)
+
 		for file in files:
-			print file
 			self.parseConfigFile(env, config, file)
 
 
