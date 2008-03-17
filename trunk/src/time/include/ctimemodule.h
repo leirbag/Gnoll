@@ -49,7 +49,7 @@
 
 #include <map>
 #include <boost/shared_ptr.hpp>
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 
 #include "itimer.h"
 #include "../../core/include/cmodule.h"
@@ -166,7 +166,7 @@ namespace Gnoll
 				/**
 				 * Mutex dedicated to m_timers
 				 */
-				boost::mutex m_timerMutex;
+				boost::recursive_mutex m_timerMutex;
 
 
 		 		/**
@@ -180,7 +180,7 @@ namespace Gnoll
 				/**
 				 * Mutex dedicated to m_timers
 				 */
-				boost::mutex m_timersMutex;
+				boost::recursive_mutex m_timersMutex;
 
 
 				/**
@@ -194,7 +194,7 @@ namespace Gnoll
 				/**
 				 * Mutex dedicated to m_timersPeriodic
 				 */
-				boost::mutex m_timersPeriodicMutex;
+				boost::recursive_mutex m_timersPeriodicMutex;
 
 
 				/**
@@ -206,7 +206,7 @@ namespace Gnoll
 				/**
 				 * Mutex dedicated to m_listListeners
 				 */
-				boost::mutex m_listListenersMutex;
+				boost::recursive_mutex m_listListenersMutex;
 
 
 				/**

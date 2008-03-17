@@ -700,7 +700,7 @@ int main(int argc, char* argv[])
 
 	CGraphicModule* graphicmanager = CGraphicModule::getInstancePtr();
 	COISInputModule inputmanager;
-	CTimeModule timeModule;
+	CTimeModule* timeModule = CTimeModule::getInstancePtr();
 	CMessageModule* messageModule = CMessageModule::getInstancePtr();
 	CSoundModule * soundmanager = CSoundModule::getInstancePtr();
 	CInputEventsTranslator* inputEventsTranslator = CInputEventsTranslator::getInstancePtr();
@@ -711,7 +711,7 @@ int main(int argc, char* argv[])
 	messageModule->init();
 	graphicmanager->init();
 	inputmanager.init();
-	timeModule.init();
+	timeModule->init();
 	soundmanager->init();
 	inputEventsTranslator->init();
 
@@ -752,7 +752,7 @@ int main(int argc, char* argv[])
 		inputEventsTranslator->process();
 		messageModule->process();
 		graphicmanager->process();
-		timeModule.process();
+		timeModule->process();
 		soundmanager->process();
 	}
 
@@ -793,7 +793,7 @@ int main(int argc, char* argv[])
 		deleteRobot();
 	}
 
-	timeModule.exit();
+	timeModule->exit();
 	inputmanager.exit();
 	inputEventsTranslator->exit();
 	graphicmanager->exit();
