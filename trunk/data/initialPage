@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<persistentobject instance="initialPage">
+  <attribute name="PageRenderer">
+    <CMeshPageRenderer meshName="ninja.mesh"/>
+  </attribute>
+  <attribute name="northLink">
+    <string value="northPage"/>
+  </attribute>
+  <attribute name="size">
+    <float value="128"/>
+  </attribute>
+</persistentobject>

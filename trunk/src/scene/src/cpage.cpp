@@ -30,6 +30,8 @@
 #include "../include/cpage.h"
 #include "../include/ipagerenderer.h"
 
+#include <iostream>
+
 using namespace std;
 using namespace boost;
 
@@ -41,48 +43,66 @@ namespace Gnoll
 
 		CPage::CPage(string _instanceName): CPersistentObjectProxy(_instanceName)
 		{
+
+		}
+
+		void CPage::init()
+		{
+
 			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
 			SceneNode* root = sm->getRootSceneNode();
-			m_pageNode = root->createChildSceneNode( _instanceName );  
-			
+
+			// Creating root page node
+			root->createChildSceneNode( this->getInstance() );
 			
 			if (this->hasAttribute("PageRenderer"))
 			{
+				cout << "Initializing PageRenderer" << endl;
 				shared_ptr<IPageRenderer> pRenderer = this->getAttribute<IPageRenderer>("PageRenderer");
 				pRenderer->init(this);
 			}
 
 		}
 
-				
+		void CPage::unInit()
+		{
+			/**
+			 * The way to check if a page has been initialized, is to check if the Page Root Node has
+			 * been created.
+			 */
+			if (this->getPageRootNode())
+			{
+				Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+
+
+				if (this->hasAttribute("PageRenderer"))
+				{
+					shared_ptr<IPageRenderer> pRenderer = this->getAttribute<IPageRenderer>("PageRenderer");
+					pRenderer->exit();
+				}
+
+				SceneNode* node = sm->getSceneNode( this->getInstance() );
+				node->removeAndDestroyAllChildren();
+
+				//SceneNode* root = sm->getRootSceneNode();
+				//root->removeAndDestroyChild(this->getInstance());
+			}
+		}
+
+
 		CPage::~CPage()
 		{
-			
-			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
-			
-
-			if (this->hasAttribute("PageRenderer"))
-			{
-				shared_ptr<IPageRenderer> pRenderer = this->getAttribute<IPageRenderer>("PageRenderer");
-				pRenderer->exit();
-			}
-			
-			SceneNode* node = sm->getSceneNode( this->getInstance() );
-			node->removeAndDestroyAllChildren();
-			
-			SceneNode* root = sm->getRootSceneNode();
-			root->removeAndDestroyChild(this->getInstance());
-
-
 		}
 
-				
+
 		Ogre::SceneNode * CPage::getPageRootNode()
 		{
-			return m_pageNode;
+			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+			SceneNode* node = sm->getSceneNode( this->getInstance() );
+			return node;
 		}
 
-				
+
 	}
 }
 

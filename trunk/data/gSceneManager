@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<persistentobject instance="gSceneManager">
+  <attribute name="focusedPage">
+    <string value="initialPage"/>
+  </attribute>
+</persistentobject>

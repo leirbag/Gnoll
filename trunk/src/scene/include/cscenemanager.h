@@ -38,8 +38,11 @@
 
 #include "../../core/include/cpersistentobjectproxy.h"
 #include "../../core/include/cpoolthreads.h"
+#include "../include/cpage.h"
+#include "../../core/include/cmessagelistener.h"
 
-#include "string.h"
+#include "../../core/include/string.h"
+#include "../../core/include/float.h"
 
 
 
@@ -57,10 +60,19 @@ namespace Gnoll
 		{
 		
 			private:
-	
+
+				/**
+				 * Pool of threads used for all sort of jobs
+				 */
 				CPoolThreads m_poolOfThreads;
 				
-		
+
+				/**
+				 * Listener which will update the scene manager
+				 */
+				shared_ptr<CMessageListener> sceneUpdateListener;
+
+
 			public:
 			
 				/**
@@ -76,17 +88,32 @@ namespace Gnoll
 			
 				
 				/**
-				 * Update scene
+				 * Update scene module
 				 */
 				void update();
 				
-				
+
 				/**
 				 * Enqueue a job in the pool of threads
 				 */
 				void queueJob( shared_ptr<CJob> _job);
-		
-						
+
+
+				/**
+				 * Check if a CPage object is within the camera frustrum
+				 * @param _page CPage object to check
+				 * @return Whether or not that page is visible
+				 */
+				bool isPageVisible(const CPage& _page);
+
+
+				/**
+				 * Set up a page (position, etc.)
+				 * @param _pageInstance Page Instance to setup
+				 * @param _loadedPages List of loaded pages
+				 * @param _offset Page offset
+				 */
+				void setupPage( const string _pageInstance, shared_ptr< Gnoll::Core::List > _loadedPages, const Ogre::Vector3 _offset = Ogre::Vector3());
 		};
 				
 	}

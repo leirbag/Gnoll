@@ -62,6 +62,7 @@
 #include "graphic/include/cgraphicmodule.h"
 #include "time/include/ctimemodule.h"
 #include "sound/include/csoundmodule.h"
+#include "scene/include/cscenemanager.h"
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>
@@ -80,6 +81,7 @@ using namespace Gnoll::Core;
 using namespace Gnoll::Time;
 using namespace Gnoll::Sound;
 using namespace Gnoll::Input;
+using namespace Gnoll::Scene;
 
 bool done = false;
 
@@ -744,6 +746,8 @@ int main(int argc, char* argv[])
 	if (messageManager->addListener ( mylistener8, mrtype ) == true)
 		cout << "Listener ajoute" << endl;
 
+
+	CSceneManager gSceneManager("gSceneManager");
 
 	while (done == false)
 	{

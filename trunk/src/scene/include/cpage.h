@@ -52,19 +52,28 @@ namespace Gnoll
 	namespace Scene
 	{
 
-
-
+		/**
+		 * Dynamic attributes :
+		 *  * size -> lentgh of one side
+		 *  * northLink    -> Instance name of the northern neighbor
+		 *  * southLink    -> Instance name of the southern neighbor
+		 *  * eastLink     -> Instance name of the eastern neighbor
+		 *  * westLink     -> Instance name of the western neighbor
+		 *  * initialized  -> Is that page initialized ? yes or non-existant
+		 *  * PageRenderer -> IPageREnderer object in charge of displaying the ground
+		 *
+		 */
 		class CPage : public CPersistentObjectProxy
 		{
 			private:
 			
-				SceneNode* m_pageNode;
-
-
 			public:
 				CPage(string _instanceName);
 				
 				~CPage();
+
+				void init();
+				void unInit();
 				
 				Ogre::SceneNode * getPageRootNode();
 		};

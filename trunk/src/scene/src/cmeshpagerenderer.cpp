@@ -57,9 +57,9 @@ namespace Gnoll
 		{
 			m_parentPage = _parentPage;
 			SceneNode *parentNode = _parentPage->getPageRootNode();
-			SceneNode * pageNode = parentNode->createChildSceneNode( _parentPage->getInstance() );  
-			
-			
+
+			SceneNode * pageNode = parentNode->createChildSceneNode( _parentPage->getInstance() + "_renderer" );
+
 			std::string entName = _parentPage->getInstance() + "_entity";
 			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
 			
@@ -79,7 +79,7 @@ namespace Gnoll
 			std::string entName = m_parentPage->getInstance() + "_entity";
 			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
 			
-			SceneNode* pageNode = sm->getSceneNode( m_parentPage->getInstance() );
+			SceneNode* pageNode = sm->getSceneNode( m_parentPage->getInstance() + "_renderer" );
 			pageNode->detachObject( entName );
 
 			sm->destroyEntity(entName);
