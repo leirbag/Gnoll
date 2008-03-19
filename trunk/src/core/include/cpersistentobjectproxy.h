@@ -164,7 +164,7 @@ namespace Gnoll
 				 * Get the instance name of the PersistentObject
 				 * @return The instance name
 				 */
-				string getInstance();
+				string getInstance() const;
 
 		};
 	}

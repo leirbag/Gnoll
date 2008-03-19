@@ -101,7 +101,7 @@ namespace Gnoll
 		}
 
 
-		string CPersistentObjectProxy::getInstance()
+		string CPersistentObjectProxy::getInstance() const
 		{
 			return m_self->getInstance();
 		}
