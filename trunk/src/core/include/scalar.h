@@ -172,7 +172,7 @@ namespace Gnoll
 				};	
 
 				/**
-				 * Overloading of the inserting operator
+				 * Overloading the inserting operator
 				 * @param _stream Stream to insert the value to
 				 * @return Stream
 				 */
@@ -183,7 +183,7 @@ namespace Gnoll
 
 
 				/**
-				 * Overloading of the extraction operator
+				 * Overloading the extraction operator
 				 * @param _stream Streaim to extract the value from
 				 * @return Stream
 				 */
@@ -201,7 +201,7 @@ namespace Gnoll
 
 
 				/**
-				 * Overloading of the conversion T -> Scalar<T> operator
+				 * Overloading the conversion T -> Scalar<T> operator
 				 * @param _rValue Value to convert from
 				 * @return Converted value 
 				 */
@@ -213,7 +213,7 @@ namespace Gnoll
 
 
 				/**
-				 * Overloading of the conversion Scalar<T> -> T operator
+				 * Overloading the conversion Scalar<T> -> T operator
 				 * @return Converted value 
 				 */
 		  		virtual operator T() const
@@ -226,7 +226,7 @@ namespace Gnoll
 
 
 		/**
-		 * Overloading of operator +
+		 * Overloading operator +
 		 * @param _lValue Left value 
 		 * @param _rValue Right value 
 		 * @return Result of the operation 
@@ -238,7 +238,7 @@ namespace Gnoll
 
 
 		/**
-		 * Overloading of operator -
+		 * Overloading operator -
 		 * @param _lValue Left value 
 		 * @param _rValue Right value 
 		 * @return Result of the operation 
@@ -250,7 +250,7 @@ namespace Gnoll
 
 
 		/**
-		 * Overloading of operator *
+		 * Overloading operator *
 		 * @param _lValue Left value 
 		 * @param _rValue Right value 
 		 * @return Result of the operation 
@@ -262,7 +262,7 @@ namespace Gnoll
 
 
 		/**
-		 * Overloading of operator /
+		 * Overloading operator /
 		 * @param _lValue Left value 
 		 * @param _rValue Right value 
 		 * @return Result of the operation 
@@ -274,7 +274,7 @@ namespace Gnoll
 
 
 		/**
-		 * Overloading of operator ^
+		 * Overloading operator ^
 		 * @param _lValue Left value 
 		 * @param _rValue Right value 
 		 * @return Result of the operation 
@@ -282,6 +282,54 @@ namespace Gnoll
 		template <typename T> Scalar<T> const operator^(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
 		{
 			return Scalar<T>( _lValue.getAttrType(), _lValue.getValue() ^ _rValue.getValue() );
+		}
+
+
+		/**
+		 * Overloading operator ==
+		 * @param _lValue Left value
+		 * @param _rValue Right value
+		 * @return Result of the operation
+		 */
+		template <typename T> bool const operator==(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return (_lValue.getValue() == _rValue.getValue() );
+		}
+
+
+		/**
+		 * Overloading operator !=
+		 * @param _lValue Left value
+		 * @param _rValue Right value
+		 * @return Result of the operation
+		 */
+		template <typename T> bool const operator!=(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return (_lValue.getValue() != _rValue.getValue() );
+		}
+
+
+		/**
+		 * Overloading operator <
+		 * @param _lValue Left value
+		 * @param _rValue Right value
+		 * @return Result of the operation
+		 */
+		template <typename T> bool const operator<(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return (_lValue.getValue() < _rValue.getValue() );
+		}
+
+
+		/**
+		 * Overloading operator >
+		 * @param _lValue Left value
+		 * @param _rValue Right value
+		 * @return Result of the operation
+		 */
+		template <typename T> bool const operator>(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
+		{
+			return (_lValue.getValue() > _rValue.getValue() );
 		}
 
 	}
