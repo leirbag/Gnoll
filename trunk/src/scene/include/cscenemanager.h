@@ -43,6 +43,7 @@
 
 #include "../../core/include/string.h"
 #include "../../core/include/float.h"
+#include "../../core/include/set.h"
 
 
 

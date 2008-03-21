@@ -91,13 +91,6 @@ namespace Gnoll
 		};
 
 
-		struct pageComparison
-		{
-			bool operator()(const string page1Name, const string page2Name) const
-			{
-				return strcmp(page1Name.c_str(), page2Name.c_str()) < 0;
-			}
-		};
 
 		CSceneManager::CSceneManager(string _instanceName) : CPersistentObjectProxy(_instanceName)
 		{
@@ -110,17 +103,21 @@ namespace Gnoll
 
 
 			shared_ptr< Gnoll::Core::List > loadedPages = this->getAttribute< Gnoll::Core::List > ("loadedPages");
-			if (loadedPages.get() == 0)
+			if (loadedPages->size() == 0)
 			{
 				loadedPages = shared_ptr< Gnoll::Core::List > ( new Gnoll::Core::List() );
 				this->setAttribute("loadedPages", loadedPages);
 			}
 
+
 			/**
 			 * Set up focused Page
 			 */
 			shared_ptr<Gnoll::Core::String> focusedPageName = this->getAttribute<Gnoll::Core::String>("focusedPage");
+			cout << "SIZE A: " << loadedPages->size() << endl;
+			cout << "Address of loadedPages : " << loadedPages << endl;
 			this->setupPage(*focusedPageName, loadedPages);
+			cout << "SIZE B: " << loadedPages->size() << endl;
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
@@ -156,114 +153,66 @@ namespace Gnoll
 
 		void CSceneManager::update()
 		{
-			// Parcourt des sets de pages pour verifier qu'ils soient tous visibles, ainsi que leurs voisins [tant que les voisins sont visibles].
-			shared_ptr<Gnoll::Core::String> focusedPageName = this->getAttribute<Gnoll::Core::String>("focusedPage");
-			
-			if (focusedPageName.get())
+
+			/**
+			 * Used to keep track of visited pages
+			 */
+			set<string> visitedPages;
+
+			/**
+			 * List of currently visible pages
+			 */
+			shared_ptr< Gnoll::Core::List > visiblePages = shared_ptr< Gnoll::Core::List > ( new Gnoll::Core::List() );
+
+			/**
+			 * Pages loaded
+			 */
+			shared_ptr< Gnoll::Core::List > loadedPages = this->getAttribute< Gnoll::Core::List > ("loadedPages");
+
+			cout << "Address of loadedPages : " << loadedPages << endl;
+			cout << "Size of loadedPages : " << loadedPages->size() << endl;
+
+			/**
+			 * Loop through all loaded pages and check if they are still visible
+			 */
+			for( Gnoll::Core::List::const_iterator it = loadedPages->begin(); it != loadedPages->end(); it++)
 			{
-
-				/**
-				 * Currently focused page
-				 */
-				CPage focusedPage(*focusedPageName);
-
-				/**
-				 * Used to keep track of visited pages
-				 */
-				set<string, pageComparison> visitedPages;
-				shared_ptr< Gnoll::Core::List > visiblePages = shared_ptr< Gnoll::Core::List > ( new Gnoll::Core::List() );
-
-				/**
-				 * Pages loaded
-				 */
-				shared_ptr< Gnoll::Core::List > loadedPages = this->getAttribute< Gnoll::Core::List > ("loadedPages");
-
-
-				if ( isPageVisible(focusedPage) )
+				if (shared_ptr<Gnoll::Core::String> pageName = dynamic_pointer_cast<Gnoll::Core::String>(*it))
 				{
-					visitedPages.insert(*focusedPageName);
-					visiblePages->push_back( focusedPageName );
-				}
+					cout << "1 - Loaded page : " << *pageName << endl;
 
-				/**
-				 * Loop through all loaded pages and check if they are still visible
-				 */
-				for( Gnoll::Core::List::const_iterator it = loadedPages->begin(); it != loadedPages->end(); it++)
-				{
-					if (shared_ptr<Gnoll::Core::String> pageName = dynamic_pointer_cast<Gnoll::Core::String>(*it))
+					if (visitedPages.find(*pageName) == visitedPages.end())
 					{
-						cout << "1 - Loaded page : " << *pageName << endl;
-
-						if (visitedPages.find(*pageName) == visitedPages.end())
+						CPage page(*pageName);
+						visitedPages.insert(*pageName);
+						cout << "  1 - checking visibility" << endl;
+						if ( this->isPageVisible(page) )
 						{
-							CPage page(*pageName);
-							visitedPages.insert(*pageName);
-							cout << "  1 - checking visibility" << endl;
-							if ( this->isPageVisible(page) )
-							{
-								visiblePages->push_back( pageName );
-							}
+							visiblePages->push_back( pageName );
 						}
-					}
-				}
 
+						const char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
 
-				/**
-				 * Loop through all neighbors of visiblePages and check if they are also visible
-				 */
-
-				set<string, pageComparison> visitedPagesForNeighbors;
-				shared_ptr< Gnoll::Core::List > newPages = shared_ptr< Gnoll::Core::List > ( new Gnoll::Core::List() );
-				for( Gnoll::Core::List::const_iterator it = visiblePages->begin(); it != visiblePages->end(); it++)
-				{
-					if (shared_ptr<Gnoll::Core::String> pageName = dynamic_pointer_cast<Gnoll::Core::String>(*it))
-					{
-						cout << "Working on " << *pageName << endl;
-						if (visitedPagesForNeighbors.find(*pageName) == visitedPagesForNeighbors.end())
+						for (unsigned int i = 0; i < 4; i++)
 						{
-
-							CPage page(*pageName);
-							const char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
-
-							visitedPagesForNeighbors.insert(*pageName);
-
-
-							for (unsigned int i = 0; i < 4; i++)
+							cout << "  Checking neighbor : " << neighbors[i] << endl;
+							if (page.hasAttribute(neighbors[i]))
 							{
-								cout << "  Checking neighbor : " << neighbors[i] << endl;
-								if (page.hasAttribute(neighbors[i]))
+								shared_ptr<Gnoll::Core::String> neighborInstanceName = page.getAttribute<Gnoll::Core::String>(neighbors[i]);
+
+								cout << "    neighbor found : " << neighborInstanceName << endl;
+								if (visitedPages.find(*neighborInstanceName) == visitedPages.end())
 								{
-									shared_ptr<Gnoll::Core::String> neighborInstanceName = page.getAttribute<Gnoll::Core::String>(neighbors[i]);
-
-									cout << "    neighbor found : " << neighborInstanceName << endl;
-									if ( (visitedPagesForNeighbors.find(*neighborInstanceName) == visitedPagesForNeighbors.end()) &&
-									     (visitedPages.find(*neighborInstanceName) == visitedPages.end()) )
-									{
-										cout << "    Loading neighbor " << *neighborInstanceName << endl;
-										CPage neighbor(*neighborInstanceName);
-										cout << "    Neighbor " << *neighborInstanceName << " loaded" << endl;
-
-										visitedPagesForNeighbors.insert(*neighborInstanceName);
-
-										if (this->isPageVisible(neighbor))
-										{
-											newPages->push_back( neighborInstanceName );
-										}
-									}
+									cout << "      appending : " << neighborInstanceName << endl;
+									loadedPages->push_back( neighborInstanceName );
 								}
 							}
 						}
 					}
 				}
-
-
-				visiblePages->merge(*newPages);
-				this->setAttribute("loadedPages", visiblePages);
-
-			} else
-			{
-				cout << "No focusedPage attribute defined for CSceneManager " << this->getInstance() << endl;
 			}
+
+			this->setAttribute("loadedPages", visiblePages);
 
 		}
 
@@ -289,7 +238,6 @@ namespace Gnoll
 
 		void CSceneManager::setupPage( const string _pageInstance, shared_ptr< Gnoll::Core::List > _loadedPages, const Ogre::Vector3 _offset )
 		{
-
 			char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
 
 			CPage page(_pageInstance);

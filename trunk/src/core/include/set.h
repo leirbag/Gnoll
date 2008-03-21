@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Paf                                             *
+ *   Copyright (C) 2008 by Bruno Mahe                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,26 +18,26 @@
  ***************************************************************************/
 
 
-/*----------------------------------List-----------------------------------*\
-|   This is a List attribute for PersistentObject                           |
+/*---------------------------------Set-------------------------------------*\
+|   This is a Set attribute for PersistentObject                            |
 |                                                                           |
 |   Changelog :                                                             |
-|               09/26/2007 - Paf - Initial release                          |
+|               03/19/2008 - Bruno Mahe - Initial release                   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 
-#ifndef __LIST_H__
-#define __LIST_H__
+#ifndef __SET_H__
+#define __SET_H__
 
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
-#include <list>
+#include <set>
 
-#include "iattribute.h" 
-#include "attributehandlerregistry.h" 
+#include "iattribute.h"
+#include "attributehandlerregistry.h"
 
 
 using namespace std;
@@ -47,36 +47,39 @@ namespace Gnoll
 {
 	namespace Core
 	{
+		bool operator<(IAttribute const & a, IAttribute const & b);
+
+		struct IAttributeComparison
+		{
+			bool operator()(shared_ptr<IAttribute> ia1, shared_ptr<IAttribute> ia2) const
+			{
+				return (*ia1) < (*ia2);
+			}
+		};
+
+
 
 		/**
-		 *	This is a list attribute for PersistentObject. 
-		 */ 
-		class List : public list< shared_ptr<IAttribute> >, public IAttribute 
+		 *	This is a set attribute for PersistentObject.
+		 */
+		class Set : public set< shared_ptr<IAttribute>, IAttributeComparison >, public IAttribute
 		{
-			private:
-
 
 			public:
 
 				/**
 				 * This is a constructor
 				 */
-				List();
-
-
-				/**
-				 * This is a destructor
-				 */
-				virtual ~List();
+				Set();
 
 
 				/**
 				 * This method serialize the object. <br/>
 				 * It has to be implemented by all classes that inherits from this class.
 				 *
-				 * @return This return the object as a XML tree 
+				 * @return This return the object as a XML tree
 				 */
-				virtual shared_ptr<xmlpp::Document> serializeXML(); 
+				virtual shared_ptr<xmlpp::Document> serializeXML();
 
 
 				/**
@@ -84,12 +87,12 @@ namespace Gnoll
 				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
 				 * It has to be implemented by all classes that inherits from this class.
 				 *
-			  	 * @param _element This is the XML tree containing the state of this object
+				 * @param _element This is the XML tree containing the state of this object
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element ); 
+				virtual void deSerializeXML( xmlpp::Element* _element );
 		};
 
 	}
 }
 
-#endif // __LIST_H__
+#endif // __SET_H__

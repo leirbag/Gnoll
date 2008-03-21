@@ -197,47 +197,105 @@ class BaseGnollBuilder:
 
 	def gatherCoreSourceFiles(self, env, config):
 
-		coreSourceFiles = ['src/core/src/cgenericmessagemanager.cpp', 'src/core/src/cmessagetype.cpp', 'src/core/src/attributehandlerregistry.cpp', 'src/core/src/filestream.cpp', 'src/core/src/list.cpp', 'src/core/src/string.cpp', 'src/core/src/persistentobject.cpp', 'src/core/src/persistentobjectmanager.cpp', 'src/core/src/sourcefile.cpp', 'src/core/src/camera.cpp', 'src/core/src/camerafixe.cpp', 'src/core/src/camerafixefactory.cpp', 'src/core/src/defaultcamerathirdpersonlistener.cpp', 'src/core/src/camerathirdperson.cpp', 'src/core/src/camerathirdpersonfactory.cpp', 'src/core/src/cmessagelistenercamera.cpp', 'src/core/src/inheritsattributehandler.cpp', 'src/core/src/inherits.cpp', 'src/core/src/cmessagemodule.cpp', 'src/core/src/cpersistentobjectproxy.cpp', 'src/core/src/cpoolthreads.cpp', 'src/core/src/cthreadstopper.cpp', 'src/core/src/cworker.cpp']
+		coreSourceFiles = [
+			'src/core/src/cgenericmessagemanager.cpp',
+			'src/core/src/cmessagetype.cpp',
+			'src/core/src/attributehandlerregistry.cpp',
+			'src/core/src/filestream.cpp',
+			'src/core/src/list.cpp',
+			'src/core/src/string.cpp',
+			'src/core/src/persistentobject.cpp',
+			'src/core/src/persistentobjectmanager.cpp',
+			'src/core/src/sourcefile.cpp',
+			'src/core/src/camera.cpp',
+			'src/core/src/camerafixe.cpp',
+			'src/core/src/camerafixefactory.cpp',
+			'src/core/src/defaultcamerathirdpersonlistener.cpp',
+			'src/core/src/camerathirdperson.cpp',
+			'src/core/src/camerathirdpersonfactory.cpp',
+			'src/core/src/cmessagelistenercamera.cpp',
+			'src/core/src/inheritsattributehandler.cpp',
+			'src/core/src/inherits.cpp',
+			'src/core/src/cmessagemodule.cpp',
+			'src/core/src/cpersistentobjectproxy.cpp',
+			'src/core/src/cpoolthreads.cpp',
+			'src/core/src/cthreadstopper.cpp',
+			'src/core/src/cworker.cpp',
+			'src/core/src/set.cpp'
+			]
+
 
 		return coreSourceFiles
 
 
 	def gatherTimeSourceFiles(self, env, config):
 
-		timeSourceFiles = ['src/time/src/ccreateperiodiceventlistener.cpp', 'src/time/src/cdestroyperiodiceventlistener.cpp', 'src/time/src/ccreatedelayedeventlistener.cpp', 'src/time/src/cdestroydelayedeventlistener.cpp', 'src/time/src/ctimemodule.cpp']
+		timeSourceFiles = [
+			'src/time/src/ccreateperiodiceventlistener.cpp',
+			'src/time/src/cdestroyperiodiceventlistener.cpp',
+			'src/time/src/ccreatedelayedeventlistener.cpp',
+			'src/time/src/cdestroydelayedeventlistener.cpp',
+			'src/time/src/ctimemodule.cpp'
+			]
 
 		return timeSourceFiles
 
 
 	def gatherGraphicSourceFiles(self, env, config):
 
-		graphicSourceFiles = ['src/graphic/src/cgraphicmodule.cpp', 'src/graphic/src/cscenefactorystd.cpp', 'src/graphic/src/csceneparser.cpp']
+		graphicSourceFiles = [
+			'src/graphic/src/cgraphicmodule.cpp',
+			'src/graphic/src/cscenefactorystd.cpp',
+			'src/graphic/src/csceneparser.cpp'
+			]
 
 		return graphicSourceFiles
 
 
 	def gatherInputSourceFiles(self, env, config):
 
-		inputSourceFiles = ['src/input/src/coisinputmodule.cpp', 'src/input/src/coisinputmanager.cpp', 'src/input/src/cinputeventstranslator.cpp', 'src/input/src/ckeyboardeventstranslator.cpp', 'src/input/src/cmousemotioneventstranslator.cpp', 'src/input/src/cmousebuttoneventstranslator.cpp', 'src/input/src/ckeyboardeventstrigger.cpp']
+		inputSourceFiles = [
+			'src/input/src/coisinputmodule.cpp',
+			'src/input/src/coisinputmanager.cpp',
+			'src/input/src/cinputeventstranslator.cpp',
+			'src/input/src/ckeyboardeventstranslator.cpp',
+			'src/input/src/cmousemotioneventstranslator.cpp',
+			'src/input/src/cmousebuttoneventstranslator.cpp',
+			'src/input/src/ckeyboardeventstrigger.cpp'
+			]
 
 		return inputSourceFiles
 
 
 	def gatherSceneSourceFiles(self, env, config):
 
-		sceneSourceFiles = ['src/scene/src/cmeshpagerenderer.cpp', 'src/scene/src/cpage.cpp', 'src/scene/src/cscenemanager.cpp']
+		sceneSourceFiles = [
+			'src/scene/src/cmeshpagerenderer.cpp',
+			'src/scene/src/cpage.cpp',
+			'src/scene/src/cscenemanager.cpp'
+			]
 
 		return sceneSourceFiles
 
 	def gatherStatsSourceFiles(self, env, config):
 
-		statsSourceFiles = ['src/stats/src/cstatsmodule.cpp', 'src/stats/src/statsmodulelistener.cpp']
+		statsSourceFiles = [
+			'src/stats/src/cstatsmodule.cpp',
+			'src/stats/src/statsmodulelistener.cpp'
+			]
 
 		return statsSourceFiles
 
 	def gatherSoundSourceFiles(self, env, config):
 
-		soundSourceFiles = ['src/sound/src/audiocodecmanager.cpp', 'src/sound/src/csoundmodule.cpp', 'src/sound/src/oggcodechandler.cpp', 'src/sound/src/sound.cpp', 'src/sound/src/soundmanager.cpp', 'src/sound/src/soundplaylistener.cpp']
+		soundSourceFiles = [
+			'src/sound/src/audiocodecmanager.cpp',
+			'src/sound/src/csoundmodule.cpp',
+			'src/sound/src/oggcodechandler.cpp',
+			'src/sound/src/sound.cpp',
+			'src/sound/src/soundmanager.cpp',
+			'src/sound/src/soundplaylistener.cpp'
+			]
 
 		return soundSourceFiles
 
