@@ -92,11 +92,11 @@ namespace Gnoll
 
 
 				CMessageType messageType = message->getType();
-				float intensity = 1.0;
+				float intensity = 0.0;
 
 				if (messageType == keyDown)
 				{
-					intensity = 0.0f;
+					intensity = 1.0f;
 				}
 
 				ActionEvent actionEvent(actionName, intensity);
