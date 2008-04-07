@@ -37,10 +37,13 @@
 #include "../include/cinputmouseevents.h"
 #include <OIS/OISKeyboard.h>
 #include <iostream>
+#include "../../time/include/ctimemodule.h"
+
 
 
 using namespace boost;
 using namespace Gnoll::Core;
+using namespace Gnoll::Time;
 
 
 namespace Gnoll
@@ -48,7 +51,7 @@ namespace Gnoll
 	namespace Input 
 	{
 
-		CKeyboardEventsTranslator::CKeyboardEventsTranslator(): keyUp("KEYBOARD_KEYUP"), keyDown("KEYBOARD_KEYDOWN")
+		CKeyboardEventsTranslator::CKeyboardEventsTranslator(unsigned int long _period): keyUp("KEYBOARD_KEYUP"), keyDown("KEYBOARD_KEYDOWN"), m_period(_period)
 		{
 
 			PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
@@ -84,33 +87,68 @@ namespace Gnoll
 			 */
 			if ( keyboardEventTranslationMap->hasAttribute(keyCodeValue) )
 			{
-				CMessageType actionEventType(ACTION_EVENT_TYPE);
 
 
 				shared_ptr<String> actionString = keyboardEventTranslationMap->getAttribute<String>( keyCodeValue );
 				string actionName ( *actionString );
 
+				CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
 				CMessageType messageType = message->getType();
-				float intensity = 0.0;
 
 				if (messageType == keyDown)
 				{
-					intensity = 1.0f;
+					m_keyPressed[keyCodeValue]	= timeModule->getMsecs();
+				}
+				else
+				{
+					m_durationKeyPressed[keyCodeValue] += timeModule->getMsecs() - m_keyPressed[keyCodeValue];
+					m_keyPressed[keyCodeValue]	= 0;
 				}
 
-				ActionEvent actionEvent(actionName, intensity);
+			}
+
+		}
 
 
+		void CKeyboardEventsTranslator::trigger ( )
+		{
 
-				shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-				shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+			CMessageType actionEventType(ACTION_EVENT_TYPE);
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
-				if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-					cout << "Message ajoute ["<< actionName << "]" << endl;
-				else
-					cout << "Message NON ajoute ["<< actionName << "]" << endl;
+			for( map<string, unsigned long int>::iterator it =	m_durationKeyPressed.begin(); it != m_durationKeyPressed.end(); it++)
+			{
+				unsigned long int timePressed = it->second;
 
+				if (m_keyPressed[it->first] != 0)
+				{
+					unsigned long int now = timeModule->getMsecs();
+					timePressed += now - m_keyPressed[it->first];
+
+					m_keyPressed[it->first] = now;
+				}
+
+
+				if (timePressed > 0)
+				{
+
+					float intensity = (float) timePressed / (float) m_period;
+
+					shared_ptr<String> actionString = keyboardEventTranslationMap->getAttribute<String>( it->first );
+					string actionName ( *actionString );
+					ActionEvent actionEvent(actionName, intensity);
+
+					shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
+					shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+
+					if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+						cout << "Message ajoute ["<< actionName << "]" << endl;
+					else
+						cout << "Message NON ajoute ["<< actionName << "]" << " of intensity " <<  intensity << " => " << timePressed << " / " << m_period << endl;
+
+					it->second = 0;
+				}
 			}
 
 		}

@@ -29,14 +29,17 @@
 
 #include "../include/cinputeventstranslator.h"
 #include "../include/ckeyboardeventstranslator.h"
+#include "../include/ckeyboardeventstrigger.h"
 #include "../include/cmousemotioneventstranslator.h"
 #include "../include/cmousebuttoneventstranslator.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessagemodule.h"
+#include "../../time/include/ctimemodule.h"
 #include <iostream>
 
 
 using namespace Gnoll::Core;
+using namespace Gnoll::Time;
 
 namespace Gnoll
 {
@@ -84,18 +87,38 @@ namespace Gnoll
 		
 			CMessageType keyDown("KEYBOARD_KEYDOWN");
 			CMessageType keyUp("KEYBOARD_KEYUP");
+			CMessageType updateKeyboard("UPDATE_KEYBOARD");
+
+
+			/**
+			 * How often will the keyboard module get updated (millisecond)
+			 */
+			unsigned long int period = 500;
+
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CMessageManager* messageManager = messageModule->getMessageManager();
 
 
-			keyboardEventsTranslator = shared_ptr<CMessageListener> ( new CKeyboardEventsTranslator() );
+			keyboardEventsTranslator = shared_ptr<CMessageListener> ( new CKeyboardEventsTranslator(period) );
+			keyboardEventsTrigger = shared_ptr<CMessageListener> ( new CKeyboardEventsTrigger(static_pointer_cast<CKeyboardEventsTranslator>(keyboardEventsTranslator) ));
 
 			if (messageManager->addListener ( keyboardEventsTranslator, keyDown ) == true)
 				cout << "KeyboardEventsTranslator listener installed" << endl;
 
 			if (messageManager->addListener ( keyboardEventsTranslator, keyUp ) == true)
 				cout << "KeyboardEventsTranslator listener installed" << endl;
+
+			if (messageManager->addListener ( keyboardEventsTrigger, updateKeyboard ) == true)
+				cout << "KeyboardEventsTrigger listener installed" << endl;
+
+
+
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			shared_ptr<boost::any> data (new boost::any()) ;
+			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, data ));
+
+			timeModule->addPeriodicEvent(0, message, period);
 
 
 		}
@@ -106,6 +129,13 @@ namespace Gnoll
 		
 			CMessageType keyDown("KEYBOARD_KEYDOWN");
 			CMessageType keyUp("KEYBOARD_KEYUP");
+			CMessageType updateKeyboard("UPDATE_KEYBOARD");
+
+			/**
+			 * How often will the keyboard module get updated (millisecond)
+			 */
+			unsigned long int period = 100;
+
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CMessageManager* messageManager = messageModule->getMessageManager();
@@ -115,7 +145,16 @@ namespace Gnoll
 
 			if (messageManager->delListener ( keyboardEventsTranslator, keyUp ) == true)
 				cout << "KeyboardEventsTranslator listener removed" << endl;
+
+			if (messageManager->delListener ( keyboardEventsTrigger, updateKeyboard ) == true)
+				cout << "KeyboardEventsTrigger listener removed" << endl;
 		
+
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			shared_ptr<boost::any> data (new boost::any()) ;
+			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, data ));
+			// FIX IT
+			timeModule->delPeriodicEvent(0, message, period);
 		}
 
 

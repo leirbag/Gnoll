@@ -68,6 +68,12 @@ namespace Gnoll
 
 
 				/**
+				 * Translator for keyboard generated messages
+				 */
+				shared_ptr<CMessageListener> keyboardEventsTrigger;
+
+
+				/**
 				 * Translator for mouse motion generated messages
 				 */
 				shared_ptr<CMessageListener> mouseMotionEventsTranslator;

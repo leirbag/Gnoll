@@ -1,5 +1,5 @@
 /**************************************************************************
-*   Copyright (C) 2008 by Paf                                             *
+*   Copyright (C) 2008 by Bruno Mahe                                      *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -18,16 +18,16 @@
 ***************************************************************************/
 
 
-/*-----------------------CKeyboardEventsTranslator-------------------------*\
+/*-----------------------CKeyboardEventsTrigger----------------------------*\
 |   This is translate keyboard events to action events                      |
 |                                                                           |
 |   Changelog :                                                             |
-|               01/08/2008 - Paf - Initial release                          |
+|               04/06/2008 - Bruno Mahe - Initial release                   |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef __CKEYBOARDEVENTSTRANSLATOR_H__
-#define __CKEYBOARDEVENTSTRANSLATOR_H__
+#ifndef __CKEYBOARDEVENTSTRIGGER_H__
+#define __CKEYBOARDEVENTSTRIGGER_H__
 
 #include <boost/shared_ptr.hpp>
 
@@ -37,71 +37,40 @@
 
 
 using namespace boost;
-using namespace Gnoll::Core;
+
 
 namespace Gnoll
 {
-	namespace Input 
+	namespace Input
 	{
 
-		class CKeyboardEventsTranslator : public CMessageListener
+		class CKeyboardEventsTrigger : public CMessageListener
 		{
-
 			private:
 
-				/**
-				 * PersistentObject that contains a translation map for events from keyboard
-				 */
-				shared_ptr<Gnoll::Core::PersistentObject> keyboardEventTranslationMap;
-
-				/**
-				 * CMessageType for KeyUp messages
-				 */
-				CMessageType keyUp;
-
-				/**
-				 * CMessageType for KeyDown messages
-				 */
-				CMessageType keyDown;
-
-				/**
-				 * How long a key has been pressed
-				 */
-				map<string, unsigned long int> m_durationKeyPressed;
-
-				/**
-				 * When a key has been pressed
-				 */
-				map<string, unsigned long int> m_keyPressed;
-
-				unsigned long int m_period;
+				shared_ptr<CKeyboardEventsTranslator> m_cKeyboardEventsTranslator;
 
 			public:
 
 				/**
 				* This is a constructor
 				*/
-				CKeyboardEventsTranslator(unsigned long int _period);
+				CKeyboardEventsTrigger(shared_ptr<CKeyboardEventsTranslator> _cKeyboardEventsTranslator);
 
 				/**
 				* This is a destructor
 				*/
-				virtual ~CKeyboardEventsTranslator(); 
+				virtual ~CKeyboardEventsTrigger();
 
 				/**
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
 				virtual void handle ( shared_ptr<CMessage> message );
-
-				/**
-				* Send keyboard events if any key has been pressed
-				*/
-				void trigger();
 		};
-	};
-};
+	}
+}
 
-#endif // __CKEYBOARDEVENTSTRANSLATOR_H__
+#endif // __CKEYBOARDEVENTSTRIGGER_H__
 
 

@@ -218,7 +218,7 @@ class BaseGnollBuilder:
 
 	def gatherInputSourceFiles(self, env, config):
 
-		inputSourceFiles = ['src/input/src/coisinputmodule.cpp', 'src/input/src/coisinputmanager.cpp', 'src/input/src/cinputeventstranslator.cpp', 'src/input/src/ckeyboardeventstranslator.cpp', 'src/input/src/cmousemotioneventstranslator.cpp', 'src/input/src/cmousebuttoneventstranslator.cpp']
+		inputSourceFiles = ['src/input/src/coisinputmodule.cpp', 'src/input/src/coisinputmanager.cpp', 'src/input/src/cinputeventstranslator.cpp', 'src/input/src/ckeyboardeventstranslator.cpp', 'src/input/src/cmousemotioneventstranslator.cpp', 'src/input/src/cmousebuttoneventstranslator.cpp', 'src/input/src/ckeyboardeventstrigger.cpp']
 
 		return inputSourceFiles
 
