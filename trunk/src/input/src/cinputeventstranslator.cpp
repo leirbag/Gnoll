@@ -93,7 +93,7 @@ namespace Gnoll
 			/**
 			 * How often will the keyboard module get updated (millisecond)
 			 */
-			unsigned long int period = 500;
+			unsigned long int period = 300;
 
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
@@ -147,7 +147,7 @@ namespace Gnoll
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, m_periodData ));
-			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (m_periodData) );
+			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (*m_periodData) );
 		}
 
 

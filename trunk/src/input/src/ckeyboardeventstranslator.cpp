@@ -99,6 +99,11 @@ namespace Gnoll
 				if (messageType == keyDown)
 				{
 					m_keyPressed[keyCodeValue]	= timeModule->getMsecs();
+
+					if (m_durationKeyPressed.find(keyCodeValue) == m_durationKeyPressed.end())
+					{
+						m_durationKeyPressed[keyCodeValue] = 0;
+					}
 				}
 				else
 				{
