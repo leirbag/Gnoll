@@ -74,6 +74,11 @@ namespace Gnoll
 
 
 				/**
+				 * How often keyboard events will be triggered
+				 */
+				shared_ptr<boost::any> m_periodData;
+
+				/**
 				 * Translator for mouse motion generated messages
 				 */
 				shared_ptr<CMessageListener> mouseMotionEventsTranslator;

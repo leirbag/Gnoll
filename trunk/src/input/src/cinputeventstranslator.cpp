@@ -100,7 +100,7 @@ namespace Gnoll
 			CMessageManager* messageManager = messageModule->getMessageManager();
 
 
-			keyboardEventsTranslator = shared_ptr<CMessageListener> ( new CKeyboardEventsTranslator(period) );
+			keyboardEventsTranslator = shared_ptr<CMessageListener> ( new CKeyboardEventsTranslator() );
 			keyboardEventsTrigger = shared_ptr<CMessageListener> ( new CKeyboardEventsTrigger(static_pointer_cast<CKeyboardEventsTranslator>(keyboardEventsTranslator) ));
 
 			if (messageManager->addListener ( keyboardEventsTranslator, keyDown ) == true)
@@ -115,8 +115,8 @@ namespace Gnoll
 
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-			shared_ptr<boost::any> data (new boost::any()) ;
-			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, data ));
+			m_periodData = shared_ptr<boost::any> (new boost::any(period)) ;
+			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, m_periodData ));
 
 			timeModule->addPeriodicEvent(0, message, period);
 
@@ -130,11 +130,6 @@ namespace Gnoll
 			CMessageType keyDown("KEYBOARD_KEYDOWN");
 			CMessageType keyUp("KEYBOARD_KEYUP");
 			CMessageType updateKeyboard("UPDATE_KEYBOARD");
-
-			/**
-			 * How often will the keyboard module get updated (millisecond)
-			 */
-			unsigned long int period = 100;
 
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
@@ -151,10 +146,8 @@ namespace Gnoll
 		
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-			shared_ptr<boost::any> data (new boost::any()) ;
-			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, data ));
-			// FIX IT
-			timeModule->delPeriodicEvent(0, message, period);
+			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, m_periodData ));
+			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (m_periodData) );
 		}
 
 

@@ -51,7 +51,7 @@ namespace Gnoll
 	namespace Input 
 	{
 
-		CKeyboardEventsTranslator::CKeyboardEventsTranslator(unsigned int long _period): keyUp("KEYBOARD_KEYUP"), keyDown("KEYBOARD_KEYDOWN"), m_period(_period)
+		CKeyboardEventsTranslator::CKeyboardEventsTranslator(): keyUp("KEYBOARD_KEYUP"), keyDown("KEYBOARD_KEYDOWN"), m_lastTimeTriggerCalled(0)
 		{
 
 			PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
@@ -111,11 +111,15 @@ namespace Gnoll
 		}
 
 
-		void CKeyboardEventsTranslator::trigger ( )
+		void CKeyboardEventsTranslator::trigger ( shared_ptr<CMessage> _msg )
 		{
 
 			CMessageType actionEventType(ACTION_EVENT_TYPE);
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+
+			unsigned long int now = timeModule->getMsecs();
+			unsigned long int period = now - m_lastTimeTriggerCalled;
+
 
 			for( map<string, unsigned long int>::iterator it =	m_durationKeyPressed.begin(); it != m_durationKeyPressed.end(); it++)
 			{
@@ -123,7 +127,6 @@ namespace Gnoll
 
 				if (m_keyPressed[it->first] != 0)
 				{
-					unsigned long int now = timeModule->getMsecs();
 					timePressed += now - m_keyPressed[it->first];
 
 					m_keyPressed[it->first] = now;
@@ -133,7 +136,7 @@ namespace Gnoll
 				if (timePressed > 0)
 				{
 
-					float intensity = (float) timePressed / (float) m_period;
+					float intensity = (float) timePressed / (float) period;
 
 					shared_ptr<String> actionString = keyboardEventTranslationMap->getAttribute<String>( it->first );
 					string actionName ( *actionString );
@@ -145,12 +148,13 @@ namespace Gnoll
 					if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
 						cout << "Message ajoute ["<< actionName << "]" << endl;
 					else
-						cout << "Message NON ajoute ["<< actionName << "]" << " of intensity " <<  intensity << " => " << timePressed << " / " << m_period << endl;
+						cout << "Message NON ajoute ["<< actionName << "]" << " of intensity " <<  intensity << " => " << timePressed << " / " << period << endl;
 
 					it->second = 0;
 				}
 			}
 
+			m_lastTimeTriggerCalled = now;
 		}
 	};
 };

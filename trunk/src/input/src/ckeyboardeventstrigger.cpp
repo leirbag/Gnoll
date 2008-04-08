@@ -57,7 +57,7 @@ namespace Gnoll
 
 		void CKeyboardEventsTrigger::handle ( shared_ptr<CMessage> message )
 		{
-			m_cKeyboardEventsTranslator->trigger();
+			m_cKeyboardEventsTranslator->trigger( message );
 		}
 	};
 };

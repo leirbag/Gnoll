@@ -74,14 +74,17 @@ namespace Gnoll
 				 */
 				map<string, unsigned long int> m_keyPressed;
 
-				unsigned long int m_period;
+				/**
+				 * When trigger has been called last time
+				 */
+				unsigned long int m_lastTimeTriggerCalled;
 
 			public:
 
 				/**
 				* This is a constructor
 				*/
-				CKeyboardEventsTranslator(unsigned long int _period);
+				CKeyboardEventsTranslator();
 
 				/**
 				* This is a destructor
@@ -97,7 +100,7 @@ namespace Gnoll
 				/**
 				* Send keyboard events if any key has been pressed
 				*/
-				void trigger();
+				void trigger(shared_ptr<CMessage> _msg);
 		};
 	};
 };
