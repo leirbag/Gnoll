@@ -229,6 +229,12 @@ class BaseGnollBuilder:
 
 		return sceneSourceFiles
 
+	def gatherStatsSourceFiles(self, env, config):
+
+		statsSourceFiles = ['src/stats/src/cstatsmodule.cpp', 'src/stats/src/statsmodulelistener.cpp']
+
+		return statsSourceFiles
+
 	def gatherSoundSourceFiles(self, env, config):
 
 		soundSourceFiles = ['src/sound/src/audiocodecmanager.cpp', 'src/sound/src/csoundmodule.cpp', 'src/sound/src/oggcodechandler.cpp', 'src/sound/src/sound.cpp', 'src/sound/src/soundmanager.cpp', 'src/sound/src/soundplaylistener.cpp']
@@ -243,6 +249,7 @@ class BaseGnollBuilder:
 		sourceFiles.extend( self.gatherSoundSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherSceneSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherInputSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherStatsSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherGraphicSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherTimeSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherCoreSourceFiles(env, config) )
