@@ -50,7 +50,6 @@
 #include "core/include/cmessagemanager.h"
 #include "core/include/cmessagemodule.h"
 #include "core/include/cmessagelistener.h"
-#include "core/include/camerafreefly.h"
 
 #include "core/include/isource.h"
 #include "core/include/persistentobjectmanager.h"

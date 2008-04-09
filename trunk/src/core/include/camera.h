@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 
-/*---------------------------------integer---------------------------------*\
+/*---------------------------------camera----------------------------------*\
 |   This is the interface of all camera                                     |
 |                                                                           |
 |   Changelog :                                                             |
@@ -27,128 +27,177 @@
 |               12/17/2007 - Paf - Camera inherits of CPersistentObjectProxy|      
 |               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |               02/15/2008 - Bruno Mahe - Implements destructor             |
-|                                                                           |
+|               04/08/2008 - Gabriel - total refactoring                    |
 \*-------------------------------------------------------------------------*/
 
+#ifndef INCLUDED_CAMERA
+#define INCLUDED_CAMERA
 
 #include <glibmm/ustring.h>
+#include <OgreSceneNode.h>
 #include <OgreVector3.h>
 #include <OgreCamera.h>
-#include <OgreSceneManager.h>
-
-#include "../../input/include/coisinputmodule.h"
-#include "../../input/include/cinputmouseevents.h"
-
-#include "cpersistentobjectproxy.h" 
-#include "cgenericmessagemanager.h"
-#include "singleton.h"
-#include "cmessagelistener.h"
-#include "cmessage.h"
-#include "cmessagetype.h"
-#include "cmessagemanager.h"
-#include "cmessagemodule.h"
-
-#ifndef __CAMERA_H__
-#define __CAMERA_H__
+#include "cpersistentobjectproxy.h"
 
 namespace Gnoll
 {
-
-	namespace Core 
+	namespace Core
 	{
+		/*
+		 * Structure that contains camera attributs
+		 */
+		struct camera_i;
 
-		/**
-		*	This is the interface of all Sources.</br>
-		*   This class cannot be instanciable.
-		*/ 
+		class CMessageListenerCamera;
+
 		class Camera : public CPersistentObjectProxy
 		{
-		protected:
-			/**
-			 * This is the Ogre camera
-			 */ 
-			Ogre::Camera* m_ogreCamera;
+		private:
+			/*
+			 * This is a pointer to camera attributs
+			 */
+			camera_i* m_this;
 
-			/**
-			* This is the instance name
-			*/ 
-			Glib::ustring m_name;
+		protected:
+			/*
+			 * Default constructor, it initializes the camera with default settings :
+			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
+			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
+			 * @param instanceName This is the instance name of the camera, it will be use for the
+			 * 					   instance name of the Ogre Camera
+			 */
+			explicit Camera(const Glib::ustring& instanceName);
+
+			/*
+			 * Copy constructor
+			 * @param copy This is the camera to copy
+			 */
+			explicit Camera(const Camera& copy);
+
+			/*
+			 * Helper method for setTarget()
+			 * @param (see setTarget)
+			 */
+			void setTargetHelper(Ogre::SceneNode* target);
 
 		public:
-			/**
-			 * This is the constructor.
-			 * @param instanceName This is the instance name
-			 * @param pSM This is a pointer to the scenemanager
-			 */
-			Camera(const Glib::ustring& instanceName);
-
-			/**
-			 * This is the destructor
+			/*
+			 * Destructior
 			 */
 			virtual ~Camera();
 
-			/**
-			 * This update the View.
-			 * Method virtual pure
-			 * @param time This is the time between 2 frames
+			/*
+			 * Operator to copy a camera
+			 * @param copy This is the camera to copy
 			 */
-			virtual void update(float time) = 0;
+			virtual Camera& operator=(const Camera& copy);
 
-			/**
-			 * Get the look at of the current camera
+			/*
+			 * Acessor to the near value
+			 * @return the near value
+			 */
+			float getNearValue() const;
+
+			/*
+			 * Acessor to the far value
+			 * @return the far value
+			 */
+			float getFarValue() const;
+
+			/*
+			 * Acessor to the fov value
+			 * @return the fov value
+			 */
+			float getFovValue() const;
+
+			/*
+			 * Accessor to get the position
+			 * @return the current position of the camera
+			 */
+			const Ogre::Vector3& getPosition() const;
+
+			/*
+			 * Accessor to get the direction
 			 * @return the current direction of the camera
 			 */
-			virtual Ogre::Vector3 getLookAt();
+			Ogre::Vector3 getDirection() const;
 
-			/**
-			 * Set the look at to the current camera
-			 * @param vLookAt This is the position to look at
+			/*
+			 * Accessor to get the target
+			 * @return the scene node of the current target, NULL if default setting
 			 */
-			virtual void setLookAt(const Ogre::Vector3& vLookAt);
+			Ogre::SceneNode* getTarget() const;
 
-			/**
-			 * Get the vector up of the current camera
-			 * @return the position of the vector up
+			/*
+			 * Accessor to get the orientation
+			 * @return the current orientation of the camera
 			 */
-			virtual Ogre::Vector3 getUp();
+			Ogre::Quaternion getOrientation() const;
 
-			/**
-			 * Get the eye of the current camera
-			 * @return the position of the eye
+			/*
+			 * Accessor to get the up vector
+			 * @return the current up vector
 			 */
-			virtual Ogre::Vector3 getEye();
+			Ogre::Vector3 getUp() const;
 
-			/**
-			 * Set the eye to the current camera
-			 * @param vEye This is the position of the camera
+			/*
+			 * Accessor to get the current view matrix
+			 * @return the current view matrix
 			 */
-			virtual void setEye(const Ogre::Vector3& vEye);
+			Ogre::Matrix4 getView() const;
 
-			/**
-			 * Set the near distance to the current camera
-			 * @param distance This is the near distance
+			/*
+			 * Accessor to get the OgreCamera
+			 * @return the OgreCamera
 			 */
-			virtual void setNearDistance(float distance);
+			Ogre::Camera* getOgreCamera();
 
-			/**
-			 * Set the far distance to the current camera
-			 * @param distance This is the far distance
+			/*
+			 * Settor to set the near value
+			 * @param near This is the near value to set, the method take the absolute value
+			 * 			   of this parameter, and must be more less than far value (not equal)
 			 */
-			virtual void setFarDistance(float distance);
+			void setNearValue(float near);
 
-			/**
-			 * Set the far distance to the current camera
-			 * @param angle This is the FOV in radian of the camera
+			/*
+			 * Settor to set the far value
+			 * @param far This is the far value to set, the method take the absolute value
+			 * 			  of this parameter, and must be greater than near value (not equal)
 			 */
-			virtual void setFov(float angle);
+			void setFarValue(float far);
 
-			/**
-			 * Get the instance of the current ogre camera
-			 * @return the ogre camera
+			/*
+			 * Settor to set the fov value
+			 * @param fov This is the fov value to set, the method take the absolute value
 			 */
-			virtual Ogre::Camera& getOgreCamera();
+			void setFovValue(float fov);
+
+			/*
+			 * Settor to set the new position of the camera
+			 * @param position This is the new position, it must be different to the target
+			 * 				   position (see setPosition of OgreCamera)
+			 */
+			void setPosition(const Ogre::Vector3& position);
+
+		    /*
+			 * Settor to set the new target of the camera
+			 * @param target This is the new target, NULL for no target
+			 */
+			virtual void setTarget(Ogre::SceneNode* target);
+
+			/*
+			 * Settor to set the orientation
+			 * @param orientation This is the new orientation
+			 */
+			void setOrientation(const Ogre::Quaternion& orientation);
+
+			/*
+			 * This method is call each frame
+			 * @param time This is the time between 2 frames
+			 */
+			virtual void update(float time);
 		};
-	}
-}
+	};
+};
 
-#endif // __CAMERA_H__
+#endif

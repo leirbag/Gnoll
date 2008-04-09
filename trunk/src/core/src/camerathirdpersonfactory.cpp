@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
@@ -19,52 +18,42 @@
  ***************************************************************************/
 
 
-/*---------------------------------CameraFixe------------------------------*\
-|   This is a fixed camera                                                  |
+/*-------------------------------CameraTHirdPersonFactory------------------*\
+|   This is a first person camera factory                                   |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/30/2007 - Gabriel - Initial release                      |
-|               10/30/2007 - Gabriel - add time to update()                 |
-|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
+|               04/08/2008 - Gabriel - Initial release                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_CAMERAFIXE
-#define INCLUDED_CAMERAFIXE
-
-#include "camera.h"
+#include "../include/camerathirdpersonfactory.h"
+#include "../include/camerathirdperson.h"
+#include "../include/defaultcamerathirdpersonlistener.h"
+#include "../include/cmessagelistenercamera.h"
+#include "../include/cmessage.h"
+#include "../include/cmessagetype.h"
+#include "../include/cmessagemanager.h"
+#include "../../input/include/coisinputmodule.h"
+#include "../../input/include/ctranslationevents.h"
+#include "../../input/include/cinputmouseevents.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		/*
-		 * Structure that contains camera attributs
-		 */
-		class CameraFixe : public Camera
+		boost::shared_ptr<Camera> CameraThirdPersonFactory::createCamera(const Glib::ustring& instanceName)
 		{
-		public:
-			/*
-			 * Default constructor, it initializes the camera with default settings :
-			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
-			 */
-			explicit CameraFixe(const Glib::ustring& instanceName);
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 
-			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit CameraFixe(const CameraFixe& copy);
+			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(
+															   new Gnoll::Core::DefaultCameraThirdPersonListener);
+			messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
 
-			/*
-			 * Destructior
-			 */
-			virtual ~CameraFixe();
-		};
+			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraThirdPerson(instanceName));
+
+			listenerInput->setCamera(pCam);
+
+			return pCam;
+		}
 	};
 };
-
-#endif

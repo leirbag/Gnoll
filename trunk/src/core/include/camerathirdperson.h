@@ -1,3 +1,5 @@
+
+
 /***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
@@ -31,120 +33,188 @@
 |               11/16/2007 - Paf - Remove all references to                 |
 |                                   CGenericMessageManager                  |
 |               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
+|               03/14/2008 - Gabriel - add minOffset and maxOffset          |
+|               04/05/2006 - Gabriel - change return type of rotation       |
+|                                      methods                              |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#include <OgreVector3.h>
-#include "camera.h" 
-#include "camerathirdpersonlistener.h"
+#ifndef INCLUDED_CAMERATHIRDPERSON
+#define INCLUDED_CAMERATHIRDPERSON
 
-#ifndef __CAMERATHIRDPERSON_H__
-#define __CAMERATHIRDPERSON_H__
+#include "camera.h"
 
 namespace Gnoll
 {
-
-	namespace Core 
+	namespace Core
 	{
-		/**
-		*	This is the interface of all Sources.</br>
-		*   This class cannot be instanciable.
-		*/ 
-		class CameraThirdPerson : public Gnoll::Core::Camera
+		/*
+		 * Structure that contains camera attributs
+		 */
+		struct camerathirdperson_i;
+
+		class CameraThirdPerson : public Camera
 		{
 		private:
-			Ogre::SceneNode* m_pNode;
-			float            m_fOffset;
-			float            m_fAmountDegreeX, m_fAmountDegreeY, m_fAmountDegreeZ;
-			float            m_fLimitRotX, m_fLimitRotY, m_fLimitRotZ;
-
-			shared_ptr<CMessageListener> m_listenerMove;
-			shared_ptr<CMessageListener> m_listenerRotate;
-			shared_ptr<CMessageListener> m_listenerMouseRotate;
-
-			shared_ptr<CMessageListener> m_listenerKeyUp;
-			shared_ptr<CMessageListener> m_listenerKeyDown;
+			camerathirdperson_i* m_this;
 
 		public:
-
-			/**
-			 * This is the constructor.
-			 * @param _instance This is the instance name; the Camera's name
+			/*
+			 * Default constructor, (see camera) + offset set at 100, min offset to 0 and max offset to 200
+			 * this is no limit on rotation
+			 * @param instanceName This is the instance name of the camera, it will be use for the
+			 * 					   instance name of the Ogre Camera
 			 */
-			CameraThirdPerson(const Glib::ustring& instanceName);
+			explicit CameraThirdPerson(const Glib::ustring& instanceName);
 
-			/**
-			 * This is the destructor
+			/*
+			 * Copy constructor
+			 * @param copy This is the camera to copy
+			 */
+			explicit CameraThirdPerson(const CameraThirdPerson& copy);
+
+			/*
+			 * Destructior
 			 */
 			virtual ~CameraThirdPerson();
 
 			/**
-			 * This update the View.
-			 */
-			virtual void update(float time);
-
-			/**
-			 * This set a pointer to the target node
-			 * @param pNode This is the target
-			 */
-			void setTarget(Ogre::SceneNode* pNode);
-
-			/**
-			 * This return a pointer to the target node
-			 * @return node
-			 */
-			Ogre::SceneNode* getTarget();
-
-			/**
 			 * This set the offset between camera and target
-			 * @param offset This is the offset between target and camera
+			 * @param offset This is the offset, we take the absolute value
+			 * 				 and the value must be between MinOffset and MaxOffset
 			 */
 			void setOffset(float offset);
 
 			/**
+			 * This set the minimum amount of offset
+			 * @param value This is the min offset, we take the asolute value
+			 * 				and the value must be inferior to MaxOffset, if
+			 * 				the new value is greater than current offset, the
+			 * 				offset is set to the new MinOffset
+			 */
+			void setMinOffset(float value);
+
+			 /**
+			 * This set the maximum amount of offset
+			 * @param value This is the max offset, we take the asolute value
+			 * 				and the value must be superior to MinOffset, if
+			 * 				the new value is inferior to current offset, the
+			 * 				offset is set to the new MaxOffset
+			 */
+			void setMaxOffset(float value);
+
+			/**
 			 * This return the offset between camera and target
-			 * @return offset (default 30)
+			 * @return the current offset
 			 */
 			float getOffset();
 
 			/**
-			 * This set the rotation limit of camera around axis X
-			 * @param angle limit in degree
+			 * This return the min amount offset between camera and target
+			 * @return the min offset
 			 */
-			void setLimitRotationX(float angle);
+			float getMinOffset();
 
 			/**
-			 * This set the rotation limit of camera around axis Y
-			 * @param angle limit in degree
+			 * This return the max amount offset between camera and target
+			 * @return the max offset
 			 */
-			void setLimitRotationY(float angle);
+			float getMaxOffset();
 
-			/**
-			 * This set the rotation limit of camera around axis Z
-			 * @param angle limit in degree
+			/*
+			 * Accessor to get the current limit rotation on X Axis
+			 * @return the limit of rotation on axis X
 			 */
-			void setLimitRotationZ(float angle);
+			float getLimitRotationAroundAxisX() const;
 
-			/**
-			 * This rotate the camera around the axis X
-			 * @param angle The angle to rotate in degree
+			/*
+			 * Accessor to get the current limit rotation on Y Axis
+			 * @return the limit of rotation on axis Y
 			 */
-			virtual void rotateAxisX(float angle);
+			float getLimitRotationAroundAxisY() const;
 
-			/**
-			 * This rotate the camera around the axis Y
-			 * @param angle The angle to rotate in degree
+			/*
+			 * Accessor to get the current limit rotation on Z Axis
+			 * @return the limit of rotation on axis Z
 			 */
-			virtual void rotateAxisY(float angle);
+			float getLimitRotationAroundAxisZ() const;
 
-			/**
-			 * This rotate the camera around the axis Z
-			 * @param angle The angle to rotate in degree
+			/*
+			 * Accessor to get the current amount of rotation on X Axis
+			 * @return the amount of rotation on axis X
 			 */
-			virtual void rotateAxisZ(float angle);
-				
+			float getAmountRotationAroundAxisX() const;
+
+			/*
+			 * Accessor to get the current amount rotation on Y Axis
+			 * @return the amount of rotation on axis Y
+			 */
+			float getAmountRotationAroundAxisY() const;
+
+			/*
+			 * Accessor to get the current amount rotation on Z Axis
+			 * @return the amount of rotation on axis Z
+			 */
+			float getAmountRotationAroundAxisZ() const;
+
+			/*
+			 * Settor to set the limit of rotation aroud the target
+			 * around the X axis
+			 * @param xLimit This is the limit value, it must be positive and greater
+			 * 				 than the current amount of rotation on axis X else no
+			 * 				 changement, -1 is allowed to indicate no limit
+			 */
+			void setLimitRotationAroundAxisX(float xLimit);
+
+			/*
+			 * Settor to set the limit of rotation aroud the target
+			 * around the Y axis
+			 * @param yLimit This is the limit value, it must be positive and greater
+			 * 				 than the current amount of rotation on axis Y else no
+			 * 				 changement, -1 is allowed to indicate no limit
+			 */
+			void setLimitRotationAroundAxisY(float yLimit);
+
+			/*
+			 * Settor to set the limit of rotation aroud the target
+			 * around the z axis
+			 * @param zLimit This is the limit value, it must be positive and greater
+			 * 				 than the current amount of rotation on axis Z else no
+			 * 				 changement, -1 is allowed to indicate no limit
+			 */
+			void setLimitRotationAroundAxisZ(float zLimit);
+
+			/*
+			 * Rotate the camera around the targed around the X axis
+			 * It doesn't rotate if the rotation is greater than limit
+			 * fixed
+			 * @param degree This is the angle to rotation in degree
+			 */
+			void rotateAroundAxisX(float degree);
+
+			/*
+			 * Rotate the camera around the targed around the Y axis
+			 * It doesn't rotate if the rotation is greater than limit
+			 * fixed
+			 * @param degree This is the angle to rotation in degree
+			 */
+			void rotateAroundAxisY(float degree);
+
+			/*
+			 * Rotate the camera around the targed around the Z axis
+			 * It doesn't rotate if the rotation is greater than limit
+			 * fixed
+			 * @param degree This is the angle to rotation in degree
+			 */
+			void rotateAroundAxisZ(float degree);
+
+			/*
+			 * This method is call each frame
+			 * @param time This is the time between 2 frames
+			 */
+			void update(float time);
 		};
 	};
 };
 
-#endif // __CAMERATHIRDPERSON_H__
+#endif

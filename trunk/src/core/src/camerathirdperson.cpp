@@ -18,152 +18,218 @@
  ***************************************************************************/
 
 
-/*----------------------------CameraThirdPerson----------------------------*\
-|   This is a free fly camera                                               |
+/*-------------------------------CameraThirdPerson-------------------------*\
+|   This is a first person camera                                           |
 |                                                                           |
 |   Changelog :                                                             |
-|               10/06/2007 - Gabriel - Initial release                      |
-|               19/06/2007 - Gabriel - Change all variables for listener    |
-|                                       by a map.                           |
-|                                      Add limitation of rotation           |
-|                                      Add time to the transformation       |
-|               11/16/2007 - Paf - Remove all references to                 |
-|                                   CGenericMessageManager                  |
-|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
-|               01/10/2008 - Gabriel - fix a bug with the update            |
+|               04/08/2008 - Gabriel - Initial release                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camerathirdperson.h"
+#include <cmath>
 
 namespace Gnoll
 {
-
-	namespace Core 
+	namespace Core
 	{
-
-		CameraThirdPerson::CameraThirdPerson(const Glib::ustring& instanceName) : Gnoll::Core::Camera(instanceName)
+		struct camerathirdperson_i
 		{
-			// Initialize attributs
-			m_pNode = NULL;
-			m_fOffset = 30.0f; 
-			m_fAmountDegreeX = m_fAmountDegreeY = m_fAmountDegreeZ = 0.0f;
-			m_fLimitRotX     = m_fLimitRotY     = m_fLimitRotZ     = 0.0f;
+			float offset;
+			float minOffset;
+			float maxOffset;
+			float amountRotationAroundAxisX;
+			float amountRotationAroundAxisY;
+			float amountRotationAroundAxisZ;
+			float limitRotationAroundAxisX;
+			float limitRotationAroundAxisY;
+			float limitRotationAroundAxisZ;
 
-			// Add listener
-			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
+			camerathirdperson_i() :
+				offset(100.0f),
+				minOffset(0.0f),
+				maxOffset(200.0f),
+				amountRotationAroundAxisX(0.0f),
+				amountRotationAroundAxisY(0.0f),
+				amountRotationAroundAxisZ(0.0f),
+				limitRotationAroundAxisX(-1.0f),
+				limitRotationAroundAxisY(-1.0f),
+				limitRotationAroundAxisZ(-1.0f)
+			{
+			}
+		};
+
+		CameraThirdPerson::CameraThirdPerson(const Glib::ustring& instanceName) :
+			Camera(instanceName),
+			m_this(new camerathirdperson_i)
+		{
+		}
 			
-			m_listenerKeyUp = shared_ptr<CMessageListener>(new Gnoll::Core::CtpKeyUp);
-			messageModule->getMessageManager()->addListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
-
-			m_listenerKeyDown = shared_ptr<CMessageListener>(new Gnoll::Core::CtpKeyDown);
-			messageModule->getMessageManager()->addListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
-
-
-			m_listenerMove = shared_ptr<CMessageListener>(new Gnoll::Core::MoveCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			messageModule->getMessageManager()->addListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
-
-			m_listenerRotate = shared_ptr<CMessageListener>(new Gnoll::Core::RotateCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			messageModule->getMessageManager()->addListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
-
-			m_listenerMouseRotate = shared_ptr<CMessageListener>(new Gnoll::Core::MouseRotateCameraThirdPersonListener(static_cast<Gnoll::Core::CameraThirdPerson*>(this)));
-			messageModule->getMessageManager()->addListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
-
-
-			// Creation of controller
-			g_mapCtpKeys["MoveUp"]         = false;
-			g_mapCtpKeys["MoveDown"]       = false;
-
-			g_mapCtpKeys["RotateUp"]       = false;
-			g_mapCtpKeys["RotateDown"]     = false;
-			g_mapCtpKeys["RotateLeft"]     = false;
-			g_mapCtpKeys["RotateRight"]    = false;
+		CameraThirdPerson::CameraThirdPerson(const CameraThirdPerson& copy) :
+			Camera(copy),
+			m_this(new camerathirdperson_i)
+		{
 		}
 
 		CameraThirdPerson::~CameraThirdPerson()
 		{
-			CMessageModule* messageModule = CMessageModule::getInstancePtr(); 
-			messageModule->getMessageManager()->delListener ( m_listenerMove, CMessageType("GRAPHIC_FRAME_RENDERED") );
-			messageModule->getMessageManager()->delListener ( m_listenerRotate, CMessageType("GRAPHIC_FRAME_RENDERED") );
-			messageModule->getMessageManager()->delListener ( m_listenerKeyUp, CMessageType("KEYBOARD_KEYUP") );
-			messageModule->getMessageManager()->delListener ( m_listenerKeyDown, CMessageType("KEYBOARD_KEYDOWN") );
-			messageModule->getMessageManager()->delListener ( m_listenerMouseRotate, CMessageType("MOUSE_MOVED") );
-		}
-
-		void CameraThirdPerson::update(float time)
-		{
-			m_ogreCamera->setPosition(m_pNode->getPosition());
-			m_ogreCamera->move(-m_ogreCamera->getDirection() * m_fOffset);
-		}
-
-		void CameraThirdPerson::setTarget(Ogre::SceneNode* pNode)
-		{
-			if(pNode == NULL)
-				return;
-
-			m_pNode = pNode;
-		}
-
-		Ogre::SceneNode* CameraThirdPerson::getTarget()
-		{
-			return m_pNode;
+			delete m_this;
 		}
 
 		void CameraThirdPerson::setOffset(float offset)
 		{
-			m_fOffset = offset;
+			if(offset < 1)
+				return;
+
+			if(offset < getMinOffset())
+				return;
+
+			if(offset > getMaxOffset())
+				return;
+
+			m_this->offset = fabs(offset);
+			setTarget(getTarget());
+		}
+
+		void CameraThirdPerson::setMinOffset(float value)
+		{
+			if(value > getMaxOffset())
+				return;
+
+			if(value > getOffset())
+				setOffset(value);
+
+			m_this->minOffset = fabs(value);
+		}
+
+		void CameraThirdPerson::setMaxOffset(float value)
+		{
+			if(value < getMinOffset())
+				return;
+
+			if(value < getOffset())
+				setOffset(value);
+
+			m_this->maxOffset = fabs(value);
 		}
 
 		float CameraThirdPerson::getOffset()
 		{
-			return m_fOffset;
+			return m_this->offset;
 		}
 
-		void CameraThirdPerson::setLimitRotationX(float angle)
+		float CameraThirdPerson::getMinOffset()
 		{
-			m_fLimitRotX = angle;
+			return m_this->minOffset;
 		}
 
-		void CameraThirdPerson::setLimitRotationY(float angle)
+		float CameraThirdPerson::getMaxOffset()
 		{
-			m_fLimitRotY = angle;
+			return m_this->maxOffset;
 		}
 
-		void CameraThirdPerson::setLimitRotationZ(float angle)
+		float CameraThirdPerson::getLimitRotationAroundAxisX() const
 		{
-			m_fLimitRotZ = angle;
+			return m_this->limitRotationAroundAxisX;
 		}
 
-		void CameraThirdPerson::rotateAxisX(float angle)
+		float CameraThirdPerson::getLimitRotationAroundAxisY() const
 		{
-			if(fabs(m_fAmountDegreeX - Ogre::Radian(angle).valueDegrees()) > m_fLimitRotX)
+			return m_this->limitRotationAroundAxisY;
+		}
+
+		float CameraThirdPerson::getLimitRotationAroundAxisZ() const
+		{
+			return m_this->limitRotationAroundAxisZ;
+		}
+
+		float CameraThirdPerson::getAmountRotationAroundAxisX() const
+		{
+			return m_this->amountRotationAroundAxisX;
+		}
+
+		float CameraThirdPerson::getAmountRotationAroundAxisY() const
+		{
+			return m_this->amountRotationAroundAxisY;
+		}
+
+		float CameraThirdPerson::getAmountRotationAroundAxisZ() const
+		{
+			return m_this->amountRotationAroundAxisZ;
+		}
+
+		void CameraThirdPerson::setLimitRotationAroundAxisX(float xLimit)
+		{
+			if(xLimit < 1)
 				return;
 
-			m_fAmountDegreeX -= Ogre::Radian(angle).valueDegrees();
-			m_ogreCamera->pitch(-Ogre::Radian(angle));
-			update(0);
-		}
-
-		void CameraThirdPerson::rotateAxisY(float angle)
-		{
-			if(fabs(m_fAmountDegreeY - Ogre::Radian(angle).valueDegrees()) > m_fLimitRotY)
+			if(xLimit < getAmountRotationAroundAxisX())
 				return;
 
-			m_fAmountDegreeY -= Ogre::Radian(angle).valueDegrees();
-			m_ogreCamera->yaw(-Ogre::Radian(angle));
-			update(0);
+			m_this->limitRotationAroundAxisX = std::fmod(xLimit, 360);
 		}
 
-		void CameraThirdPerson::rotateAxisZ(float angle)
+		void CameraThirdPerson::setLimitRotationAroundAxisY(float yLimit)
 		{
-			if(fabs(m_fAmountDegreeZ - Ogre::Radian(angle).valueDegrees()) > m_fLimitRotZ)
+			if(yLimit < 1)
 				return;
 
-			m_fAmountDegreeZ -= Ogre::Radian(angle).valueDegrees();
-			m_ogreCamera->roll(-Ogre::Radian(angle));
-			update(0);
+			if(yLimit < getAmountRotationAroundAxisY())
+				return;
+
+			m_this->limitRotationAroundAxisX = std::fmod(yLimit, 360);
+		}
+
+		void CameraThirdPerson::setLimitRotationAroundAxisZ(float zLimit)
+		{
+			if(zLimit < 1)
+				return;
+
+			if(zLimit < getAmountRotationAroundAxisZ())
+				return;
+
+			m_this->limitRotationAroundAxisZ = std::fmod(zLimit, 360);
+		}
+
+		void CameraThirdPerson::rotateAroundAxisX(float degree)
+		{
+			if(getLimitRotationAroundAxisX() >= 0)
+				if(getAmountRotationAroundAxisX() + degree > getLimitRotationAroundAxisX())
+					return;
+
+			m_this->amountRotationAroundAxisX += degree;
+			m_this->amountRotationAroundAxisX = std::fmod(m_this->amountRotationAroundAxisX, 360);
+
+			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(degree)));
+		}
+
+		void CameraThirdPerson::rotateAroundAxisY(float degree)
+		{
+			if(getLimitRotationAroundAxisY() >= 0)
+				if(getAmountRotationAroundAxisY() + degree > getLimitRotationAroundAxisY())
+					return;
+
+			m_this->amountRotationAroundAxisY += degree;
+			m_this->amountRotationAroundAxisY = std::fmod(m_this->amountRotationAroundAxisY, 360);
+
+			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(degree)));
+		}
+
+		void CameraThirdPerson::rotateAroundAxisZ(float degree)
+		{
+			if(getLimitRotationAroundAxisZ() >= 0)
+				if(getAmountRotationAroundAxisZ() + degree > getLimitRotationAroundAxisZ())
+					return;
+
+			m_this->amountRotationAroundAxisZ += degree;
+			m_this->amountRotationAroundAxisZ = std::fmod(m_this->amountRotationAroundAxisZ, 360);
+
+			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(degree)));
+		}
+
+		void CameraThirdPerson::update(float time)
+		{
+			setPosition(getTarget()->getPosition() + (getDirection() * getOffset() * -1.0f));
 		}
 	};
 };
-
-

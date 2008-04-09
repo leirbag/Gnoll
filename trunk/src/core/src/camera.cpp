@@ -1,55 +1,64 @@
-/**************************************************************************
-*   Copyright (C) 2006 by Puzzle Team                                     *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+/***************************************************************************
+ *   Copyright (C) 2006 by Puzzle Team                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
 
-/*---------------------------------integer---------------------------------*\
-|   This is the interface of all camera                                     |
+/*-------------------------------Camera------------------------------------*\
+|   This is the interface of camera                                         |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/30/2007 - Gabriel - Initial release                      |
-|               10/30/2007 - Gabriel - add time to update()                 |
-|               12/24/2007 - Gabriel - pass by GraphicModule to get         |
-|                                      the scenemanager and delete          |
-|                                      scenemanager from constructor        |
-|               02/15/2008 - Bruno Mahe - Load/Save Camera's position       |
-|                                      and direction when (un-)initialized  |
-|               02/15/2008 - Bruno Mahe - Replace                           |
-|                            CPersistentObjectProxy::getAttribute() by      |
-|                            CPersistentOBjectPRoxy::getAttributeOrDefault()|
+|               04/08/2008 - Gabriel - Initial release                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camera.h"
 #include "../../graphic/include/cgraphicmodule.h"
+#include "../include/cmessagemodule.h"
 #include "../include/float.h"
-#include <OgreVector3.h>
-
-
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		Camera::Camera(const Glib::ustring& instanceName) : CPersistentObjectProxy(instanceName)
+		struct camera_i
 		{
-			m_ogreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
-			m_name = instanceName;
+			Glib::ustring name;
+			Ogre::Camera* pOgreCamera;
+			Ogre::SceneNode* pTarget;
+
+			camera_i() :
+				name(""),
+				pOgreCamera(NULL),
+				pTarget(NULL)
+			{
+			}
+		};
+
+		Camera::Camera(const Glib::ustring& instanceName) :
+			CPersistentObjectProxy(instanceName),
+			m_this(new camera_i)
+		{
+			m_this->name = instanceName;
+			m_this->pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
+
+			setNearValue(1.0f);
+			setFarValue(200.0f);
+			setFovValue(3.14/4); // TODO : change this to the real value
 
 			/**
 			 * Extract Camera's position
@@ -57,16 +66,13 @@ namespace Gnoll
 			shared_ptr<Float> pos_x;
 			shared_ptr<Float> pos_y;
 			shared_ptr<Float> pos_z;
-
 			shared_ptr<Float> default_pos = shared_ptr<Float> (new Float(0.0f));
 
 			pos_x = this->getAttributeOrDefault<Float>("pos_x", default_pos);
 			pos_y = this->getAttributeOrDefault<Float>("pos_y", default_pos);
 			pos_z = this->getAttributeOrDefault<Float>("pos_z", default_pos);
 
-
-			m_ogreCamera->setPosition(*pos_x, *pos_y, *pos_z);
-
+			m_this->pOgreCamera->setPosition(*pos_x, *pos_y, *pos_z);
 
 			/**
 			 * Extract Camera's direction
@@ -74,22 +80,31 @@ namespace Gnoll
 			shared_ptr<Float> dir_x;
 			shared_ptr<Float> dir_y;
 			shared_ptr<Float> dir_z;
+			shared_ptr<Float> default_dir_x = shared_ptr<Float> (new Float(0.0f));
+			shared_ptr<Float> default_dir_y = shared_ptr<Float> (new Float(0.0f));
+			shared_ptr<Float> default_dir_z = shared_ptr<Float> (new Float(1.0f));
 
-			shared_ptr<Float> default_dir = shared_ptr<Float> (new Float(0.0f));
+			dir_x = this->getAttributeOrDefault<Float>("dir_x", default_dir_x);
+			dir_y = this->getAttributeOrDefault<Float>("dir_y", default_dir_y);
+			dir_z = this->getAttributeOrDefault<Float>("dir_z", default_dir_z);
 
-			dir_x = this->getAttributeOrDefault<Float>("dir_x", default_dir);
-			dir_y = this->getAttributeOrDefault<Float>("dir_y", default_dir);
-			dir_z = this->getAttributeOrDefault<Float>("dir_z", default_dir);
+			m_this->pOgreCamera->setDirection(*dir_x, *dir_y, *dir_z);
+		}
 
-			m_ogreCamera->setDirection(*dir_x, *dir_y, *dir_z);
-
+		Camera::Camera(const Camera& copy) :
+			CPersistentObjectProxy(copy)
+		{
+			// Copy attributs
+			m_this = new camera_i;
+			*m_this = *(copy.m_this);
 		}
 
 		Camera::~Camera()
 		{
-
-			Ogre::Vector3 pos = m_ogreCamera->getPosition();
-
+			/*
+			 * Save the current configuration of the camera
+			 */
+			Ogre::Vector3 pos = m_this->pOgreCamera->getPosition();
 			shared_ptr<Float> pos_x(new Float(pos.x));
 			this->setAttribute("pos_x", pos_x);
 
@@ -99,11 +114,7 @@ namespace Gnoll
 			shared_ptr<Float> pos_z(new Float(pos.z));
 			this->setAttribute("pos_z", pos_z);
 
-
-
-
-			Ogre::Vector3 dir = m_ogreCamera->getDirection();
-
+			Ogre::Vector3 dir = m_this->pOgreCamera->getDirection();
 			shared_ptr<Float> dir_x(new Float(dir.x));
 			this->setAttribute("dir_x", dir_x);
 
@@ -112,53 +123,122 @@ namespace Gnoll
 
 			shared_ptr<Float> dir_z(new Float(dir.z));
 			this->setAttribute("dir_z", dir_z);
+
+			delete m_this;
 		}
 
-		Ogre::Vector3 Camera::getLookAt()
+		Camera& Camera::operator=(const Camera& copy)
 		{
-			return m_ogreCamera->getRealDirection();
+			// Copy attributs
+			*m_this = *(copy.m_this);
+			return *this;
 		}
 
-		void Camera::setLookAt(const Ogre::Vector3& vLookAt)
+		float Camera::getNearValue() const
 		{
-			m_ogreCamera->lookAt(vLookAt);
+			return m_this->pOgreCamera->getNearClipDistance();
 		}
 
-		Ogre::Vector3 Camera::getUp()
+		float Camera::getFarValue() const
 		{
-			return m_ogreCamera->getRealUp();
+			return m_this->pOgreCamera->getFarClipDistance();
 		}
 
-		Ogre::Vector3 Camera::getEye()
+		float Camera::getFovValue() const
 		{
-			return m_ogreCamera->getRealPosition();
+			return m_this->pOgreCamera->getAspectRatio();
 		}
 
-		void Camera::setEye(const Ogre::Vector3& vEye)
+		const Ogre::Vector3& Camera::getPosition() const
 		{
-			m_ogreCamera->setPosition(vEye);
+			return m_this->pOgreCamera->getPosition();
 		}
 
-		void Camera::setNearDistance(float distance)
+		Ogre::Vector3 Camera::getDirection() const
 		{
-			m_ogreCamera->setNearClipDistance(distance);
+			return m_this->pOgreCamera->getDirection();
 		}
 
-		void Camera::setFarDistance(float distance)
+		Ogre::Quaternion Camera::getOrientation() const
 		{
-			m_ogreCamera->setFarClipDistance(distance);
+			return m_this->pOgreCamera->getOrientation();
 		}
 
-		void Camera::setFov(float angle)
+		Ogre::SceneNode* Camera::getTarget() const
 		{
-			m_ogreCamera->setAspectRatio(angle);
+			return m_this->pTarget;
 		}
 
-		Ogre::Camera& Camera::getOgreCamera()
+		Ogre::Camera* Camera::getOgreCamera()
 		{
-			return *m_ogreCamera;
+			return m_this->pOgreCamera;
 		}
-	}
-}
 
+		Ogre::Vector3 Camera::getUp() const
+		{
+			return m_this->pOgreCamera->getUp();
+		}
 
+		Ogre::Matrix4 Camera::getView() const
+		{
+			return m_this->pOgreCamera->getViewMatrix();
+		}
+
+		void Camera::setNearValue(float near)
+		{
+			if(fabs(near) > getFarValue())
+				return;
+
+		    m_this->pOgreCamera->setNearClipDistance(near);
+		}
+
+		void Camera::setFarValue(float far)
+		{
+			if(fabs(far) <= getNearValue())
+				return;
+
+			m_this->pOgreCamera->setFarClipDistance(far);
+		}
+
+		void Camera::setFovValue(float fov)
+		{
+			m_this->pOgreCamera->setAspectRatio(fov);
+		}
+
+		void Camera::setPosition(const Ogre::Vector3& position)
+		{
+			m_this->pOgreCamera->setPosition(position);
+		}
+
+		void Camera::setTargetHelper(Ogre::SceneNode* target)
+		{
+			m_this->pTarget = target;
+		}
+
+		void Camera::setTarget(Ogre::SceneNode* target)
+		{
+			if(target != NULL)
+			{
+				m_this->pOgreCamera->setAutoTracking(true, target);
+				setTargetHelper(target);
+			}
+			else
+			{
+				m_this->pOgreCamera->setAutoTracking(false);
+				setTargetHelper(target);
+			}
+
+			update(0);
+		}
+
+		void Camera::setOrientation(const Ogre::Quaternion& orientation)
+		{
+			m_this->pOgreCamera->setOrientation(orientation);
+		}
+
+		void Camera::update(float time)
+		{
+			// Do nothing
+		}
+	};
+};

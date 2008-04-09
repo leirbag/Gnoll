@@ -19,52 +19,44 @@
  ***************************************************************************/
 
 
-/*---------------------------------CameraFixe------------------------------*\
-|   This is a fixed camera                                                  |
+/*---------------------------DefaultCameraThirdPersonListener--------------*\
+|   This is a message's listener for camera third person                    |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/30/2007 - Gabriel - Initial release                      |
-|               10/30/2007 - Gabriel - add time to update()                 |
-|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
+|               04/08/2008 - Gabriel - Initial release                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_CAMERAFIXE
-#define INCLUDED_CAMERAFIXE
+#ifndef INCLUDED_DEFAULTCAMERATHIRDPERSONLISTENER_H
+#define INCLUDED_DEFAULTCAMERATHIRDPERSONLISTENER_H
 
-#include "camera.h"
+#include "cmessagelistenercamera.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		/*
-		 * Structure that contains camera attributs
-		 */
-		class CameraFixe : public Camera
+		class DefaultCameraThirdPersonListener : public CMessageListenerCamera
 		{
 		public:
-			/*
-			 * Default constructor, it initializes the camera with default settings :
-			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
+			/**
+			 * This is a constructor
 			 */
-			explicit CameraFixe(const Glib::ustring& instanceName);
+			DefaultCameraThirdPersonListener();
 
-			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
+			/**
+			 * This is a destructor
 			 */
-			explicit CameraFixe(const CameraFixe& copy);
+			~DefaultCameraThirdPersonListener();
 
-			/*
-			 * Destructior
+			/**
+			 * This method is called in order to process a message
+			 * @param message The message this method will have to process
 			 */
-			virtual ~CameraFixe();
+			void handle ( shared_ptr<CMessage> message );
 		};
 	};
 };
 
 #endif
+

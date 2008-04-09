@@ -72,13 +72,6 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#include "../../core/include/camera.h"
-#include "../../core/include/camerafixe.h"
-#include "../../core/include/camerafreefly.h"
-#include "../../core/include/camerathirdperson.h"
-#include "../../core/include/camerafirstperson.h"
-#include "../../core/include/cameraspline.h"
-
 #include "../include/cgraphicmodule.h"
 #include "../../config.h"
 
@@ -91,6 +84,9 @@
 #include "../../core/include/persistentobject.h"
 #include "../../core/include/persistentobjectmanager.h"
 
+#include "../../core/include/camera.h"
+#include "../../core/include/abstractcamerafactory.h"
+#include "../../core/include/camerathirdpersonfactory.h"
 
 using namespace Ogre;
 
@@ -167,25 +163,23 @@ void CGraphicModule::init()
 	mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 	// Create and configure the camera
-	m_camera = new Gnoll::Core::CameraThirdPerson("camTP");
-
-	//m_camera->setEye(Vector3(780, 25, 590));
-	//m_camera->setLookAt(Vector3(0, 10, 0));
-	m_camera->setNearDistance(5);
-	m_camera->setFarDistance(1000);
+	Gnoll::Core::AbstractCameraFactory* acf = new Gnoll::Core::CameraThirdPersonFactory();
+	boost::shared_ptr<Gnoll::Core::Camera> m_camera = acf->createCamera("camTP");
+	m_camera->setNearValue(5);
+	m_camera->setFarValue(1000);
 
 	// Create one viewport, entire window
-	Viewport* vp = mwindow->addViewport(&m_camera->getOgreCamera());
+	Viewport* vp = mwindow->addViewport(m_camera->getOgreCamera());
 	vp->setBackgroundColour(ColourValue(0.5,1,0));
 
 	// Alter the camera aspect ratio to match the viewport
-	m_camera->setFov( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
+	m_camera->setFovValue( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
 
 	mSceneMgr->setAmbientLight( ColourValue( 0.6, 0.6, 0.6 ) );
-	mSceneMgr->setShadowTechnique( SHADOWTYPE_TEXTURE_ADDITIVE );
+	/*mSceneMgr->setShadowTechnique( SHADOWTYPE_TEXTURE_ADDITIVE );
 	mSceneMgr->setShadowFarDistance(5000);
 	mSceneMgr->setShadowTextureSize(2048);
-	mSceneMgr->setShadowTextureCount(4);
+	mSceneMgr->setShadowTextureCount(4);*/
 
 
 
@@ -213,23 +207,23 @@ void CGraphicModule::init()
 	// Infinite far plane?
 	if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
 	{
-		m_camera->setFarDistance(0);
+		m_camera->setFarValue(0);
 	}
 
 	RaySceneQuery* raySceneQuery = mSceneMgr->createRayQuery(
-	Ray(m_camera->getEye(), Vector3::NEGATIVE_UNIT_Y));
+	Ray(m_camera->getPosition(), Vector3::NEGATIVE_UNIT_Y));
 
 	Ray updateRay;
-	updateRay.setOrigin(m_camera->getEye());
+	updateRay.setOrigin(m_camera->getPosition());
 	updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
 	raySceneQuery->setRay(updateRay);
 	RaySceneQueryResult& qryResult = raySceneQuery->execute();
 	RaySceneQueryResult::iterator i = qryResult.begin();
 	if (i != qryResult.end() && i->worldFragment)
 	{
-		m_camera->setEye(Vector3(m_camera->getEye().x,
+		m_camera->setPosition(Vector3(m_camera->getPosition().x,
 		i->worldFragment->singleIntersection.y + 5, 
-		m_camera->getEye().z));
+		m_camera->getPosition().z));
 	}
 
 	//mSceneMgr->destroyQuery(raySceneQuery);
@@ -297,12 +291,8 @@ void CGraphicModule::init()
 	eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 	eb->setAlwaysOnTop(true);
 
-	static_cast<Gnoll::Core::CameraThirdPerson*>(m_camera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
-	static_cast<Gnoll::Core::CameraThirdPerson*>(m_camera)->setOffset(100.0f);
-	static_cast<Gnoll::Core::CameraThirdPerson*>(m_camera)->setLimitRotationX(180.0f);
-	static_cast<Gnoll::Core::CameraThirdPerson*>(m_camera)->setLimitRotationY(180.0f);
+	m_camera->setTarget(mSceneMgr->getSceneNode("RobotNode"));
 }
-
 
 void CGraphicModule::process()
 {	
@@ -320,9 +310,6 @@ void CGraphicModule::process()
 	CEGUI::String str(s);
 	mEditorGuiSheet->getChild("fpsText")->setText(str);
 
-
-
-	
 	mRoot->renderOneFrame();
 //	mWindow->update();
 
@@ -345,10 +332,6 @@ void CGraphicModule::process()
 
 void CGraphicModule::exit()
 {
-	if (m_camera)
-	{
-		delete m_camera;
-	}
     delete m_timer;
 }
 

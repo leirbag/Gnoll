@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
@@ -19,52 +18,33 @@
  ***************************************************************************/
 
 
-/*---------------------------------CameraFixe------------------------------*\
-|   This is a fixed camera                                                  |
+/*-------------------------------DefaultCameraThirdPersonListener----------*\
+|   This is a first person camera listener                                  |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/30/2007 - Gabriel - Initial release                      |
-|               10/30/2007 - Gabriel - add time to update()                 |
-|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
+|               04/08/2008 - Gabriel - Initial release                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_CAMERAFIXE
-#define INCLUDED_CAMERAFIXE
-
-#include "camera.h"
+#include "../include/defaultcamerathirdpersonlistener.h"
+#include "../../stats/include/cstatsmodule.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		/*
-		 * Structure that contains camera attributs
-		 */
-		class CameraFixe : public Camera
+		DefaultCameraThirdPersonListener::DefaultCameraThirdPersonListener()
 		{
-		public:
-			/*
-			 * Default constructor, it initializes the camera with default settings :
-			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
-			 */
-			explicit CameraFixe(const Glib::ustring& instanceName);
+		}
 
-			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit CameraFixe(const CameraFixe& copy);
+		DefaultCameraThirdPersonListener::~DefaultCameraThirdPersonListener()
+		{
+		}
 
-			/*
-			 * Destructior
-			 */
-			virtual ~CameraFixe();
-		};
+		void DefaultCameraThirdPersonListener::handle ( shared_ptr<CMessage> message )
+		{
+			m_pCamera->update(Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime());
+		}
 	};
 };
 
-#endif

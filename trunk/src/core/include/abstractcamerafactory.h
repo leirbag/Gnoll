@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
@@ -19,52 +18,37 @@
  ***************************************************************************/
 
 
-/*---------------------------------CameraFixe------------------------------*\
-|   This is a fixed camera                                                  |
+/*---------------------------------AbstractCameraFactory-------------------*\
+|   This is an abstract factory to create camera                            |
 |                                                                           |
 |   Changelog :                                                             |
-|               08/30/2007 - Gabriel - Initial release                      |
-|               10/30/2007 - Gabriel - add time to update()                 |
-|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
+|               04/08/2008 - Gabriel - Initial release                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_CAMERAFIXE
-#define INCLUDED_CAMERAFIXE
+#ifndef INCLUDED_ABSTRACTCAMERAFACTORY
+#define INCLUDED_ABSTRACTCAMERAFACTORY
 
+#include <boost/shared_ptr.hpp>
 #include "camera.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		/*
-		 * Structure that contains camera attributs
-		 */
-		class CameraFixe : public Camera
+		class AbstractCameraFactory
 		{
 		public:
-			/*
-			 * Default constructor, it initializes the camera with default settings :
-			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
+			/**
+			 * This method is virtual pure, it will be implemented by derived factory
+			 * to create their camera
+			 * @param instanceName This is the instance name of the camera
+			 * @return the camera create, NULL if error
 			 */
-			explicit CameraFixe(const Glib::ustring& instanceName);
-
-			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit CameraFixe(const CameraFixe& copy);
-
-			/*
-			 * Destructior
-			 */
-			virtual ~CameraFixe();
+			virtual boost::shared_ptr<Camera> createCamera(const Glib::ustring& instanceName) = 0;
 		};
 	};
 };
 
 #endif
+

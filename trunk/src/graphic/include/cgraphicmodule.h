@@ -40,7 +40,6 @@
 #ifndef __CGRAPHICMODULE_H__
 #define __CGRAPHICMODULE_H__
 
-
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
 #include "../../core/include/cmessagetype.h"
@@ -70,27 +69,13 @@
 //regular mem handler
 #include <OgreMemoryMacros.h> 
 
-#include "../../core/include/camera.h"
-#include "../../core/include/camerafixe.h"
-#include "../../core/include/camerafreefly.h"
-#include "../../core/include/camerathirdperson.h"
-#include "../../core/include/camerafirstperson.h"
-#include "../../core/include/cameraspline.h"
-
-
-
-
-
 #if OGRE_PLATFORM == PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
 #endif
 
-
 using namespace std;
 using namespace boost;
-
-
 
 
 /**
@@ -107,17 +92,14 @@ class CGraphicModule: public CModule, public Gnoll::Core::Singleton<CGraphicModu
 		unsigned long m_lastframe;
 		Ogre::Timer* m_timer;
 
-//		CEGUI::Renderer* mGUIRenderer;	
-	   CEGUI::OgreCEGUIRenderer* mGUIRenderer;
-	   CEGUI::System* mGUISystem;
-	   CEGUI::Window* mEditorGuiSheet;
-
+		//CEGUI::Renderer* mGUIRenderer;
+	    CEGUI::OgreCEGUIRenderer* mGUIRenderer;
+	    CEGUI::System* mGUISystem;
+	    CEGUI::Window* mEditorGuiSheet;
 
 		CMessageType framerendered;
 		shared_ptr<boost::any> data;
 
-		Gnoll::Core::Camera* m_camera;
-	
 		/**
 		 * Load resources path
 		 */
