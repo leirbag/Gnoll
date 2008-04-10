@@ -39,9 +39,8 @@ namespace Gnoll
 		void StatsModuleListener::handle ( shared_ptr<CMessage> message )
 		{
 			unsigned long temp = message->getData<unsigned long>();
-			float lasttime = temp / 1000.0f;
 
-			CStatsModule::getInstancePtr()->setRenderTime(lasttime);
+			CStatsModule::getInstancePtr()->setRenderTime(temp);
 		}
 
 		StatsModuleListener::~StatsModuleListener()
