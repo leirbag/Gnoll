@@ -44,6 +44,7 @@
 #include "ctimemodule.h"
 
 
+using namespace Gnoll::Core;
 using namespace boost;
 
 

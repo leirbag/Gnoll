@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*---------------------------cgraphicmodule.h-------------------------------*\
-|   The game graphic module                                                  |
+/*---------------------------cstatsmodule.h---------------------------------*\
+|   The game stats module                                                    |
 |                                                                            |
 |   Changelog :                                                              |
 |               04/09/2008 - Gabriel - Initial release                       |
@@ -33,6 +33,8 @@
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
 
+using namespace Gnoll::Core;
+
 namespace Gnoll
 {
 	namespace Stats
@@ -41,7 +43,7 @@ namespace Gnoll
 		/**
 		 *	The game stats module.
 		 */
-		class CStatsModule : public ::CModule, public Gnoll::Core::Singleton<CStatsModule>
+		class CStatsModule : public CModule, public Singleton<CStatsModule>
 		{
 			private:
 				stats_i* m_pStats;

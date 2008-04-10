@@ -37,7 +37,7 @@
 
 
 using namespace boost;
-
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {

@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -38,33 +39,37 @@
 using namespace std;
 using namespace boost;
 
-
-/**
- *	A message listener.
- *	This is a base implementation for all of the message's handler
- */ 
-class CMessageListener
+namespace Gnoll
 {
-
-	public:
-		
+	namespace Core
+	{
 		/**
-		 * This is a constructor
+		 *	A message listener.
+		 *	This is a base implementation for all of the message's handler
 		 */
-		CMessageListener() {}
+		class CMessageListener
+		{
 
-		/**
-		 * This is a destructor
-		 */
-		virtual ~CMessageListener() {}
+			public:
 
-		/**
-		 * This method is called in order to process a message
-		 * @param message The message this method will have to process
-		 */
-		virtual void handle ( shared_ptr<CMessage> message ) = 0;
+				/**
+				 * This is a constructor
+				 */
+				CMessageListener() {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~CMessageListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle ( shared_ptr<CMessage> message ) = 0;
 
 
+		};
+	};
 };
-
 #endif // __CMESSAGELISTENER_H__

@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -37,58 +38,63 @@
 using namespace std;
 
 
-
-/**
- *	A message's type.
- */ 
-class CMessageType
+namespace Gnoll
 {
-	private:
-
+	namespace Core
+	{
 		/**
-		 * A string which contain the message type
+		 *	A message's type.
 		 */
-		string m_msgtype;
+		class CMessageType
+		{
+			private:
 
-	public:
-		
-		/**
-		 * This is a constructor
-		 */
-		CMessageType(string _msgtype): m_msgtype(_msgtype) {}
+				/**
+				 * A string which contain the message type
+				 */
+				string m_msgtype;
 
-		/**
-		 * This is a destructor
-		 */
-		~CMessageType() {}
+			public:
 
-		/**
-		 * Operator ==
-		 * @param op A message's type to compare to
-		 * @return bool : The result :)
-		 */
-		bool operator== (CMessageType const & op); 
+				/**
+				 * This is a constructor
+				 */
+				CMessageType(string _msgtype): m_msgtype(_msgtype) {}
 
-		/**
-		 * Operator !=
-		 * @param op A message's type to compare to
-		 * @return bool : The result :)
-		 */
-		bool operator!= (CMessageType const & op); 
+				/**
+				 * This is a destructor
+				 */
+				~CMessageType() {}
 
-		/**
-		 * Operator <
-		 * @param op A message's type to compare to
-		 * @return bool : The result :)
-		 */
-		bool operator< ( CMessageType const & op ) const;
+				/**
+				 * Operator ==
+				 * @param op A message's type to compare to
+				 * @return bool : The result :)
+				 */
+				bool operator== (CMessageType const & op);
 
-		/**
-		 * Returns its type
-		 * @return string : The type 
-		 */
-		string getTypeStr() {return m_msgtype;}
+				/**
+				 * Operator !=
+				 * @param op A message's type to compare to
+				 * @return bool : The result :)
+				 */
+				bool operator!= (CMessageType const & op);
 
+				/**
+				 * Operator <
+				 * @param op A message's type to compare to
+				 * @return bool : The result :)
+				 */
+				bool operator< ( CMessageType const & op ) const;
+
+				/**
+				 * Returns its type
+				 * @return string : The type
+				 */
+				string getTypeStr() {return m_msgtype;}
+
+		};
+	};
 };
 
 #endif // __CMESSAGETYPE_H__

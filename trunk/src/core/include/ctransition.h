@@ -24,30 +24,36 @@
 |   Changelog :                                                             |
 |               04/27/2006 - Paf - Initial release                          |
 |               07/10/2007 - Paf - Virtual destructor added                 |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #ifndef __CTRANSITION_H__
 #define __CTRANSITION_H__
 
-/**
- *	Interface of all the FSM's transitions
- */ 
-class CTransition
+namespace Gnoll
 {
-	public:
-
+	namespace Core
+	{
 		/**
-		 * This is a destructor
+		 *	Interface of all the FSM's transitions
 		 */
-		virtual ~CTransition() {};
+		class CTransition
+		{
+			public:
 
-		/**
-		 * This will check if this transition is valid, or not.
-		 * @return The validation test's result
-		 */		
-		virtual bool isValid() = 0;
+				/**
+				 * This is a destructor
+				 */
+				virtual ~CTransition() {};
 
+				/**
+				 * This will check if this transition is valid, or not.
+				 * @return The validation test's result
+				 */
+				virtual bool isValid() = 0;
+
+		};
+	};
 };
-
 #endif // __CTRANSITION_H__

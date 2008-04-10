@@ -25,6 +25,7 @@
 |               05/15/2006 - Paf - Initial release                          |
 |               05/09/2007 - Paf - Change m_userdata type to                |
 |                                     shared_ptr< boost::any >              |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -42,43 +43,47 @@ using namespace std;
 using namespace boost;
 using boost::any_cast;
 
-const CMessageType MSG_ANYTYPE("*");
-
-
-/**
- *	A message.
- */ 
-class CMessage
+namespace Gnoll
 {
-	private:
-
-		CMessageType m_type;
-		shared_ptr<boost::any> m_userdata;
-
-	public:
-		
-		/**
-		 * This is a constructor
-		 */
-		CMessage(CMessageType _msgtype = MSG_ANYTYPE, shared_ptr<boost::any> _data = shared_ptr<boost::any>() ): m_type(_msgtype), m_userdata(_data) {}
+	namespace Core
+	{
+		const CMessageType MSG_ANYTYPE("*");
 
 		/**
-		 * This is a destructor
+		 *	A message.
 		 */
-		~CMessage() {}
+		class CMessage
+		{
+			private:
 
-		/**
-		 * This returns the type of this message
-		 *	@return CMessageType	:	Its type
-		 */
-		CMessageType getType() {return m_type;}
+				CMessageType m_type;
+				shared_ptr<boost::any> m_userdata;
 
-		/**
-		 * This returns the data contained in this message
-		 *	@return shared_ptr<boost::any>	:	Its data
-		 */
-		template <class T> T getData() {return  T (any_cast<T>(*m_userdata)) ;}
+			public:
 
+				/**
+				 * This is a constructor
+				 */
+				CMessage(CMessageType _msgtype = MSG_ANYTYPE, shared_ptr<boost::any> _data = shared_ptr<boost::any>() ): m_type(_msgtype), m_userdata(_data) {}
+
+				/**
+				 * This is a destructor
+				 */
+				~CMessage() {}
+
+				/**
+				 * This returns the type of this message
+				 *	@return CMessageType	:	Its type
+				 */
+				CMessageType getType() {return m_type;}
+
+				/**
+				 * This returns the data contained in this message
+				 *	@return shared_ptr<boost::any>	:	Its data
+				 */
+				template <class T> T getData() {return  T (any_cast<T>(*m_userdata)) ;}
+
+		};
+	};
 };
-
 #endif // __CMESSAGE_H__

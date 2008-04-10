@@ -65,7 +65,7 @@
 #include "cdestroyperiodiceventlistener.h"
 
 
-
+using namespace Gnoll::Core;
 using namespace std;
 using namespace boost;
 

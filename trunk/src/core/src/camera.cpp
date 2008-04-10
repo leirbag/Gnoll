@@ -31,6 +31,8 @@
 #include "../include/cmessagemodule.h"
 #include "../include/float.h"
 
+using namespace Gnoll::Graphic;
+
 namespace Gnoll
 {
 	namespace Core

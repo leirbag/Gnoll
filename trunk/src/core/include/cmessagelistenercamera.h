@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
@@ -18,37 +19,48 @@
  ***************************************************************************/
 
 
-/*---------------------------StatsModuleListener.h-------------------------*\
-|   This is a message's listener for stats module                           |
+/*---------------------------cmessagelistener------------------------------*\
+|   This is a message's listener for camera                                 |
 |                                                                           |
 |   Changelog :                                                             |
 |               04/08/2008 - Gabriel - Initial release                      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_STATSMODULELISTENER_H
-#define INCLUDED_STATSMODULELISTENER_H
+#ifndef __CMESSAGELISTENERCAMERA_H__
+#define __CMESSAGELISTENERCAMERA_H__
 
-#include "../../core/include/cmessagelistener.h"
-
-using namespace Gnoll::Core;
+#include "cmessagelistener.h"
+#include "camera.h"
 
 namespace Gnoll
 {
-	namespace Stats
+	namespace Core
 	{
-		class StatsModuleListener : public CMessageListener
+		class Camera;
+
+		class CMessageListenerCamera : public CMessageListener
 		{
+		protected:
+			shared_ptr<Camera> m_pCamera;
+
 		public:
 			/**
 			 * This is a constructor
 			 */
-			StatsModuleListener();
+			CMessageListenerCamera();
 
 			/**
 			 * This is a destructor
 			 */
-			~StatsModuleListener();
+			~CMessageListenerCamera();
+
+			/**
+			 * This method set the camera of the listener
+			 * @param pCamera This is a pointer to the camera that can be affect by
+			 * 				  message
+			 */
+			void setCamera(shared_ptr<Camera> pCamera);
 
 			/**
 			 * This method is called in order to process a message
@@ -58,6 +70,4 @@ namespace Gnoll
 		};
 	};
 };
-
-#endif
-
+#endif // __CMESSAGELISTENERCAMERA_H__

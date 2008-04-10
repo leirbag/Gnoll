@@ -36,7 +36,7 @@
 #define __CTIMERMESSAGES_H__
 
 using namespace boost;
-
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {

@@ -28,6 +28,7 @@
 |                          - Paf - serializeXML() now returns a             |
 |                                    shared_ptr<xmlpp::Document>            |
 |               08/14/2007 - Paf - Update comments                          |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -43,44 +44,50 @@
 
 using namespace boost;
 
-/**
- *	This is the interface of an attribute.
- *	This make sure each Attribute will be (de)serializable
- */ 
-class IAttribute
+namespace Gnoll
 {
-	public:
-
+	namespace Core
+	{
 		/**
-		 * This is a constructor.
+		 *	This is the interface of an attribute.
+		 *	This make sure each Attribute will be (de)serializable
 		 */
-		IAttribute() {};
+		class IAttribute
+		{
+			public:
+
+				/**
+				 * This is a constructor.
+				 */
+				IAttribute() {};
 
 
-		/**
-		 * This is a destructor.
-		 */
-		virtual ~IAttribute() {};
+				/**
+				 * This is a destructor.
+				 */
+				virtual ~IAttribute() {};
 
 
-		/**
-		 * This method serialize the object. <br/>
-		 * It has to be implemented by all classes that inherits from this class.
-		 *
-		 * @return This return the object as a XML tree 
-		 */
-		virtual shared_ptr<xmlpp::Document> serializeXML() = 0;		
+				/**
+				 * This method serialize the object. <br/>
+				 * It has to be implemented by all classes that inherits from this class.
+				 *
+				 * @return This return the object as a XML tree
+				 */
+				virtual shared_ptr<xmlpp::Document> serializeXML() = 0;
 
 
-		/**
-		 * This method deserialize the object. <br/>
-		 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
-		 * It has to be implemented by all classes that inherits from this class.
-		 *
-		 * @param _element This is the XML tree containing the state of this object
-		 */
-		virtual void deSerializeXML( xmlpp::Element* _element ) = 0;		
+				/**
+				 * This method deserialize the object. <br/>
+				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
+				 * It has to be implemented by all classes that inherits from this class.
+				 *
+				 * @param _element This is the XML tree containing the state of this object
+				 */
+				virtual void deSerializeXML( xmlpp::Element* _element ) = 0;
 
+		};
+	};
 };
 
 #endif // __IATTRIBUTE_H__

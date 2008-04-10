@@ -32,6 +32,7 @@
 #ifndef __CINPUTMODULE_H__
 #define __CINPUTMODULE_H__
 
+using namespace Gnoll::Core;
 
 /**
  *	Interface of all game modules. 

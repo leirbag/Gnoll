@@ -39,8 +39,7 @@ namespace Gnoll
 		{
 		public:
 			/**
-			 * This method create a fixe camera, it will be implemented by
-			 * derived factory to create their camera
+			 * This method create a fixe camera : inherits methods
 			 * @param instanceName This is the instance name of the camera
 			 * @return the camera create, NULL if error
 			 */

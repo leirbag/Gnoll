@@ -40,7 +40,7 @@
 #include "cinputmouseevents.h"
 
 using namespace boost;
-
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {

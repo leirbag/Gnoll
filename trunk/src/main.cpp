@@ -81,6 +81,7 @@ using namespace Gnoll::Time;
 using namespace Gnoll::Sound;
 using namespace Gnoll::Input;
 using namespace Gnoll::Scene;
+using namespace Gnoll::Graphic;
 
 bool done = false;
 

@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -37,79 +38,83 @@
 
 using namespace std;
 
-
-
-/**
- *	A message manager.
- *	This is a base implementation for all of the messages manager
- */ 
-class CMessageManager
+namespace Gnoll
 {
-
-	public:
-		
+	namespace Core
+	{
 		/**
-		 * This is a constructor
+		 *	A message manager.
+		 *	This is a base implementation for all of the messages manager
 		 */
-		CMessageManager() {}
+		class CMessageManager
+		{
 
-		/**
-		 * This is a destructor
-		 */
-		virtual ~CMessageManager() {}
+			public:
 
+				/**
+				 * This is a constructor
+				 */
+				CMessageManager() {}
 
-		/**
-		 * This adds a new listener
-		 * @param handler The listener which handle messages
-		 * @param messagetype The listener will care about every message of this message type
-		 * @return True if ok, false otherwise 
-		 */
-		virtual bool addListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype ) = 0;
-		
-		/**
-		 * This deletes a new listener
-		 * @param handler The listener which handle messages
-		 * @param messagetype The listener which have cared about every message of this message type
-		 * @return True if ok, false otherwise 
-		 */
-		virtual bool delListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype ) = 0;
-
-		/**
-		 * This process a given message as parameter
-		 * @param message The message to be processed
-		 * @return True if ok, false otherwise 
-		 */
-		virtual bool trigger ( shared_ptr<CMessage> message ) = 0;
-
-		/**
-		 * This enqueue a message
-		 * @param message The message to be processed
-		 * @return True if ok, false otherwise 
-		 */
-		virtual bool queueMessage ( shared_ptr<CMessage> message ) = 0;
-
-		/**
-		 * This abort the first message or every message of type messagetype
-		 * @param messagetype The message's or messages' type to be aborted
-		 * @param alloftype Are every messages of type messagetype aborted ? (default : False)<br> True -> Yes <br> False -> No (only the first one is aborted)
-		 * @return True if ok, false otherwise 
-		 */
-		virtual bool abortMessage ( CMessageType messagetype, bool alloftype = false ) = 0;
-
-		/**
-		 * This validate a message type
-		 * @param messagetype The message type to be validated
-		 * @return True if ok, false otherwise 
-		 */
-		virtual bool validateType( CMessageType messagetype ) = 0;
-
-		/**
-		 * This process the message queue
-		 */
-		virtual void process( ) = 0;
+				/**
+				 * This is a destructor
+				 */
+				virtual ~CMessageManager() {}
 
 
+				/**
+				 * This adds a new listener
+				 * @param handler The listener which handle messages
+				 * @param messagetype The listener will care about every message of this message type
+				 * @return True if ok, false otherwise
+				 */
+				virtual bool addListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype ) = 0;
+
+				/**
+				 * This deletes a new listener
+				 * @param handler The listener which handle messages
+				 * @param messagetype The listener which have cared about every message of this message type
+				 * @return True if ok, false otherwise
+				 */
+				virtual bool delListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype ) = 0;
+
+				/**
+				 * This process a given message as parameter
+				 * @param message The message to be processed
+				 * @return True if ok, false otherwise
+				 */
+				virtual bool trigger ( shared_ptr<CMessage> message ) = 0;
+
+				/**
+				 * This enqueue a message
+				 * @param message The message to be processed
+				 * @return True if ok, false otherwise
+				 */
+				virtual bool queueMessage ( shared_ptr<CMessage> message ) = 0;
+
+				/**
+				 * This abort the first message or every message of type messagetype
+				 * @param messagetype The message's or messages' type to be aborted
+				 * @param alloftype Are every messages of type messagetype aborted ? (default : False)<br> True -> Yes <br> False -> No (only the first one is aborted)
+				 * @return True if ok, false otherwise
+				 */
+				virtual bool abortMessage ( CMessageType messagetype, bool alloftype = false ) = 0;
+
+				/**
+				 * This validate a message type
+				 * @param messagetype The message type to be validated
+				 * @return True if ok, false otherwise
+				 */
+				virtual bool validateType( CMessageType messagetype ) = 0;
+
+				/**
+				 * This process the message queue
+				 */
+				virtual void process( ) = 0;
+
+
+		};
+	};
 };
 
 #endif // __CMESSAGEMANAGER_H__

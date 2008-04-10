@@ -27,11 +27,12 @@
 |                                   CGraphicModule::getWindowHandle()        |
 |                                - CGraphicModule::getWindowHandle() handles |
 |                                   now both Windows and GNU/Linux plateforms|
-|               04/25/2007 - Paf - Added CEGUI                               |	
-|               05/09/2007 - Paf - Use boost::any due to a change in CMessage|	
+|               04/25/2007 - Paf - Added CEGUI                               |
+|               05/09/2007 - Paf - Use boost::any due to a change in CMessage|
 |               12/17/2007 - Paf - Add private method loadOgreResourcesPath()|
 |               02/15/2008 - Bruno Mahe - Need to keep track of Camera's     |
 |                                  address, so it can be freed when exiting  |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Graphic       |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -67,7 +68,7 @@
 #include <OGRE/OgreCEGUIResourceProvider.h>
 #include <CEGUI/elements/CEGUIPushButton.h>
 //regular mem handler
-#include <OgreMemoryMacros.h> 
+#include <OgreMemoryMacros.h>
 
 #if OGRE_PLATFORM == PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -76,68 +77,74 @@
 
 using namespace std;
 using namespace boost;
+using namespace Gnoll::Core;
 
-
-/**
- *	The game graphic module. 
- */ 
-class CGraphicModule: public CModule, public Gnoll::Core::Singleton<CGraphicModule>
+namespace Gnoll
 {
-
-	private:
-
-		Ogre::Root *mRoot;
-		Ogre::RenderWindow* mwindow;
-		Ogre::SceneManager* mSceneMgr;
-		unsigned long m_lastframe;
-		Ogre::Timer* m_timer;
-
-		//CEGUI::Renderer* mGUIRenderer;
-	    CEGUI::OgreCEGUIRenderer* mGUIRenderer;
-	    CEGUI::System* mGUISystem;
-	    CEGUI::Window* mEditorGuiSheet;
-
-		CMessageType framerendered;
-		shared_ptr<boost::any> data;
-
+	namespace Graphic
+	{
 		/**
-		 * Load resources path
+		 *	The game graphic module.
 		 */
-		void loadOgreResourcesPath();
+		class CGraphicModule: public CModule, public Gnoll::Core::Singleton<CGraphicModule>
+		{
 
-	public:
+			private:
 
-		/**
-		 * A constructor
-		 */
-		CGraphicModule();
+				Ogre::Root *mRoot;
+				Ogre::RenderWindow* mwindow;
+				Ogre::SceneManager* mSceneMgr;
+				unsigned long m_lastframe;
+				Ogre::Timer* m_timer;
 
-		/**
-		 * @copydoc CModule::init
-		 */
-		virtual void init();
+				//CEGUI::Renderer* mGUIRenderer;
+				CEGUI::OgreCEGUIRenderer* mGUIRenderer;
+				CEGUI::System* mGUISystem;
+				CEGUI::Window* mEditorGuiSheet;
 
-		/**
-		 * @copydoc CModule::process
-		 */
-		virtual void process();
+				CMessageType framerendered;
+				shared_ptr<boost::any> data;
 
-		/**
-		 * @copydoc CModule::exit 
-		 */
-		virtual void exit();
+				/**
+				 * Load resources path
+				 */
+				void loadOgreResourcesPath();
 
-		/**
-		 * @copydoc CModule::~CModule
-		 */
-		virtual ~CGraphicModule();
+			public:
+
+				/**
+				 * A constructor
+				 */
+				CGraphicModule();
+
+				/**
+				 * @copydoc CModule::init
+				 */
+				virtual void init();
+
+				/**
+				 * @copydoc CModule::process
+				 */
+				virtual void process();
+
+				/**
+				 * @copydoc CModule::exit
+				 */
+				virtual void exit();
+
+				/**
+				 * @copydoc CModule::~CModule
+				 */
+				virtual ~CGraphicModule();
 
 
-		Ogre::RenderWindow* getRenderWindow();
+				Ogre::RenderWindow* getRenderWindow();
 
-		Ogre::SceneManager* getSceneManager();
+				Ogre::SceneManager* getSceneManager();
 
-		size_t getWindowHandle();
+				size_t getWindowHandle();
+		};
+	};
 };
 
 #endif // __CGRAPHICMODULE_H__

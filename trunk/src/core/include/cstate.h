@@ -23,37 +23,44 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               04/27/2006 - Paf - Initial release                          |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #ifndef __CSTATE_H__
 #define __CSTATE_H__
 
-/**
- *	Interface of all the FSM's states. <br>A state is a description of an activity.
- */ 
-class CState
+namespace Gnoll
 {
-	public:
+	namespace Core
+	{
 		/**
-		 * This is called after entering this state
+		 *	Interface of all the FSM's states. <br>A state is a description of an activity.
 		 */
-		virtual void onInit() = 0;
+		class CState
+		{
+			public:
+				/**
+				 * This is called after entering this state
+				 */
+				virtual void onInit() = 0;
 
-		/**
-		 * This is called during its activation
-		 */
-		virtual void onProcess() = 0;
+				/**
+				 * This is called during its activation
+				 */
+				virtual void onProcess() = 0;
 
-		/**
-		 * This is called before exiting this state
-		 */
-		virtual void onExit() = 0;
+				/**
+				 * This is called before exiting this state
+				 */
+				virtual void onExit() = 0;
 
-		/**
-		 * This is a virtual destructor
-		 */
-		virtual ~CState() {};
+				/**
+				 * This is a virtual destructor
+				 */
+				virtual ~CState() {};
+		};
+	};
 };
 
 #endif // __CSTATE_H__

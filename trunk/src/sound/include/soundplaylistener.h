@@ -38,6 +38,7 @@
 #ifndef __SOUNDPLAYLISTENER_H__
 #define __SOUNDPLAYLISTENER_H__
 
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {

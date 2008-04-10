@@ -23,37 +23,44 @@
 |                                                                            |
 |   Changelog :                                                              |
 |               06/23/2006 - Paf - Initial release                           |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core          |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
 #ifndef __CMODULE_H__
 #define __CMODULE_H__
 
-/**
- *	Interface of all game modules. 
- */ 
-class CModule
+namespace Gnoll
 {
-	public:
+	namespace Core
+	{
 		/**
-		 * This inits a module
+		 *	Interface of all game modules.
 		 */
-		virtual void init() = 0;
+		class CModule
+		{
+			public:
+				/**
+				 * This inits a module
+				 */
+				virtual void init() = 0;
 
-		/**
-		 * This lets a module to do its own business
-		 */
-		virtual void process() = 0;
+				/**
+				 * This lets a module to do its own business
+				 */
+				virtual void process() = 0;
 
-		/**
-		 * This is called on exiting 
-		 */
-		virtual void exit() = 0;
+				/**
+				 * This is called on exiting
+				 */
+				virtual void exit() = 0;
 
-		/**
-		 * This is a virtual destructor
-		 */
-		virtual ~CModule() {};
+				/**
+				 * This is a virtual destructor
+				 */
+				virtual ~CModule() {};
+		};
+	};
 };
 
 #endif // __CMODULE_H__

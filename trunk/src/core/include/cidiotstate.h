@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               04/27/2006 - Paf - Initial release                          |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -36,43 +37,49 @@ using namespace std;
 #ifndef __CIDIOTSTATE_H__
 #define __CIDIOTSTATE_H__
 
-/**
- *	An idiot FSM's state
- */ 
-class CIdiotState: public CState
+namespace Gnoll
 {
-	private:
-
+	namespace Core
+	{
 		/**
-		 * It is the state's name
+		 *	An idiot FSM's state
 		 */
-		string m_name;
+		class CIdiotState: public CState
+		{
+			private:
 
-	public:
-		/**
-		 * This is called after entering this state
-		 */
-		virtual void onInit() { cout << "Je rentre dans l'etat : " << m_name << endl;}
+				/**
+				 * It is the state's name
+				 */
+				string m_name;
 
-		/**
-		 * This is called during its activation
-		 */
-		virtual void onProcess() { cout << "Je suis dans l'etat : " << m_name << endl; }
+			public:
+				/**
+				 * This is called after entering this state
+				 */
+				virtual void onInit() { cout << "Je rentre dans l'etat : " << m_name << endl;}
 
-		/**
-		 * This is called before exiting this state
-		 */
-		virtual void onExit() { cout << "Je sors de l'etat : " << m_name << endl << endl; }
+				/**
+				 * This is called during its activation
+				 */
+				virtual void onProcess() { cout << "Je suis dans l'etat : " << m_name << endl; }
 
-		/**
-		 * This is a constructor
-		 */
-		CIdiotState( string myname = "Anne nonyme" ) : m_name(myname) {}
+				/**
+				 * This is called before exiting this state
+				 */
+				virtual void onExit() { cout << "Je sors de l'etat : " << m_name << endl << endl; }
 
-		/**
-		 * This is a destructor
-		 */
-		~CIdiotState() {}
+				/**
+				 * This is a constructor
+				 */
+				CIdiotState( string myname = "Anne nonyme" ) : m_name(myname) {}
+
+				/**
+				 * This is a destructor
+				 */
+				~CIdiotState() {}
+		};
+	};
 };
 
 #endif // __CIDIOTSTATE_H__

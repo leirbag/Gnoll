@@ -23,27 +23,33 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               05/15/2006 - Paf - Initial release                          |
+|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
 #include "../include/cmessagetype.h"
 
-
-bool CMessageType::operator== (CMessageType const & op)
+namespace Gnoll
 {
-	return (this->m_msgtype == op.m_msgtype);
+	namespace Core
+	{
+		bool CMessageType::operator== (CMessageType const & op)
+		{
+			return (this->m_msgtype == op.m_msgtype);
 
-}
+		}
 
 
-bool CMessageType::operator!= (CMessageType const & op)
-{
-	return !(*this == op);
-}
-	
+		bool CMessageType::operator!= (CMessageType const & op)
+		{
+			return !(*this == op);
+		}
 
-bool CMessageType::operator< (CMessageType const & op) const
-{
-	return ( this->m_msgtype < op.m_msgtype );
-}
+
+		bool CMessageType::operator< (CMessageType const & op) const
+		{
+			return ( this->m_msgtype < op.m_msgtype );
+		}
+	};
+};

@@ -40,7 +40,7 @@
 #include <string>
 #include <iostream>
 
-
+using namespace Gnoll::Graphic;
 using namespace Gnoll::Core;
 
 COISInputManager::COISInputManager( ) :
