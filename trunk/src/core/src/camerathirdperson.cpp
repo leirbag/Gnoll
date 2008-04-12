@@ -23,10 +23,12 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               04/08/2008 - Gabriel - Initial release                      |
+|               04/10/2008 - Gabriel - Add persistance of attributs         |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camerathirdperson.h"
+#include "../include/float.h"
 #include <cmath>
 
 namespace Gnoll
@@ -63,6 +65,55 @@ namespace Gnoll
 			Camera(instanceName),
 			m_this(new camerathirdperson_i)
 		{
+			/**
+			 * Extract Camera's offset settings
+			 */
+			shared_ptr<Float> offset;
+			shared_ptr<Float> minOffset;
+			shared_ptr<Float> maxOffset;
+			shared_ptr<Float> default_offset = shared_ptr<Float> (new Float(100.0f));
+			shared_ptr<Float> default_minOffset = shared_ptr<Float> (new Float(0.0f));
+			shared_ptr<Float> default_maxOffset = shared_ptr<Float> (new Float(200.0f));
+
+			offset = this->getAttributeOrDefault<Float>("offset", default_offset);
+			minOffset = this->getAttributeOrDefault<Float>("minOffset", default_minOffset);
+			maxOffset = this->getAttributeOrDefault<Float>("maxOffset", default_maxOffset);
+
+			setOffset(*offset);
+			setMinOffset(*minOffset);
+			setMaxOffset(*maxOffset);
+
+			/**
+			 * Extract Camera's limit rotation
+			 */
+			shared_ptr<Float> limit_x;
+			shared_ptr<Float> limit_y;
+			shared_ptr<Float> limit_z;
+			shared_ptr<Float> default_limit = shared_ptr<Float> (new Float(-1.0f));
+
+			limit_x = this->getAttributeOrDefault<Float>("limitRotationOnAxisX", default_limit);
+			limit_y = this->getAttributeOrDefault<Float>("limitRotationOnAxisY", default_limit);
+			limit_z = this->getAttributeOrDefault<Float>("limitRotationOnAxisZ", default_limit);
+
+			setLimitRotationAroundAxisX(*limit_x);
+			setLimitRotationAroundAxisY(*limit_y);
+			setLimitRotationAroundAxisZ(*limit_z);
+
+			/**
+			 * Extract Camera's amount rotation
+			 */
+			shared_ptr<Float> amount_x;
+			shared_ptr<Float> amount_y;
+			shared_ptr<Float> amount_z;
+			shared_ptr<Float> default_amount = shared_ptr<Float> (new Float(0.0f));
+
+			amount_x = this->getAttributeOrDefault<Float>("amountRotationOnAxisX", default_amount);
+			amount_y = this->getAttributeOrDefault<Float>("amountRotationOnAxisY", default_amount);
+			amount_z = this->getAttributeOrDefault<Float>("amountRotationOnAxisZ", default_amount );
+
+			m_this->amountRotationAroundAxisX = *amount_x;
+			m_this->amountRotationAroundAxisY = *amount_y;
+			m_this->amountRotationAroundAxisZ = *amount_z;
 		}
 			
 		CameraThirdPerson::CameraThirdPerson(const CameraThirdPerson& copy) :
@@ -73,6 +124,33 @@ namespace Gnoll
 
 		CameraThirdPerson::~CameraThirdPerson()
 		{
+			/*
+			 * Save the current configuration of the camera
+			 */
+			// limit
+			shared_ptr<Float> limitX(new Float(getLimitRotationAroundAxisX()));
+			shared_ptr<Float> limitY(new Float(getLimitRotationAroundAxisY()));
+			shared_ptr<Float> limitZ(new Float(getLimitRotationAroundAxisZ()));
+			this->setAttribute("limitRotationOnAxisX", limitX);
+			this->setAttribute("limitRotationOnAxisY", limitY);
+			this->setAttribute("limitRotationOnAxisZ", limitZ);
+
+			// amount
+			shared_ptr<Float> amountX(new Float(getAmountRotationAroundAxisX()));
+			shared_ptr<Float> amountY(new Float(getAmountRotationAroundAxisY()));
+			shared_ptr<Float> amountZ(new Float(getAmountRotationAroundAxisZ()));
+			this->setAttribute("amountRotationOnAxisX", amountX);
+			this->setAttribute("amountRotationOnAxisY", amountY);
+			this->setAttribute("amountRotationOnAxisZ", amountZ);
+
+			// offset settings
+			shared_ptr<Float> offset(new Float(getOffset()));
+			shared_ptr<Float> minOffset(new Float(getMinOffset()));
+			shared_ptr<Float> maxOffset(new Float(getMaxOffset()));
+			this->setAttribute("offset", amountX);
+			this->setAttribute("minOffset", amountY);
+			this->setAttribute("maxOffset", amountZ);
+
 			delete m_this;
 		}
 

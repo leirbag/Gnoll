@@ -23,13 +23,19 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
+|               04/10/2008 - Gabriel - Add persistance of near, far and fov |
+|									   value                                |
+|               04/10/2008 - Gabriel - Add the enqueue of listener          |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camera.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../include/cmessagemodule.h"
+#include "../include/cmessagelistenercamera.h"
+#include "../include/cmessagetype.h"
 #include "../include/float.h"
+#include <iostream>
+#include <queue>
 
 using namespace Gnoll::Graphic;
 
@@ -39,6 +45,9 @@ namespace Gnoll
 	{
 		struct camera_i
 		{
+			typedef std::pair<shared_ptr<CMessageListenerCamera>, shared_ptr<CMessageType> > PairsListener;
+			typedef std::queue<shared_ptr<PairsListener> > QueueListener;
+			QueueListener queueListener;
 			Glib::ustring name;
 			Ogre::Camera* pOgreCamera;
 			Ogre::SceneNode* pTarget;
@@ -58,9 +67,23 @@ namespace Gnoll
 			m_this->name = instanceName;
 			m_this->pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
 
-			setNearValue(1.0f);
-			setFarValue(200.0f);
-			setFovValue(3.14/4); // TODO : change this to the real value
+			/**
+			 * Extract Camera's near, far and fov value
+			 */
+			shared_ptr<Float> near_value;
+			shared_ptr<Float> far_value;
+			shared_ptr<Float> fov_value;
+			shared_ptr<Float> default_near = shared_ptr<Float> (new Float(1.0f));
+			shared_ptr<Float> default_far = shared_ptr<Float> (new Float(200.0f));
+			shared_ptr<Float> default_fov = shared_ptr<Float> (new Float(3.14/4.0f)); // TODO : change this to the real value
+
+			near_value = this->getAttributeOrDefault<Float>("near", default_near);
+			far_value = this->getAttributeOrDefault<Float>("far", default_far);
+			fov_value = this->getAttributeOrDefault<Float>("fov", default_fov);
+
+			setNearValue(*near_value);
+			setFarValue(*far_value);
+			setFovValue(*fov_value);
 
 			/**
 			 * Extract Camera's position
@@ -103,9 +126,32 @@ namespace Gnoll
 
 		Camera::~Camera()
 		{
+			// Destroy all listeners attach to this camera
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+
+			while (!m_this->queueListener.empty())
+			{
+				shared_ptr<camera_i::PairsListener> pairs = shared_ptr<camera_i::PairsListener>(m_this->queueListener.front());
+				messageModule->getMessageManager()->delListener(shared_ptr<CMessageListenerCamera>(pairs->first), *pairs->second);
+				m_this->queueListener.pop();
+			}
+
 			/*
 			 * Save the current configuration of the camera
 			 */
+			// near
+			shared_ptr<Float> near_value(new Float(getNearValue()));
+			this->setAttribute("near", near_value);
+
+			// far
+			shared_ptr<Float> far_value(new Float(getFarValue()));
+			this->setAttribute("far", far_value);
+
+			// fov
+			shared_ptr<Float> fov_value(new Float(getFovValue()));
+			this->setAttribute("fov", fov_value);
+
+			// Position
 			Ogre::Vector3 pos = m_this->pOgreCamera->getPosition();
 			shared_ptr<Float> pos_x(new Float(pos.x));
 			this->setAttribute("pos_x", pos_x);
@@ -116,6 +162,7 @@ namespace Gnoll
 			shared_ptr<Float> pos_z(new Float(pos.z));
 			this->setAttribute("pos_z", pos_z);
 
+			// Direction
 			Ogre::Vector3 dir = m_this->pOgreCamera->getDirection();
 			shared_ptr<Float> dir_x(new Float(dir.x));
 			this->setAttribute("dir_x", dir_x);
@@ -241,6 +288,12 @@ namespace Gnoll
 		void Camera::update(float time)
 		{
 			// Do nothing
+		}
+
+		void Camera::enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<CMessageType> type)
+		{
+			// Add the listener to the queue
+			m_this->queueListener.push(shared_ptr<camera_i::PairsListener>(new camera_i::PairsListener(listener, type)));
 		}
 	};
 };

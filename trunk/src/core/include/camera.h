@@ -28,6 +28,7 @@
 |               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |               02/15/2008 - Bruno Mahe - Implements destructor             |
 |               04/08/2008 - Gabriel - total refactoring                    |
+|               04/10/2008 - Gabriel - Add the enqueue of listener          |
 \*-------------------------------------------------------------------------*/
 
 #ifndef INCLUDED_CAMERA
@@ -49,6 +50,7 @@ namespace Gnoll
 		struct camera_i;
 
 		class CMessageListenerCamera;
+		class CMessageType;
 
 		class Camera : public CPersistentObjectProxy
 		{
@@ -190,6 +192,13 @@ namespace Gnoll
 			 * @param orientation This is the new orientation
 			 */
 			void setOrientation(const Ogre::Quaternion& orientation);
+
+			/*
+			 * Put a new listener in the queue of the camera
+			 * @param listener This is the listener to put on the queue
+			 * @param type This is the type of message associate to the listener
+			 */
+			void enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<CMessageType> type);
 
 			/*
 			 * This method is call each frame
