@@ -24,4 +24,13 @@
   <attribute name="MaximumRotationAroundY">
     <float value="500.0"/>
   </attribute>
+	<attribute name="near">
+		<float value="1"/>
+	</attribute>
+	<attribute name="far">
+		<float value="300"/>
+	</attribute>
+	<attribute name="fov">
+		<float value="0.785"/>
+	</attribute>
 </persistentobject>

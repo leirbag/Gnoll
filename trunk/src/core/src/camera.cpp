@@ -243,9 +243,6 @@ namespace Gnoll
 
 		void Camera::setFarValue(float far)
 		{
-			if(fabs(far) <= getNearValue())
-				return;
-
 			m_this->pOgreCamera->setFarClipDistance(far);
 		}
 
