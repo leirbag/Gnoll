@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<persistentobject instance="camTP">
+  <attribute name="dir_x">
+    <float value="-0.87225"/>
+  </attribute>
+  <attribute name="dir_y">
+    <float value="-0.3041443"/>
+  </attribute>
+  <attribute name="dir_z">
+    <float value="-0.3829793"/>
+  </attribute>
+  <attribute name="pos_x">
+    <float value="873.174"/>
+  </attribute>
+  <attribute name="pos_y">
+    <float value="52.26911"/>
+  </attribute>
+  <attribute name="pos_z">
+    <float value="620.8526"/>
+  </attribute>
+  <attribute name="MaximumRotationAroundX">
+    <float value="500.0"/>
+  </attribute>
+  <attribute name="MaximumRotationAroundY">
+    <float value="500.0"/>
+  </attribute>
+</persistentobject>
