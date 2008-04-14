@@ -22,7 +22,9 @@
 |   The translates input events to action events used by game logic         |
 |                                                                           |
 |   Changelog :                                                             |
-|               01/08/2008 - Paf - Initial release                          |
+|               01/08/2008 - Bruno Mahe - Initial release                   |
+|               04/13/2008 - Bruno Mahe - Read refreshing period from a     |
+|                                           config file                     |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -34,6 +36,9 @@
 #include "../include/cmousebuttoneventstranslator.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessagemodule.h"
+#include "../../core/include/persistentobject.h"
+#include "../../core/include/persistentobjectmanager.h"
+#include "../../core/include/integer.h"
 #include "../../time/include/ctimemodule.h"
 #include <iostream>
 
@@ -90,11 +95,15 @@ namespace Gnoll
 			CMessageType updateKeyboard("UPDATE_KEYBOARD");
 
 
+			PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+			shared_ptr<PersistentObject> keyboardConfig = pom->load("keyboardConfig");
+
 			/**
 			 * How often will the keyboard module get updated (millisecond)
 			 */
 			unsigned long int period = 300;
-
+			shared_ptr<Integer> periodFromConfig = keyboardConfig->getAttribute<Integer>("period");
+			period = *periodFromConfig;
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CMessageManager* messageManager = messageModule->getMessageManager();
