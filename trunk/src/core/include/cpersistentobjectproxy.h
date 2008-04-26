@@ -103,7 +103,7 @@ namespace Gnoll
 				 * @param _name The name of the attribute we want
 				 * @return The attribute
 				 */
-				template< class T > shared_ptr<T> getAttribute( const Glib::ustring _name  )
+				template< class T > shared_ptr<T> getAttribute( const Glib::ustring _name  ) const
 				{
 					return m_self->getAttribute<T>(_name);
 				}
@@ -127,7 +127,7 @@ namespace Gnoll
 				 * @param _name Name of the attribute
 				 * @return It returns true if an attribute with such a name exists, or false if it doesn't
 				 */
-				bool hasAttribute ( Glib::ustring _name );
+				bool hasAttribute ( Glib::ustring _name ) const;
 
 
 				/**

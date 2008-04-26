@@ -65,7 +65,7 @@ namespace Gnoll
 		}
 
 
-		bool CPersistentObjectProxy::hasAttribute ( Glib::ustring _name )
+		bool CPersistentObjectProxy::hasAttribute ( Glib::ustring _name ) const
 		{
 			return m_self->hasAttribute(_name);
 		}
