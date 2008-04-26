@@ -6,5 +6,8 @@
   <attribute name="size">
     <float value="128"/>
   </attribute>
+  <attribute name="southhLink">
+    <string value="initialPage"/>
+  </attribute>
 </persistentobject>
 
