@@ -74,8 +74,11 @@ namespace Gnoll
 
 				void init();
 				void unInit();
+				bool isInitialized();
 				
-				Ogre::SceneNode * getPageRootNode();
+				Ogre::SceneNode * getPageRootNode() const;
+
+				bool isVisibleFromCamera(shared_ptr< Gnoll::Core::String > _cameraName) const;
 		};
 	}
 }

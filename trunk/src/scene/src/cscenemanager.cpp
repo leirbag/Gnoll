@@ -227,22 +227,19 @@ namespace Gnoll
 		{
 			shared_ptr< Gnoll::Core::String > currentCameraName = this->getAttribute< Gnoll::Core::String > ("currentCamera");
 
-			// XXX TODO
-			// Get page root node coordinates
-			// get page length
-			// Compute AABB box
-			// Check with the current camera if the AABB box is inside the view frustrum
-			return true;
+			return _page.isVisibleFromCamera( currentCameraName );
+			//return true;
 		}
 
 
 		void CSceneManager::setupPage( const string _pageInstance, shared_ptr< Gnoll::Core::List > _loadedPages, const Ogre::Vector3 _offset )
 		{
 			char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
+			shared_ptr<Gnoll::Core::String> focusedPageName = this->getAttribute<Gnoll::Core::String>("focusedPage");
 
 			CPage page(_pageInstance);
 
-			if (this->isPageVisible(page) == false)
+			if ( ((string)(*focusedPageName) != _pageInstance) && (this->isPageVisible(page) == false) )
 			{
 				return;
 			}
