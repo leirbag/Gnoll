@@ -37,8 +37,6 @@
 
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/persistentobject.h"
-
 #include "../../core/include/cmessagelistener.h"
 
 
