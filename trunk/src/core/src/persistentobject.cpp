@@ -59,9 +59,9 @@ namespace Gnoll
 		}
 
 
-		bool PersistentObject::hasAttribute ( Glib::ustring _name )
+		bool PersistentObject::hasAttribute ( Glib::ustring _name ) const
 		{
-			mapAttributes::iterator iter = m_attributes.find(_name);
+			mapAttributes::const_iterator iter = m_attributes.find(_name);
 			
 			return iter != m_attributes.end() ;
 		}

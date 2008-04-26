@@ -150,12 +150,12 @@ namespace Gnoll
 				 * @return The attribute
 				 */
 				template< class T > 
-						shared_ptr<T> getAttribute( const Glib::ustring _name  )
+						shared_ptr<T> getAttribute( const Glib::ustring _name  ) const
 				{
 					typedef  NicePolicyExceptions<T> ErrorPolicy;
 	
 	
-					mapAttributes::iterator iter = m_attributes.find(_name);
+					mapAttributes::const_iterator iter = m_attributes.find(_name);
 	
 					// If there is no attribute with such a name, throw an exception.
 					if( iter == m_attributes.end() ) {
@@ -191,7 +191,7 @@ namespace Gnoll
 				 * @param _name Name of the attribute
 				 * @return It returns true if an attribute with such a name exists, or false if it doesn't
 				 */
-				bool hasAttribute ( Glib::ustring _name );
+				bool hasAttribute ( Glib::ustring _name ) const;
 
 
 				/**
