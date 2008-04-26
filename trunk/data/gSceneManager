@@ -3,4 +3,7 @@
   <attribute name="focusedPage">
     <string value="initialPage"/>
   </attribute>
+  <attribute name="currentCamera">
+    <string value="camTP"/>
+  </attribute>
 </persistentobject>
