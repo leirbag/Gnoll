@@ -177,7 +177,7 @@ namespace Gnoll
 				template< class T >
 						shared_ptr<T> getAttributeOrDefault( const Glib::ustring _name, shared_ptr<T> _defaultValue = shared_ptr<T>()  )
 				{
-					if (this->hasAttribute(_name));
+					if (this->hasAttribute(_name))
 					{
 						return getAttribute<T>(_name);
 					}
