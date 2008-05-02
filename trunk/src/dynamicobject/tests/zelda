@@ -1,20 +1,5 @@
 <?xml version="1.0"?>
-<persistentobject instance="zelda">
-  <attribute name="age">
-    <integer value="345"/>
-  </attribute>
-  <attribute name="phrase">
-    <string value="c'etait un cafard qui vivait dans le noir"/>
-  </attribute>
-  <attribute name="pi">
-    <float value="3.145"/>
-  </attribute>
-  <attribute name="nut">
-    <string value="cric crac croc !"/>
-  </attribute>
-  <attribute name="dpi">
-    <double value="3.145123456713556778"/>
-  </attribute>
+<dynamicobject instance="zelda">
   <attribute name="ListPreums">
     <list>
       <integer value="6810"/>
@@ -22,6 +7,22 @@
       <float value="3.145"/>
     </list>
   </attribute>
-
-</persistentobject>
-
+  <attribute name="age">
+    <integer value="345"/>
+  </attribute>
+  <attribute name="age2">
+    <integer value="346"/>
+  </attribute>
+  <attribute name="dpi">
+    <double value="3.145123456713557"/>
+  </attribute>
+  <attribute name="nut">
+    <string value="cric crac croc !"/>
+  </attribute>
+  <attribute name="phrase">
+    <string value="c'etait un cafard qui vivait dans le noir"/>
+  </attribute>
+  <attribute name="pi">
+    <float value="3.145"/>
+  </attribute>
+</dynamicobject>

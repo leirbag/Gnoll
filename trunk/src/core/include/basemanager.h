@@ -56,7 +56,6 @@
 #include <algorithm>
 #include <iostream>
 #include "isource.h"
-#include "iattribute.h"
 
 
 #ifndef __BASEMANAGER_H__

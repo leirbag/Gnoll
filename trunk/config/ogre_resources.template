@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<persistentobject instance="ogre_resources">
+<dynamicobject instance="ogre_resources">
   <attribute name="FileSystem">
     <list>
       <string value="%(install_data)s"/>
@@ -31,4 +31,4 @@
       <string value="%(install_data)spacks/skybox.zip"/>
     </list>
   </attribute>
-</persistentobject>
+</dynamicobject>

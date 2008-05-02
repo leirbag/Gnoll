@@ -52,7 +52,7 @@
 #include "core/include/cmessagelistener.h"
 
 #include "core/include/isource.h"
-#include "core/include/persistentobjectmanager.h"
+#include "dynamicobject/include/dynamicobjectmanager.h"
 #include "core/include/sourcefile.h"
 
 #include "input/include/coisinputmodule.h"
@@ -82,6 +82,7 @@ using namespace Gnoll::Sound;
 using namespace Gnoll::Input;
 using namespace Gnoll::Scene;
 using namespace Gnoll::Graphic;
+using namespace Gnoll::DynamicObject;
 
 bool done = false;
 
@@ -574,7 +575,7 @@ class AnimationListener : public CMessageListener
 void analyzeArguments (int argc, char* argv[])
 {
 
-	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 	SoundManager *soundManager = SoundManager::getInstancePtr();
 
 	// Declare the supported options.
@@ -648,12 +649,12 @@ int main(int argc, char* argv[])
 	srand ( time(NULL) );
 
 
-	// The very first thing to do is to add the current directory in PersistentObjectManager's list of repositories
+	// The very first thing to do is to add the current directory in DynamicObjectManager's list of repositories
 	// In case some modules would need to load some config files
 	shared_ptr<ISource> loadChannel(new SourceFile(".", false));
 	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
 
-	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 	SoundManager *soundManager = SoundManager::getInstancePtr();
 
 	pom->addLoadSource(loadChannel);

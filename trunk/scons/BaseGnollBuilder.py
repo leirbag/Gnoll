@@ -200,12 +200,7 @@ class BaseGnollBuilder:
 		coreSourceFiles = [
 			'src/core/src/cgenericmessagemanager.cpp',
 			'src/core/src/cmessagetype.cpp',
-			'src/core/src/attributehandlerregistry.cpp',
 			'src/core/src/filestream.cpp',
-			'src/core/src/list.cpp',
-			'src/core/src/string.cpp',
-			'src/core/src/persistentobject.cpp',
-			'src/core/src/persistentobjectmanager.cpp',
 			'src/core/src/sourcefile.cpp',
 			'src/core/src/camera.cpp',
 			'src/core/src/camerafixe.cpp',
@@ -214,18 +209,32 @@ class BaseGnollBuilder:
 			'src/core/src/camerathirdperson.cpp',
 			'src/core/src/camerathirdpersonfactory.cpp',
 			'src/core/src/cmessagelistenercamera.cpp',
-			'src/core/src/inheritsattributehandler.cpp',
-			'src/core/src/inherits.cpp',
 			'src/core/src/cmessagemodule.cpp',
-			'src/core/src/cpersistentobjectproxy.cpp',
 			'src/core/src/cpoolthreads.cpp',
 			'src/core/src/cthreadstopper.cpp',
 			'src/core/src/cworker.cpp',
-			'src/core/src/set.cpp'
 			]
 
 
 		return coreSourceFiles
+
+
+	def gatherDynamicObjectSourceFiles(self, env, config):
+
+		dynamicObjectSourceFiles = [
+			'src/dynamicobject/src/attributehandlerregistry.cpp',
+			'src/dynamicobject/src/list.cpp',
+			'src/dynamicobject/src/string.cpp',
+			'src/dynamicobject/src/dynamicobject.cpp',
+			'src/dynamicobject/src/dynamicobjectmanager.cpp',
+			'src/dynamicobject/src/inheritsattributehandler.cpp',
+			'src/dynamicobject/src/inherits.cpp',
+			'src/dynamicobject/src/cdynamicobjectproxy.cpp',
+			'src/dynamicobject/src/set.cpp'
+			]
+
+
+		return dynamicObjectSourceFiles
 
 
 	def gatherTimeSourceFiles(self, env, config):
@@ -310,6 +319,7 @@ class BaseGnollBuilder:
 		sourceFiles.extend( self.gatherStatsSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherGraphicSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherTimeSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherDynamicObjectSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherCoreSourceFiles(env, config) )
 		sourceFiles.append( 'src/main.cpp' )
 

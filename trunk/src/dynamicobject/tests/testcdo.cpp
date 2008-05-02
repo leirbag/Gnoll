@@ -29,10 +29,10 @@
 #include <glibmm/ustring.h>
 #include <boost/shared_ptr.hpp>
 
-#include "../include/persistentobjectmanager.h"
-#include "../include/persistentobject.h"
-#include "../include/cpersistentobjectproxy.h"
-#include "../include/basemanager.h"
+#include "../include/dynamicobjectmanager.h"
+#include "../include/dynamicobject.h"
+#include "../include/cdynamicobjectproxy.h"
+#include "../../core/include/basemanager.h"
 
 #include "../include/scalar.h"
 #include "../include/integer.h"
@@ -42,23 +42,24 @@
 #include "../include/double.h"
 #include "../include/inherits.h"
 
-#include "../include/sourcefile.h"
-#include "../include/istream.h"
+#include "../../core/include/sourcefile.h"
+#include "../../core/include/istream.h"
 
 
 using namespace std;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 
 
 
 
 
-class PJ : public CPersistentObjectProxy
+class PJ : public CDynamicObjectProxy
 {
 
 	public:
 	
-		PJ(string _instanceName) : CPersistentObjectProxy(_instanceName)
+		PJ(string _instanceName) : CDynamicObjectProxy(_instanceName)
 		{
 		
 		}
@@ -87,12 +88,12 @@ int main() {
 	shared_ptr<ISource> loadChannel(new SourceFile(".", false));
 	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
 
-	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 	pom->addLoadSource(loadChannel);
 	pom->addSaveSource(saveChannel);
 /*
-	shared_ptr<PersistentObject> Zelda = pom->load("zelda");
+	shared_ptr<DynamicObject> Zelda = pom->load("zelda");
 
 	shared_ptr<Integer> ageZelda = Zelda->getAttribute< Integer > ("age");
 	shared_ptr<Integer> newAge(new Integer((*ageZelda)() + 1));

@@ -36,7 +36,7 @@
 #include <glibmm/ustring.h>
 #include <Ogre.h>
 
-#include "../../core/include/cpersistentobjectproxy.h"
+#include "../../dynamicobject/include/cdynamicobjectproxy.h"
 
 #include "string.h"
 
@@ -44,6 +44,7 @@
 using namespace std;
 using namespace boost;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 using namespace Ogre;
 
 
@@ -63,7 +64,7 @@ namespace Gnoll
 		 *  * PageRenderer -> IPageREnderer object in charge of displaying the ground
 		 *
 		 */
-		class CPage : public CPersistentObjectProxy
+		class CPage : public CDynamicObjectProxy
 		{
 			private:
 			
@@ -78,7 +79,7 @@ namespace Gnoll
 				
 				Ogre::SceneNode * getPageRootNode() const;
 
-				bool isVisibleFromCamera(shared_ptr< Gnoll::Core::String > _cameraName) const;
+				bool isVisibleFromCamera(shared_ptr< Gnoll::DynamicObject::String > _cameraName) const;
 		};
 	}
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<persistentobject instance="eventTranslationMap">
+<dynamicobject instance="eventTranslationMap">
   <attribute name="200">
       <string value="ACTION_STEP_FORWARD"/>
   </attribute>
@@ -27,4 +27,4 @@
   <attribute name="16">
       <string value="ACTION_QUIT"/>
   </attribute>
-</persistentobject>
+</dynamicobject>

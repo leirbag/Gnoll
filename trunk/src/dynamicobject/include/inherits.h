@@ -19,7 +19,7 @@
 
 
 /*-------------------------------Inherits----------------------------------*\
-|   This is an inheritance attribute for PersistentObject                   |
+|   This is an inheritance attribute for DynamicObject                      |
 |                                                                           |
 |   Changelog :                                                             |
 |               10/07/2007 - Paf - Initial release                          |
@@ -32,9 +32,9 @@
 #define __INHERITS_H__
 
 
-#include "iattribute.h" 
-#include "string.h" 
-#include "attributehandlerregistry.h" 
+#include "iattribute.h"
+#include "string.h"
+#include "attributehandlerregistry.h"
 
 
 using namespace std;
@@ -42,13 +42,13 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**
-		 *	This is an inheritance attribute for PersistentObject. 
-		 */ 
-		class Inherits : public IAttribute 
+		 *	This is an inheritance attribute for DynamicObject.
+		 */
+		class Inherits : public IAttribute
 		{
 			private:
 
@@ -67,17 +67,17 @@ namespace Gnoll
 				 */
 				~Inherits();
 
-				
+
 				/**
-				 * Get the parent PersistentObject instance name
-				 * @return Parent PersistentObject instance name
+				 * Get the parent DynamicObject instance name
+				 * @return Parent DynamicObject instance name
 				 */
 				String getParent();
 
 
 				/**
-				 * Set the parent PersistentObject instance name
-				 * @param _parent Parent PersistentObject instance name
+				 * Set the parent DynamicObject instance name
+				 * @param _parent Parent DynamicObject instance name
 				 */
 				void setParent (String _parent);
 
@@ -86,9 +86,9 @@ namespace Gnoll
 				 * This method serialize the object. <br/>
 				 * It has to be implemented by all classes that inherits from this class.
 				 *
-				 * @return This return the object as a XML tree 
+				 * @return This return the object as a XML tree
 				 */
-				virtual shared_ptr<xmlpp::Document> serializeXML(); 
+				virtual shared_ptr<xmlpp::Document> serializeXML();
 
 
 				/**

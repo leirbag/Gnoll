@@ -19,7 +19,7 @@
 
 
 /*----------------------------------List-----------------------------------*\
-|   This is a List attribute for PersistentObject                           |
+|   This is a List attribute for DynamicObject                              |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/26/2007 - Paf - Initial release                          |
@@ -36,8 +36,8 @@
 #include <libxml++/libxml++.h>
 #include <list>
 
-#include "iattribute.h" 
-#include "attributehandlerregistry.h" 
+#include "iattribute.h"
+#include "attributehandlerregistry.h"
 
 
 using namespace std;
@@ -45,13 +45,13 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**
-		 *	This is a list attribute for PersistentObject. 
-		 */ 
-		class List : public list< shared_ptr<IAttribute> >, public IAttribute 
+		 *	This is a list attribute for DynamicObject.
+		 */
+		class List : public list< shared_ptr<IAttribute> >, public IAttribute
 		{
 			private:
 
@@ -74,9 +74,9 @@ namespace Gnoll
 				 * This method serialize the object. <br/>
 				 * It has to be implemented by all classes that inherits from this class.
 				 *
-				 * @return This return the object as a XML tree 
+				 * @return This return the object as a XML tree
 				 */
-				virtual shared_ptr<xmlpp::Document> serializeXML(); 
+				virtual shared_ptr<xmlpp::Document> serializeXML();
 
 
 				/**
@@ -86,7 +86,7 @@ namespace Gnoll
 				 *
 			  	 * @param _element This is the XML tree containing the state of this object
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element ); 
+				virtual void deSerializeXML( xmlpp::Element* _element );
 		};
 
 	}

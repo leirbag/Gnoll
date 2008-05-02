@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<persistentobject instance="eventTranslationMap">
+<dynamicobject instance="eventTranslationMap">
   <attribute name="-X">
       <string value="ACTION_ROTATE_CAMERA_LEFT"/>
   </attribute>
@@ -18,4 +18,4 @@
   <attribute name="+Z">
       <string value="ACTION_ZOOM_CAMERA_IN"/>
   </attribute>
-</persistentobject>
+</dynamicobject>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<persistentobject instance="camTP">
+<dynamicobject instance="camTP">
   <attribute name="dir_x">
     <float value="-0.87225"/>
   </attribute>
@@ -33,4 +33,4 @@
 	<attribute name="fov">
 		<float value="0.785"/>
 	</attribute>
-</persistentobject>
+</dynamicobject>

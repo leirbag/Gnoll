@@ -44,19 +44,20 @@
 #include <string>
 
 #include "iattributehandler.h"
-#include "singleton.h"
+#include "../../core/include/singleton.h"
 
 
 
 
 using namespace boost;
 using namespace std;
+using namespace Gnoll::Core;
 
 
 namespace Gnoll
 {
 
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**

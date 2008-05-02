@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*-------------------------PersistentObjectManager-------------------------*\
-|   This is a singleton object managing PersistentObjects                   |
+/*-------------------------DynamicObjectManager-------------------------*\
+|   This is a singleton object managing DynamicObjects                   |
 |                                                                           |
 |                                                                           |
 |   Changelog :                                                             |
@@ -32,12 +32,12 @@
 
 
 
-#ifndef __PERSISTENTOBJECTMANAGER_H__
-#define __PERSISTENTOBJECTMANAGER_H__
+#ifndef __DYNAMICOBJECTMANAGER_H__
+#define __DYNAMICOBJECTMANAGER_H__
 
-#include "basemanager.h"
-#include "singleton.h"
-#include "persistentobject.h"
+#include "../../core/include/basemanager.h"
+#include "../../core/include/singleton.h"
+#include "dynamicobject.h"
 
 
 using namespace std;
@@ -47,49 +47,49 @@ using namespace boost;
 
 namespace Gnoll {
 
-	namespace Core {
+	namespace DynamicObject {
 
 		/**
-		 * PersistentObjectManager is a singleton managing PersistentObject instances.</br>
+		 * DynamicObjectManager is a singleton managing DynamicObject instances.</br>
 		 * It can load/save from any Source and provide a cache to improve performance (using LRU)
 		 */
-		class PersistentObjectManager : public BaseManager<PersistentObject, ObjectNotFoundNewObject<PersistentObject> >, public Singleton<PersistentObjectManager>
+		class DynamicObjectManager : public BaseManager<DynamicObject, ObjectNotFoundNewObject<DynamicObject> >, public Singleton<DynamicObjectManager>
 		{
 
 			private:
 
 				/**
-				 * This method loads a PersistentObject from a stream
+				 * This method loads a DynamicObject from a stream
 				 * @param _stream Stream from which the ressource will be extracted
 				 * @return Smart pointer to the newly created object
 				 */
-				virtual shared_ptr<PersistentObject> loadImpl( shared_ptr<IStream> _stream, string _instance);
+				virtual shared_ptr<DynamicObject> loadImpl( shared_ptr<IStream> _stream, string _instance);
 
 				/**
-				 * This method saves a PersistentObject to a stream
+				 * This method saves a DynamicObject to a stream
 				 * @param _stream Stream to which the ressource will be saved
 				 * @param _obj Smart pointer to the object to be saved
 				 * @return The successfulness of this operation
 				 */
-				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<PersistentObject> _obj, string _instance);
+				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<DynamicObject> _obj, string _instance);
 
 			public:
 
 				/**
 				 * This is a constructor.
 				 */
-				PersistentObjectManager();
+				DynamicObjectManager();
 
 
 				/**
 				 * This is a destructor.
 				 */
-				virtual ~PersistentObjectManager();
+				virtual ~DynamicObjectManager();
 
 		};
 
 	}
 }
 
-#endif // __PERSISTENTOBJECTMANAGER_H__
+#endif // __DYNAMICOBJECTMANAGER_H__
 

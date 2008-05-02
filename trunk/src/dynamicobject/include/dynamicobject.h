@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*----------------------------persistentobject-----------------------------*\
-|   This is a PersistentObject. An object that can store any kind of data   |
+/*-----------------------------dynamicobject-------------------------------*\
+|   This is a DynamicObject. An object that can store any kind of data      |
 |     and can be readt/written from anywhere                                |
 |                                                                           |
 |   Changelog :                                                             |
@@ -39,8 +39,8 @@
 \*-------------------------------------------------------------------------*/
 
 
-#ifndef __PERSISTENTOBJECT_H__
-#define __PERSISTENTOBJECT_H__
+#ifndef __DYNAMICOBJECT_H__
+#define __DYNAMICOBJECT_H__
 
 
 #include <boost/shared_ptr.hpp>
@@ -61,7 +61,7 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**
@@ -69,46 +69,46 @@ namespace Gnoll
 		 */
 		class List;
 
-		
+
 		template <class T> class ErrorPolicyExceptions
 		{
 			public:
-			
+
 				static shared_ptr<T> attributeNotFound( const Glib::ustring _name )
 				{
 					throw("Attribut [" + _name + "] non trouve !");
 				}
-		
+
 		};
 
 		template <class T> class NicePolicyExceptions
 		{
 			public:
-			
+
 				static shared_ptr<T> attributeNotFound( const Glib::ustring _name )
 				{
 					return shared_ptr<T>( new T() );
 				}
-		
+
 		};
 
 
 
 		/**
-		 *	This is a Persistent Object.
+		 *	This is a Dynamic Object.
 		 *	This object maps a unicode string to any object inheriting from IAttribute (ie is (de)serializable).<br/>
-		 * Thus we can store any data or game object through a PersistentObject (as long as it inherits from IAttribute).<br/>
-		 * Each PersistentObject is referenced via its instance name.
+		 * Thus we can store any data or game object through a DynamicObject (as long as it inherits from IAttribute).<br/>
+		 * Each DynamicObject is referenced via its instance name.
 		 * @see IAttribute
-		 */ 
-		class PersistentObject : public IAttribute
+		 */
+		class DynamicObject : public IAttribute
 		{
-			public: 
+			public:
 
 				typedef map< Glib::ustring, shared_ptr<IAttribute> > mapAttributes;
 
 
-			private:	
+			private:
 
 				/**
 				 * This maps all the attributes to their names
@@ -120,20 +120,20 @@ namespace Gnoll
 				 */
 				Glib::ustring m_instance;
 
-						
+
 			public:
 
 
 				/**
 				 * This is the constructor.
-				 * @param _instance This is the instance name; the PersistentObject's name
+				 * @param _instance This is the instance name; the DynamicObject's name
 				 */
-				PersistentObject(Glib::ustring _instance);
+				DynamicObject(Glib::ustring _instance);
 
 				/**
 				 * This is the destructor
 				 */
-				virtual ~PersistentObject();
+				virtual ~DynamicObject();
 
 
 				/**
@@ -142,32 +142,32 @@ namespace Gnoll
 				 * @param _value The attribute itself
 				 */
 				void setAttribute( const Glib::ustring _name, shared_ptr<IAttribute> _value );
-		
+
 
 				/**
-				 * This return an attribute 
+				 * This return an attribute
 				 * @param _name The name of the attribute we want
 				 * @return The attribute
 				 */
-				template< class T > 
+				template< class T >
 						shared_ptr<T> getAttribute( const Glib::ustring _name  ) const
 				{
 					typedef  NicePolicyExceptions<T> ErrorPolicy;
-	
-	
+
+
 					mapAttributes::const_iterator iter = m_attributes.find(_name);
-	
+
 					// If there is no attribute with such a name, throw an exception.
 					if( iter == m_attributes.end() ) {
-						return ErrorPolicy::attributeNotFound(_name);						
+						return ErrorPolicy::attributeNotFound(_name);
 					}
 
 
-					shared_ptr<IAttribute> value = iter->second;	
+					shared_ptr<IAttribute> value = iter->second;
 					return dynamic_pointer_cast<T>(value);
 				}
 
-	
+
 				/**
 				 * This return an attribute. If the attribute doesn't exists, it will<br/>
 				 * return a default value
@@ -225,28 +225,28 @@ namespace Gnoll
 				mapAttributes::const_iterator end() const;
 
 				/**
-				 * Get the instance name of the PersistentObject
+				 * Get the instance name of the DynamicObject
 				 * @return The instance name
 				 */
 				string getInstance();
 
 
 				/**
-				 * This method serialize the PersistentObject and all its attributes
+				 * This method serialize the DynamicObject and all its attributes
 				 *
-				 * @return This return the PersistentObject as a XML tree 
+				 * @return This return the DynamicObject as a XML tree
 				 */
-				virtual shared_ptr<xmlpp::Document> serializeXML(); 
-		
-		
+				virtual shared_ptr<xmlpp::Document> serializeXML();
+
+
 				/**
-				 * This method deserialize the PersistentObject and all its attributes from a XML element
+				 * This method deserialize the DynamicObject and all its attributes from a XML element
 				 *
-				 * @param _element The XML Element to parse data from 
+				 * @param _element The XML Element to parse data from
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element );		
+				virtual void deSerializeXML( xmlpp::Element* _element );
 		};
 	}
 }
 
-#endif // __PERSISTENTOBJECT_H__
+#endif // __DYNAMICOBJECT_H__

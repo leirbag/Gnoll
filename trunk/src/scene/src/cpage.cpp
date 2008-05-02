@@ -27,8 +27,8 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../core/include/persistentobjectmanager.h"
-#include "../../core/include/float.h"
+#include "../../dynamicobject/include/dynamicobjectmanager.h"
+#include "../../dynamicobject/include/float.h"
 #include "../include/cpage.h"
 #include "../include/ipagerenderer.h"
 #include <OgreCamera.h>
@@ -45,7 +45,7 @@ namespace Gnoll
 	{
 
 
-		CPage::CPage(string _instanceName): CPersistentObjectProxy(_instanceName)
+		CPage::CPage(string _instanceName): CDynamicObjectProxy(_instanceName)
 		{
 
 		}
@@ -129,7 +129,7 @@ namespace Gnoll
 		}
 
 
-		bool CPage::isVisibleFromCamera(shared_ptr< Gnoll::Core::String > _cameraName) const
+		bool CPage::isVisibleFromCamera(shared_ptr< Gnoll::DynamicObject::String > _cameraName) const
 		{
 			// XXX TODO
 			// Get page root node coordinates
@@ -211,10 +211,10 @@ namespace Gnoll
 				// Construct an Ogre::AxisAlignedBox
 				// Check if visible from ogrecamera
 				char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
-				PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+				DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 
-				shared_ptr< Gnoll::Core::String > loadedNeighbor;
+				shared_ptr< Gnoll::DynamicObject::String > loadedNeighbor;
 
 				for (unsigned int i = 0; (i < 4) && (loadedNeighbor.get() == NULL); i++)
 				{
@@ -224,7 +224,7 @@ namespace Gnoll
 					if (this->hasAttribute( neighbors[i] ))
 					{
 
-						shared_ptr< Gnoll::Core::String > neighbor = this->getAttribute< Gnoll::Core::String >( neighbors[i] );
+						shared_ptr< Gnoll::DynamicObject::String > neighbor = this->getAttribute< Gnoll::DynamicObject::String >( neighbors[i] );
 						cout << "                Looking at neighbor " << *neighbor << " from " << neighbors[i] << endl;
 
 						if (pom->isInstanceInCache (*neighbor) )
@@ -287,23 +287,23 @@ namespace Gnoll
 				cout << "         AABB Min : " <<  min  << endl;
 				cout << "         AABB Max : " <<  max  << endl;
 
-					shared_ptr<Gnoll::Core::Float> pageSize = neighborPage.getAttribute<Float>("size");
+					shared_ptr<Gnoll::DynamicObject::Float> pageSize = neighborPage.getAttribute<Float>("size");
 
 					Ogre::Vector3 neighborOffset;
 
-					if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::Core::String >( "northLink"))).c_str()) == 0)
+					if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( "northLink"))).c_str()) == 0)
 					{
 						neighborOffset = Ogre::Vector3(0.0, 0.0, -*pageSize) / 2.0f;
 
-					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::Core::String >( "southLink"))).c_str()) == 0)
+					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( "southLink"))).c_str()) == 0)
 					{
 						neighborOffset = Ogre::Vector3(0.0, 0.0, *pageSize) / 2.0f;
 
-					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::Core::String >( "eastLink"))).c_str()) == 0)
+					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( "eastLink"))).c_str()) == 0)
 					{
 						neighborOffset = Ogre::Vector3( *pageSize, 0.0, 0.0 ) / 2.0f;
 
-					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::Core::String >( "westLink"))).c_str()) == 0)
+					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( "westLink"))).c_str()) == 0)
 					{
 						neighborOffset = Ogre::Vector3( -(*pageSize), 0.0, 0.0 ) / 2.0f;
 					}

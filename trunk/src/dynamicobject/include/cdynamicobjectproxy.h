@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*--------------------------CPersistentObjectProxy-------------------------*\
-|   This is a PersistentObject proxy                                        |
+/*---------------------------CDynamicObjectProxy---------------------------*\
+|   This is a DynamicObject proxy                                           |
 |                                                                           |
 |   Changelog :                                                             |
 |               12/14/2007 - Bruno Mahe - Initial release                   |
@@ -30,8 +30,8 @@
 \*-------------------------------------------------------------------------*/
 
 
-#ifndef __CPERSISTENTOBJECTPROXY_H__
-#define __CPERSISTENTOBJECTPROXY_H__
+#ifndef __CDYNAMICOBJECTPROXY_H__
+#define __CDYNAMICOBJECTPROXY_H__
 
 
 #include <boost/shared_ptr.hpp>
@@ -41,7 +41,7 @@
 
 #include "iattribute.h"
 #include "iattributehandler.h"
-#include "persistentobject.h"
+#include "dynamicobject.h"
 
 #include "string.h"
 #include "list.h"
@@ -52,22 +52,22 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 
 
 		/**
-		 *	This is a proxy for Persistent Object.
-		 *	This object can be used as a base for objects using PersistentObject capabilities </br>
+		 *	This is a proxy for Dynamic Object.
+		 *	This object can be used as a base for objects using DynamicObject capabilities </br>
 		 * @see IAttribute </br>
- 		 * @see PersistentObject
-		 */ 
-		class CPersistentObjectProxy 
+		 * @see DynamicObject
+		 */
+		class CDynamicObjectProxy
 		{
 
 
 			protected:
-				shared_ptr<PersistentObject> m_self;
+				shared_ptr<DynamicObject> m_self;
 
 
 
@@ -75,21 +75,21 @@ namespace Gnoll
 
 				/**
 				 * This is a constructor
-				 * @param _instanceName Instance name of the PersistentObject
+				 * @param _instanceName Instance name of the DynamicObject
 				 */
-				CPersistentObjectProxy (string _instanceName);
+				CDynamicObjectProxy (string _instanceName);
 
 
 				/**
 				 * This is a destructor
 				 */
-				virtual ~CPersistentObjectProxy ();
+				virtual ~CDynamicObjectProxy ();
 
 				/**
 				 * Save the instance
 				 */
 				void save();
-				
+
 				/**
 				 * This sets an attribute
 				 * @param _name The name of the attribute
@@ -99,7 +99,7 @@ namespace Gnoll
 
 
 				/**
-				 * This return an attribute 
+				 * This return an attribute
 				 * @param _name The name of the attribute we want
 				 * @return The attribute
 				 */
@@ -121,7 +121,7 @@ namespace Gnoll
 					return m_self->getAttributeOrDefault<T>(_name, _defaultValue);
 				}
 
-		
+
 				/**
 				 * Check if an attribute exists
 				 * @param _name Name of the attribute
@@ -152,16 +152,16 @@ namespace Gnoll
 				 * Get a const_iterator on the first element of the map of the attributes
 				 * @return const_iterator at the beginning of the map of attributes
 				 */
-				PersistentObject::mapAttributes::const_iterator begin() const;
+				DynamicObject::mapAttributes::const_iterator begin() const;
 
 				/**
 				 * Get a const_iterator on the end of the map of the attributes
 				 * @return const_iterator at the end of the map of attributes
 				 */
-				PersistentObject::mapAttributes::const_iterator end() const;
+				DynamicObject::mapAttributes::const_iterator end() const;
 
 				/**
-				 * Get the instance name of the PersistentObject
+				 * Get the instance name of the DynamicObject
 				 * @return The instance name
 				 */
 				string getInstance() const;
@@ -170,4 +170,4 @@ namespace Gnoll
 	}
 }
 
-#endif // __CPERSISTENTOBJECTPROXY_H__
+#endif // __CDYNAMICOBJECTPROXY_H__

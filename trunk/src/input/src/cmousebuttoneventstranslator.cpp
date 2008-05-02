@@ -31,7 +31,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include "../include/cmousebuttoneventstranslator.h"
-#include "../../core/include/persistentobjectmanager.h"
+#include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../include/cinputmouseevents.h"
 #include "../include/ctranslationevents.h"
@@ -41,6 +41,7 @@
 
 using namespace boost;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 
 
 namespace Gnoll
@@ -51,7 +52,7 @@ namespace Gnoll
 		CMouseButtonEventsTranslator::CMouseButtonEventsTranslator(): mouseButtonPressedEvent("MOUSE_PRESSED"), mouseButtonReleasedEvent("MOUSE_RELEASED")
 		{
 
-			PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 			/**
 			 * Loading translation map : Keycode -> Action

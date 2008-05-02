@@ -31,13 +31,14 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/include/persistentobject.h"
+#include "../../dynamicobject/include/dynamicobject.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessage.h"
 
 
 using namespace boost;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
@@ -52,7 +53,7 @@ namespace Gnoll
 				/**
 				 * PersistentObject that contains a translation map for events from mouse
 				 */
-				shared_ptr<Gnoll::Core::PersistentObject> mouseButtonEventTranslationMap;
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> mouseButtonEventTranslationMap;
 
 				/**
 				 * CMessageType for MOUSE_PRESSED messages

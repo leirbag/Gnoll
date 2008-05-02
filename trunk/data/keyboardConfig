@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<persistentobject instance="configKeyboard">
+<dynamicobject instance="configKeyboard">
   <attribute name="period">
     <integer value="100"/>
   </attribute>
-</persistentobject>
+</dynamicobject>

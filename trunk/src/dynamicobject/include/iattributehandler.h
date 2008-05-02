@@ -46,13 +46,13 @@ using namespace boost;
 namespace Gnoll 
 {
 
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**
 		 * Forward declaration
 		 */
-		class PersistentObject;
+		class DynamicObject;
 
 
 		/**
@@ -81,7 +81,7 @@ namespace Gnoll
 				 * @param _node The attribute passed as a xml tree
 				 * @return Smart pointer to the deserialized IAttribute
 				 */
-				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, PersistentObject* _po = NULL) = 0;
+				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, DynamicObject* _po = NULL) = 0;
 
 		};
 

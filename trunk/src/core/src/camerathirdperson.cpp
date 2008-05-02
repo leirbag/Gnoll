@@ -28,8 +28,10 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camerathirdperson.h"
-#include "../include/float.h"
+#include "../../dynamicobject/include/float.h"
 #include <cmath>
+
+using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {

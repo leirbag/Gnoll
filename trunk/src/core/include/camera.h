@@ -38,7 +38,7 @@
 #include <OgreSceneNode.h>
 #include <OgreVector3.h>
 #include <OgreCamera.h>
-#include "cpersistentobjectproxy.h"
+#include "../../dynamicobject/include/cdynamicobjectproxy.h"
 
 namespace Gnoll
 {
@@ -52,7 +52,7 @@ namespace Gnoll
 		class CMessageListenerCamera;
 		class CMessageType;
 
-		class Camera : public CPersistentObjectProxy
+		class Camera : public Gnoll::DynamicObject::CDynamicObjectProxy
 		{
 		private:
 			/*
@@ -64,7 +64,7 @@ namespace Gnoll
 			/*
 			 * Default constructor, it initializes the camera with default settings :
 			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
+			 * fov PI/4 OR get back ancient configuration with dynamic objet if exists
 			 * @param instanceName This is the instance name of the camera, it will be use for the
 			 * 					   instance name of the Ogre Camera
 			 */

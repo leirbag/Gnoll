@@ -1,19 +1,19 @@
 /*
  * main.c
  * Copyright (C) Paf 2007 <paf@tuxfamily.org>
- * 
+ *
  * main.cpp is free software.
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
- * 
+ *
  * main.cpp is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with main.cpp.  If not, write to:
  * 	The Free Software Foundation, Inc.,
@@ -29,8 +29,8 @@
 #include <glibmm/ustring.h>
 #include <boost/shared_ptr.hpp>
 
-#include "../include/persistentobjectmanager.h"
-#include "../include/persistentobject.h"
+#include "../include/dynamicobjectmanager.h"
+#include "../include/dynamicobject.h"
 #include "../include/scalar.h"
 #include "../include/integer.h"
 #include "../include/float.h"
@@ -39,19 +39,20 @@
 #include "../include/double.h"
 #include "../include/inherits.h"
 
-#include "../include/sourcefile.h"
-#include "../include/istream.h"
+#include "../../core/include/sourcefile.h"
+#include "../../core/include/istream.h"
 
 
 using namespace std;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 
 int main() {
 
 
 	cout << "Hello world !" << endl;
 
-	PersistentObject toto = PersistentObject("toto");	
+	DynamicObject toto = DynamicObject("toto");
 
 	shared_ptr<Scalar<float> > pi( new Scalar<float>("float", 3.145) );
 	shared_ptr<Integer> age( new Integer(345) );
@@ -77,8 +78,8 @@ int main() {
 
 	cout << "Get attribute 'pi' : " << *pi2 << endl;
 	cout << "Get attribute 'phrase' : " << *phrase2 << endl;
-	
-	try 
+
+	try
 	{
 		shared_ptr<Scalar<Glib::ustring> > phrase3 = toto.getAttribute< Scalar<Glib::ustring> > ("aioli");
 	}
@@ -118,18 +119,18 @@ int main() {
 	streamW->close();
 
 	cout << endl << "Bytes Written : " << bytesWritten << endl;
-	
+
 
 
 	shared_ptr<ISource> loadChannel(new SourceFile(".", false));
 	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
 
-	PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 	pom->addLoadSource(loadChannel);
 	pom->addSaveSource(saveChannel);
 
-	shared_ptr<PersistentObject> Zelda = pom->load("zelda");
+	shared_ptr<DynamicObject> Zelda = pom->load("zelda");
 
 	shared_ptr<Integer> ageZelda = Zelda->getAttribute< Integer > ("age");
 	shared_ptr<Integer> newAge(new Integer((*ageZelda)() + 1));
@@ -196,7 +197,7 @@ int main() {
 	cout << endl << endl << "--------------------------------------------" << endl << endl;
 
 
-	shared_ptr<PersistentObject> Zelda2 = pom->load("zelda2");
+	shared_ptr<DynamicObject> Zelda2 = pom->load("zelda2");
 
 	shared_ptr<xmlpp::Document> outputZelda2 = Zelda2->serializeXML();
 	cout << outputZelda2->write_to_string_formatted()  << endl;

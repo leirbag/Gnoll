@@ -33,11 +33,12 @@
 #include "../include/cmessagemodule.h"
 #include "../include/cmessagelistenercamera.h"
 #include "../include/cmessagetype.h"
-#include "../include/float.h"
+#include "../../dynamicobject/include/float.h"
 #include <iostream>
 #include <queue>
 
 using namespace Gnoll::Graphic;
+using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
@@ -61,7 +62,7 @@ namespace Gnoll
 		};
 
 		Camera::Camera(const Glib::ustring& instanceName) :
-			CPersistentObjectProxy(instanceName),
+			CDynamicObjectProxy(instanceName),
 			m_this(new camera_i)
 		{
 			m_this->name = instanceName;
@@ -117,7 +118,7 @@ namespace Gnoll
 		}
 
 		Camera::Camera(const Camera& copy) :
-			CPersistentObjectProxy(copy)
+			CDynamicObjectProxy(copy)
 		{
 			// Copy attributs
 			m_this = new camera_i;

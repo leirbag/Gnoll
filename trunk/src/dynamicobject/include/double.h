@@ -19,7 +19,7 @@
 
 
 /*---------------------------------double----------------------------------*\
-|   This is a double attribute for PersistentObject                         |
+|   This is a double attribute for DynamicObject                            |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/26/2007 - Paf - Initial release                          |
@@ -32,26 +32,26 @@
 #define __DOUBLE_H__
 
 
-#include "iattribute.h" 
-#include "scalar.h" 
+#include "iattribute.h"
+#include "scalar.h"
 
 using namespace std;
 using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**
-		 *	This is a simple attribute. 
-		 */ 
+		 *	This is a simple attribute.
+		 */
 		class Double : public Scalar<double>
 		{
 			public:
-		
+
 				Double(double _value = 0.0f) : Scalar<double>("double", _value) {};
-		
+
 		};
 
 	}

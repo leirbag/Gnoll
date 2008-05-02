@@ -32,7 +32,7 @@
 
 #include "../../core/include/basemanager.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/attributehandlerregistry.h"
+#include "../../dynamicobject/include/attributehandlerregistry.h"
 #include "../../core/include/sourcefile.h"
 #include "sound.h"
 #include "audiocodecmanager.h"
@@ -48,6 +48,7 @@ using namespace std;
 using namespace boost;
 
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 
 
 namespace Gnoll {

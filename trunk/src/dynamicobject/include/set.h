@@ -19,7 +19,7 @@
 
 
 /*---------------------------------Set-------------------------------------*\
-|   This is a Set attribute for PersistentObject                            |
+|   This is a Set attribute for DynamicObject                               |
 |                                                                           |
 |   Changelog :                                                             |
 |               03/19/2008 - Bruno Mahe - Initial release                   |
@@ -45,7 +45,7 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 		bool operator<(IAttribute const & a, IAttribute const & b);
 
@@ -60,7 +60,7 @@ namespace Gnoll
 
 
 		/**
-		 *	This is a set attribute for PersistentObject.
+		 *	This is a set attribute for DynamicObject.
 		 */
 		class Set : public set< shared_ptr<IAttribute>, IAttributeComparison >, public IAttribute
 		{

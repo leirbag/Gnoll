@@ -46,7 +46,7 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 		/**
 		 *	This is the interface of an attribute.

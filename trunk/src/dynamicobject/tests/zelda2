@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<persistentobject instance="zelda2">
+<dynamicobject instance="zelda2">
   <attribute name="parent">
     <inherits>
     	<string value="zelda"/>
@@ -9,5 +9,5 @@
     <integer value="6"/>
   </attribute>
 
-</persistentobject>
+</dynamicobject>
 

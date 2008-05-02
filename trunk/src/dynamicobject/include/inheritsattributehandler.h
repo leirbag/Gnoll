@@ -35,7 +35,7 @@
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 
-#include "persistentobject.h"
+#include "dynamicobject.h"
 #include "iattributehandler.h"
 
 using namespace boost;
@@ -45,14 +45,14 @@ using namespace Gnoll::Core;
 namespace Gnoll
 {
 
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**
 		*	This is the interface of an attribute handler.</br>
 		*	This make sure each Attribute will be (de)serializable.</br>
 		*	This works as long as T inherits from IAttribute.
-		*/ 
+		*/
 		class InheritsAttributeHandler : public IAttributeHandler
 		{
 
@@ -74,8 +74,8 @@ namespace Gnoll
 				 * This is the handler method
 				 * @param _node Node to process and extract the IAttribute smart pointer from
 				 * @return Smart pointer to an IAttribute
-				 */		
-				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, PersistentObject* _po = NULL); 
+				 */
+				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, DynamicObject* _po = NULL);
 
 		};
 

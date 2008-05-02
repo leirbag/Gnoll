@@ -17,9 +17,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------filestream----------------------------------*\
-|   This is a stream based on files                                         |
+/*---------------------------DynamicObjectManager--------------------------*\
+|   This is as a manager for DynamicObject instances                        |
 |                                                                           |
 |   Changelog :                                                             |
 |               07/18/2007 - Paf - Initial release                          |
@@ -30,27 +29,23 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-
-#include "../include/persistentobjectmanager.h"
+#include "../include/dynamicobjectmanager.h"
 #include "../include/attributehandlerregistry.h"
-
 
 namespace Gnoll {
 
-	namespace Core {
+	namespace DynamicObject {
 
-		PersistentObjectManager::PersistentObjectManager()
+		DynamicObjectManager::DynamicObjectManager()
 		{
-		
 
 		}
 
-		PersistentObjectManager::~PersistentObjectManager()
+		DynamicObjectManager::~DynamicObjectManager()
 		{
 		}
 
-
-		shared_ptr<PersistentObject> PersistentObjectManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
+		shared_ptr<DynamicObject> DynamicObjectManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
 		{
 
 			// First : Stream -> XML
@@ -65,11 +60,11 @@ namespace Gnoll {
 				int nb = _stream->read(buffer, 256);
 				content.append(buffer, nb);
 			}
-	
+
 			xmlpp::Document* document;
-			shared_ptr<PersistentObject> po (new PersistentObject("NULL"));
-	
-			// Second : XML -> PersistentObject
+			shared_ptr<DynamicObject> po (new DynamicObject("NULL"));
+
+			// Second : XML -> DynamicObject
 			// Only if some data are available
 			if (content.length() > 0)
 			{
@@ -87,7 +82,7 @@ namespace Gnoll {
 			return po;
 		}
 
-		bool PersistentObjectManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<PersistentObject> _obj, string _instance)
+		bool DynamicObjectManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<DynamicObject> _obj, string _instance)
 		{
 			shared_ptr<xmlpp::Document> output = _obj->serializeXML();
 			string outputString = output->write_to_string_formatted();
@@ -104,7 +99,3 @@ namespace Gnoll {
 
 	}
 }
-
-
-
-

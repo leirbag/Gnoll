@@ -35,7 +35,7 @@
 #include "../include/cmousemotioneventstranslator.h"
 #include "../include/cinputmouseevents.h"
 #include "../include/ctranslationevents.h"
-#include "../../core/include/persistentobjectmanager.h"
+#include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../include/cinputmouseevents.h"
 #include <OIS/OISMouse.h>
@@ -48,6 +48,7 @@
 
 using namespace boost;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 using namespace Gnoll::Graphic;
 
 namespace Gnoll
@@ -58,7 +59,7 @@ namespace Gnoll
 		CMouseMotionEventsTranslator::CMouseMotionEventsTranslator(): mouseMoved("MOUSE_MOVED")
 		{
 
-			PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
+			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 			/**
 			 * Loading translation map : Keycode -> Action

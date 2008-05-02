@@ -82,8 +82,8 @@
 #include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagelistener.h"
 
-#include "../../core/include/persistentobject.h"
-#include "../../core/include/persistentobjectmanager.h"
+#include "../../dynamicobject/include/dynamicobject.h"
+#include "../../dynamicobject/include/dynamicobjectmanager.h"
 
 #include "../../core/include/camera.h"
 #include "../../core/include/abstractcamerafactory.h"
@@ -112,15 +112,15 @@ namespace Gnoll
 		void CGraphicModule::loadOgreResourcesPath()
 		{
 
-			Gnoll::Core::PersistentObjectManager *pom = Gnoll::Core::PersistentObjectManager::getInstancePtr();
+			Gnoll::DynamicObject::DynamicObjectManager *pom = Gnoll::DynamicObject::DynamicObjectManager::getInstancePtr();
 
 			// Load resource paths from config file
-			shared_ptr<Gnoll::Core::PersistentObject> resources = pom->load("ogre_resources");
+			shared_ptr<Gnoll::DynamicObject::DynamicObject> resources = pom->load("ogre_resources");
 
 
-			typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+			typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
 
-			Gnoll::Core::List attributesNames = resources->getAttributesNames();
+			Gnoll::DynamicObject::List attributesNames = resources->getAttributesNames();
 
 			/**
 			 * For each resource type (zip, filesystem...)
@@ -128,13 +128,13 @@ namespace Gnoll
 			for (ListIterator itAttrs = attributesNames.begin(); itAttrs != attributesNames.end(); itAttrs++)
 			{
 
-				if (shared_ptr<Gnoll::Core::String> attrName = dynamic_pointer_cast<Gnoll::Core::String>(*itAttrs))
+				if (shared_ptr<Gnoll::DynamicObject::String> attrName = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*itAttrs))
 				{
 
 					/**
 					 * Get a list of resources for this resource type
 					 */
-					shared_ptr< Gnoll::Core::List > listResources = resources->getAttribute< Gnoll::Core::List > (string(*attrName));
+					shared_ptr< Gnoll::DynamicObject::List > listResources = resources->getAttribute< Gnoll::DynamicObject::List > (string(*attrName));
 
 					for (ListIterator itRes = listResources->begin(); itRes != listResources->end(); itRes++)
 					{
@@ -142,7 +142,7 @@ namespace Gnoll
 						/**
 						 * Add each resource path
 						 */
-						if (shared_ptr<Gnoll::Core::String> res = dynamic_pointer_cast<Gnoll::Core::String>(*itRes))
+						if (shared_ptr<Gnoll::DynamicObject::String> res = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*itRes))
 						{
 						ResourceGroupManager::getSingleton().addResourceLocation(
 						 string(*res), (*attrName));

@@ -36,15 +36,17 @@
 #include "../include/cmousebuttoneventstranslator.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessagemodule.h"
-#include "../../core/include/persistentobject.h"
-#include "../../core/include/persistentobjectmanager.h"
-#include "../../core/include/integer.h"
+#include "../../dynamicobject/include/dynamicobject.h"
+#include "../../dynamicobject/include/dynamicobjectmanager.h"
+#include "../../dynamicobject/include/integer.h"
 #include "../../time/include/ctimemodule.h"
 #include <iostream>
 
 
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 using namespace Gnoll::Time;
+using namespace boost;
 
 namespace Gnoll
 {
@@ -95,14 +97,14 @@ namespace Gnoll
 			CMessageType updateKeyboard("UPDATE_KEYBOARD");
 
 
-			PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
-			shared_ptr<PersistentObject> keyboardConfig = pom->load("keyboardConfig");
+			DynamicObjectManager *dom = DynamicObjectManager::getInstancePtr();
+			shared_ptr< Gnoll::DynamicObject::DynamicObject > keyboardConfig = dom->load("keyboardConfig");
 
 			/**
 			 * How often will the keyboard module get updated (millisecond)
 			 */
 			unsigned long int period = 300;
-			shared_ptr<Integer> periodFromConfig = keyboardConfig->getAttribute<Integer>("period");
+			shared_ptr< Integer > periodFromConfig = keyboardConfig->getAttribute<Integer>("period");
 			period = *periodFromConfig;
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();

@@ -19,7 +19,7 @@
 
 
 /*---------------------------------string----------------------------------*\
-|   This is a string attribute for PersistentObject                         |
+|   This is a string attribute for DynamicObject                            |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/26/2007 - Paf - Initial release                          |
@@ -43,7 +43,7 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**

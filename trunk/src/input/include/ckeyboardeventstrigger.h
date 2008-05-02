@@ -31,7 +31,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/include/persistentobject.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessage.h"
 

@@ -19,7 +19,7 @@
 
 
 /*---------------------------------Set-------------------------------------*\
-|   This is a set attribute for PersistentObject                            |
+|   This is a set attribute for DynamicObject                               |
 |                                                                           |
 |   Changelog :                                                             |
 |               03/19/2008 - Bruno Mahe - Initial release                   |
@@ -33,7 +33,7 @@
 
 namespace Gnoll {
 
-	namespace Core {
+	namespace DynamicObject {
 
 
 		/**
@@ -84,7 +84,7 @@ namespace Gnoll {
 			}
 
 			// We need a handler to deserialize attributes
-			Gnoll::Core::AttributeHandlerRegistry* registry = Gnoll::Core::AttributeHandlerRegistry::getInstancePtr();
+			Gnoll::DynamicObject::AttributeHandlerRegistry* registry = Gnoll::DynamicObject::AttributeHandlerRegistry::getInstancePtr();
 
 
 			xmlpp::Node::NodeList list = _element->get_children();
@@ -97,7 +97,7 @@ namespace Gnoll {
 				if (elementChild)
 				{
 
-					shared_ptr<Gnoll::Core::IAttributeHandler> handler = registry->getHandler(name);
+					shared_ptr<Gnoll::DynamicObject::IAttributeHandler> handler = registry->getHandler(name);
 
 					// Check if a handler is available for this attribute
 					if (handler.get() != NULL)

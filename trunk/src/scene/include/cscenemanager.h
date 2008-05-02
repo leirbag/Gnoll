@@ -36,20 +36,21 @@
 #include <glibmm/ustring.h>
 
 
-#include "../../core/include/cpersistentobjectproxy.h"
+#include "../../dynamicobject/include/cdynamicobjectproxy.h"
 #include "../../core/include/cpoolthreads.h"
 #include "../include/cpage.h"
 #include "../../core/include/cmessagelistener.h"
 
-#include "../../core/include/string.h"
-#include "../../core/include/float.h"
-#include "../../core/include/set.h"
+#include "../../dynamicobject/include/string.h"
+#include "../../dynamicobject/include/float.h"
+#include "../../dynamicobject/include/set.h"
 
 
 
 using namespace std;
 using namespace boost;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
@@ -57,7 +58,7 @@ namespace Gnoll
 	{
 
 
-		class CSceneManager : public CPersistentObjectProxy
+		class CSceneManager : public CDynamicObjectProxy
 		{
 		
 			private:
@@ -114,7 +115,7 @@ namespace Gnoll
 				 * @param _loadedPages List of loaded pages
 				 * @param _offset Page offset
 				 */
-				void setupPage( const string _pageInstance, shared_ptr< Gnoll::Core::List > _loadedPages, const Ogre::Vector3 _offset = Ogre::Vector3());
+				void setupPage( const string _pageInstance, shared_ptr< Gnoll::DynamicObject::List > _loadedPages, const Ogre::Vector3 _offset = Ogre::Vector3());
 		};
 				
 	}

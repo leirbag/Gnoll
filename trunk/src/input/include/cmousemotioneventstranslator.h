@@ -33,7 +33,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/include/persistentobject.h"
+#include "../../dynamicobject/include/dynamicobject.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessage.h"
 
@@ -41,6 +41,7 @@
 
 using namespace boost;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
@@ -53,9 +54,9 @@ namespace Gnoll
 			private:
 
 				/**
-				 * PersistentObject that contains a translation map for events from mouse
+				 * DynamicObject that contains a translation map for events from mouse
 				 */
-				shared_ptr<Gnoll::Core::PersistentObject> mouseMotionEventTranslationMap;
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> mouseMotionEventTranslationMap;
 
 
 				/**

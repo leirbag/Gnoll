@@ -30,7 +30,7 @@
 
 #include "../include/inheritsattributehandler.h"
 
-#include "../include/persistentobjectmanager.h"
+#include "../include/dynamicobjectmanager.h"
 #include "../include/inherits.h"
 
 
@@ -41,7 +41,7 @@ using namespace Gnoll::Core;
 namespace Gnoll
 {
 
-	namespace Core
+	namespace DynamicObject
 	{
 
 
@@ -50,12 +50,12 @@ namespace Gnoll
 		}
 
 
-		InheritsAttributeHandler::~InheritsAttributeHandler() 
+		InheritsAttributeHandler::~InheritsAttributeHandler()
 		{
 		}
 
 
-		shared_ptr<IAttribute> InheritsAttributeHandler::handle (xmlpp::Element* _node, PersistentObject* _po) 
+		shared_ptr<IAttribute> InheritsAttributeHandler::handle (xmlpp::Element* _node, DynamicObject* _po)
 		{
 			/**
 			 * Deserialization
@@ -64,7 +64,7 @@ namespace Gnoll
 			attribute->deSerializeXML(_node);
 
 			/**
-			 * We only apply inheritance if the target PersistentObject is provided
+			 * We only apply inheritance if the target DynamicObject is provided
 			 */
 			if (_po != NULL)
 			{
@@ -76,30 +76,30 @@ namespace Gnoll
 				String parentName = attribute->getParent();
 
 
-				PersistentObjectManager *pom = PersistentObjectManager::getInstancePtr();
-			
+				DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
+
 
 				/**
 				 * We release the parent if it's in the cache. So the child and the parent will not share any attribute.
 				 * We want a copy of these attributes, not a reference to their attributes.
-				 * Onw way to simulate a copy is to save and release first and then copy the references of each attribute, and 
+				 * Onw way to simulate a copy is to save and release first and then copy the references of each attribute, and
 				 * finally release the parent again.
 				 */
-				if (pom->isInstanceInCache(parentName)) 
+				if (pom->isInstanceInCache(parentName))
 				{
 					pom->save(parentName);
 					pom->release(parentName);
 				}
 
 
-				shared_ptr<PersistentObject> parent = pom->load(parentName);
+				shared_ptr<DynamicObject> parent = pom->load(parentName);
 
 
 				/**
 				 * The second step is to copy all the parent's attributes if they don't exists in the child object
 				 */
 
-				for (PersistentObject::mapAttributes::const_iterator it = parent->begin(); it != parent->end(); it++)
+				for (DynamicObject::mapAttributes::const_iterator it = parent->begin(); it != parent->end(); it++)
 				{
 					string attrName = (*it).first;
 

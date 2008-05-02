@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*---------------------------------string----------------------------------*\
-|   This is a string attribute for PersistentObject                         |
+/*---------------------------------String----------------------------------*\
+|   This is a string attribute for DynamicObject                            |
 |                                                                           |
 |   Changelog :                                                             |
 |               10/03/2007 - Paf - Initial release                          |
@@ -33,7 +33,7 @@
 
 namespace Gnoll {
 
-	namespace Core {
+	namespace DynamicObject {
 
 		/**
 		 * Constructor

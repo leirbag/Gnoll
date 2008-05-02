@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 
-/*-------------------------------cmessage----------------------------------*\
+/*---------------------------AttributeHandlerRegistry----------------------*\
 |   This is the interface of all the attributes. Each Attribute has to be   |
 |     (de)serializable                                                      |
 |                                                                           |
@@ -49,14 +49,14 @@
 #include "../include/list.h"
 #include "../include/set.h"
 #include "../include/inherits.h"
-#include "../../scene/include/cmeshpagerenderer.h"
+//#include "../../scene/include/cmeshpagerenderer.h"
 
 
 
 namespace Gnoll 
 {
 
-	namespace Core
+	namespace DynamicObject
 	{
 
 		AttributeHandlerRegistry::AttributeHandlerRegistry()
@@ -70,7 +70,7 @@ namespace Gnoll
 			this->registerHandler(string("list"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<List>()));
 			this->registerHandler(string("set"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Set>()));
 			this->registerHandler(string("inherits"), shared_ptr<IAttributeHandler>(new InheritsAttributeHandler()));
-			this->registerHandler(string("CMeshPageRenderer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CMeshPageRenderer>()));
+//			this->registerHandler(string("CMeshPageRenderer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CMeshPageRenderer>()));
 
 		}
 

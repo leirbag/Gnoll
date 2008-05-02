@@ -19,7 +19,7 @@
 
 
 /*----------------------------------float----------------------------------*\
-|   This is a float attribute for PersistentObject                          |
+|   This is a float attribute for DynamicObject                             |
 |                                                                           |
 |   Changelog :                                                             |
 |               09/24/2007 - Paf - Initial release                          |
@@ -40,7 +40,7 @@ using namespace boost;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace DynamicObject
 	{
 
 		/**

@@ -45,6 +45,7 @@
 using namespace std;
 using namespace boost;
 using namespace Gnoll::Core;
+using namespace Gnoll::DynamicObject;
 using namespace Gnoll::Time;
 
 namespace Gnoll
@@ -92,7 +93,7 @@ namespace Gnoll
 
 
 
-		CSceneManager::CSceneManager(string _instanceName) : CPersistentObjectProxy(_instanceName)
+		CSceneManager::CSceneManager(string _instanceName) : CDynamicObjectProxy(_instanceName)
 		{
 
 			if (this->hasAttribute("focusedPage") == false)
@@ -102,10 +103,10 @@ namespace Gnoll
 			}
 
 
-			shared_ptr< Gnoll::Core::List > loadedPages = this->getAttribute< Gnoll::Core::List > ("loadedPages");
+			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ("loadedPages");
 			if (loadedPages->size() == 0)
 			{
-				loadedPages = shared_ptr< Gnoll::Core::List > ( new Gnoll::Core::List() );
+				loadedPages = shared_ptr< Gnoll::DynamicObject::List > ( new Gnoll::DynamicObject::List() );
 				this->setAttribute("loadedPages", loadedPages);
 			}
 
@@ -113,7 +114,7 @@ namespace Gnoll
 			/**
 			 * Set up focused Page
 			 */
-			shared_ptr<Gnoll::Core::String> focusedPageName = this->getAttribute<Gnoll::Core::String>("focusedPage");
+			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>("focusedPage");
 			cout << "SIZE A: " << loadedPages->size() << endl;
 			cout << "Address of loadedPages : " << loadedPages << endl;
 			this->setupPage(*focusedPageName, loadedPages);
@@ -162,12 +163,12 @@ namespace Gnoll
 			/**
 			 * List of currently visible pages
 			 */
-			shared_ptr< Gnoll::Core::List > visiblePages = shared_ptr< Gnoll::Core::List > ( new Gnoll::Core::List() );
+			shared_ptr< Gnoll::DynamicObject::List > visiblePages = shared_ptr< Gnoll::DynamicObject::List > ( new Gnoll::DynamicObject::List() );
 
 			/**
 			 * Pages loaded
 			 */
-			shared_ptr< Gnoll::Core::List > loadedPages = this->getAttribute< Gnoll::Core::List > ("loadedPages");
+			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ("loadedPages");
 
 			cout << "Address of loadedPages : " << loadedPages << endl;
 			cout << "Size of loadedPages : " << loadedPages->size() << endl;
@@ -175,9 +176,9 @@ namespace Gnoll
 			/**
 			 * Loop through all loaded pages and check if they are still visible
 			 */
-			for( Gnoll::Core::List::const_iterator it = loadedPages->begin(); it != loadedPages->end(); it++)
+			for( Gnoll::DynamicObject::List::const_iterator it = loadedPages->begin(); it != loadedPages->end(); it++)
 			{
-				if (shared_ptr<Gnoll::Core::String> pageName = dynamic_pointer_cast<Gnoll::Core::String>(*it))
+				if (shared_ptr<Gnoll::DynamicObject::String> pageName = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*it))
 				{
 					cout << "1 - Loaded page : " << *pageName << endl;
 
@@ -198,7 +199,7 @@ namespace Gnoll
 							cout << "  Checking neighbor : " << neighbors[i] << endl;
 							if (page.hasAttribute(neighbors[i]))
 							{
-								shared_ptr<Gnoll::Core::String> neighborInstanceName = page.getAttribute<Gnoll::Core::String>(neighbors[i]);
+								shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
 
 								cout << "    neighbor found : " << neighborInstanceName << endl;
 								if (visitedPages.find(*neighborInstanceName) == visitedPages.end())
@@ -225,17 +226,17 @@ namespace Gnoll
 
 		bool CSceneManager::isPageVisible(const CPage& _page)
 		{
-			shared_ptr< Gnoll::Core::String > currentCameraName = this->getAttribute< Gnoll::Core::String > ("currentCamera");
+			shared_ptr< Gnoll::DynamicObject::String > currentCameraName = this->getAttribute< Gnoll::DynamicObject::String > ("currentCamera");
 
 			return _page.isVisibleFromCamera( currentCameraName );
 			//return true;
 		}
 
 
-		void CSceneManager::setupPage( const string _pageInstance, shared_ptr< Gnoll::Core::List > _loadedPages, const Ogre::Vector3 _offset )
+		void CSceneManager::setupPage( const string _pageInstance, shared_ptr< Gnoll::DynamicObject::List > _loadedPages, const Ogre::Vector3 _offset )
 		{
 			char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
-			shared_ptr<Gnoll::Core::String> focusedPageName = this->getAttribute<Gnoll::Core::String>("focusedPage");
+			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>("focusedPage");
 
 			CPage page(_pageInstance);
 
@@ -247,10 +248,10 @@ namespace Gnoll
 			cout << "taking care of page " << _pageInstance << endl;
 
 			page.init();
-			_loadedPages->push_back(shared_ptr<Gnoll::Core::String>(new Gnoll::Core::String(_pageInstance)));
+			_loadedPages->push_back(shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(_pageInstance)));
 
 			cout << "page " << _pageInstance << "initialized" << endl;
-			shared_ptr<Gnoll::Core::Float> pageSize = page.getAttribute<Float>("size");
+			shared_ptr<Gnoll::DynamicObject::Float> pageSize = page.getAttribute<Float>("size");
 
 
 			/**
@@ -261,7 +262,7 @@ namespace Gnoll
 			{
 				if (page.hasAttribute(neighbors[i]))
 				{
-					shared_ptr<Gnoll::Core::String> neighborInstanceName = page.getAttribute<Gnoll::Core::String>(neighbors[i]);
+					shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
 					cout << "Loading neighbor " << *neighborInstanceName << endl;
 					CPage neighbor(*neighborInstanceName);
 					cout << "Neighbor " << *neighborInstanceName << " loaded" << endl;
