@@ -33,6 +33,7 @@
 |               02/15/2008 - Bruno Mahe - Need to keep track of Camera's     |
 |                                  address, so it can be freed when exiting  |
 |               04/10/2006 - Gabriel - Add namespace Gnoll and Graphic       |
+|               02/05/2008 - WT - Add private method loadOgrePlugins()       |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -109,6 +110,11 @@ namespace Gnoll
 				 * Load resources path
 				 */
 				void loadOgreResourcesPath();
+
+				/**
+				 * Load plugins path and plugins
+				 */
+				 void loadOgrePlugins();
 
 			public:
 

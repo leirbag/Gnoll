@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<dynamicobject instance="ogre_plugins">
+
+	<attribute name="PluginList">
+		<list>
+			<string value="%(ogre_lib_path)sRenderSystem_GL" />
+			<string value="%(ogre_lib_path)sPlugin_ParticleFX" />
+			<string value="%(ogre_lib_path)sPlugin_BSPSceneManager" />
+			<string value="%(ogre_lib_path)sPlugin_OctreeSceneManager" />
+		</list>
+	</attribute>
+
+</dynamicobject>

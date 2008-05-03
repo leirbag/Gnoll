@@ -123,6 +123,15 @@ def main():
 			env['install_prefix'] = env['install_prefix'] + '/'
 
 
+		env['ogre_lib_path'] = ARGUMENTS.get('ogre_lib_path')
+		if not env['ogre_lib_path']:
+			env['ogre_lib_path'] = "/usr/lib/OGRE/"
+
+		if env['ogre_lib_path'][-1] != '/' :
+			env['ogre_lib_path'] = env['ogre_lib_path'] + '/'
+
+
+
 		env['install_bin'] = env['install_prefix'] + "bin/"
 		env['install_data'] = env['install_prefix'] + 'data/'
 		env['install_config'] = env['install_data']

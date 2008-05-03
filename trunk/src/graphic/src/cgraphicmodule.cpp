@@ -71,6 +71,10 @@
 |                                  address, so it can be freed when exiting |
 |                                                                           |
 |               04/10/2006 - Gabriel - Add namespace Gnoll and Graphic      |
+|                                                                           |
+|          02/05/2008 - WT - Put plugins path loading in a private method   |
+|                               and use DynamicObject instead of            |
+|                               Ogre plugins.cfg to load these plugins      |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/cgraphicmodule.h"
@@ -157,9 +161,30 @@ namespace Gnoll
 
 		}
 
+
+		void CGraphicModule::loadOgrePlugins()
+		{
+			Gnoll::DynamicObject::DynamicObjectManager *pom = Gnoll::DynamicObject::DynamicObjectManager::getInstancePtr();
+
+			// Load plugins paths from config file
+			shared_ptr<Gnoll::DynamicObject::DynamicObject> plugins = pom->load("ogre_plugins");
+
+			typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+
+			// Get the list of plugins' paths
+			shared_ptr<Gnoll::DynamicObject::List> pluginList = plugins->getAttribute<Gnoll::DynamicObject::List>("PluginList");
+
+			// For each plugin path
+			for (ListIterator itAttrs = pluginList->begin(); itAttrs != pluginList->end(); itAttrs++)
+				if (shared_ptr<Gnoll::DynamicObject::String> path = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*itAttrs))
+					mRoot->loadPlugin( (*path) );
+		}
+
+
 		void CGraphicModule::init()
 		{
-			this->mRoot = new Root("plugins.cfg","display.cfg","log.txt");
+			this->mRoot = new Root("","display.cfg","log.txt");
+			this->loadOgrePlugins();
 			this->mRoot->showConfigDialog();
 			this->mwindow = mRoot->initialise(true, PACKAGE_STRING);
 
