@@ -275,7 +275,6 @@ namespace Gnoll
 				setTargetHelper(target);
 			}
 
-			update(0);
 		}
 
 		void Camera::setOrientation(const Ogre::Quaternion& orientation)
