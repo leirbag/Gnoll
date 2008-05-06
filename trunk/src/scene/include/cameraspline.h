@@ -37,7 +37,7 @@
 namespace Gnoll
 {
 
-	namespace Core
+	namespace Scene
 	{
 		struct cameraspline_i;
 

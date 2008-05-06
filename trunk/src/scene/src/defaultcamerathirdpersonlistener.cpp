@@ -41,7 +41,7 @@ using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		DefaultCameraThirdPersonListener::DefaultCameraThirdPersonListener()
 		{

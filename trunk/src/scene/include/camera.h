@@ -39,10 +39,11 @@
 #include <OgreVector3.h>
 #include <OgreCamera.h>
 #include "../../dynamicobject/include/cdynamicobjectproxy.h"
+#include "../../core/include/cmessagetype.h"
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		/*
 		 * Structure that contains camera attributs
@@ -50,7 +51,7 @@ namespace Gnoll
 		struct camera_i;
 
 		class CMessageListenerCamera;
-		class CMessageType;
+		//class CMessageType;
 
 		class Camera : public Gnoll::DynamicObject::CDynamicObjectProxy
 		{
@@ -198,7 +199,7 @@ namespace Gnoll
 			 * @param listener This is the listener to put on the queue
 			 * @param type This is the type of message associate to the listener
 			 */
-			void enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<CMessageType> type);
+			void enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<Gnoll::Core::CMessageType> type);
 
 			/*
 			 * This method is call each frame

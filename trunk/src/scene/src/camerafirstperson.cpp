@@ -29,7 +29,7 @@
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName) :
 			Camera(instanceName)

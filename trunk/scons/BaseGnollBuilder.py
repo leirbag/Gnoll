@@ -202,13 +202,6 @@ class BaseGnollBuilder:
 			'src/core/src/cmessagetype.cpp',
 			'src/core/src/filestream.cpp',
 			'src/core/src/sourcefile.cpp',
-			'src/core/src/camera.cpp',
-			'src/core/src/camerafixe.cpp',
-			'src/core/src/camerafixefactory.cpp',
-			'src/core/src/defaultcamerathirdpersonlistener.cpp',
-			'src/core/src/camerathirdperson.cpp',
-			'src/core/src/camerathirdpersonfactory.cpp',
-			'src/core/src/cmessagelistenercamera.cpp',
 			'src/core/src/cmessagemodule.cpp',
 			'src/core/src/cpoolthreads.cpp',
 			'src/core/src/cthreadstopper.cpp',
@@ -281,7 +274,14 @@ class BaseGnollBuilder:
 		sceneSourceFiles = [
 			'src/scene/src/cmeshpagerenderer.cpp',
 			'src/scene/src/cpage.cpp',
-			'src/scene/src/cscenemanager.cpp'
+			'src/scene/src/cscenemanager.cpp',
+			'src/scene/src/camera.cpp',
+			'src/scene/src/camerafixe.cpp',
+			'src/scene/src/camerafixefactory.cpp',
+			'src/scene/src/defaultcamerathirdpersonlistener.cpp',
+			'src/scene/src/camerathirdperson.cpp',
+			'src/scene/src/camerathirdpersonfactory.cpp',
+			'src/scene/src/cmessagelistenercamera.cpp',
 			]
 
 		return sceneSourceFiles

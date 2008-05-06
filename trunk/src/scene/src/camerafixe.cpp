@@ -30,7 +30,7 @@
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		CameraFixe::CameraFixe(const Glib::ustring& instanceName) :
 			Camera(instanceName)

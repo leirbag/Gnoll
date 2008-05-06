@@ -34,7 +34,7 @@
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		class AbstractCameraFactory
 		{

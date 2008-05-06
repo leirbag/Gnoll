@@ -29,16 +29,16 @@
 #include "../include/cameraspline.h"
 #include "../include/defaultcamerasplinelistener.h"
 #include "../include/cmessagelistenercamera.h"
-#include "../include/cmessage.h"
-#include "../include/cmessagetype.h"
-#include "../include/cmessagemanager.h"
+#include "../../core/include/cmessage.h"
+#include "../../core/include/cmessagetype.h"
+#include "../../core/include/cmessagemanager.h"
 #include "../../input/include/coisinputmodule.h"
 #include "../../input/include/ctranslationevents.h"
 #include "../../input/include/cinputmouseevents.h"
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		boost::shared_ptr<Camera> CameraSplineFactory::createCamera(const Glib::ustring& instanceName)
 		{

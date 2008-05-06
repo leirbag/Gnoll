@@ -31,7 +31,7 @@
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		boost::shared_ptr<Camera> CameraFixeFactory::createCamera(const Glib::ustring& instanceName)
 		{

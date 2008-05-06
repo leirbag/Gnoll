@@ -30,16 +30,16 @@
 #ifndef __CMESSAGELISTENERCAMERA_H__
 #define __CMESSAGELISTENERCAMERA_H__
 
-#include "cmessagelistener.h"
+#include "../../core/include/cmessagelistener.h"
 #include "camera.h"
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		class Camera;
 
-		class CMessageListenerCamera : public CMessageListener
+		class CMessageListenerCamera : public Gnoll::Core::CMessageListener
 		{
 		protected:
 			shared_ptr<Camera> m_pCamera;
@@ -66,7 +66,7 @@ namespace Gnoll
 			 * This method is called in order to process a message
 			 * @param message The message this method will have to process
 			 */
-			void handle ( shared_ptr<CMessage> message );
+			void handle ( shared_ptr<Gnoll::Core::CMessage> message );
 		};
 	};
 };

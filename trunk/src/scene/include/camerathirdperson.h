@@ -46,7 +46,7 @@
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		/*
 		 * Structure that contains camera attributs

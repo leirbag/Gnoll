@@ -2,10 +2,10 @@
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		CMessageListenerCamera::CMessageListenerCamera() :
-			CMessageListener()
+			Gnoll::Core::CMessageListener()
 		{
 		}
 
@@ -21,7 +21,7 @@ namespace Gnoll
 			m_pCamera = pCamera;
 		}
 
-		void CMessageListenerCamera::handle ( shared_ptr<CMessage> message )
+		void CMessageListenerCamera::handle ( shared_ptr<Gnoll::Core::CMessage> message )
 		{
 		}
 	};

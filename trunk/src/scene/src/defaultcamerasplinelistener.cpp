@@ -30,11 +30,11 @@
 #include "../../stats/include/cstatsmodule.h"
 #include "../../input/include/ctranslationevents.h"
 #include "../../input/include/cinputmouseevents.h"
-#include "../include/float.h"
+#include "../../dynamicobject/include/float.h"
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		DefaultCameraSplineListener::DefaultCameraSplineListener()
 		{

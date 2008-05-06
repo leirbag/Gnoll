@@ -32,7 +32,7 @@
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		class CameraSplineFactory : public AbstractCameraFactory
 		{

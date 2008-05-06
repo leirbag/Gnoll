@@ -89,9 +89,9 @@
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 
-#include "../../core/include/camera.h"
-#include "../../core/include/abstractcamerafactory.h"
-#include "../../core/include/camerathirdpersonfactory.h"
+#include "../../scene/include/camera.h"
+#include "../../scene/include/abstractcamerafactory.h"
+#include "../../scene/include/camerathirdpersonfactory.h"
 
 using namespace Ogre;
 
@@ -192,8 +192,8 @@ namespace Gnoll
 			mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 			// Create and configure the camera
-			Gnoll::Core::AbstractCameraFactory* acf = new Gnoll::Core::CameraThirdPersonFactory();
-			boost::shared_ptr<Gnoll::Core::Camera> m_camera = acf->createCamera("camTP");
+			Gnoll::Scene::AbstractCameraFactory* acf = new Gnoll::Scene::CameraThirdPersonFactory();
+			boost::shared_ptr<Gnoll::Scene::Camera> m_camera = acf->createCamera("camTP");
 			m_camera->setNearValue(5);
 			m_camera->setFarValue(1000);
 

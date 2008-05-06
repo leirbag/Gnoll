@@ -29,20 +29,21 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camera.h"
-#include "../../graphic/include/cgraphicmodule.h"
-#include "../include/cmessagemodule.h"
 #include "../include/cmessagelistenercamera.h"
-#include "../include/cmessagetype.h"
+#include "../../graphic/include/cgraphicmodule.h"
+#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/cmessagetype.h"
 #include "../../dynamicobject/include/float.h"
 #include <iostream>
 #include <queue>
 
 using namespace Gnoll::Graphic;
 using namespace Gnoll::DynamicObject;
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		struct camera_i
 		{

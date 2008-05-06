@@ -32,7 +32,7 @@ using namespace Gnoll::Graphic;
 
 namespace Gnoll
 {
-	namespace Core
+	namespace Scene
 	{
 		cameraspline_i
 		{
