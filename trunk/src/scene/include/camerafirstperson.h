@@ -18,37 +18,50 @@
  ***************************************************************************/
 
 
-/*---------------------------------AbstractCameraFactory-------------------*\
-|   This is an abstract factory to create camera                            |
+/*---------------------------------CameraFirstPerson-----------------------*\
+|   This is a camera first person                                           |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
+|               04/12/2008 - Gabriel - Initial release                      |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_ABSTRACTCAMERAFACTORY
-#define INCLUDED_ABSTRACTCAMERAFACTORY
+#ifndef INCLUDED_CAMERAFIRSTPERSON
+#define INCLUDED_CAMERAFIRSTPERSON
 
-#include <boost/shared_ptr.hpp>
 #include "camera.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		class AbstractCameraFactory
+		class CameraFirstPerson : public Camera
 		{
 		public:
-			/**
-			 * This method is virtual pure, it will be implemented by derived factory
-			 * to create their camera
-			 * @param instanceName This is the instance name of the camera
-			 * @return the camera create, NULL if error
+			/*
+			 * Default constructor
+			 * @param instanceName This is the instance name of the camera, it will be use for the
+			 * 					   instance name of the Ogre Camera
 			 */
-			virtual boost::shared_ptr<Camera> createCamera(const Glib::ustring& instanceName) = 0;
+			explicit CameraFirstPerson(const Glib::ustring& instanceName);
+
+			/*
+			 * Copy constructor
+			 * @param copy This is the camera to copy
+			 */
+			explicit CameraFirstPerson(const CameraFirstPerson& copy);
+
+			/*
+			 * Destructior
+			 */
+			virtual ~CameraFirstPerson();
+
+			/*
+			 * This method is call each frame
+			 * @param time This is the time between 2 frames
+			 */
+			virtual void update(float time);
 		};
 	};
 };
 
 #endif
-

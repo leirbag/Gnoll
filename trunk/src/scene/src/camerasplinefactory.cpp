@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
@@ -19,44 +18,41 @@
  ***************************************************************************/
 
 
-/*---------------------------DefaultCameraThirdPersonListener--------------*\
-|   This is a message's listener for camera third person                    |
+/*-------------------------------CameraSplineFactory-----------------------*\
+|   This is a first person camera factory                                   |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
+|               04/12/2008 - Gabriel - Initial release                      |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_DEFAULTCAMERATHIRDPERSONLISTENER_H
-#define INCLUDED_DEFAULTCAMERATHIRDPERSONLISTENER_H
-
-#include "cmessagelistenercamera.h"
+#include "../include/camerasplinefactory.h"
+#include "../include/cameraspline.h"
+#include "../include/defaultcamerasplinelistener.h"
+#include "../include/cmessagelistenercamera.h"
+#include "../include/cmessage.h"
+#include "../include/cmessagetype.h"
+#include "../include/cmessagemanager.h"
+#include "../../input/include/coisinputmodule.h"
+#include "../../input/include/ctranslationevents.h"
+#include "../../input/include/cinputmouseevents.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		class DefaultCameraThirdPersonListener : public CMessageListenerCamera
+		boost::shared_ptr<Camera> CameraSplineFactory::createCamera(const Glib::ustring& instanceName)
 		{
-		public:
-			/**
-			 * This is a constructor
-			 */
-			DefaultCameraThirdPersonListener();
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 
-			/**
-			 * This is a destructor
-			 */
-			~DefaultCameraThirdPersonListener();
+			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(
+															   new Gnoll::Core::DefaultCameraSplineListener);
+			messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
 
-			/**
-			 * This method is called in order to process a message
-			 * @param message The message this method will have to process
-			 */
-			void handle ( shared_ptr<CMessage> message );
-		};
+			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraSpline(instanceName));
+
+			listenerInput->setCamera(pCam);
+
+			return pCam;
+		}
 	};
 };
-
-#endif
-

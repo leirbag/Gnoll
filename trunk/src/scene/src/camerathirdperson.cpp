@@ -117,7 +117,7 @@ namespace Gnoll
 			m_this->amountRotationAroundAxisY = *amount_y;
 			m_this->amountRotationAroundAxisZ = *amount_z;
 		}
-			
+
 		CameraThirdPerson::CameraThirdPerson(const CameraThirdPerson& copy) :
 			Camera(copy),
 			m_this(new camerathirdperson_i)

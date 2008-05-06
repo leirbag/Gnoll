@@ -24,7 +24,7 @@
 |   Changelog :                                                             |
 |               08/30/2007 - Gabriel - Initial release                      |
 |               10/30/2007 - Gabriel - add time to update()                 |
-|               12/17/2007 - Paf - Camera inherits of CPersistentObjectProxy|      
+|               12/17/2007 - Paf - Camera inherits of CPersistentObjectProxy|
 |               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
 |               02/15/2008 - Bruno Mahe - Implements destructor             |
 |               04/08/2008 - Gabriel - total refactoring                    |

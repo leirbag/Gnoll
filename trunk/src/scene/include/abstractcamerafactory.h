@@ -18,36 +18,36 @@
  ***************************************************************************/
 
 
-/*---------------------------------CameraSplineFactory---------------------*\
-|   This is an implementation of the abstract factory                       |
+/*---------------------------------AbstractCameraFactory-------------------*\
+|   This is an abstract factory to create camera                            |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
+|               04/08/2008 - Gabriel - Initial release                      |
+|                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_CAMERASPLINEFACTORY
-#define INCLUDED_CAMERASPLINEFACTORY
+#ifndef INCLUDED_ABSTRACTCAMERAFACTORY
+#define INCLUDED_ABSTRACTCAMERAFACTORY
 
-#include "abstractcamerafactory.h"
+#include <boost/shared_ptr.hpp>
+#include "camera.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		class CameraSplineFactory : public AbstractCameraFactory
+		class AbstractCameraFactory
 		{
 		public:
 			/**
-			 * This method create a fixe camera : inherits methods
+			 * This method is virtual pure, it will be implemented by derived factory
+			 * to create their camera
 			 * @param instanceName This is the instance name of the camera
 			 * @return the camera create, NULL if error
 			 */
-			boost::shared_ptr<Camera> createCamera(const Glib::ustring& instanceName);
+			virtual boost::shared_ptr<Camera> createCamera(const Glib::ustring& instanceName) = 0;
 		};
 	};
 };
 
 #endif
-
-
-

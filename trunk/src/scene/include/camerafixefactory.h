@@ -18,43 +18,35 @@
  ***************************************************************************/
 
 
-/*-------------------------------CameraSplineFactory-----------------------*\
-|   This is a first person camera factory                                   |
+/*---------------------------------CameraFixeFactory-----------------------*\
+|   This is an implementation of the abstract factory                       |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
+|               04/08/2008 - Gabriel - Initial release                      |
+|                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#include "../include/camerasplinefactory.h"
-#include "../include/cameraspline.h"
-#include "../include/defaultcamerasplinelistener.h"
-#include "../include/cmessagelistenercamera.h"
-#include "../include/cmessage.h"
-#include "../include/cmessagetype.h"
-#include "../include/cmessagemanager.h"
-#include "../../input/include/coisinputmodule.h"
-#include "../../input/include/ctranslationevents.h"
-#include "../../input/include/cinputmouseevents.h"
+#ifndef INCLUDED_CAMERAFIXFACTORY
+#define INCLUDED_CAMERAFIXFACTORY
+
+#include "abstractcamerafactory.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		boost::shared_ptr<Camera> CameraSplineFactory::createCamera(const Glib::ustring& instanceName)
+		class CameraFixeFactory : public AbstractCameraFactory
 		{
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-
-			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(
-															   new Gnoll::Core::DefaultCameraSplineListener);
-			messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
-
-			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraSpline(instanceName));
-
-			listenerInput->setCamera(pCam);
-
-			return pCam;
-		}
+		public:
+			/**
+			 * This method create a fixe camera, it will be implemented by
+			 * derived factory to create their camera
+			 * @param instanceName This is the instance name of the camera
+			 * @return the camera create, NULL if error
+			 */
+			boost::shared_ptr<Camera> createCamera(const Glib::ustring& instanceName);
+		};
 	};
 };
 
-
+#endif

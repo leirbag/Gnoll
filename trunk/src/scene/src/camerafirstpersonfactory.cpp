@@ -18,37 +18,41 @@
  ***************************************************************************/
 
 
-/*---------------------------------CameraFixeFactory-----------------------*\
-|   This is an implementation of the abstract factory                       |
+/*-------------------------------CameraFirstPersonfactory------------------*\
+|   This is a first person camera factory                                   |
 |                                                                           |
 |   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
+|               04/12/2008 - Gabriel - Initial release                      |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_CAMERAFIXFACTORY
-#define INCLUDED_CAMERAFIXFACTORY
-
-#include "abstractcamerafactory.h"
+#include "../include/camerafirstpersonfactory.h"
+#include "../include/camerafirstperson.h"
+#include "../include/defaultcamerafirstpersonlistener.h"
+#include "../include/cmessagelistenercamera.h"
+#include "../include/cmessage.h"
+#include "../include/cmessagetype.h"
+#include "../include/cmessagemanager.h"
+#include "../../input/include/coisinputmodule.h"
+#include "../../input/include/ctranslationevents.h"
+#include "../../input/include/cinputmouseevents.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		class CameraFixeFactory : public AbstractCameraFactory
+		boost::shared_ptr<Camera> CameraFirstPersonFactory::createCamera(const Glib::ustring& instanceName)
 		{
-		public:
-			/**
-			 * This method create a fixe camera, it will be implemented by
-			 * derived factory to create their camera
-			 * @param instanceName This is the instance name of the camera
-			 * @return the camera create, NULL if error
-			 */
-			boost::shared_ptr<Camera> createCamera(const Glib::ustring& instanceName);
-		};
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+
+			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(
+															   new Gnoll::Core::DefaultCameraFirstPersonListener);
+			messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
+
+			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFirstPerson(instanceName));
+
+			listenerInput->setCamera(pCam);
+
+			return pCam;
+		}
 	};
 };
-
-#endif
-
-

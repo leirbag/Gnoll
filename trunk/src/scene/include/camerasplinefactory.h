@@ -18,51 +18,33 @@
  ***************************************************************************/
 
 
-/*---------------------------------CameraFirstPerson-----------------------*\
-|   This is a camera first person                                           |
+/*---------------------------------CameraSplineFactory---------------------*\
+|   This is an implementation of the abstract factory                       |
 |                                                                           |
 |   Changelog :                                                             |
 |               04/12/2008 - Gabriel - Initial release                      |
 \*-------------------------------------------------------------------------*/
 
-#ifndef INCLUDED_CAMERAFIRSTPERSON
-#define INCLUDED_CAMERAFIRSTPERSON
+#ifndef INCLUDED_CAMERASPLINEFACTORY
+#define INCLUDED_CAMERASPLINEFACTORY
 
-#include "camera.h"
+#include "abstractcamerafactory.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		class CameraFirstPerson : public Camera
+		class CameraSplineFactory : public AbstractCameraFactory
 		{
 		public:
-			/*
-			 * Default constructor
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
+			/**
+			 * This method create a fixe camera : inherits methods
+			 * @param instanceName This is the instance name of the camera
+			 * @return the camera create, NULL if error
 			 */
-			explicit CameraFirstPerson(const Glib::ustring& instanceName);
-
-			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit CameraFirstPerson(const CameraFirstPerson& copy);
-
-			/*
-			 * Destructior
-			 */
-			virtual ~CameraFirstPerson();
-
-			/*
-			 * This method is call each frame
-			 * @param time This is the time between 2 frames
-			 */
-			virtual void update(float time);
+			boost::shared_ptr<Camera> createCamera(const Glib::ustring& instanceName);
 		};
 	};
 };
 
 #endif
-
