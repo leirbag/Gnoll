@@ -75,6 +75,10 @@
 |          02/05/2008 - WT - Put plugins path loading in a private method   |
 |                               and use DynamicObject instead of            |
 |                               Ogre plugins.cfg to load these plugins      |
+|                                                                           |
+|          10/05/2008 - WT - Put Ogre config loading in a private method    |
+|                               and use DynamicObject instead of Ogre       |
+|                               display.cfg to load the Renderer config     |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/cgraphicmodule.h"
@@ -92,6 +96,8 @@
 #include "../../scene/include/camera.h"
 #include "../../scene/include/abstractcamerafactory.h"
 #include "../../scene/include/camerathirdpersonfactory.h"
+
+#include <string>
 
 using namespace Ogre;
 
@@ -181,11 +187,65 @@ namespace Gnoll
 		}
 
 
+		void CGraphicModule::loadOgreConfig()
+		{
+			Gnoll::DynamicObject::DynamicObjectManager *pom = Gnoll::DynamicObject::DynamicObjectManager::getInstancePtr();
+
+			// Load ogre config
+			shared_ptr<Gnoll::DynamicObject::DynamicObject> config = pom->load("ogre_config");
+			shared_ptr<Gnoll::DynamicObject::String> param_value;
+			Ogre::String param_name;
+
+			// Define and init a RenderSystem
+			param_name = "Render System";
+			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
+			Ogre::RenderSystem *rs = mRoot->getRenderSystemByName(*param_value);
+
+			if(rs == NULL)
+			{
+				// Ogre throws an exception if there's no RenderSystem defined
+				return;
+			}
+
+			param_name = "Colour Depth";
+			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
+			rs->setConfigOption(param_name, *param_value);
+
+			param_name = "Display Frequency";
+			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
+			rs->setConfigOption(param_name, *param_value);
+
+			param_name = "FSAA";
+			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
+			rs->setConfigOption(param_name, *param_value);
+
+			param_name = "Full Screen";
+			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
+			rs->setConfigOption(param_name, *param_value);
+
+			param_name = "RTT Prefered Mode";
+			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
+			rs->setConfigOption(param_name, *param_value);
+
+			param_name = "VSync";
+			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
+			rs->setConfigOption(param_name, *param_value);
+
+			param_name = "Video Mode";
+			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
+			rs->setConfigOption(param_name, *param_value);
+
+
+			// Use this RenderSystem
+			this->mRoot->setRenderSystem(rs);
+		}
+
+
 		void CGraphicModule::init()
 		{
-			this->mRoot = new Root("","display.cfg","log.txt");
+			this->mRoot = new Root("","","log.txt");
 			this->loadOgrePlugins();
-			this->mRoot->showConfigDialog();
+			this->loadOgreConfig();
 			this->mwindow = mRoot->initialise(true, PACKAGE_STRING);
 
 			mwindow->setActive(true);

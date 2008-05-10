@@ -34,6 +34,7 @@
 |                                  address, so it can be freed when exiting  |
 |               04/10/2006 - Gabriel - Add namespace Gnoll and Graphic       |
 |               02/05/2008 - WT - Add private method loadOgrePlugins()       |
+|               10/05/2008 - WT - Add private method loadOgreConfig()        |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -115,6 +116,11 @@ namespace Gnoll
 				 * Load plugins path and plugins
 				 */
 				 void loadOgrePlugins();
+
+				 /**
+				  * Load ogre display config from DO
+				  */
+				 void loadOgreConfig();
 
 			public:
 

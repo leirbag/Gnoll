@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<dynamicobject name="ogre_config">
+	<attribute name="Render System">
+		<string value="OpenGL Rendering Subsystem" />
+	</attribute>
+	<attribute name="Colour Depth">
+		<string value="32" />
+	</attribute>
+	<attribute name="Display Frequency">
+		<string value="N/A" />
+	</attribute>
+	<attribute name="FSAA">
+		<string value="0" />
+	</attribute>
+	<attribute name="Full Screen">
+		<string value="Yes" />
+	</attribute>
+	<attribute name="RTT Prefered Mode">
+		<string value="OpenGL Rendering Subsystem" />
+	</attribute>
+	<attribute name="VSync">
+		<string value="No" />
+	</attribute>
+	<attribute name="Video Mode">
+		<string value="1600 x 1200" />
+	</attribute>
+</dynamicobject>
