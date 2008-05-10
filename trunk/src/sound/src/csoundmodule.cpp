@@ -135,9 +135,12 @@ namespace Gnoll {
 			/**
 			 * Uninitialize OpenAL
 			 */
-			alcMakeContextCurrent(NULL);
-			alcDestroyContext(context);
-			alcCloseDevice(device);		
+			if( device )
+			{
+				alcMakeContextCurrent(NULL);
+				alcDestroyContext(context);
+				alcCloseDevice(device);
+			}
 		}
 			
 		void CSoundModule::enqueueSound(const string instance)
