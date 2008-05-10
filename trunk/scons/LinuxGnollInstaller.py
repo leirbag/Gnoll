@@ -27,7 +27,6 @@ import SCons.Action
 import SCons.Builder
 import SCons.Environment
 import SCons.PathList
-import SCons.Sig
 import SCons.Subst
 import SCons.Tool
 

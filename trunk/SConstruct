@@ -20,7 +20,9 @@
 
 
 import os
+import os.path
 import sys
+import shutil
 
 import scons.BaseGnollInstaller
 
@@ -189,24 +191,39 @@ def main():
 
 			gnollInstaller = None
 
+			# Use GNU/Linux installer for posix systems
 			if (env['PLATFORM'] == 'posix'):
 				from  scons.LinuxGnollInstaller import LinuxGnollInstaller
 				gnollInstaller = LinuxGnollInstaller()
 
 
+			# Step 1 : Copy static files from ./data/
+			# This proceeds only if 'install_data' doesn't exists
+			if not os.path.exists(env['install_data']):
+				try:
+					shutil.copytree('./data/', env['install_data'], True)
+
+				except (IOError, os.error), why:
+					print "Can't copy %s to %s: %s" % ('./data/', `env['install_data']`, str(why))
+			else:
+				print "%s already exists. No need to install files from ./data/" % (`env['install_data']`)
+
+
+			# If no specific installer has been found, use the base one
 			if gnollInstaller == None:
 				gnollInstaller = scons.BaseGnollInstaller.BaseGnollInstaller()
 
 
-
+			# Define binaries	installation target
 			env.Alias('install_bin_gnoll', env.Install(env['install_bin'], 'gnoll'))
 			env.Alias('install_bin', ['install_bin_gnoll'])
-			env.Alias('install_data', env.InstallAs(env['install_data'], './data/'))
-			env.Alias('install', ['gnoll', 'install_bin', 'install_data'], )
+			env.Alias('install', ['gnoll', 'install_bin'], )
 
 
+			# Launche install process
 			if (gnollInstaller != None):
 				gnollInstaller.install(env, config)
+
 
 		config.Finish()
 
