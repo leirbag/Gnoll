@@ -193,13 +193,13 @@ namespace Gnoll
 
 			// Load ogre config
 			shared_ptr<Gnoll::DynamicObject::DynamicObject> config = pom->load("ogre_config");
-			shared_ptr<Gnoll::DynamicObject::String> param_value;
-			Ogre::String param_name;
 
 			// Define and init a RenderSystem
-			param_name = "Render System";
-			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
-			Ogre::RenderSystem *rs = mRoot->getRenderSystemByName(*param_value);
+			std::string renderSystemAttrName ("Render System");
+			Gnoll::DynamicObject::String gRenderSystemAttrName ( renderSystemAttrName );
+
+			shared_ptr<Gnoll::DynamicObject::String> renderSystemAttrValue = config->getAttribute<Gnoll::DynamicObject::String>(renderSystemAttrName);
+			Ogre::RenderSystem *rs = mRoot->getRenderSystemByName(*renderSystemAttrValue);
 
 			if(rs == NULL)
 			{
@@ -207,34 +207,23 @@ namespace Gnoll
 				return;
 			}
 
-			param_name = "Colour Depth";
-			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
-			rs->setConfigOption(param_name, *param_value);
+			/**
+			 * Loop through all config object attributes (except "Render System") and passes them to Ogre's Render System
+			 */
+			Gnoll::DynamicObject::List listAttrNames = config->getAttributesNames();
+			for (Gnoll::DynamicObject::List::iterator it = listAttrNames.begin(); it != listAttrNames.end(); it++)
+			{
+				shared_ptr<Gnoll::DynamicObject::IAttribute> attrNameRaw = *it;
+				shared_ptr<Gnoll::DynamicObject::String> attrName = static_pointer_cast<Gnoll::DynamicObject::String>(attrNameRaw);
 
-			param_name = "Display Frequency";
-			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
-			rs->setConfigOption(param_name, *param_value);
+				
+				if (*attrName != gRenderSystemAttrName)
+				{
+					shared_ptr<Gnoll::DynamicObject::String> param_value = config->getAttribute< Gnoll::DynamicObject::String >(*attrName);
+					rs->setConfigOption(*attrName, *param_value);
+				}
 
-			param_name = "FSAA";
-			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
-			rs->setConfigOption(param_name, *param_value);
-
-			param_name = "Full Screen";
-			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
-			rs->setConfigOption(param_name, *param_value);
-
-			param_name = "RTT Prefered Mode";
-			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
-			rs->setConfigOption(param_name, *param_value);
-
-			param_name = "VSync";
-			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
-			rs->setConfigOption(param_name, *param_value);
-
-			param_name = "Video Mode";
-			param_value = config->getAttribute<Gnoll::DynamicObject::String>(param_name);
-			rs->setConfigOption(param_name, *param_value);
-
+			}
 
 			// Use this RenderSystem
 			this->mRoot->setRenderSystem(rs);
