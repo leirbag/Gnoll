@@ -1,19 +1,18 @@
 README
 -----
 
-Gnoll is a free (as free speech) 3D action/rpg game engine still at an early 
-development stage.
+Gnoll is a free (as free speech) 3D action/rpg game engine
 The source code is under GNU/GPL v2 or greater. 
 
 You can contact the development team at:
-Gnoll Devel <gnoll-devel@gna.org>
+Gnoll Devel <gnoll-devel@lists.gnoll.org>
 
 ======================================
 Building Gnoll
 ======================================
 
 In order to build Gnoll you will need these packages :
-- Autotools
+- Scons
 - g++
 - libxml++2.6
 - glibmm
@@ -32,9 +31,10 @@ In order to build Gnoll you will need these packages :
 
 
 To build it, just launch these commands :
-./bootstrap
-./configure
-make
-make install
+scons gnoll 
+You can compile gnoll with debug options by passing 'debug=1' to the build command line
 
+
+To install it to a specific directory :
+scons install prefix=/where/to/install/gnoll/
 
