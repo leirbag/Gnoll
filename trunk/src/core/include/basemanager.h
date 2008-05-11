@@ -223,7 +223,7 @@ namespace Gnoll {
 				/**
 				* Maximum number of elements the cache can hold
 				*/
-				unsigned int m_maxCache;
+				static const unsigned int m_maxCache = 250;
 
 				/**
 				 * Mutex
