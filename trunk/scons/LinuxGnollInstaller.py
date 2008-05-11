@@ -21,6 +21,7 @@
 
 
 from BaseGnollInstaller import *
+import stat
 import os.path
 import re
 import SCons.Action
@@ -40,8 +41,9 @@ class LinuxGnollInstaller (BaseGnollInstaller):
 		env.Alias('install_bin_launcher', env.Install(env['install_bin'], 'launch-gnoll'))
 		env.Alias('install_bin', ['install_bin_launcher'])
 
-
+		# We don't want to overwrite any existing file
 		if os.path.isfile(launcher_filename):
+			print "%s already exists. No need to recreate one" % (launcher_filename)
 			return
 
 		print "Creating launcher..."
@@ -54,6 +56,8 @@ class LinuxGnollInstaller (BaseGnollInstaller):
 		launcher.close()
 
 
+		# Set mode 755 to the launcher
+		os.chmod(launcher_filename, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
 
 
 	def __init__(self):
