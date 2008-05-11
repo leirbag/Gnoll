@@ -40,6 +40,8 @@
 #include <string>
 #include <iostream>
 
+#include "../../config.h"
+
 using namespace Gnoll::Graphic;
 using namespace Gnoll::Core;
 
@@ -139,7 +141,11 @@ bool COISInputManager::keyPressed( const OIS::KeyEvent &e )
 	shared_ptr<CMessage>  mymessage (new CMessage(keydown, kc ));
 
 	if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
+	{
+#if DEBUG
 		cout << "Message ajoute" << endl;
+#endif
+	}
 
 	return true;
 }
@@ -152,7 +158,11 @@ bool COISInputManager::keyReleased( const OIS::KeyEvent &e )
 	shared_ptr<CMessage>  mymessage (new CMessage(keyup, kc ));
 
 	if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
+	{
+#if DEBUG
 		cout << "Message ajoute" << endl;
+#endif
+	}
 
 
     return true;
@@ -171,7 +181,11 @@ bool COISInputManager::mouseMoved( const OIS::MouseEvent &arg )
 	shared_ptr<CMessage>  mymessage (new CMessage(mouseMoved, data ));
 
 	if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
+	{
+#if DEBUG
 		cout << "Message ajoute" << endl;
+#endif
+	}
 
 
     return true;
@@ -200,7 +214,11 @@ bool COISInputManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButto
 			shared_ptr<CMessage>  mymessage (new CMessage(mousePressed, button ));
 
 			if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
+			{
+#if DEBUG
 				cout << "Message ajoute" << endl;
+#endif
+			}
 		}
 
 
@@ -235,7 +253,11 @@ bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButt
 			shared_ptr<CMessage>  mymessage (new CMessage(mouseReleased, button ));
 
 			if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == true)
+			{
+#if DEBUG
 				cout << "Message ajoute" << endl;
+#endif
+			}
 		}
 
 

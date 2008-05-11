@@ -38,6 +38,7 @@
 #include <OIS/OISMouse.h>
 #include <iostream>
 
+#include "../../config.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -77,7 +78,10 @@ namespace Gnoll
 			 * Get the value and convert it to a string
 			 */ 
 			string buttonValue = lexical_cast<string> (button);
+
+#if DEBUG
 			cout << "Looking for KeyCode [" << buttonValue << "]"<< endl;
+#endif
 
 
 			/**
@@ -108,9 +112,17 @@ namespace Gnoll
 				shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 				if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+				{
+#if DEBUG
 					cout << "Message ajoute ["<< actionName << "]" << endl;
+#endif
+				}
 				else
+				{
+#if DEBUG
 					cout << "Message NON ajoute ["<< actionName << "]" << endl;
+#endif
+				}
 
 			}
 

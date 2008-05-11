@@ -45,6 +45,7 @@
 
 #include "../../graphic/include/cgraphicmodule.h"
 
+#include "../../config.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -112,9 +113,17 @@ namespace Gnoll
 				shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 				if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+				{
+#if DEBUG
 					cout << "Message ajoute ["<< actionName << "]" << endl;
+#endif
+				}
 				else
+				{
+#if DEBUG
 					cout << "Message NON ajoute ["<< actionName << "]" << endl;
+#endif
+				}
 
 			}	
 

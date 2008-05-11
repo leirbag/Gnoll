@@ -39,7 +39,7 @@
 #include <iostream>
 #include "../../time/include/ctimemodule.h"
 
-
+#include "../../config.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -80,8 +80,10 @@ namespace Gnoll
 			 * Get the value and convert it to a string
 			 */ 
 			string keyCodeValue = lexical_cast<string> (keyCode);
-			cout << "Looking for KeyCode [" << keyCodeValue << "]"<< endl;
 
+#if DEBUG
+			cout << "Looking for KeyCode [" << keyCodeValue << "]"<< endl;
+#endif
 
 			/**
 			 * If an action is associated to this key code, an action message is sent
@@ -152,9 +154,17 @@ namespace Gnoll
 					shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 					if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+					{
+#if DEBUG
 						cout << "Message ajoute ["<< actionName << "]" << endl;
+#endif
+					}
 					else
+					{
+#if DEBUG
 						cout << "Message NON ajoute ["<< actionName << "]" << " of intensity " <<  intensity << " => " << timePressed << " / " << period << endl;
+#endif
+					}
 
 					it->second = 0;
 				}

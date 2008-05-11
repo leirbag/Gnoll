@@ -37,6 +37,8 @@
 #include <iostream>
 #include <queue>
 
+#include "../../config.h"
+
 using namespace Gnoll::Graphic;
 using namespace Gnoll::DynamicObject;
 using namespace Gnoll::Core;
@@ -66,6 +68,11 @@ namespace Gnoll
 			CDynamicObjectProxy(instanceName),
 			m_this(new camera_i)
 		{
+
+#if DEBUG
+			std::cout << "Loading camera [" << instanceName << "]" << std::endl;
+#endif
+
 			m_this->name = instanceName;
 			m_this->pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
 
@@ -174,6 +181,10 @@ namespace Gnoll
 
 			shared_ptr<Float> dir_z(new Float(dir.z));
 			this->setAttribute("dir_z", dir_z);
+
+#if DEBUG
+			std::cout << "Saving camera [" << this->getInstance() << "]" << std::endl;
+#endif
 
 			delete m_this;
 		}
