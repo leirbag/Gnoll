@@ -47,6 +47,10 @@
 #include "../../core/include/singleton.h"
 #include "../../core/include/cmessagetype.h"
 
+#include "../../scene/include/camera.h"
+#include "../../scene/include/abstractcamerafactory.h"
+#include "../../scene/include/camerathirdpersonfactory.h"
+
 #include "cscenefactorystd.h"
 
 #include <boost/shared_ptr.hpp>
@@ -106,6 +110,9 @@ namespace Gnoll
 
 				CMessageType framerendered;
 				shared_ptr<boost::any> data;
+
+
+				boost::shared_ptr<Gnoll::Scene::Camera> m_camera;
 
 				/**
 				 * Load resources path
