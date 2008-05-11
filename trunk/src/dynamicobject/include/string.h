@@ -91,6 +91,28 @@ namespace Gnoll
 		  		virtual operator string();
 
 
+				/**
+				 * Overloading of the conversion String -> Glib::ustring operator
+				 * @return Converted value
+				 */
+				virtual operator Glib::ustring();
+
+
+				/**
+				 * Overloading of the conversion String -> const string operator
+				 * @return Converted value
+				 */
+				virtual operator string() const;
+
+
+				/**
+				 * Overloading of the conversion String -> const Glib::ustring operator
+				 * @return Converted value
+				 */
+				virtual operator Glib::ustring() const;
+
+
+
 
 		};
 

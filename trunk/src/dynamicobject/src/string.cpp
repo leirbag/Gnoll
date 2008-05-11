@@ -102,6 +102,36 @@ namespace Gnoll {
 
 
 		/**
+		 * Overloading of the conversion String -> Glib::ustring operator
+		 * @return Converted value
+		 */
+		String::operator Glib::ustring()
+		{
+			return this->getValue();
+		}
+
+
+		/**
+		 * Overloading of the conversion String -> const string operator
+		 * @return Converted value
+		 */
+		String::operator string() const
+		{
+			return this->getValue();
+		}
+
+
+		/**
+		 * Overloading of the conversion String -> const Glib::ustring operator
+		 * @return Converted value
+		 */
+		String::operator Glib::ustring() const
+		{
+			return this->getValue();
+		}
+
+
+		/**
  		 * Overloading of the inserting operator
 		 * @param _stream Stream to insert the value to
 		 * @return Stream
