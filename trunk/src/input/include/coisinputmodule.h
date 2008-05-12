@@ -52,7 +52,7 @@ class COISInputModule
 		/**
 		 * The events which will be processed
 		 */
-		shared_ptr<COISInputManager> inputmanager;
+		COISInputManager* inputmanager;
 
 
 	public:

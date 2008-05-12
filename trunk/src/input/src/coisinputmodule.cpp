@@ -40,7 +40,7 @@ COISInputModule::COISInputModule()
 
 void COISInputModule::init()
 {
-	inputmanager = shared_ptr<COISInputManager>(new COISInputManager());
+	inputmanager = new COISInputManager();
 	inputmanager->initialise( );
 
 }
@@ -54,7 +54,7 @@ void COISInputModule::process()
 
 void COISInputModule::exit()
 {
-
+	delete inputmanager;
 }
 
 
