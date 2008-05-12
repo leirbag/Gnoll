@@ -32,6 +32,9 @@
 #include "../include/dynamicobjectmanager.h"
 #include "../include/attributehandlerregistry.h"
 
+#include <iostream>
+
+
 namespace Gnoll {
 
 	namespace DynamicObject {
@@ -43,6 +46,10 @@ namespace Gnoll {
 
 		DynamicObjectManager::~DynamicObjectManager()
 		{
+#if DEBUG
+			std::cout << "Deleting DynamicObjectManager" << std::endl;
+#endif
+
 		}
 
 		shared_ptr<DynamicObject> DynamicObjectManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
