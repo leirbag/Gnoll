@@ -57,6 +57,7 @@
 #include <iostream>
 #include "isource.h"
 
+#include "../../config.h"
 
 #ifndef __BASEMANAGER_H__
 #define __BASEMANAGER_H__
@@ -354,6 +355,9 @@ namespace Gnoll {
 				 */
 				BaseManager()
 				{
+#if DEBUG
+					std::cout << "One BaseManager initialized" << std::endl;
+#endif
 				};
 
 
@@ -362,8 +366,22 @@ namespace Gnoll {
 				 */
 				virtual ~BaseManager()
 				{
+#if DEBUG
+					std::cout << "One BaseManager exiting" << std::endl;
+#endif
+					m_cache.clear();
 				};
-   
+
+
+				/**
+				 * Returns the number of elements cached
+				 * @return Size of the cache
+				 */
+				unsigned int getSize()
+				{
+					return m_cache.size();
+				}
+
 				/**
 				 * Add a Source to the pool of available loading sources
 				 * @param _source Source to add
