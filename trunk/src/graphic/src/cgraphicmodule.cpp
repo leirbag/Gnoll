@@ -239,16 +239,16 @@ namespace Gnoll
 
 			// Create and configure the camera
 			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraThirdPersonFactory() );
-			m_camera = acf->createCamera("camTP");
-			m_camera->setNearValue(5);
-			m_camera->setFarValue(1000);
+			m_camera  = new shared_ptr<Gnoll::Scene::Camera> (acf->createCamera("camTP"));
+			(*m_camera)->setNearValue(5);
+			(*m_camera)->setFarValue(1000);
 
 			// Create one viewport, entire window
-			Viewport* vp = mwindow->addViewport(m_camera->getOgreCamera());
+			Viewport* vp = mwindow->addViewport((*m_camera)->getOgreCamera());
 			vp->setBackgroundColour(ColourValue(0.5,1,0));
 
 			// Alter the camera aspect ratio to match the viewport
-			m_camera->setFovValue( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
+			(*m_camera)->setFovValue( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
 
 			mSceneMgr->setAmbientLight( ColourValue( 0.6, 0.6, 0.6 ) );
 			/*mSceneMgr->setShadowTechnique( SHADOWTYPE_TEXTURE_ADDITIVE );
@@ -282,23 +282,23 @@ namespace Gnoll
 			// Infinite far plane?
 			if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
 			{
-				m_camera->setFarValue(0);
+				(*m_camera)->setFarValue(0);
 			}
 
 			RaySceneQuery* raySceneQuery = mSceneMgr->createRayQuery(
-			Ray(m_camera->getPosition(), Vector3::NEGATIVE_UNIT_Y));
+			Ray((*m_camera)->getPosition(), Vector3::NEGATIVE_UNIT_Y));
 
 			Ray updateRay;
-			updateRay.setOrigin(m_camera->getPosition());
+			updateRay.setOrigin((*m_camera)->getPosition());
 			updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
 			raySceneQuery->setRay(updateRay);
 			RaySceneQueryResult& qryResult = raySceneQuery->execute();
 			RaySceneQueryResult::iterator i = qryResult.begin();
 			if (i != qryResult.end() && i->worldFragment)
 			{
-				m_camera->setPosition(Vector3(m_camera->getPosition().x,
+				(*m_camera)->setPosition(Vector3((*m_camera)->getPosition().x,
 				i->worldFragment->singleIntersection.y + 5,
-				m_camera->getPosition().z));
+				(*m_camera)->getPosition().z));
 			}
 
 			//mSceneMgr->destroyQuery(raySceneQuery);
@@ -366,7 +366,7 @@ namespace Gnoll
 			eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 			eb->setAlwaysOnTop(true);
 
-			m_camera->setTarget(mSceneMgr->getSceneNode("RobotNode"));
+			(*m_camera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
 		}
 
 		void CGraphicModule::process()
@@ -413,6 +413,7 @@ namespace Gnoll
 
 		CGraphicModule::~CGraphicModule()
 		{
+
 			if(mEditorGuiSheet)
 			{
 				CEGUI::WindowManager::getSingleton().destroyWindow(mEditorGuiSheet);
@@ -427,6 +428,24 @@ namespace Gnoll
 				delete mGUIRenderer;
 				mGUIRenderer = 0;
 			}
+
+
+			mwindow->removeAllViewports();
+
+			if (m_camera)
+			{
+#if DEBUG
+				cout << "Number of classes using the camera : " << (*m_camera).use_count() << endl;
+#endif
+				delete m_camera;
+			}
+
+			mSceneMgr->destroyAllCameras();
+			mRoot->destroySceneManager(mSceneMgr);
+			mwindow->destroy();
+			mRoot->shutdown();
+			delete mRoot;
+
 		}
 
 		RenderWindow* CGraphicModule::getRenderWindow()
