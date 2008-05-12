@@ -39,6 +39,10 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
 
+#include <iostream>
+
+#include "../../config.h"
+
 namespace Gnoll
 {
 
@@ -95,10 +99,17 @@ namespace Gnoll
 				 */
 				static void destroy()
 				{
+#if DEBUG
+					std::cout << "Trying to destroy one singleton" << std::endl;
+#endif
+
 					boost::mutex::scoped_lock lock(m_mutex);
-			
+
 					if (m_instance != 0)
 					{
+#if DEBUG
+					std::cout << "Deleting one singleton" << std::endl;
+#endif
 						delete m_instance;
 						m_instance = 0;
 					}			
