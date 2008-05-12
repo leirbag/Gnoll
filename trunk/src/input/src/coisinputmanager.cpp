@@ -63,6 +63,10 @@ COISInputManager::~COISInputManager( void ) {
             mMouse = 0;
         }
 
+
+#if DEBUG
+			std::cout << "Destroying OIS" << std::endl;
+#endif
         OIS::InputManager::destroyInputSystem( mInputSystem );
         mInputSystem = 0;
 
