@@ -36,6 +36,21 @@ namespace Gnoll
 {
 	namespace Core
 	{
+
+		CGenericMessageManager::~CGenericMessageManager()
+		{
+
+			/**
+			 * Clear all message queues
+			 */
+			for (unsigned int i = 0; i < NUMQUEUE; i++)
+			{
+				m_messages[i].clear();
+			}
+
+		}
+
+
 		bool CGenericMessageManager::addListener ( shared_ptr<CMessageListener> handler, CMessageType messagetype )
 		{
 

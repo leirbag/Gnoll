@@ -130,7 +130,7 @@ namespace Gnoll
 				/**
 				 * This is a destructor
 				 */
-				virtual ~CGenericMessageManager() {}
+				virtual ~CGenericMessageManager();
 
 				/**
 				 * This adds a new listener
