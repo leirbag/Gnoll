@@ -30,6 +30,7 @@
 
 
 #include "../include/csoundmodule.h"
+#include "../include/soundmanager.h"
 #include "config.h"
 
 
@@ -126,6 +127,12 @@ namespace Gnoll {
 		
 		void CSoundModule::exit()
 		{
+
+			/**
+			 * Destroy SoundManager
+			 */
+			SoundManager::destroy();
+
 			/**
 			 * Delete listeners
 			 */

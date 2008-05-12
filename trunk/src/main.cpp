@@ -748,7 +748,7 @@ int main(int argc, char* argv[])
 		cout << "Listener ajoute" << endl;
 
 
-	CSceneManager gSceneManager("gSceneManager");
+	CSceneManager* gSceneManager = new CSceneManager("gSceneManager");
 
 	while (done == false)
 	{
@@ -798,12 +798,25 @@ int main(int argc, char* argv[])
 		deleteRobot();
 	}
 
+	delete gSceneManager;
+
 	timeModule->exit();
 	inputmanager.exit();
 	inputEventsTranslator->exit();
 	graphicmanager->exit();
 	messageModule->exit();
 	soundmanager->exit();
+
+
+	CSoundModule::destroy();
+	CTimeModule::destroy();
+	CMessageModule::destroy();
+	CInputEventsTranslator::destroy();
+	CGraphicModule::destroy();
+
+	cout << "Size of DO cache before destroying it : " << DynamicObjectManager::getInstancePtr()->getSize() << endl;
+	DynamicObjectManager::destroy();
+
 
 	// Bye bye 
 	cout << "Au revoir !" << endl;
