@@ -57,7 +57,18 @@ namespace Gnoll
 			float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
 			lasttime = lasttime * 1000.0f;
 
-			shared_ptr<CameraThirdPerson> pCam = static_pointer_cast<CameraThirdPerson>(m_pCamera);
+			/**
+			 * Converts weak ptr m_pCamera to a shared_ptr<>
+			 * This is not an issue since cam has a very short live.
+			 *
+			 * We can't directly convert a weak_ptr<Camera> to a shared_ptr<CameraThirdPerson>
+			 */
+			shared_ptr<Camera> cam(m_pCamera);
+
+			/**
+			 * Static conversion to a shared_ptr<CameraThirdPerson>
+			 */
+			shared_ptr<CameraThirdPerson> pCam = static_pointer_cast<CameraThirdPerson>(cam);
 
 			// ZOOM
 			if(ae.action == "ACTION_ZOOM_CAMERA_IN")

@@ -32,6 +32,7 @@
 
 #include "../../core/include/cmessagelistener.h"
 #include "camera.h"
+#include <boost/weak_ptr.hpp>
 
 namespace Gnoll
 {
@@ -42,7 +43,7 @@ namespace Gnoll
 		class CMessageListenerCamera : public Gnoll::Core::CMessageListener
 		{
 		protected:
-			shared_ptr<Camera> m_pCamera;
+			weak_ptr<Camera> m_pCamera;
 
 		public:
 			/**
