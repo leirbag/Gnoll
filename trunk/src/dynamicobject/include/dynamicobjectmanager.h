@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*-------------------------DynamicObjectManager-------------------------*\
-|   This is a singleton object managing DynamicObjects                   |
+/*---------------------------DynamicObjectManager--------------------------*\
+|   This is a singleton object managing DynamicObjects                      |
 |                                                                           |
 |                                                                           |
 |   Changelog :                                                             |
