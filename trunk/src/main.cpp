@@ -62,6 +62,7 @@
 #include "time/include/ctimemodule.h"
 #include "sound/include/csoundmodule.h"
 #include "scene/include/cscenemanager.h"
+#include "stats/include/cstatsmodule.h"
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>
@@ -807,12 +808,14 @@ int main(int argc, char* argv[])
 	messageModule->exit();
 	soundmanager->exit();
 
-
+	Gnoll::Stats::CStatsModule::destroy();
 	CSoundModule::destroy();
 	CTimeModule::destroy();
-	CMessageModule::destroy();
 	CInputEventsTranslator::destroy();
 	CGraphicModule::destroy();
+	CMessageModule::destroy();
+
+	Gnoll::DynamicObject::AttributeHandlerRegistry::destroy();
 
 	cout << "Size of DO cache before destroying it : " << DynamicObjectManager::getInstancePtr()->getSize() << endl;
 	DynamicObjectManager::destroy();

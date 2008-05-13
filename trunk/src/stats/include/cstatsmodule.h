@@ -43,7 +43,7 @@ namespace Gnoll
 		/**
 		 *	The game stats module.
 		 */
-		class CStatsModule : public CModule, public Singleton<CStatsModule>
+		class CStatsModule : public Gnoll::Core::CModule, public Gnoll::Core::Singleton<CStatsModule>
 		{
 			private:
 				stats_i* m_pStats;
