@@ -75,7 +75,7 @@ namespace Gnoll {
 				/**
 				 * Playlist
 				 */
-				static vector< string > * sound_queue;
+				vector< string > * sound_queue;
 
 				/**
 				 * Listener used to play sound
@@ -113,7 +113,7 @@ namespace Gnoll {
 				 * Add a sound to the playlist
 				 * @param _soundName Name of the sound to add to the playlist
 				 */
-				static void enqueueSound(const string _soundName);
+				void enqueueSound(const string _soundName);
 
 		};
 	}		

@@ -31,26 +31,33 @@
 
 #include "../include/csoundmodule.h"
 #include "../include/soundmanager.h"
-#include "config.h"
+#include "../../config.h"
 
 
 namespace Gnoll {
 	namespace Sound {
 
-		/**
-		 * Initialize static attribute
-		 */
-		vector <string> * CSoundModule::sound_queue = new vector <string>;
-
 
 		CSoundModule::CSoundModule()
 		{
-			
+
+			/**
+			 * Initialize sound queue
+			 */
+			sound_queue = new vector <string>;
+
+
 		}
 
 		
 		CSoundModule::~CSoundModule()
 		{
+
+			/**
+			 * Delete sound queue
+			 */
+			delete sound_queue;
+
 		}
 		
 		
