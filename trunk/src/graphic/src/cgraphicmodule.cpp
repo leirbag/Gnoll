@@ -229,6 +229,12 @@ namespace Gnoll
 
 		void CGraphicModule::init()
 		{
+			/**
+			 * Log file creation is deactivated if Gnoll is not in debug mode
+			 * To do so, we have to create a LogManager *before* Ogre's root node is created.
+			 * Then a default  (see second parameter of createLog()) log is created and output to
+			 * a file deactivated (if last parameter of createLog())
+			 */
 #if DEBUG != 1
 			Ogre::LogManager* logManager = new Ogre::LogManager::LogManager();
 			logManager = NULL;
