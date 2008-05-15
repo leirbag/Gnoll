@@ -229,7 +229,12 @@ namespace Gnoll
 
 		void CGraphicModule::init()
 		{
-			this->mRoot = new Root("","","log.txt");
+#if DEBUG != 1
+			Ogre::LogManager* logManager = new Ogre::LogManager::LogManager();
+			logManager = NULL;
+			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog("", true, false, true);
+#endif
+			this->mRoot = new Root("","");
 			this->loadOgrePlugins();
 			this->loadOgreConfig();
 			this->mwindow = mRoot->initialise(true, PACKAGE_STRING);
