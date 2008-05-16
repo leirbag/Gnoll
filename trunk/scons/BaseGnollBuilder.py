@@ -262,9 +262,12 @@ class BaseGnollBuilder:
 			'src/input/src/coisinputmanager.cpp',
 			'src/input/src/cinputeventstranslator.cpp',
 			'src/input/src/ckeyboardeventstranslator.cpp',
+			'src/input/src/ckeyboardstatetranslator.cpp',
 			'src/input/src/cmousemotioneventstranslator.cpp',
 			'src/input/src/cmousebuttoneventstranslator.cpp',
-			'src/input/src/ckeyboardeventstrigger.cpp'
+			'src/input/src/cmousebuttonstatetranslator.cpp',
+			'src/input/src/ckeyboardeventstrigger.cpp',
+			'src/input/src/cmousebuttoneventstrigger.cpp'
 			]
 
 		return inputSourceFiles
