@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<dynamicobject instance="mouseConfig">
+  <attribute name="period">
+    <integer value="500"/>
+  </attribute>
+</dynamicobject>

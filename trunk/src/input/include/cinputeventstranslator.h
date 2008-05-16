@@ -23,6 +23,8 @@
 |                                                                            |
 |   Changelog :                                                              |
 |               01/08/2008 - Paf - Initial release                           |
+|		16/05/2008 - WT	 - Add state based listeners for	     |
+|					keyboard and mouse button	     |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -60,9 +62,10 @@ namespace Gnoll
 			private:
 
 				/**
-				 * Translator for keyboard generated messages
+				 * Translators for keyboard generated messages
 				 */
 				shared_ptr<CMessageListener> keyboardEventsTranslator;
+				shared_ptr<CMessageListener> keyboardStateTranslator;
 
 
 				/**
@@ -83,9 +86,15 @@ namespace Gnoll
 
 
 				/**
-				 * Translator for mouse button generated messages
+				 * Translators for mouse button generated messages
 				 */
 				shared_ptr<CMessageListener> mouseButtonEventsTranslator;
+				shared_ptr<CMessageListener> mouseButtonStateTranslator;
+
+				/**
+				 * Translator for mouse generated messages
+				 */
+				shared_ptr<CMessageListener> mouseButtonEventsTrigger;
 
 
 

@@ -25,6 +25,8 @@
 |               01/08/2008 - Bruno Mahe - Initial release                   |
 |               04/13/2008 - Bruno Mahe - Read refreshing period from a     |
 |                                           config file                     |
+|		16/05/2008 - WT		- Add state based listeners for	    |
+|					    keyboard and mouse button	    |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -32,8 +34,11 @@
 #include "../include/cinputeventstranslator.h"
 #include "../include/ckeyboardeventstranslator.h"
 #include "../include/ckeyboardeventstrigger.h"
+#include "../include/ckeyboardstatetranslator.h"
 #include "../include/cmousemotioneventstranslator.h"
 #include "../include/cmousebuttoneventstranslator.h"
+#include "../include/cmousebuttoneventstrigger.h"
+#include "../include/cmousebuttonstatetranslator.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../../dynamicobject/include/dynamicobject.h"
@@ -113,7 +118,11 @@ namespace Gnoll
 
 			keyboardEventsTranslator = shared_ptr<CMessageListener> ( new CKeyboardEventsTranslator() );
 			keyboardEventsTrigger = shared_ptr<CMessageListener> ( new CKeyboardEventsTrigger(static_pointer_cast<CKeyboardEventsTranslator>(keyboardEventsTranslator) ));
+			keyboardStateTranslator = shared_ptr<CMessageListener> ( new CKeyboardStateTranslator() );
 
+			/**
+			 * Continuous keybord messages
+			 */
 			if (messageManager->addListener ( keyboardEventsTranslator, keyDown ) == true)
 				cout << "KeyboardEventsTranslator listener installed" << endl;
 
@@ -122,6 +131,15 @@ namespace Gnoll
 
 			if (messageManager->addListener ( keyboardEventsTrigger, updateKeyboard ) == true)
 				cout << "KeyboardEventsTrigger listener installed" << endl;
+
+			/**
+			 * State based keyboard messages
+			 */
+			if (messageManager->addListener ( keyboardStateTranslator, keyDown ) == true)
+				cout << "KeyboardStateTranslator listener installed" << endl;
+
+			if (messageManager->addListener ( keyboardStateTranslator, keyUp ) == true)
+				cout << "KeyboardStateTranslator listener installed" << endl;
 
 
 
@@ -146,6 +164,10 @@ namespace Gnoll
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CMessageManager* messageManager = messageModule->getMessageManager();
 
+
+			/**
+			 * Continuous keybord messages
+			 */
 			if (messageManager->delListener ( keyboardEventsTranslator, keyDown ) == true)
 				cout << "KeyboardEventsTranslator listener removed" << endl;
 
@@ -154,6 +176,15 @@ namespace Gnoll
 
 			if (messageManager->delListener ( keyboardEventsTrigger, updateKeyboard ) == true)
 				cout << "KeyboardEventsTrigger listener removed" << endl;
+
+			/**
+			 * State based keyboard messages
+			 */
+			if (messageManager->delListener ( keyboardStateTranslator, keyDown ) == true)
+				cout << "KeyboardStateTranslator listener removed" << endl;
+
+			if (messageManager->delListener ( keyboardStateTranslator, keyUp ) == true)
+				cout << "KeyboardStateTranslator listener removed" << endl;
 		
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
@@ -201,18 +232,56 @@ namespace Gnoll
 		
 			CMessageType mousePressed("MOUSE_PRESSED");
 			CMessageType mouseReleased("MOUSE_RELEASED");
+			CMessageType updateMouse("UPDATE_MOUSE");
+
+			DynamicObjectManager *dom = DynamicObjectManager::getInstancePtr();
+			shared_ptr< Gnoll::DynamicObject::DynamicObject > mouseConfig = dom->load("mouseConfig");
+
+			/**
+			 * How often will the mouse button module get updated (millisecond)
+			 */
+			unsigned long int period = 300;
+			shared_ptr< Integer > periodFromConfig = mouseConfig->getAttribute<Integer>("period");
+			period = *periodFromConfig;
+
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CMessageManager* messageManager = messageModule->getMessageManager();
 
 
 			mouseButtonEventsTranslator = shared_ptr<CMessageListener> ( new CMouseButtonEventsTranslator() );
+			mouseButtonEventsTrigger = shared_ptr<CMessageListener> ( new CMouseButtonEventsTrigger(static_pointer_cast<CMouseButtonEventsTranslator>(mouseButtonEventsTranslator) ) );
 
+			mouseButtonStateTranslator = shared_ptr<CMessageListener> ( new CMouseButtonStateTranslator() );
+
+
+			/**
+			 * Continuous mouse messages
+			 */
 			if (messageManager->addListener ( mouseButtonEventsTranslator, mousePressed ) == true)
 				cout << "mouseButtonEventsTranslator listener installed for MOUSE_PRESSED" << endl;
 
 			if (messageManager->addListener ( mouseButtonEventsTranslator, mouseReleased ) == true)
 				cout << "mouseButtonEventsTranslator listener installed for MOUSE_RELEASED" << endl;
+
+			if (messageManager->addListener ( mouseButtonEventsTrigger, updateMouse ) == true)
+				cout << "mouseButtonEventsTrigger listener installed" << endl;
+
+			/**
+			 * State based mouse messages
+			 */
+			if (messageManager->addListener ( mouseButtonStateTranslator, mousePressed ) == true)
+				cout << "mouseButtonStateTranslator listener installed for MOUSE_PRESSED" << endl;
+
+			if (messageManager->addListener ( mouseButtonStateTranslator, mouseReleased ) == true)
+				cout << "mouseButtonStateTranslator listener installed for MOUSE_RELEASED" << endl;
+
+
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			m_periodData = shared_ptr<boost::any> (new boost::any(period)) ;
+			shared_ptr<CMessage>  message (new CMessage(updateMouse, m_periodData ));
+
+			timeModule->addPeriodicEvent(0, message, period);
 		}
 
 
@@ -221,15 +290,37 @@ namespace Gnoll
 		
 			CMessageType mousePressed("MOUSE_PRESSED");
 			CMessageType mouseReleased("MOUSE_RELEASED");
+			CMessageType updateMouse("UPDATE_MOUSE");
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CMessageManager* messageManager = messageModule->getMessageManager();
 
+
+			/**
+			 * Continuous mouse messages
+			 */
 			if (messageManager->delListener ( mouseButtonEventsTranslator, mousePressed ) == true)
 				cout << "mouseButtonEventsTranslator listener removed for MOUSE_PRESSED" << endl;
 
 			if (messageManager->delListener ( mouseButtonEventsTranslator, mouseReleased ) == true)
 				cout << "mouseButtonEventsTranslator listener removed for MOUSE_RELEASED" << endl;
+
+			if (messageManager->delListener ( mouseButtonEventsTrigger, updateMouse ) == true)
+				cout << "mouseButtonEventsTrigger listener removed" << endl;
+
+			/**
+			 * State based mouse messages
+			 */
+			if (messageManager->delListener ( mouseButtonStateTranslator, mousePressed ) == true)
+				cout << "mouseButtonStateTranslator listener removed for MOUSE_PRESSED" << endl;
+
+			if (messageManager->delListener ( mouseButtonStateTranslator, mouseReleased ) == true)
+				cout << "mouseButtonStateTranslator listener removed for MOUSE_RELEASED" << endl;
+
+
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			shared_ptr<CMessage>  message (new CMessage(updateMouse, m_periodData ));
+			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (*m_periodData) );
 		
 		}
 
