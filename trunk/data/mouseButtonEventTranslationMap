@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
-<dynamicobject instance="eventTranslationMap">
+<dynamicobject instance="mouseButtonEventTranslationMap">
   <attribute name="0">
-      <string value="ACTION_ATTACK"/>
+	<list>
+		<string value="ACTION_ATTACK"/>
+	</list>
   </attribute>
   <attribute name="1">
-      <string value="ACTION_DEFEND"/>
+	<list>
+		<string value="ACTION_DEFEND"/>
+	</list>
   </attribute>
 </dynamicobject>

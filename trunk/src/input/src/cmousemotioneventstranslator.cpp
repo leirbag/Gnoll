@@ -25,6 +25,8 @@
 |               01/11/2008 - Paf - Initial release                          |
 |               01/13/2008 - Paf - Add sendZMotionEvents() to take Z axis   |
 |                                    in account                             |
+|		16/05/2008 - WT  - Send a list of action messages instead   |
+|				     of a unique message per input	    |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -100,29 +102,38 @@ namespace Gnoll
 			CMessageType actionEventType(ACTION_EVENT_TYPE);
 
 			/**
-			 * If an action is associated to this key code, an action message is sent
+			 * If an action is associated to this key code, a list of action messages is sent
 			 */
 			if ( mouseMotionEventTranslationMap->hasAttribute(_event) )
 			{
-				shared_ptr<String> actionString = mouseMotionEventTranslationMap->getAttribute<String>( _event );
-				string actionName ( *actionString );
+				shared_ptr<List> actionList = mouseMotionEventTranslationMap->getAttribute<List>( _event );
+				typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
 
-				ActionEvent actionEvent(actionName, _intensity);
-
-				shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-				shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
-
-				if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+				/**
+				 * Send all action messages in the list
+				 */
+				for (ListIterator itAttrs = actionList->begin(); itAttrs != actionList->end(); itAttrs++)
 				{
+					if (shared_ptr<String> actionName = dynamic_pointer_cast<String>(*itAttrs))
+					{
+						ActionEvent actionEvent(*actionName, _intensity);
+
+						shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
+						shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+
+						if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+						{
 #if DEBUG
-					cout << "Message ajoute ["<< actionName << "]" << endl;
+							cout << "Message ajoute ["<< *actionName << "]" << endl;
 #endif
-				}
-				else
-				{
+						}
+						else
+						{
 #if DEBUG
-					cout << "Message NON ajoute ["<< actionName << "]" << endl;
+							cout << "Message NON ajoute ["<< *actionName << "]" << endl;
 #endif
+						}
+					}
 				}
 
 			}	

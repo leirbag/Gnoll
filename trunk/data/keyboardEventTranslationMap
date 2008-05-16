@@ -1,30 +1,50 @@
 <?xml version="1.0"?>
-<dynamicobject instance="eventTranslationMap">
-  <attribute name="200">
-      <string value="ACTION_STEP_FORWARD"/>
-  </attribute>
-  <attribute name="203">
-      <string value="ACTION_ROTATE_LEFT"/>
-  </attribute>
-  <attribute name="205">
-      <string value="ACTION_ROTATE_RIGHT"/>
-  </attribute>
-  <attribute name="31">
-      <string value="ACTION_ROTATE_LEFT"/>
-  </attribute>
-  <attribute name="33">
-      <string value="ACTION_ROTATE_RIGHT"/>
-  </attribute>
-  <attribute name="208">
-      <string value="ACTION_STEP_BACKWARD"/>
-  </attribute>
-  <attribute name="18">
-      <string value="ACTION_ROTATE_UP"/>
-  </attribute>
-  <attribute name="32">
-      <string value="ACTION_ROTATE_DOWN"/>
-  </attribute>
-  <attribute name="16">
-      <string value="ACTION_QUIT"/>
-  </attribute>
+<dynamicobject instance="keyboardEventTranslationMap">
+	<attribute name="200">
+		<list>
+			<string value="ACTION_STEP_FORWARD"/>
+			<string value="ACTION_ROTATE_LEFT"/>
+		</list>
+	</attribute>
+	<attribute name="203">
+		<list>
+			<string value="ACTION_ROTATE_LEFT"/>
+		</list>
+	</attribute>
+	<attribute name="205">
+		<list>
+			<string value="ACTION_ROTATE_RIGHT"/>
+		</list>
+	</attribute>
+	<attribute name="31">
+		<list>
+			<string value="ACTION_ROTATE_LEFT"/>
+		</list>
+	</attribute>
+	<attribute name="33">
+		<list>
+			<string value="ACTION_ROTATE_RIGHT"/>
+		</list>
+	</attribute>
+	<attribute name="208">
+		<list>
+			<string value="ACTION_STEP_BACKWARD"/>
+			<string value="ACTION_ROTATE_RIGHT"/>
+		</list>
+	</attribute>
+	<attribute name="18">
+		<list>
+			<string value="ACTION_ROTATE_UP"/>
+		</list>
+	</attribute>
+	<attribute name="32">
+		<list>
+			<string value="ACTION_ROTATE_DOWN"/>
+		</list>
+	</attribute>
+	<attribute name="16">
+		<list>
+			<string value="ACTION_QUIT"/>
+		</list>
+	</attribute>
 </dynamicobject>

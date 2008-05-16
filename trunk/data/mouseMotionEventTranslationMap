@@ -1,21 +1,33 @@
 <?xml version="1.0"?>
-<dynamicobject instance="eventTranslationMap">
+<dynamicobject instance="mouseMotionEventTranslationMap">
   <attribute name="-X">
-      <string value="ACTION_ROTATE_CAMERA_LEFT"/>
+	<list>
+		<string value="ACTION_ROTATE_CAMERA_LEFT"/>
+	</list>
   </attribute>
   <attribute name="+X">
-      <string value="ACTION_ROTATE_CAMERA_RIGHT"/>
+	<list>
+		<string value="ACTION_ROTATE_CAMERA_RIGHT"/>
+	</list>
   </attribute>
   <attribute name="-Y">
-      <string value="ACTION_ROTATE_CAMERA_DOWN"/>
+	<list>
+		<string value="ACTION_ROTATE_CAMERA_DOWN"/>
+	</list>
   </attribute>
   <attribute name="+Y">
-      <string value="ACTION_ROTATE_CAMERA_UP"/>
+	<list>
+		<string value="ACTION_ROTATE_CAMERA_UP"/>
+	</list>
   </attribute>
   <attribute name="-Z">
-      <string value="ACTION_ZOOM_CAMERA_OUT"/>
+	<list>
+		<string value="ACTION_ZOOM_CAMERA_OUT"/>
+	</list>
   </attribute>
   <attribute name="+Z">
-      <string value="ACTION_ZOOM_CAMERA_IN"/>
+	<list>
+		<string value="ACTION_ZOOM_CAMERA_IN"/>
+	</list>
   </attribute>
 </dynamicobject>

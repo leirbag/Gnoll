@@ -24,6 +24,8 @@
 |   Changelog :                                                             |
 |               01/08/2008 - Paf - Initial release                          |
 |                                                                           |
+|		16/05/2008 - WT  - Send a list of action messages instead   |
+|				     of a unique message per input	    |
 \*-------------------------------------------------------------------------*/
 
 
@@ -90,18 +92,13 @@ namespace Gnoll
 			 */
 			if ( keyboardEventTranslationMap->hasAttribute(keyCodeValue) )
 			{
-
-
-				shared_ptr<String> actionString = keyboardEventTranslationMap->getAttribute<String>( keyCodeValue );
-				string actionName ( *actionString );
-
 				CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
 				CMessageType messageType = message->getType();
 
 				if (messageType == keyDown)
 				{
-					m_keyPressed[keyCodeValue]	= timeModule->getMsecs();
+					m_keyPressed[keyCodeValue] = timeModule->getMsecs();
 
 					if (m_durationKeyPressed.find(keyCodeValue) == m_durationKeyPressed.end())
 					{
@@ -111,7 +108,7 @@ namespace Gnoll
 				else
 				{
 					m_durationKeyPressed[keyCodeValue] += timeModule->getMsecs() - m_keyPressed[keyCodeValue];
-					m_keyPressed[keyCodeValue]	= 0;
+					m_keyPressed[keyCodeValue] = 0;
 				}
 
 			}
@@ -129,7 +126,7 @@ namespace Gnoll
 			unsigned long int period = now - m_lastTimeTriggerCalled;
 
 
-			for( map<string, unsigned long int>::iterator it =	m_durationKeyPressed.begin(); it != m_durationKeyPressed.end(); it++)
+			for( map<string, unsigned long int>::iterator it = m_durationKeyPressed.begin(); it != m_durationKeyPressed.end(); it++)
 			{
 				unsigned long int timePressed = it->second;
 
@@ -146,27 +143,38 @@ namespace Gnoll
 
 					float intensity = (float) timePressed / (float) period;
 
-					shared_ptr<String> actionString = keyboardEventTranslationMap->getAttribute<String>( it->first );
-					string actionName ( *actionString );
-					ActionEvent actionEvent(actionName, intensity);
+					shared_ptr<List> actionList = keyboardEventTranslationMap->getAttribute<List>( it->first );
+					typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
 
-					shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-					shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
-
-					if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+					/**
+					 * Send all action messages in the list
+					 */
+					for (ListIterator itAttrs = actionList->begin(); itAttrs != actionList->end(); itAttrs++)
 					{
-#if DEBUG
-						cout << "Message ajoute ["<< actionName << "]" << endl;
-#endif
-					}
-					else
-					{
-#if DEBUG
-						cout << "Message NON ajoute ["<< actionName << "]" << " of intensity " <<  intensity << " => " << timePressed << " / " << period << endl;
-#endif
-					}
+						if (shared_ptr<String> actionName = dynamic_pointer_cast<String>(*itAttrs))
+						{
+							ActionEvent actionEvent(*actionName, intensity);
 
-					it->second = 0;
+							shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
+							shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+
+							if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+							{
+#if DEBUG
+								cout << "Message ajoute ["<< *actionName << "]" << endl;
+#endif
+							}
+							else
+							{
+#if DEBUG
+								cout << "Message NON ajoute ["<< *actionName << "]" << " of intensity ";
+								cout <<  intensity << " => " << timePressed << " / " << period << endl;
+#endif
+							}
+
+							it->second = 0;
+						}
+					}
 				}
 			}
 
