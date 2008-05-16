@@ -51,11 +51,11 @@ using namespace std;
 
 /**
  * The Scene Factory standard implementation
- */ 
+ */
 class  CSceneFactoryStd : public ISceneFactory
 {
 	private:
-	
+
 		const std::string m_filename;
 		Ogre::Root * m_root;
 
