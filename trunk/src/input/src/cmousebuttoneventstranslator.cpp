@@ -22,7 +22,7 @@
 |   This is translate mouse events to action events                         |
 |                                                                           |
 |   Changelog :                                                             |
-|               01/11/2008 - Paf - Initial release                          |
+|               16/05/2008 - WT - Initial release                           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -37,12 +37,14 @@
 #include "../include/ctranslationevents.h"
 #include <OIS/OISMouse.h>
 #include <iostream>
+#include "../../time/include/ctimemodule.h"
 
 #include "../../config.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
 using namespace Gnoll::DynamicObject;
+using namespace Gnoll::Time;
 
 
 namespace Gnoll
@@ -50,7 +52,9 @@ namespace Gnoll
 	namespace Input 
 	{
 
-		CMouseButtonEventsTranslator::CMouseButtonEventsTranslator(): mouseButtonPressedEvent("MOUSE_PRESSED"), mouseButtonReleasedEvent("MOUSE_RELEASED")
+		CMouseButtonEventsTranslator::CMouseButtonEventsTranslator():
+			mouseButtonPressedEvent("MOUSE_PRESSED"),
+			mouseButtonReleasedEvent("MOUSE_RELEASED")
 		{
 
 			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
@@ -92,40 +96,93 @@ namespace Gnoll
 				CMessageType actionEventType(ACTION_EVENT_TYPE);
 
 
-				shared_ptr<String> actionString = mouseButtonEventTranslationMap->getAttribute<String>( buttonValue );
-				string actionName ( *actionString );
-
+				CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
 				CMessageType messageType = message->getType();
-				float intensity = 1.0;
 
 				if (messageType == mouseButtonPressedEvent)
 				{
-					intensity = 0.0f;
-				}
+					m_buttonPressed[buttonValue] = timeModule->getMsecs();
 
-				ActionEvent actionEvent(actionName, intensity);
-
-
-
-				shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-				shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
-
-				if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-				{
-#if DEBUG
-					cout << "Message ajoute ["<< actionName << "]" << endl;
-#endif
+					if (m_durationButtonPressed.find(buttonValue) == m_durationButtonPressed.end())
+					{
+						m_durationButtonPressed[buttonValue] = 0;
+					}
 				}
 				else
 				{
-#if DEBUG
-					cout << "Message NON ajoute ["<< actionName << "]" << endl;
-#endif
+					m_durationButtonPressed[buttonValue] += timeModule->getMsecs() - m_buttonPressed[buttonValue];
+					m_buttonPressed[buttonValue] = 0;
 				}
 
 			}
 
+		}
+
+
+		void CMouseButtonEventsTranslator::trigger ( shared_ptr<CMessage> _msg )
+		{
+
+			CMessageType actionEventType(ACTION_EVENT_TYPE);
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+
+			unsigned long int now = timeModule->getMsecs();
+			unsigned long int period = now - m_lastTimeTriggerCalled;
+
+
+			for( map<string, unsigned long int>::iterator it = m_durationButtonPressed.begin(); it != m_durationButtonPressed.end(); it++)
+			{
+				unsigned long int timePressed = it->second;
+
+				if (m_buttonPressed[it->first] != 0)
+				{
+					timePressed += now - m_buttonPressed[it->first];
+
+					m_buttonPressed[it->first] = now;
+				}
+
+
+				if (timePressed > 0)
+				{
+
+					float intensity = (float) timePressed / (float) period;
+
+					shared_ptr<List> actionList = mouseButtonEventTranslationMap->getAttribute<List>( it->first );
+					typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+
+					/**
+					 * Send all action messages in the list
+					 */
+					for (ListIterator itAttrs = actionList->begin(); itAttrs != actionList->end(); itAttrs++)
+					{
+						if (shared_ptr<String> actionName = dynamic_pointer_cast<String>(*itAttrs))
+						{
+							ActionEvent actionEvent(*actionName, intensity);
+
+							shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
+							shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+
+							if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
+							{
+#if DEBUG
+								cout << "Message ajoute ["<< *actionName << "]" << endl;
+#endif
+							}
+							else
+							{
+#if DEBUG
+								cout << "Message NON ajoute ["<< *actionName << "]" << " of intensity ";
+								cout <<  intensity << " => " << timePressed << " / " << period << endl;
+#endif
+							}
+
+							it->second = 0;
+						}
+					}
+				}
+			}
+
+			m_lastTimeTriggerCalled = now;
 		}
 	};
 };

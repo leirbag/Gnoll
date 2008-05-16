@@ -1,5 +1,5 @@
 /**************************************************************************
-*   Copyright (C) 2008 by Paf                                             *
+*   Copyright (C) 2008 by Bruno Mahe                                      *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -18,97 +18,56 @@
 ***************************************************************************/
 
 
-/*----------------------CMouseButtonEventsTranslator-----------------------*\
-|   This is translate mouse button events to action events                  |
+/*-----------------------CKeyboardEventsTrigger----------------------------*\
+|   This is translate keyboard events to action events                      |
 |                                                                           |
 |   Changelog :                                                             |
-|               01/11/2008 - Paf - Initial release                          |
+|               04/06/2008 - WT - Initial release         	            |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef __CMOUSEBUTTONEVENTSTRANSLATOR_H__
-#define __CMOUSEBUTTONVENTSTRANSLATOR_H__
+#ifndef __CMOUSEBUTTONEVENTSTRIGGER_H__
+#define __CMOUSEBUTTONEVENTSTRIGGER_H__
 
 #include <boost/shared_ptr.hpp>
 
-#include "../../dynamicobject/include/dynamicobject.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessage.h"
 
 
 using namespace boost;
-using namespace Gnoll::Core;
-using namespace Gnoll::DynamicObject;
+
 
 namespace Gnoll
 {
-	namespace Input 
+	namespace Input
 	{
 
-		class CMouseButtonEventsTranslator : public CMessageListener
+		class CMouseButtonEventsTrigger : public CMessageListener
 		{
-
 			private:
 
-				/**
-				 * PersistentObject that contains a translation map for events from mouse
-				 */
-				shared_ptr<Gnoll::DynamicObject::DynamicObject> mouseButtonEventTranslationMap;
-
-				/**
-				 * CMessageType for MOUSE_PRESSED messages
-				 */
-				CMessageType mouseButtonPressedEvent;
-
-
-				/**
-				 * CMessageType for MOUSE_RELEASED messages
-				 */
-				CMessageType mouseButtonReleasedEvent;
-
-
-				/**
-				 * How long a button has been pressed
-				 */
-				map<string, unsigned long int> m_durationButtonPressed;
-
-				/**
-				 * When a button has been pressed
-				 */
-				map<string, unsigned long int> m_buttonPressed;
-
-				/**
-				 * When trigger has been called last time
-				 */
-				unsigned long int m_lastTimeTriggerCalled;
-
+				shared_ptr<CMouseButtonEventsTranslator> m_cMouseButtonEventsTranslator;
 
 			public:
 
 				/**
 				* This is a constructor
 				*/
-				CMouseButtonEventsTranslator();
+				CMouseButtonEventsTrigger(shared_ptr<CMouseButtonEventsTranslator> _cMouseButtonEventsTranslator);
 
 				/**
 				* This is a destructor
 				*/
-				virtual ~CMouseButtonEventsTranslator(); 
+				virtual ~CMouseButtonEventsTrigger();
 
 				/**
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
 				virtual void handle ( shared_ptr<CMessage> message );
-
-				/**
-				* Send mouse button events if any button has been pressed
-				*/
-				void trigger(shared_ptr<CMessage> _msg);
 		};
-	};
-};
+	}
+}
 
-#endif // __CMOUSEEVENTSTRANSLATOR_H__
-
-
+#endif // __CMOUSEBUTTONEVENTSTRIGGER_H__
