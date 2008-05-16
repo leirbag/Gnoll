@@ -44,6 +44,7 @@ namespace Gnoll
 		 * Message type for action events
 		 */
 		const string ACTION_EVENT_TYPE("INPUT_ACTION_EVENT");
+		const string ACTION_EVENT_STATE_TYPE("INPUT_ACTION_STATE");
 
 
 		/**
