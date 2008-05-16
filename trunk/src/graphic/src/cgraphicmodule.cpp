@@ -93,6 +93,7 @@
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 
+#include "../include/cceguilogger.h"
 
 #include <string>
 
@@ -346,7 +347,12 @@ namespace Gnoll
 			m_timer = new Timer();
 			m_lastframe = m_timer->getMilliseconds ();
 
-			// Set up GUI system
+			// -----------  Set up GUI system -----------
+
+			/**
+			 * Set up a logger for cegui which will redirect CEGUI's logs to Ogre's one
+			 */
+			CCEGUILogger* ceguiLogger = new CCEGUILogger();
 			mGUIRenderer = new CEGUI::OgreCEGUIRenderer(mwindow, Ogre::RENDER_QUEUE_OVERLAY, false, 3000, mSceneMgr);
 			mGUISystem = new CEGUI::System(mGUIRenderer);
 			CEGUI::Logger::getSingleton().setLoggingLevel(CEGUI::Informative);
