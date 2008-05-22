@@ -29,7 +29,7 @@
 
 #include "../include/oggcodechandler.h"
 
-
+#include <string.h>
 
 namespace Gnoll 
 {
