@@ -33,14 +33,14 @@ class BaseGnollBuilder:
 			print "Boost::program_options not found"
 			exit(-1)
 
-		config.CheckLib('boost_program_options')
+		config.CheckLib('boost_program_options', None, None, 'c++')
 
 		for header in ['boost/filesystem/path.hpp', 'boost/filesystem/convenience.hpp', 'boost/filesystem/operations.hpp']:
 			if not config.CheckCXXHeader(header):
 				print "Boost::filesystem not found"
 				exit(-1)
 
-		config.CheckLib('boost_filesystem')
+		config.CheckLib('boost_filesystem', None, None, 'c++')
 
 
 		for header in ['boost/thread/mutex.hpp', 'boost/thread/thread.hpp', 'boost/thread/condition.hpp', 'boost/thread/xtime.hpp']:
@@ -48,7 +48,7 @@ class BaseGnollBuilder:
 				print "Boost::thread not found"
 				exit(-1)
 
-		config.CheckLib('boost_thread')
+		config.CheckLib('boost_thread', None, None, 'c++')
 
 		configProject['HAVE_BOOST_SHARED_PTR'] = '1'
 		configProject['HAVE_BOOST_PROGRAM_OPTIONS'] = '1'
@@ -66,8 +66,8 @@ class BaseGnollBuilder:
 				print "OpenAL not found"
 				exit(-1)
 
-		config.CheckLib('openal')
-		config.CheckLib('alut')
+		config.CheckLib('openal', None, None, 'c++')
+		config.CheckLib('alut', None, None, 'c++')
 
 		configProject['HAVE_OPENAL'] = '1'
 		return configProject
@@ -83,10 +83,10 @@ class BaseGnollBuilder:
 				print "Vorbis library not found"
 				exit(-1)
 
-		config.CheckLib('vorbis')
-		config.CheckLib('vorbisenc')
-		config.CheckLib('vorbisfile')
-		config.CheckLib('ogg')
+		config.CheckLib('vorbis', None, None, 'c++')
+		config.CheckLib('vorbisenc', None, None, 'c++')
+		config.CheckLib('vorbisfile', None, None, 'c++')
+		config.CheckLib('ogg', None, None, 'c++')
 
 		configProject['HAVE_OGG_VORBIS'] = '1'
 		return configProject
@@ -100,7 +100,7 @@ class BaseGnollBuilder:
 				print "Ogre library not found"
 				exit(-1)
 
-		config.CheckLib('OgreMain')
+		config.CheckLib('OgreMain', None, None, 'c++')
 
 		configProject['HAVE_OGRE'] = '1'
 		return configProject
@@ -115,7 +115,7 @@ class BaseGnollBuilder:
 				print "OIS library not found"
 				exit(-1)
 
-		config.CheckLib('OIS')
+		config.CheckLib('OIS', None, None, 'c++')
 
 
 		configProject['HAVE_OIS'] = '1'
@@ -131,12 +131,12 @@ class BaseGnollBuilder:
 				print "libxml++2.6 library not found"
 				exit(-1)
 
-		config.CheckLib('xml++-2.6')
-		config.CheckLib('xml2')
-		config.CheckLib('glibmm-2.4')
-		config.CheckLib('gobject-2.0')
-		config.CheckLib('sigc-2.0')
-		config.CheckLib('glib-2.0')
+		config.CheckLib('xml++-2.6', None, None, 'c++')
+		config.CheckLib('xml2', None, None, 'c++')
+		config.CheckLib('glibmm-2.4', None, None, 'c++')
+		config.CheckLib('gobject-2.0', None, None, 'c++')
+		config.CheckLib('sigc-2.0', None, None, 'c++')
+		config.CheckLib('glib-2.0', None, None, 'c++')
 
 
 		configProject['HAVE_LIB_XML_PP'] = '1'
@@ -158,8 +158,8 @@ class BaseGnollBuilder:
 				print "CEGUI library not found"
 				exit(-1)
 
-		config.CheckLib('CEGUIBase')
-		config.CheckLib('CEGUIOgreRenderer')
+		config.CheckLib('CEGUIBase', None, None, 'c++')
+		config.CheckLib('CEGUIOgreRenderer', None, None, 'c++')
 
 		configProject['HAVE_CEGUI'] = '1'
 		configProject['HAVE_CEGUI_OGRE'] = '1'
