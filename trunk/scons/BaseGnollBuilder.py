@@ -117,6 +117,9 @@ class BaseGnollBuilder:
 
 		config.CheckLib('OIS', None, None, 'c++')
 
+		if config.CheckLibWithHeader( 'OIS', 'OISInputManager.h', 'c++', 'OIS::InputManager::createInputSystem(0)->numKeyBoards();' ):
+			configProject['HAVE_OIS_1RC'] = '1'
+
 
 		configProject['HAVE_OIS'] = '1'
 		return configProject

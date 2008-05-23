@@ -92,8 +92,23 @@ void COISInputManager::initialise(  ) {
         // Create inputsystem
         mInputSystem = OIS::InputManager::createInputSystem( paramList );
 
+
+			/**
+			 * Get number of available keyboard
+			 *
+			 * OIS::InputManager::numKeyBoards has been renamed to
+			 * OIS::InputManager::numKeyboards from OIS 1.0
+			 * But the old one is still used in OIS 1.0rc which is shiped
+			 * with some GNU/Linux distribution
+			 */
+#ifdef HAVE_OIS_1RC
+			int numKeyboards = mInputSystem->numKeyBoards();
+#else
+			int numKeyboards = mInputSystem->numKeyboards();
+#endif
+
         // If possible create a buffered keyboard
-        if( mInputSystem->numKeyBoards() > 0 ) {
+        if( numKeyboards > 0 ) {
             mKeyboard = static_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
             mKeyboard->setEventCallback( this );
         }
