@@ -48,7 +48,8 @@ class BaseGnollBuilder:
 				print "Boost::thread not found"
 				exit(-1)
 
-		config.CheckLib('boost_thread', None, None, 'c++')
+		if not config.CheckLib('boost_thread', None, None, 'c++') :
+			config.CheckLib('boost_thread-mt', None, None, 'c++')
 
 		configProject['HAVE_BOOST_SHARED_PTR'] = '1'
 		configProject['HAVE_BOOST_PROGRAM_OPTIONS'] = '1'
