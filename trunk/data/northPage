@@ -6,7 +6,7 @@
   <attribute name="size">
     <float value="128"/>
   </attribute>
-  <attribute name="southhLink">
+  <attribute name="southLink">
     <string value="initialPage"/>
   </attribute>
 </dynamicobject>
