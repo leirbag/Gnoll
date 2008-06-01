@@ -265,6 +265,7 @@ class BaseGnollBuilder:
 			'src/input/src/coisinputmodule.cpp',
 			'src/input/src/coisinputmanager.cpp',
 			'src/input/src/cinputeventstranslator.cpp',
+			'src/input/src/ctranslationevents.cpp',
 			'src/input/src/ckeyboardeventstranslator.cpp',
 			'src/input/src/ckeyboardstatetranslator.cpp',
 			'src/input/src/cmousemotioneventstranslator.cpp',

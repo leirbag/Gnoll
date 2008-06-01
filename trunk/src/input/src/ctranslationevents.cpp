@@ -22,16 +22,12 @@
 |   Translation event                                                        |
 |                                                                            |
 |   Changelog :                                                              |
-|               01/09/2008 - Paf - Initial release                           |
-|               01/11/2008 - Paf - Renamed file to ctranslationevents.h      |
+|               05/31/2008 - Paf - Initial release                           |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
 
-#ifndef __CTRANSLATIONEVENTS_H__
-#define __CTRANSLATIONEVENTS_H__
-
-#include <string>
+#include "../include/ctranslationevents.h"
 
 namespace Gnoll
 {
@@ -43,34 +39,20 @@ namespace Gnoll
 		/**
 		 * Message type for action events
 		 */
-		extern const std::string ACTION_EVENT_TYPE;
-		extern const std::string ACTION_EVENT_STATE_TYPE;
+		const std::string ACTION_EVENT_TYPE("INPUT_ACTION_EVENT");
+		const std::string ACTION_EVENT_STATE_TYPE("INPUT_ACTION_STATE");
 
 
 		/**
 		 * Action events
 		 */
-		struct ActionEvent
-		{
-			/**
-			 * Action type
-			 */
-			std::string action;
-
-			/**
-			 * Intensity of the action
-			 */
-			float intensity;
-
-			/**
-			 * Constructor
-			 */
-			ActionEvent( std::string _action, float _intensity);
-
-		};
+		ActionEvent::ActionEvent( std::string _action, float _intensity) :
+						action(_action),
+						intensity(_intensity)
+			{
+			}
 
 	}
 }
 
 
-#endif // __CTRANSLATIONEVENTS_H__
