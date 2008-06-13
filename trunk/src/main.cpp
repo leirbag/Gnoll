@@ -63,6 +63,7 @@
 #include "sound/include/csoundmodule.h"
 #include "scene/include/cscenemanager.h"
 #include "stats/include/cstatsmodule.h"
+#include "log/include/clogmodule.h"
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>
@@ -84,6 +85,7 @@ using namespace Gnoll::Input;
 using namespace Gnoll::Scene;
 using namespace Gnoll::Graphic;
 using namespace Gnoll::DynamicObject;
+using namespace Gnoll::Log;
 
 bool done = false;
 
@@ -582,7 +584,8 @@ void analyzeArguments (int argc, char* argv[])
 	// Declare the supported options.
 	options_description desc("Allowed options");
 	desc.add_options()
-	    ("help,h", "produce help message")
+	    ("help,h", "Produce help message")
+	    ("log,l", value<std::string>(), "Log file name")
 	    ("load-source-directory", value< vector<string> >()->composing(), "Add a directory as a load source")
 	    ("save-source-directory", value< vector<string> >()->composing(), "Add a directory as a save source")
 	;
@@ -602,6 +605,15 @@ void analyzeArguments (int argc, char* argv[])
 	    cout << desc << "\n";
 	    exit(1);
 	}
+
+	if (vm.count("log"))
+	{
+		std::string logFile = vm["log"].as<std::string>();
+
+		CLogModule *logManager = CLogModule::getInstancePtr();
+		logManager->setLogFileName(logFile);
+	}
+
 
 	/**
 	 * If a loading source has to be added
@@ -702,6 +714,7 @@ int main(int argc, char* argv[])
 	shared_ptr<CMessageListener> mylistener8(new MousePressedListener);
 
 
+	CLogModule *logModule = CLogModule::getInstancePtr();
 	CGraphicModule* graphicmanager = CGraphicModule::getInstancePtr();
 	COISInputModule inputmanager;
 	CTimeModule* timeModule = CTimeModule::getInstancePtr();
@@ -712,6 +725,7 @@ int main(int argc, char* argv[])
 
 	CMessageManager* messageManager = messageModule->getMessageManager();
 
+	logModule->init();
 	messageModule->init();
 	graphicmanager->init();
 	inputmanager.init();
@@ -807,6 +821,7 @@ int main(int argc, char* argv[])
 	graphicmanager->exit();
 	messageModule->exit();
 	soundmanager->exit();
+	logModule->exit();
 
 	Gnoll::Stats::CStatsModule::destroy();
 	CSoundModule::destroy();
@@ -814,6 +829,7 @@ int main(int argc, char* argv[])
 	CInputEventsTranslator::destroy();
 	CGraphicModule::destroy();
 	CMessageModule::destroy();
+	CLogModule::destroy();
 
 	Gnoll::DynamicObject::AttributeHandlerRegistry::destroy();
 

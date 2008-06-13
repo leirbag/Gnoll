@@ -317,6 +317,15 @@ class BaseGnollBuilder:
 
 		return soundSourceFiles
 
+	def gatherLogSourceFiles(self, env, config):
+
+		logSourceFiles = [
+			'src/log/src/clogmodule.cpp',
+			]
+
+		return logSourceFiles
+
+
 	def gatherSourceFiles(self, env, config):
 
 
@@ -330,6 +339,7 @@ class BaseGnollBuilder:
 		sourceFiles.extend( self.gatherTimeSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherDynamicObjectSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherCoreSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherLogSourceFiles(env, config) )
 		sourceFiles.append( 'src/main.cpp' )
 
 

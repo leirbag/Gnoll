@@ -92,6 +92,7 @@ def main():
 
 	configProject = {
 				"DEBUG"  : "0",
+				"DEFAULT_LOG_FILENAME"  : '"./gnoll.log"',
 				"PACKAGE_NAME": '"Gnoll"',
 				"PACKAGE_VERSION": '"0.1.4"' ,
 				"PACKAGE_BUGREPORT": '"gnoll-devel@lists.gnoll.org"',
