@@ -84,6 +84,13 @@ namespace Gnoll
 				void setLogFileName(string logFileName);
 
 
+				/**
+				 * Log a message
+				 * @param msg Message to log
+				 */
+				void logMessage(string msg);
+
+
 			private:
 
 				/**

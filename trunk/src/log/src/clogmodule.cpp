@@ -92,6 +92,12 @@ namespace Gnoll
 		{
 			m_logFileName = logFileName;
 		}
+
+
+		void CLogModule::logMessage(string msg)
+		{
+			Ogre::LogManager::getSingleton().logMessage( msg );
+		}
 	}
 }
 
