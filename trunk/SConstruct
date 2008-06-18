@@ -25,6 +25,7 @@ import sys
 import shutil
 
 import scons.BaseGnollInstaller
+import SCons.Defaults
 
 
 
@@ -118,6 +119,13 @@ def main():
 		config = env.Configure()
 		env.BuildDir("./objs/", "src")
 
+		# Change default log path for posix systems
+		if (env['PLATFORM'] == 'posix'):
+
+			linuxLogDir = os.path.expanduser("~") + '/.gnoll/logs'
+			configProject["DEFAULT_LOG_FILENAME"] = '"' + linuxLogDir + '/gnoll.log' + '"'
+
+
 		env['install_prefix'] = ARGUMENTS.get('prefix')
 		if not env['install_prefix']:
 			env['install_prefix'] = "/usr/share/"
@@ -156,13 +164,17 @@ def main():
 			gnollBuilder = None
 
 			if (env['PLATFORM'] == 'posix'):
+
 				from  scons.LinuxGnollBuilder import LinuxGnollBuilder
 				gnollBuilder = LinuxGnollBuilder()
 
 
+
 			if (gnollBuilder == None):
+
 				print "Sorry, your platform [%s] is not supported." % (env['PLATFORM'])
 				exit(-1)
+
 
 			# If debug is activated, add some flags to ad debugging symbols
 			if configProject['DEBUG'] == '1':
@@ -192,8 +204,23 @@ def main():
 
 			gnollInstaller = None
 
-			# Use GNU/Linux installer for posix systems
+			# DEFAULT_LOG_FILENAME has the path enclosed by "
+			# dirname will remove the ending " but not the very first one
+			logDir = os.path.dirname( configProject['DEFAULT_LOG_FILENAME'] )
+			logDir = logDir[1:]
+
+			if not os.path.exists( logDir ):
+				try:
+					print "Creating destination logs directory [%s]" % (logDir)
+					os.makedirs(logDir)
+				except OSError, why:
+					print "Can't create %s: %s" % (logDir, why)
+			else:
+				print "No need to create %s. It already exists" % (logDir)
+
+
 			if (env['PLATFORM'] == 'posix'):
+
 				from  scons.LinuxGnollInstaller import LinuxGnollInstaller
 				gnollInstaller = LinuxGnollInstaller()
 

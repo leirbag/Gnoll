@@ -58,6 +58,7 @@ namespace Gnoll
 
 			Ogre::LogManager* logManager = new Ogre::LogManager::LogManager();
 
+			logManager = NULL;
 
 			/**
 			 * Log file creation is deactivated if Gnoll is not in debug mode
@@ -66,11 +67,12 @@ namespace Gnoll
 			 * a file deactivated (if last parameter of createLog())
 			 */
 #if DEBUG != 1
-			logManager = NULL;
 			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog("", true, false, true);
+			log = NULL;
 #else
 
 			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog(m_logFileName, true, false, false);
+			log = NULL;
 #endif
 		}
 
