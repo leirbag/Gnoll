@@ -4,6 +4,11 @@
 #define DEBUG %(DEBUG)s
 
 
+/* Do we want to activate logging ? */
+#define DO_LOG %(DO_LOG)s
+
+
+
 /**
  * Log file name.
  * Log file is created only if debug option is activated

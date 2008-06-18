@@ -61,17 +61,17 @@ namespace Gnoll
 			logManager = NULL;
 
 			/**
-			 * Log file creation is deactivated if Gnoll is not in debug mode
+			 * Log file creation is deactivated if DO_LOG is not defined
 			 * To do so, we have to create a LogManager *before* Ogre's root node is created.
 			 * Then a default  (see second parameter of createLog()) log is created and output to
 			 * a file deactivated (if last parameter of createLog())
 			 */
-#if DEBUG != 1
-			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog("", true, false, true);
+#if DO_LOG
+			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog(m_logFileName, true, false, false);
 			log = NULL;
 #else
 
-			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog(m_logFileName, true, false, false);
+			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog("", true, false, true);
 			log = NULL;
 #endif
 		}
