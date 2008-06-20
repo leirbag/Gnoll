@@ -61,7 +61,7 @@ namespace Gnoll
 		}
 			
 		
-		shared_ptr<Sound> AudioCodecManager::decodeStream(shared_ptr<IStream> _stream, string _instance)	
+		shared_ptr<AudioCodecHandler> AudioCodecManager::getAudioCodecHandler(shared_ptr<IStream> _stream, string _instance)
 		{
 			string type;
 
@@ -76,11 +76,11 @@ namespace Gnoll
 			
 			
 			if (list_codec.find(type) != list_codec.end())
-				return list_codec[type]->handle(_stream);
+				return list_codec[type];
 			else
 			{
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Codec par defaut (ogg pour le moment)" );
-				return list_codec["ogg"]->handle(_stream);
+				return list_codec["ogg"];
 			}
 			
 			//return list_codec["ogg"]->handle(_stream);

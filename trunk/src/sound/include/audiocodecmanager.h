@@ -56,18 +56,22 @@ namespace Gnoll {
 				 * Associative container to associate an audio codec to an handler
 				 */
 				map<string, shared_ptr<AudioCodecHandler> > list_codec;
-				
+
+
 			public :
-				
+
+
 				/**
 				 * Constructor
 				 */
 				AudioCodecManager();
 
+
 				/**
 				 * Destructor
 				 */
 				~AudioCodecManager();
+
 
 				/**
 				 * Add a new codec handler
@@ -75,14 +79,15 @@ namespace Gnoll {
 				 */
 				void addAudioCodec(shared_ptr<AudioCodecHandler> _audioCodecHandler);
 
+
 				/**
-				 * Decode an audio stream and return a shared pointer to a Sound object
+				 * Returns an AudioCodecHandler able to decode a specific audio stream
 				 * @param _stream Stream to decode
 				 * @param _streamName Name of the stream (file name...)
-				 * @return A shared pointer to a newly created Sound object from the decoded audio stream
+				 * @return A shared pointer to an AudioCodecHandler able to decode the audio stream passed as a parameter
 				 */
-				shared_ptr<Sound> decodeStream(shared_ptr<IStream> _stream, string _streamName);
-		
+				shared_ptr<AudioCodecHandler> getAudioCodecHandler(shared_ptr<IStream> _stream, string _streamName);
+
 		};
 	}
 }

@@ -48,7 +48,20 @@ namespace Gnoll {
 		
 		shared_ptr<Sound> SoundManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
 		{	
-			return AudioCodecManager::getInstancePtr()->decodeStream(_stream, _instance);
+			shared_ptr<AudioCodecHandler> audioCodecHandler = AudioCodecManager::getInstancePtr()->getAudioCodecHandler(_stream, _instance);
+
+			/**
+			 * If an AudioCodecHandler has been found, decode the stream.
+			 * Else return NULL
+			 */
+
+			if (audioCodecHandler.get())
+			{
+				return audioCodecHandler->handle(_stream);
+			} else
+			{
+				return shared_ptr<Sound>();
+			}
 			
 		}
 		
