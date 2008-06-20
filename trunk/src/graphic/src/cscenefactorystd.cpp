@@ -30,6 +30,7 @@
 
 #include "../include/cscenefactorystd.h"
 #include "../include/csceneparser.h"
+#include "../../log/include/clogmodule.h"
 
 
 
@@ -58,6 +59,8 @@ void CSceneFactoryStd::loadScene()
 	}
 	catch(const xmlpp::exception& ex)
 	{
-		std::cout << "libxml++ exception: " << ex.what() << std::endl;
+		std::ostringstream tmpString;
+		tmpString << "libxml++ exception: " << ex.what();
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 	}
 }

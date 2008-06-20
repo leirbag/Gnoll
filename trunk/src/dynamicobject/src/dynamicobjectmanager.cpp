@@ -32,8 +32,7 @@
 #include "../include/dynamicobjectmanager.h"
 #include "../include/attributehandlerregistry.h"
 
-#include <iostream>
-
+#include "../../log/include/clogmodule.h"
 
 namespace Gnoll {
 
@@ -46,10 +45,7 @@ namespace Gnoll {
 
 		DynamicObjectManager::~DynamicObjectManager()
 		{
-#if DEBUG
-			std::cout << "Deleting DynamicObjectManager" << std::endl;
-#endif
-
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Deleting DynamicObjectManager" );
 		}
 
 		shared_ptr<DynamicObject> DynamicObjectManager::loadImpl( shared_ptr<IStream> _stream, string _instance)

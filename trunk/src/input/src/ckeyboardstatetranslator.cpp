@@ -22,7 +22,7 @@
 |   This is translate keyboard events to action events                      |
 |                                                                           |
 |   Changelog :                                                             |
-|               01/08/2008 - WT - Initial release                          |
+|               01/08/2008 - WT - Initial release                           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -34,9 +34,9 @@
 #include "../include/ctranslationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../core/include/cmessagemodule.h"
+#include "../../log/include/clogmodule.h"
 #include "../include/cinputmouseevents.h"
 #include <OIS/OISKeyboard.h>
-#include <iostream>
 #include "../../time/include/ctimemodule.h"
 
 #include "../../config.h"
@@ -85,9 +85,7 @@ namespace Gnoll
 			 */
 			string keyCodeValue = lexical_cast<string> (keyCode);
 
-#if DEBUG
-			cout << "Looking for KeyCode [" << keyCodeValue << "]"<< endl;
-#endif
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Looking for KeyCode [" + keyCodeValue + "]" );
 
 			/**
 			 * If an action is associated to this key code, an action message is sent
@@ -114,18 +112,16 @@ namespace Gnoll
 						shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 
+						std::ostringstream tmpString;
 						if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
 						{
-#if DEBUG
-							cout << "Message ajoute ["<< *actionName << "]" << endl;
-#endif
+							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
 						else
 						{
-#if DEBUG
-							cout << "Message NON ajoute ["<< *actionName << "]" << endl;
-#endif
+							tmpString << "Message NON ajoute ["<< *actionName << "]";
 						}
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
 			}

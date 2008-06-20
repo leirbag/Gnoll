@@ -39,9 +39,9 @@
 #include "../include/ctranslationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../core/include/cmessagemodule.h"
+#include "../../log/include/clogmodule.h"
 #include "../include/cinputmouseevents.h"
 #include <OIS/OISMouse.h>
-#include <iostream>
 
 #include <OgreRenderWindow.h>
 
@@ -121,18 +121,17 @@ namespace Gnoll
 						shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 						shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
+
+						std::ostringstream tmpString;
 						if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
 						{
-#if DEBUG
-							cout << "Message ajoute ["<< *actionName << "]" << endl;
-#endif
+							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
 						else
 						{
-#if DEBUG
-							cout << "Message NON ajoute ["<< *actionName << "]" << endl;
-#endif
+							tmpString << "Message NON ajoute ["<< *actionName << "]" << endl;
 						}
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
 

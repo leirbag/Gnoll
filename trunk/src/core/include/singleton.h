@@ -39,8 +39,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include <iostream>
-
 #include "../../config.h"
 
 namespace Gnoll
@@ -51,8 +49,8 @@ namespace Gnoll
 
 
 		/**
-		 *	Interface of all game modules. 
-		 */ 
+		 *	Interface of all game modules.
+		 */
 		template <typename T> class Singleton
 		{
 			private:
@@ -61,13 +59,13 @@ namespace Gnoll
 				 * Instance pointer
 				 */
 				static T* m_instance;
-		
+
 				/**
 				 * Mutex
 				 */
 				static boost::mutex m_mutex;
 
-	
+
 
 			public:
 
@@ -84,8 +82,8 @@ namespace Gnoll
 				/**
 				 * This returns a pointer to the singleton
 				 */
-				static T* getInstancePtr() 
-				{ 
+				static T* getInstancePtr()
+				{
 					boost::mutex::scoped_lock lock(m_mutex);
 
 					if (m_instance == 0)
@@ -99,21 +97,16 @@ namespace Gnoll
 				 */
 				static void destroy()
 				{
-#if DEBUG
-					std::cout << "Trying to destroy one singleton" << std::endl;
-#endif
 
 					boost::mutex::scoped_lock lock(m_mutex);
 
 					if (m_instance != 0)
 					{
-#if DEBUG
-					std::cout << "Deleting one singleton" << std::endl;
-#endif
+
 						delete m_instance;
 						m_instance = 0;
-					}			
-		
+					}
+
 				}
 
 		};

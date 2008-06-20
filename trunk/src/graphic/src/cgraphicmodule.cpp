@@ -404,8 +404,7 @@ namespace Gnoll
 					);
 			shared_ptr<CMessage>  mymessage (new CMessage(framerendered, tempTime));
 
-			if (Gnoll::Core::CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage) == false)
-				cout << "Message pas ajoute !!!" << endl;
+			Gnoll::Core::CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 
 			m_lastframe = newframe;
 		}
@@ -440,9 +439,6 @@ namespace Gnoll
 
 			if (m_camera)
 			{
-#if DEBUG
-				cout << "Number of classes using the camera : " << (*m_camera).use_count() << endl;
-#endif
 				delete m_camera;
 			}
 

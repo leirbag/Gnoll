@@ -35,10 +35,10 @@
 #include "../include/cmousebuttonstatetranslator.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../core/include/cmessagemodule.h"
+#include "../../log/include/clogmodule.h"
 #include "../include/cinputmouseevents.h"
 #include "../include/ctranslationevents.h"
 #include <OIS/OISMouse.h>
-#include <iostream>
 
 #include "../../config.h"
 
@@ -83,9 +83,7 @@ namespace Gnoll
 			 */
 			string buttonValue = lexical_cast<string> (button);
 
-#if DEBUG
-			cout << "Looking for KeyCode [" << buttonValue << "]"<< endl;
-#endif
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Looking for KeyCode [" + buttonValue + "]" );
 
 
 			/**
@@ -120,18 +118,16 @@ namespace Gnoll
 						shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 						shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
+						std::ostringstream tmpString;
 						if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
 						{
-#if DEBUG
-							cout << "Message ajoute ["<< *actionName << "]" << endl;
-#endif
+							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
 						else
 						{
-#if DEBUG
-							cout << "Message NON ajoute ["<< *actionName << "]" << endl;
-#endif
+							tmpString << "Message NON ajoute ["<< *actionName << "]";
 						}
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
 

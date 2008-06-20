@@ -57,6 +57,8 @@
 #include <iostream>
 #include "isource.h"
 
+#include "../../log/include/clogmodule.h"
+
 #include "../../config.h"
 
 #ifndef __BASEMANAGER_H__
@@ -355,9 +357,7 @@ namespace Gnoll {
 				 */
 				BaseManager()
 				{
-#if DEBUG
-					std::cout << "One BaseManager initialized" << std::endl;
-#endif
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "One BaseManager initialized" );
 				};
 
 
@@ -366,9 +366,8 @@ namespace Gnoll {
 				 */
 				virtual ~BaseManager()
 				{
-#if DEBUG
-					std::cout << "One BaseManager exiting" << std::endl;
-#endif
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "One BaseManager exiting" );
+
 					m_cache.clear();
 				};
 

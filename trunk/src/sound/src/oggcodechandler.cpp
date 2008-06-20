@@ -31,6 +31,10 @@
 
 #include <string.h>
 
+#include "../../log/include/clogmodule.h"
+#include <sstream>
+
+
 namespace Gnoll 
 {
 	namespace Sound 
@@ -78,39 +82,39 @@ namespace Gnoll
 				
 			if (ovOpenCallbacksResult != 0)
 			{
-				cout << "Error while calling ov_opencallbacks()" << endl;
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Error while calling ov_opencallbacks()" );
 
 				switch (ovOpenCallbacksResult)
 				{
 					case OV_EREAD:
-						cout << "  ->  A read from media returned an error." << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  A read from media returned an error." );
 						break;
 
 					case OV_ENOTVORBIS:
-						cout << "  ->  Bitstream does not contain any Vorbis data." << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Bitstream does not contain any Vorbis data." );
 						break;
 
 					case OV_EVERSION:
-						cout << "  ->  Vorbis version mismatch." << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Vorbis version mismatch." );
 						break;
 
 					case OV_EBADHEADER:
-						cout << "  ->  Invalid Vorbis bitstream header." << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Invalid Vorbis bitstream header." );
 						break;
 
 					case OV_EFAULT:
-						cout << "  ->  Internal logic fault; indicates a bug or heap/stack corruption." << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Internal logic fault; indicates a bug or heap/stack corruption." );
 						break;
 
 					default:
-						cout << "  ->  Error unknown." << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Error unknown." );
 						break;
 
 				}
 
 				if (_stream->eof())
 				{
-					cout << "ERROR : End of OGG stream" << endl;
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ERROR : End of OGG stream" );
 				}
 
 			}
@@ -164,7 +168,7 @@ namespace Gnoll
 			 */
 			ov_clear(&ogg_stream);
 				
-			cout << "Sound resource created" << endl;
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Sound resource created" );
 			return _sound;
 		}
 			

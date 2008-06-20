@@ -36,8 +36,8 @@
 
 
 #include "../include/csceneparser.h"
+#include "../../log/include/clogmodule.h"
 
-#include <iostream>
 #include <stdlib.h>
 
 
@@ -56,28 +56,31 @@ CSceneParser::~CSceneParser()
 
 void CSceneParser::on_start_document()
 {
-	Ogre::LogManager::getSingleton().logMessage("Begin to parse the scene..." );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Begin to parse the scene..." );
 }
 
 void CSceneParser::on_end_document()
 {
-	Ogre::LogManager::getSingleton().logMessage("Finished to parse the scene..." );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Finished to parse the scene..." );
 }
 
 void CSceneParser::on_start_element(const Glib::ustring& name,
                                    const AttributeList& attributes)
 {
 
-	Ogre::LogManager::getSingleton().logMessage("On Start Element..." );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("On Start Element..." );
 
-	std::cout << "node name=" << name << std::endl;
+	std::ostringstream tmpString;
+	tmpString << "node name=" << name << std::endl;
 
 	// Print attributes:
 	for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
 	{
-		std::cout << "  Attribute " << iter->name << " = " << iter->value << std::endl;
+		tmpString << "  Attribute " << iter->name << " = " << iter->value << std::endl;
 	}
 
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+	tmpString.clear();
 
 	m_currentnodetype.push(name);
 
@@ -166,7 +169,7 @@ void CSceneParser::on_start_element(const Glib::ustring& name,
 			if (iter->name == "visible") {
 				if (iter->value == "false") {
 					visible = false;			
-					Ogre::LogManager::getSingleton().logMessage("Invisible !" );
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Invisible !" );
 
 				}
 			}
@@ -189,7 +192,7 @@ void CSceneParser::on_start_element(const Glib::ustring& name,
 		Glib::ustring typeSky;
 		Glib::ustring materialName;
 
-		Ogre::LogManager::getSingleton().logMessage("Sky node parsing..." );
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Sky node parsing..." );
 
 		// Parse attributes
 		for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
@@ -197,13 +200,13 @@ void CSceneParser::on_start_element(const Glib::ustring& name,
 			if (iter->name == "type")
 			{
 				typeSky = iter->value;			
-				Ogre::LogManager::getSingleton().logMessage("Type of sky : " + typeSky );
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Type of sky : " + typeSky );
 			}
 
 			if (iter->name == "material")
 			{
 				materialName = iter->value;			
-				Ogre::LogManager::getSingleton().logMessage("Sky material : " + materialName );
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Sky material : " + materialName );
 			}
 		}
 
@@ -214,7 +217,7 @@ void CSceneParser::on_start_element(const Glib::ustring& name,
 
 			sm->setSkyDome(true, materialName); //, 1, 15);//setSkyBox(true, "Examples/SpaceSkyBox", 50 );
 
-			Ogre::LogManager::getSingleton().logMessage("Setting " + typeSky + " sky");
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Setting " + typeSky + " sky");
 		}
 	} else if (name == "worldgeometry")
 	{
@@ -228,7 +231,7 @@ void CSceneParser::on_start_element(const Glib::ustring& name,
 			{
 				configTerrain = iter->value;			
 				sm->setWorldGeometry( configTerrain );
-				Ogre::LogManager::getSingleton().logMessage("Terrain cfg file : " + configTerrain );
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Terrain cfg file : " + configTerrain );
 			}
 		}
 	}
@@ -258,15 +261,15 @@ void CSceneParser::on_comment(const Glib::ustring& text)
 
 void CSceneParser::on_warning(const Glib::ustring& text)
 {
-	Ogre::LogManager::getSingleton().logMessage("Warning : " + Glib::ustring(text) );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Warning : " + Glib::ustring(text) );
 }
 
 void CSceneParser::on_error(const Glib::ustring& text)
 {
-	Ogre::LogManager::getSingleton().logMessage("Error : " + Glib::ustring(text) );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Error : " + Glib::ustring(text) );
 }
 
 void CSceneParser::on_fatal_error(const Glib::ustring& text)
 {
-	Ogre::LogManager::getSingleton().logMessage("Fatal error : " + Glib::ustring(text) );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("Fatal error : " + Glib::ustring(text) );
 }

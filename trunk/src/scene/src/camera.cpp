@@ -34,7 +34,8 @@
 #include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagetype.h"
 #include "../../dynamicobject/include/float.h"
-#include <iostream>
+#include "../../log/include/clogmodule.h"
+#include <sstream>
 #include <queue>
 
 #include "../../config.h"
@@ -69,9 +70,7 @@ namespace Gnoll
 			m_this(new camera_i)
 		{
 
-#if DEBUG
-			std::cout << "Loading camera [" << instanceName << "]" << std::endl;
-#endif
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Loading camera [" + instanceName + "]" );
 
 			m_this->name = instanceName;
 			m_this->pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
@@ -182,9 +181,7 @@ namespace Gnoll
 			shared_ptr<Float> dir_z(new Float(dir.z));
 			this->setAttribute("dir_z", dir_z);
 
-#if DEBUG
-			std::cout << "Saving camera [" << this->getInstance() << "]" << std::endl;
-#endif
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Saving camera [" + this->getInstance() + "]" );
 
 			delete m_this;
 		}

@@ -73,7 +73,6 @@
 #include <boost/program_options.hpp>
 
 #include <Ogre.h>
-#include <OgreLogManager.h>
 
 using namespace boost;
 using namespace boost::program_options;
@@ -134,7 +133,9 @@ class MousePressedListener : public CMessageListener
 			 */
 			MouseButton temp ( message->getData<MouseButton>());
 
-			cout << temp << endl;
+			std::ostringstream tmpString;
+			tmpString << temp;
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 		}
 
 
@@ -173,15 +174,15 @@ class AllMessageListener : public CMessageListener
 			 */
 			MouseEvent event = message->getData<MouseEvent>() ;
 
-			cout << '(' << event.relX 
+			std::ostringstream tmpString;
+			tmpString << '(' << event.relX
 							<< ", " << event.relY 
 							<< ", " << event.relZ 
 							<< ", " << event.abX 
 							<< ", " << event.abY 
 							<< ", " << event.abZ
-							<< ", " << event.absOnly << ')'
- 
-					<< endl;
+							<< ", " << event.absOnly << ')';
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 
 		}
 
@@ -220,7 +221,11 @@ class MyMessageListener : public CMessageListener
 
 			OIS::KeyCode kc = message->getData<OIS::KeyCode>();
 
-			cout << kc << endl;
+
+			std::ostringstream tmpString;
+			tmpString << kc;
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+
 
 			if (kc == OIS::KC_Q)
 				done = true;
@@ -257,7 +262,9 @@ class robotcontroler : public CMessageListener
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
 			 */
-			cout << message->getData<OIS::KeyCode>() << endl;
+			std::ostringstream tmpString;
+			tmpString << message->getData<OIS::KeyCode>();
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 
 			//OIS::KeyCode temp2 = message->getData<OIS::KeyCode>();
 
@@ -291,14 +298,17 @@ class robotcontroler : public CMessageListener
 
 void deleteRobot(){
 	int tempcnt = --objcnt;
-	cout << "B : " << objcnt <<endl;
+
 	if (tempcnt >= 0) {
 		Ogre::SceneManager* sceneMgr = CGraphicModule::getInstancePtr()->getSceneManager();
 		Ogre::SceneNode *node = sceneMgr->getSceneNode(Ogre::StringConverter::toString(tempcnt));
 		node->detachObject(Ogre::StringConverter::toString(tempcnt));
 		sceneMgr->destroyEntity(Ogre::StringConverter::toString(tempcnt));
 		sceneMgr->destroySceneNode(Ogre::StringConverter::toString(tempcnt));
-		cout << "Objet supprime x: " << tempcnt <<endl;
+
+		std::ostringstream tmpString;
+		tmpString << "Objet supprime x: " << tempcnt;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 	}
 }
 
@@ -331,19 +341,15 @@ class keydown : public CMessageListener
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
 			 */
-			cout << message->getData<OIS::KeyCode>() << endl;
 
 			OIS::KeyCode temp2 = message->getData<OIS::KeyCode>();
 
 			// Add a robot at a random position
 			if (temp2 == OIS::KC_A) {
-				cout << "IN : " << objcnt << endl;
 				Ogre::SceneManager* sceneMgr = CGraphicModule::getInstancePtr()->getSceneManager();
 				Ogre::Entity *ent = sceneMgr->createEntity( Ogre::StringConverter::toString(objcnt), "ninja.mesh" );
-				cout << "F2 : " << objcnt << endl;
 				Ogre::SceneNode *node1 = sceneMgr->getRootSceneNode()->createChildSceneNode( Ogre::StringConverter::toString(objcnt));
 
-				cout << "G : " << objcnt << endl;
 				bool found = false;
 				while(!found) {
 					Ogre::Vector3 pos(rand()  % 1500,
@@ -364,23 +370,26 @@ class keydown : public CMessageListener
 						i->worldFragment->singleIntersection.y + 5, 
 						pos.z);
 	
-						cout << "Objet ajoute : " << objcnt <<endl;
+						std::ostringstream tmpString;
+						tmpString << "Objet ajoute : " << objcnt;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+
 						found = true;
 					}
 				}
 				node1->attachObject( ent );
 				ent->setCastShadows( true );
 				objcnt++;
-				cout << "OUT" << endl;
 			}
 
 
 			if (temp2 == OIS::KC_R && objcnt >= 0) {
-				cout << "A : " << objcnt <<endl;
+
 				deleteRobot();
 				if (objcnt < 0) {
 					objcnt = 0;
 				}
+
 			}
 
 			if (temp2 == OIS::KC_LEFT) {
@@ -458,7 +467,6 @@ class keyup : public CMessageListener
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
 			 */
-			cout << message->getData<OIS::KeyCode>() << endl;
 
 			OIS::KeyCode temp2 = message->getData<OIS::KeyCode>();
 
@@ -578,9 +586,6 @@ class AnimationListener : public CMessageListener
 void analyzeArguments (int argc, char* argv[])
 {
 
-	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
-	SoundManager *soundManager = SoundManager::getInstancePtr();
-
 	// Declare the supported options.
 	options_description desc("Allowed options");
 	desc.add_options()
@@ -606,26 +611,34 @@ void analyzeArguments (int argc, char* argv[])
 	    exit(1);
 	}
 
+
+	CLogModule *logModule = CLogModule::getInstancePtr();
+
 	if (vm.count("log"))
 	{
 		std::string logFile = vm["log"].as<std::string>();
 
-		CLogModule *logManager = CLogModule::getInstancePtr();
-		logManager->setLogFileName(logFile);
+		logModule->setLogFileName(logFile);
 	}
 
+	logModule->init();
+
+
+
+	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
+	SoundManager *soundManager = SoundManager::getInstancePtr();
 
 	/**
 	 * If a loading source has to be added
 	 */
 	if (vm.count("load-source-directory"))
 	{
-		cout << "Adding new load source directory : " << endl ;
+
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Adding new load source directory : ");
 
 		vector<string> lsd = vm["load-source-directory"].as< vector<string> >();
 		for (vector<string>::iterator it = lsd.begin(); it != lsd.end(); it++)
 		{
-			cout << *it << "." << endl;
 
 			shared_ptr<ISource> userLoadChannel(new SourceFile(*it, false, 10));
 			pom->addLoadSource(userLoadChannel);
@@ -639,12 +652,11 @@ void analyzeArguments (int argc, char* argv[])
 	 */
 	if (vm.count("save-source-directory"))
 	{
-		cout << "Adding new save source directory : " << endl ;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Adding new save source directory : ");
 
 		vector<string> lsd = vm["save-source-directory"].as< vector<string> >();
 		for (vector<string>::iterator it = lsd.begin(); it != lsd.end(); it++)
 		{
-			cout << *it << "." << endl;
 
 			shared_ptr<ISource> userSaveChannel(new SourceFile( *it, true, 10 ));
 			pom->addSaveSource(userSaveChannel);
@@ -661,6 +673,14 @@ int main(int argc, char* argv[])
 {
 	srand ( time(NULL) );
 
+	/**
+	 * Analyze of program parameters
+	 */
+
+	analyzeArguments (argc, argv);
+
+
+
 
 	// The very first thing to do is to add the current directory in DynamicObjectManager's list of repositories
 	// In case some modules would need to load some config files
@@ -675,14 +695,6 @@ int main(int argc, char* argv[])
 
 	soundManager->addLoadSource(loadChannel);
 	soundManager->addSaveSource(saveChannel);
-
-
-
-	/**
-	 * Analyze of program parameters
-	 */
-
-	analyzeArguments (argc, argv);
 
 
 
@@ -725,7 +737,6 @@ int main(int argc, char* argv[])
 
 	CMessageManager* messageManager = messageModule->getMessageManager();
 
-	logModule->init();
 	messageModule->init();
 	graphicmanager->init();
 	inputmanager.init();
@@ -739,28 +750,28 @@ int main(int argc, char* argv[])
 	 * Each of them are handle by the listener thanks to the message manager
 	 */
 	if (messageManager->addListener ( mylistener6, alltype ) == true)
-		cout << "Listener ajoute" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener ajoute" );
 
 	if (messageManager->addListener ( mylistener, mytype ) == true)
-		cout << "Listener ajoute" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener ajoute" );
 
 	if (messageManager->addListener ( mylistener2, mytype ) == true)
-		cout << "Listener ajoute" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener ajoute" );
 
 	if (messageManager->addListener ( mylistener3, framerendered ) == true)
-		cout << "Listener ajoute" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener ajoute" );
 
 	if (messageManager->addListener ( mylistener4, mytype2 ) == true)
-		cout << "Listener ajoute" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener ajoute" );
 
 	if (messageManager->addListener ( mylistener5, mytype ) == true)
-		cout << "Listener ajoute" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener ajoute" );
 
 	if (messageManager->addListener ( mylistener7, mptype ) == true)
-		cout << "Listener ajoute" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener ajoute" );
 
 	if (messageManager->addListener ( mylistener8, mrtype ) == true)
-		cout << "Listener ajoute" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener ajoute" );
 
 
 	CSceneManager* gSceneManager = new CSceneManager("gSceneManager");
@@ -785,28 +796,28 @@ int main(int argc, char* argv[])
 	 */
 
 	if (messageManager->delListener ( mylistener, mytype ) == true)
-		cout << "Listener supprime" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener supprime" );
 
 	if (messageManager->delListener ( mylistener2, mytype ) == true)
-		cout << "Listener supprime" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener supprime" );
 
 	if (messageManager->delListener ( mylistener3, framerendered ) == true)
-		cout << "Listener supprime" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener supprime" );
 
 	if (messageManager->delListener ( mylistener4, mytype2 ) == true)
-		cout << "Listener supprime" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener supprime" );
 
 	if (messageManager->delListener ( mylistener5, mytype ) == true)
-		cout << "Listener supprime" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener supprime" );
 
 	if (messageManager->delListener ( mylistener6, alltype ) == true)
-		cout << "Listener supprime" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener supprime" );
 
 	if (messageManager->delListener ( mylistener7, mptype ) == true)
-		cout << "Listener supprime" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener supprime" );
 
 	if (messageManager->delListener ( mylistener8, mrtype ) == true)
-		cout << "Listener supprime" << endl;
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Listener supprime" );
 
 	 
 	while(objcnt >=0) {
@@ -833,11 +844,13 @@ int main(int argc, char* argv[])
 
 	Gnoll::DynamicObject::AttributeHandlerRegistry::destroy();
 
-	cout << "Size of DO cache before destroying it : " << DynamicObjectManager::getInstancePtr()->getSize() << endl;
+	std::ostringstream tmpString;
+	tmpString << "Size of DO cache before destroying it : " << DynamicObjectManager::getInstancePtr()->getSize();
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 	DynamicObjectManager::destroy();
 
 
 	// Bye bye 
-	cout << "Au revoir !" << endl;
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Au revoir !" );
 	return 0;
 }

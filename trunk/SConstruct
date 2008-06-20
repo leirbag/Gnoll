@@ -183,7 +183,8 @@ def main():
 			# If debug is activated, add some flags to ad debugging symbols
 			if configProject['DEBUG'] == '1':
 				env.MergeFlags([ ' -g ', ' -pg '])
-
+			else:
+				env.MergeFlags([ ' -O3 '])
 
 			# Check if all libraries needed by Gnoll are installed and configured
 			gnollConfig = gnollBuilder.checkGnoll(env, config)

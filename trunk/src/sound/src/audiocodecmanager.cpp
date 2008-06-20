@@ -29,6 +29,7 @@
 
 
 #include "../include/audiocodecmanager.h"
+#include "../../log/include/clogmodule.h"
 
 namespace Gnoll
 {
@@ -78,7 +79,7 @@ namespace Gnoll
 				return list_codec[type]->handle(_stream);
 			else
 			{
-				cout << "Codec par defaut (ogg pour le moment)" << endl;
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Codec par defaut (ogg pour le moment)" );
 				return list_codec["ogg"]->handle(_stream);
 			}
 			

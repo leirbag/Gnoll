@@ -39,8 +39,8 @@
 
 #include <set>
 
-#include <iostream>
-
+#include "../../log/include/clogmodule.h"
+#include <sstream>
 
 using namespace std;
 using namespace boost;
@@ -83,9 +83,9 @@ namespace Gnoll
 
 					if (sceneManager)
 					{
-						cout << "Updating scene..." << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Updating scene..." );
 						sceneManager->update();
-						cout << " done" << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( " done" );
 					}
 
 				}
@@ -98,7 +98,7 @@ namespace Gnoll
 
 			if (this->hasAttribute("focusedPage") == false)
 			{
-				cout << "No focusedPage attribute found for CSceneManager " << _instanceName << endl;
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "No focusedPage attribute found for CSceneManager " + _instanceName );
 				return;
 			}
 
@@ -115,10 +115,17 @@ namespace Gnoll
 			 * Set up focused Page
 			 */
 			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>("focusedPage");
-			cout << "SIZE A: " << loadedPages->size() << endl;
-			cout << "Address of loadedPages : " << loadedPages << endl;
+
+			std::ostringstream tmpString;
+			tmpString << "SIZE A: " << loadedPages->size() << endl;
+			tmpString << "Address of loadedPages : " << loadedPages;
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			tmpString.clear();
+
 			this->setupPage(*focusedPageName, loadedPages);
-			cout << "SIZE B: " << loadedPages->size() << endl;
+
+			tmpString << "SIZE B: " << loadedPages->size();
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
@@ -170,8 +177,11 @@ namespace Gnoll
 			 */
 			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ("loadedPages");
 
-			cout << "Address of loadedPages : " << loadedPages << endl;
-			cout << "Size of loadedPages : " << loadedPages->size() << endl;
+			std::ostringstream tmpString;
+			tmpString << "Address of loadedPages : " << loadedPages << endl;
+			tmpString << "Size of loadedPages : " << loadedPages->size();
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			tmpString.clear();
 
 			/**
 			 * Loop through all loaded pages and check if they are still visible
@@ -180,13 +190,19 @@ namespace Gnoll
 			{
 				if (shared_ptr<Gnoll::DynamicObject::String> pageName = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*it))
 				{
-					cout << "1 - Loaded page : " << *pageName << endl;
+					tmpString << "1 - Loaded page : " << *pageName;
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+					tmpString.clear();
 
 					if (visitedPages.find(*pageName) == visitedPages.end())
 					{
 						CPage page(*pageName);
 						visitedPages.insert(*pageName);
-						cout << "  1 - checking visibility" << endl;
+
+						tmpString << "  1 - checking visibility";
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+						tmpString.clear();
+
 						if ( this->isPageVisible(page) )
 						{
 							visiblePages->push_back( pageName );
@@ -196,15 +212,15 @@ namespace Gnoll
 
 						for (unsigned int i = 0; i < 4; i++)
 						{
-							cout << "  Checking neighbor : " << neighbors[i] << endl;
+							Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  Checking neighbor : " + string( neighbors[i] ) );
 							if (page.hasAttribute(neighbors[i]))
 							{
 								shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
 
-								cout << "    neighbor found : " << neighborInstanceName << endl;
+								Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("    neighbor found : ") + string(*neighborInstanceName) );
 								if (visitedPages.find(*neighborInstanceName) == visitedPages.end())
 								{
-									cout << "      appending : " << neighborInstanceName << endl;
+									Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("      appending : ") + string(*neighborInstanceName) );
 									loadedPages->push_back( neighborInstanceName );
 								}
 							}
@@ -245,12 +261,12 @@ namespace Gnoll
 				return;
 			}
 
-			cout << "taking care of page " << _pageInstance << endl;
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "taking care of page " + _pageInstance );
 
 			page.init();
 			_loadedPages->push_back(shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(_pageInstance)));
 
-			cout << "page " << _pageInstance << "initialized" << endl;
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "page " + _pageInstance + " initialized" );
 			shared_ptr<Gnoll::DynamicObject::Float> pageSize = page.getAttribute<Float>("size");
 
 
@@ -263,9 +279,9 @@ namespace Gnoll
 				if (page.hasAttribute(neighbors[i]))
 				{
 					shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
-					cout << "Loading neighbor " << *neighborInstanceName << endl;
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("Loading neighbor ") + string(*neighborInstanceName) );
 					CPage neighbor(*neighborInstanceName);
-					cout << "Neighbor " << *neighborInstanceName << " loaded" << endl;
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("Neighbor ") + string(*neighborInstanceName) + " loaded" );
 
 					if (this->isPageVisible(neighbor))
 					{
@@ -292,9 +308,12 @@ namespace Gnoll
 							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
 						}
 
-						cout << "asking for neighbor page root node" << endl;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "asking for neighbor page root node" );
 						Ogre::SceneNode* neighborRootNode = neighbor.getPageRootNode();
-						cout << "neighbor page root node " << neighborRootNode << endl;
+
+						std::ostringstream tmpString;
+						tmpString << "neighbor page root node " << neighborRootNode;
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 						neighborRootNode->translate( _offset + neighborOffset, Ogre::Node::TS_LOCAL);
 					}
 				}

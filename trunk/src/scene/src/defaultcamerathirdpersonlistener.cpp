@@ -34,7 +34,9 @@
 #include "../../input/include/ctranslationevents.h"
 #include "../../input/include/cinputmouseevents.h"
 #include "../../dynamicobject/include/float.h"
+#include "../../log/include/clogmodule.h"
 
+#include <sstream>
 
 using namespace Gnoll::DynamicObject;
 
@@ -82,7 +84,10 @@ namespace Gnoll
 			// KEYBOARD
 			if(ae.action == "ACTION_ROTATE_CAMERA_LEFT")
 			{
-				std::cout << "Value : " << *maxRotY << std::endl;
+				std::ostringstream tmpString;
+				tmpString << "Value : " << *maxRotY;
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+
 				pCam->rotateAroundAxisY(*maxRotY * ae.intensity * lasttime);
 			}
 			if(ae.action == "ACTION_ROTATE_CAMERA_RIGHT")

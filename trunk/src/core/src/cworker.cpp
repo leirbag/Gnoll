@@ -37,8 +37,11 @@
 #include "../include/cworker.h"
 #include "../include/cpoolthreads.h"
 
-#include <iostream>
+#include "../../log/include/clogmodule.h"
 
+#include <sstream>
+
+using namespace std;
 
 namespace Gnoll {
 
@@ -51,26 +54,37 @@ namespace Gnoll {
 		{
 			if ( m_poolOfThreads == NULL )
 			{
-				cout << this << "  No Poolthread sent. Exiting." << endl;
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  No Poolthread sent. Exiting." );
 				return;
 			}
 
 
+			std::ostringstream tmpString;
 			while ( m_stop == false )
 			{
-				cout << this << " I don't have to stop [" << m_stop << "]. Popping a job..." << endl;
+				tmpString << this << " I don't have to stop [" << m_stop << "]. Popping a job...";
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+				tmpString.clear();
 
 				shared_ptr<CJob> job = m_poolOfThreads->popJob();	
 
-				cout << "  Job popped" << endl;
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  Job popped" );
 				if (job.get())
 				{
-					cout << this << " It's a real job ! It's not empty" << endl;
+					tmpString << this << " It's a real job ! It's not empty";
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage(  tmpString.str() );
+					tmpString.clear();
+
 					job->run();
-					cout << this << " Job run" << endl;
+
+					tmpString << this << " Job run";
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+					tmpString.clear();
 				}
 			}
-			cout << this << " I have to stop. Byebye..." << endl;
+			tmpString << this << " I have to stop. Byebye..." << endl;
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			tmpString.clear();
 		}
 
 
@@ -93,7 +107,12 @@ namespace Gnoll {
 		void CWorker::stop() 
 		{
 			m_stop = true;
-			cout << this << "  m_stop changed to true" << endl;
+
+
+			std::ostringstream tmpString;
+			tmpString << this << "  m_stop changed to true";
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			tmpString.clear();
 		}
 
 

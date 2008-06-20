@@ -33,6 +33,8 @@
 #include "../include/soundmanager.h"
 #include "../../config.h"
 
+#include "../../log/include/clogmodule.h"
+#include <sstream>
 
 namespace Gnoll {
 	namespace Sound {
@@ -123,9 +125,15 @@ namespace Gnoll {
 				currentSound = sMgr->load((*sound_queue)[i]);
 
 				if (!currentSound)
-					cout << "Impossible de trouver " << (*sound_queue)[i] << " dans les paths existants !" << endl;
+				{
+					std::ostringstream tmpString;
+					tmpString << "Impossible de trouver " << (*sound_queue)[i] << " dans les paths existants !";
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+				}
 				else
+				{
 					currentSound->play();
+				}
 			}
 
 			sound_queue->clear();

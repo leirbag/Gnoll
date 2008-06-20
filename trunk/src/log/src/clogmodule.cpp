@@ -96,7 +96,9 @@ namespace Gnoll
 
 		void CLogModule::logMessage(string msg)
 		{
+#if DO_LOG
 			Ogre::LogManager::getSingleton().logMessage( msg );
+#endif
 		}
 	}
 }

@@ -36,8 +36,8 @@
 #include "../include/cinputmouseevents.h"
 #include "../include/ctranslationevents.h"
 #include <OIS/OISMouse.h>
-#include <iostream>
 #include "../../time/include/ctimemodule.h"
+#include "../../log/include/clogmodule.h"
 
 #include "../../config.h"
 
@@ -83,9 +83,11 @@ namespace Gnoll
 			 */ 
 			string buttonValue = lexical_cast<string> (button);
 
-#if DEBUG
-			cout << "Looking for KeyCode [" << buttonValue << "]"<< endl;
-#endif
+			std::ostringstream tmpString;
+			tmpString << "Looking for KeyCode [" << buttonValue << "]";
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			tmpString.clear();
+
 
 
 			/**
@@ -162,20 +164,19 @@ namespace Gnoll
 							shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 							shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
+
+							std::ostringstream tmpString;
 							if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
 							{
-#if DEBUG
-								cout << "Message ajoute ["<< *actionName << "]" << endl;
-#endif
+								tmpString << "Message ajoute ["<< *actionName << "]" << endl;
 							}
 							else
 							{
-#if DEBUG
-								cout << "Message NON ajoute ["<< *actionName << "]" << " of intensity ";
-								cout <<  intensity << " => " << timePressed << " / " << period << endl;
-#endif
+								tmpString << "Message NON ajoute ["<< *actionName << "]" << " of intensity ";
+								tmpString <<  intensity << " => " << timePressed << " / " << period;
 							}
 
+							Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 							it->second = 0;
 						}
 					}
