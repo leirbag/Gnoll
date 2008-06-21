@@ -109,7 +109,7 @@ namespace Gnoll
 			 * How often will the keyboard module get updated (millisecond)
 			 */
 			unsigned long int period = 300;
-			shared_ptr< Integer > periodFromConfig = keyboardConfig->getAttribute<Integer>("period");
+			shared_ptr< Gnoll::DynamicObject::Integer > periodFromConfig = keyboardConfig->getAttribute< Gnoll::DynamicObject::Integer >("period");
 			period = *periodFromConfig;
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
@@ -238,7 +238,7 @@ namespace Gnoll
 			 * How often will the mouse button module get updated (millisecond)
 			 */
 			unsigned long int period = 300;
-			shared_ptr< Integer > periodFromConfig = mouseConfig->getAttribute<Integer>("period");
+			shared_ptr< Gnoll::DynamicObject::Integer > periodFromConfig = mouseConfig->getAttribute< Gnoll::DynamicObject::Integer >("period");
 			period = *periodFromConfig;
 
 
