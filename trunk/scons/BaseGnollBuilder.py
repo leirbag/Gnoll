@@ -40,7 +40,8 @@ class BaseGnollBuilder:
 				print "Boost::filesystem not found"
 				exit(-1)
 
-		config.CheckLib('boost_filesystem', None, None, 'c++')
+		if not config.CheckLib('boost_filesystem', None, None, 'c++') :
+			config.CheckLib('boost_filesystem-mt', None, None, 'c++')
 
 
 		for header in ['boost/thread/mutex.hpp', 'boost/thread/thread.hpp', 'boost/thread/condition.hpp', 'boost/thread/xtime.hpp']:
