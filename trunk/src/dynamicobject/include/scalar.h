@@ -36,6 +36,7 @@
 |                                - getValue() method is now const           |
 |                                - Add attribute type getter and setter     |
 |               12/17/2007 - Paf - Add default values to constructor        |
+|               06/24/2008 - Gabriel - Add () forget in operator +          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -233,7 +234,7 @@ namespace Gnoll
 		 */
 		template <typename T> Scalar<T> const operator+(Scalar<T> const &_lValue, Scalar<T> const &_rValue)
 		{
-			return Scalar<T>( _lValue.getAttrType, _lValue.getValue() + _rValue.getValue() );
+			return Scalar<T>( _lValue.getAttrType(), _lValue.getValue() + _rValue.getValue() );
 		}
 
 
