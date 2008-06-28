@@ -24,7 +24,8 @@
 |   Changelog :                                                             |
 |               04/08/2008 - Gabriel - Initial release                      |
 |               04/10/2008 - Gabriel - Add persistance of attributs         |
-|                                                                           |
+|               06/28/2008 - Gabriel - Fix critical bug on serialisation of |
+|                                       offset                              |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camerathirdperson.h"
@@ -149,9 +150,9 @@ namespace Gnoll
 			shared_ptr<Float> offset(new Float(getOffset()));
 			shared_ptr<Float> minOffset(new Float(getMinOffset()));
 			shared_ptr<Float> maxOffset(new Float(getMaxOffset()));
-			this->setAttribute("offset", amountX);
-			this->setAttribute("minOffset", amountY);
-			this->setAttribute("maxOffset", amountZ);
+			this->setAttribute("offset", offset);
+			this->setAttribute("minOffset", minOffset);
+			this->setAttribute("maxOffset", maxOffset);
 
 			delete m_this;
 		}
@@ -173,6 +174,9 @@ namespace Gnoll
 
 		void CameraThirdPerson::setMinOffset(float value)
 		{
+			if(value < 0)
+				return;
+
 			if(value > getMaxOffset())
 				return;
 
