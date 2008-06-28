@@ -25,6 +25,7 @@
 |               04/08/2008 - Gabriel - Initial release                      |
 |               04/10/2008 - Gabriel - Add the management of message        |
 |               06/28/2008 - Gabriel - Remove debug info on the stdout      |
+|               06/28/2008 - Gabriel - Inverse Axe                          |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/defaultcamerathirdpersonlistener.h"
@@ -70,6 +71,8 @@ namespace Gnoll
 			 * Static conversion to a shared_ptr<CameraThirdPerson>
 			 */
 			shared_ptr<CameraThirdPerson> pCam = static_pointer_cast<CameraThirdPerson>(cam);
+
+			ae.intensity = ae.intensity * -1.0f;
 
 			// ZOOM
 			if(ae.action == "ACTION_ZOOM_CAMERA_IN")
