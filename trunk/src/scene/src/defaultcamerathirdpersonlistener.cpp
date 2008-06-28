@@ -24,8 +24,7 @@
 |   Changelog :                                                             |
 |               04/08/2008 - Gabriel - Initial release                      |
 |               04/10/2008 - Gabriel - Add the management of message        |
-|                                                                           |
-|                                                                           |
+|               06/28/2008 - Gabriel - Remove debug info on the stdout      |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/defaultcamerathirdpersonlistener.h"
@@ -83,13 +82,7 @@ namespace Gnoll
 
 			// KEYBOARD
 			if(ae.action == "ACTION_ROTATE_CAMERA_LEFT")
-			{
-				std::ostringstream tmpString;
-				tmpString << "Value : " << *maxRotY;
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
-
 				pCam->rotateAroundAxisY(*maxRotY * ae.intensity * lasttime);
-			}
 			if(ae.action == "ACTION_ROTATE_CAMERA_RIGHT")
 				pCam->rotateAroundAxisY(*maxRotY * ae.intensity * lasttime);
 			if(ae.action == "ACTION_ROTATE_CAMERA_UP")
