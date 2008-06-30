@@ -45,7 +45,7 @@ namespace Gnoll
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 
 			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(
-															   new Gnoll::Core::DefaultCameraFirstPersonListener);
+															   new Gnoll::Scene::DefaultCameraFirstPersonListener);
 			messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
 
 			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFirstPerson(instanceName));

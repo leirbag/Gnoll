@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               04/12/2008 - Gabriel - Initial release                      |
+|               06/30/2008 - Gabriel - Adapt handle to use weak_ptr         |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/defaultcamerafirstpersonlistener.h"
@@ -50,10 +51,8 @@ namespace Gnoll
 			float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
 			lasttime = lasttime * 1000.0f;
 
-			shared_ptr<CameraFirstPerson> pCam = static_pointer_cast<CameraFirstPerson>(m_pCamera);
-
 			// Update
-			pCam->update(lasttime);
+			m_pCamera.lock()->update(lasttime);
 		}
 	};
 };

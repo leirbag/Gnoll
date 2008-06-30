@@ -291,7 +291,10 @@ class BaseGnollBuilder:
 			'src/scene/src/defaultcamerathirdpersonlistener.cpp',
 			'src/scene/src/camerathirdperson.cpp',
 			'src/scene/src/camerathirdpersonfactory.cpp',
-			'src/scene/src/cmessagelistenercamera.cpp',
+			'src/scene/src/defaultcamerafirstpersonlistener.cpp',
+			'src/scene/src/camerafirstperson.cpp',
+			'src/scene/src/camerafirstpersonfactory.cpp',
+			'src/scene/src/cmessagelistenercamera.cpp'
 			]
 
 		return sceneSourceFiles
