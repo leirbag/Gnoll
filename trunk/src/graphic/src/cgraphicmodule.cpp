@@ -376,7 +376,7 @@ namespace Gnoll
 
 			(*m_camera)->setTarget(mSceneMgr->getSceneNode("RobotNode"), false);
 			boost::shared_ptr<Gnoll::Scene::CameraFirstPerson> ctp = boost::static_pointer_cast<Gnoll::Scene::CameraFirstPerson, Gnoll::Scene::Camera>(*m_camera);
-			ctp->setHeadPosition(mSceneMgr->getSceneNode("RobotNode")->getPosition() + Ogre::Vector3(0, 100, 0));
+			ctp->setHeadPosition(mSceneMgr->getSceneNode("RobotNode")->getPosition() + Ogre::Vector3(0, 25, 0));
 		}
 
 		void CGraphicModule::process()

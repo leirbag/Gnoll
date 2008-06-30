@@ -67,16 +67,19 @@ namespace Gnoll
 				return;
 
 			// Store the old position to calculate the movement of the head position
-			static Ogre::Vector3 oldHeadPosition = getTarget()->getPosition();
+			static Ogre::Vector3 oldPosition = getTarget()->getPosition();
 
 			Ogre::Vector3 position = getTarget()->getPosition();
 			if(m_headPosition != NULL)
 			{
-				position += (position - oldHeadPosition);
+				(*m_headPosition) += (position - oldPosition);
+				position = (*m_headPosition);
 			}
 
 			getOgreCamera()->setPosition(position);
 			getOgreCamera()->setDirection(-getTarget()->getOrientation().zAxis());
+
+			oldPosition = getTarget()->getPosition();
 		}
 	};
 };
