@@ -182,11 +182,12 @@ namespace Gnoll
 			 */
 			void setPosition(const Ogre::Vector3& position);
 
-		    /*
+		        /*
 			 * Settor to set the new target of the camera
 			 * @param target This is the new target, NULL for no target
+			 * @param autofocus This specify if the camera follow the object (orientation)
 			 */
-			virtual void setTarget(Ogre::SceneNode* target);
+			virtual void setTarget(Ogre::SceneNode* target, bool autofocus = true);
 
 			/*
 			 * Settor to set the orientation

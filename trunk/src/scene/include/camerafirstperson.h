@@ -23,6 +23,7 @@
 |                                                                           |
 |   Changelog :                                                             |
 |               04/12/2008 - Gabriel - Initial release                      |
+|               06/30/2008 - Gabriel - Integration of a HEAD position       |
 \*-------------------------------------------------------------------------*/
 
 #ifndef INCLUDED_CAMERAFIRSTPERSON
@@ -36,6 +37,8 @@ namespace Gnoll
 	{
 		class CameraFirstPerson : public Camera
 		{
+		private:
+			Ogre::Vector3* m_headPosition;
 		public:
 			/*
 			 * Default constructor
@@ -49,6 +52,13 @@ namespace Gnoll
 			 * @param copy This is the camera to copy
 			 */
 			explicit CameraFirstPerson(const CameraFirstPerson& copy);
+
+			/*
+			 * This method set the head position, by default we use the position of
+			 * the target
+			 * @param head This is the head position
+			 */
+			void setHeadPosition(const Ogre::Vector3& head);
 
 			/*
 			 * Destructior

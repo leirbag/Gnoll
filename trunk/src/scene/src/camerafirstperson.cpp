@@ -32,19 +32,33 @@ namespace Gnoll
 	namespace Scene
 	{
 		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName) :
-			Camera(instanceName)
+			Camera(instanceName),
+			m_headPosition(NULL)
 		{
 		}
 
 		CameraFirstPerson::CameraFirstPerson(const CameraFirstPerson& copy) :
 			Camera(copy)
 		{
+			m_headPosition = new Ogre::Vector3;
+			(*m_headPosition) = (*copy.m_headPosition);
 		}
 
 		CameraFirstPerson::~CameraFirstPerson()
 		{
 			// NOTHING TO DO
 			// NOTHING TO SERIALISE
+			if(m_headPosition != NULL)
+			    delete m_headPosition;
+		}
+
+		void CameraFirstPerson::setHeadPosition(const Ogre::Vector3& head)
+		{
+			if(m_headPosition != NULL)
+				delete m_headPosition;
+
+			m_headPosition = new Ogre::Vector3();
+			(*m_headPosition) = head;
 		}
 
 		void CameraFirstPerson::update(float time)
@@ -52,7 +66,16 @@ namespace Gnoll
 			if(getTarget() == NULL)
 				return;
 
-			getOgreCamera()->setPosition(getTarget()->getPosition());
+			// Store the old position to calculate the movement of the head position
+			static Ogre::Vector3 oldHeadPosition = getTarget()->getPosition();
+
+			Ogre::Vector3 position = getTarget()->getPosition();
+			if(m_headPosition != NULL)
+			{
+				position += (position - oldHeadPosition);
+			}
+
+			getOgreCamera()->setPosition(position);
 			getOgreCamera()->setDirection(-getTarget()->getOrientation().zAxis());
 		}
 	};

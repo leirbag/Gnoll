@@ -271,18 +271,11 @@ namespace Gnoll
 			m_this->pTarget = target;
 		}
 
-		void Camera::setTarget(Ogre::SceneNode* target)
+		void Camera::setTarget(Ogre::SceneNode* target, bool autofocus)
 		{
 			if(target != NULL)
-			{
-				m_this->pOgreCamera->setAutoTracking(true, target);
+				m_this->pOgreCamera->setAutoTracking(autofocus, target);
 				setTargetHelper(target);
-			}
-			else
-			{
-				m_this->pOgreCamera->setAutoTracking(false);
-				setTargetHelper(target);
-			}
 
 		}
 

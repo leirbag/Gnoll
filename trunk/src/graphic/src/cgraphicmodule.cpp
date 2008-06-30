@@ -90,6 +90,8 @@
 #include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagelistener.h"
 
+#include "../../scene/include/camerafirstperson.h"
+
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 
@@ -239,7 +241,7 @@ namespace Gnoll
 			mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 			// Create and configure the camera
-			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraThirdPersonFactory() );
+			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraFirstPersonFactory() );
 			m_camera  = new shared_ptr<Gnoll::Scene::Camera> (acf->createCamera("camTP"));
 			(*m_camera)->setNearValue(5);
 			(*m_camera)->setFarValue(1000);
@@ -372,7 +374,9 @@ namespace Gnoll
 			eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 			eb->setAlwaysOnTop(true);
 
-			(*m_camera)->setTarget(mSceneMgr->getSceneNode("RobotNode"));
+			(*m_camera)->setTarget(mSceneMgr->getSceneNode("RobotNode"), false);
+			boost::shared_ptr<Gnoll::Scene::CameraFirstPerson> ctp = boost::static_pointer_cast<Gnoll::Scene::CameraFirstPerson, Gnoll::Scene::Camera>(*m_camera);
+			ctp->setHeadPosition(mSceneMgr->getSceneNode("RobotNode")->getPosition() + Ogre::Vector3(0, 100, 0));
 		}
 
 		void CGraphicModule::process()
