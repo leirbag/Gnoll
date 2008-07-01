@@ -34,7 +34,7 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		cameraspline_i
+		struct cameraspline_i
 		{
 			unsigned long length;
 			Ogre::Animation* pAnim;
@@ -58,33 +58,29 @@ namespace Gnoll
 			// TODO: Serialize
 			Ogre::SceneManager* pSM = CGraphicModule::getInstancePtr()->getSceneManager();
 			Ogre::SceneNode* camNode = pSM->getRootSceneNode()->createChildSceneNode();
-			camNode->attachObject(m_ogreCamera);
+			camNode->attachObject(getOgreCamera());
 
-			m_lenght  = 10;
-			m_pAnim = pSM->createAnimation(instanceName, 10);
-			m_pAnim->setInterpolationMode(Ogre::Animation::IM_SPLINE);
-			m_pNodeAT = m_pAnim->createNodeTrack(0, camNode);
+			m_this->length  = 10;
+			m_this->pAnim = pSM->createAnimation(instanceName, 10);
+			m_this->pAnim->setInterpolationMode(Ogre::Animation::IM_SPLINE);
+			m_this->pNodeAT = m_this->pAnim->createNodeTrack(0, camNode);
 
-			m_pAnimState = pSM->createAnimationState(instanceName);
-		}
-
-		CameraSpline::CameraSpline(const Camera& copy)
-		{
-			// Copy attributs
-			m_this = new camera_i;
-			*m_this = *(copy.m_this);
-		}
-
-		CameraSpline::CameraSpline& operator=(const CameraSpline& copy)
-		{
-			// Copy attributs
-			*m_this = *(copy.m_this);
-			return *this;
+			m_this->pAnimState = pSM->createAnimationState(instanceName);
 		}
 
 		CameraSpline::~CameraSpline()
 		{
 			delete m_this;
+		}
+
+		CameraSpline::CameraSpline(const CameraSpline& copy) :
+			Camera(copy)
+		{
+		}
+
+		CameraSpline& CameraSpline::operator=(const CameraSpline& copy)
+		{
+			return *this;
 		}
 
 		void CameraSpline::update(float time)

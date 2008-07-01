@@ -294,6 +294,9 @@ class BaseGnollBuilder:
 			'src/scene/src/defaultcamerafirstpersonlistener.cpp',
 			'src/scene/src/camerafirstperson.cpp',
 			'src/scene/src/camerafirstpersonfactory.cpp',
+			'src/scene/src/defaultcamerasplinelistener.cpp',
+			'src/scene/src/cameraspline.cpp',
+			'src/scene/src/camerasplinefactory.cpp',
 			'src/scene/src/cmessagelistenercamera.cpp'
 			]
 

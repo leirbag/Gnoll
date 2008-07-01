@@ -50,10 +50,8 @@ namespace Gnoll
 			float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
 			lasttime = lasttime * 1000.0f;
 
-			shared_ptr<CameraSpline> pCam = static_pointer_cast<CameraSpline>(m_pCamera);
-
 			// Update
-			pCam->update(lasttime);
+			m_pCamera.lock()->update(lasttime);
 		}
 	};
 };
