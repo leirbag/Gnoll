@@ -54,12 +54,6 @@ namespace Gnoll
 			explicit CameraFixe(const Glib::ustring& instanceName);
 
 			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit CameraFixe(const CameraFixe& copy);
-
-			/*
 			 * Destructior
 			 */
 			virtual ~CameraFixe();

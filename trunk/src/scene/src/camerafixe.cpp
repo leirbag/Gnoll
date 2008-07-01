@@ -37,11 +37,6 @@ namespace Gnoll
 		{
 		}
 
-		CameraFixe::CameraFixe(const CameraFixe& copy) :
-			Camera(copy)
-		{
-		}
-
 		CameraFixe::~CameraFixe()
 		{
 		}

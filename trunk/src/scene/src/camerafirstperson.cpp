@@ -37,13 +37,6 @@ namespace Gnoll
 		{
 		}
 
-		CameraFirstPerson::CameraFirstPerson(const CameraFirstPerson& copy) :
-			Camera(copy)
-		{
-			m_headPosition = new Ogre::Vector3;
-			(*m_headPosition) = (*copy.m_headPosition);
-		}
-
 		CameraFirstPerson::~CameraFirstPerson()
 		{
 			// NOTHING TO DO

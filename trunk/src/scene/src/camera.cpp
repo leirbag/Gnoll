@@ -127,9 +127,6 @@ namespace Gnoll
 		Camera::Camera(const Camera& copy) :
 			CDynamicObjectProxy(copy)
 		{
-			// Copy attributs
-			m_this = new camera_i;
-			*m_this = *(copy.m_this);
 		}
 
 		Camera::~Camera()
@@ -188,8 +185,6 @@ namespace Gnoll
 
 		Camera& Camera::operator=(const Camera& copy)
 		{
-			// Copy attributs
-			*m_this = *(copy.m_this);
 			return *this;
 		}
 

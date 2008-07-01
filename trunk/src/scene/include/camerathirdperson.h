@@ -68,12 +68,6 @@ namespace Gnoll
 			explicit CameraThirdPerson(const Glib::ustring& instanceName);
 
 			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit CameraThirdPerson(const CameraThirdPerson& copy);
-
-			/*
 			 * Destructior
 			 */
 			virtual ~CameraThirdPerson();

@@ -39,6 +39,7 @@ namespace Gnoll
 		{
 		private:
 			Ogre::Vector3* m_headPosition;
+
 		public:
 			/*
 			 * Default constructor
@@ -46,12 +47,6 @@ namespace Gnoll
 			 * 					   instance name of the Ogre Camera
 			 */
 			explicit CameraFirstPerson(const Glib::ustring& instanceName);
-
-			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit CameraFirstPerson(const CameraFirstPerson& copy);
 
 			/*
 			 * This method set the head position, by default we use the position of

@@ -46,18 +46,6 @@ namespace Gnoll
 		private:
 			cameraspline_i *m_this;
 
-			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit CameraSpline(const CameraSpline& copy);
-
-			/*
-			 * Operator to copy a camera
-			 * @param copy This is the camera to copy
-			 */
-			virtual CameraSpline& operator=(const CameraSpline& copy);
-
 		public:
 			/*
 			 * Default constructor

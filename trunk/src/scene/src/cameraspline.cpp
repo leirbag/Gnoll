@@ -73,16 +73,6 @@ namespace Gnoll
 			delete m_this;
 		}
 
-		CameraSpline::CameraSpline(const CameraSpline& copy) :
-			Camera(copy)
-		{
-		}
-
-		CameraSpline& CameraSpline::operator=(const CameraSpline& copy)
-		{
-			return *this;
-		}
-
 		void CameraSpline::update(float time)
 		{
 			if(m_this->pAnimState->getEnabled())

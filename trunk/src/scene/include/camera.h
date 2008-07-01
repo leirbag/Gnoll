@@ -61,6 +61,18 @@ namespace Gnoll
 			 */
 			camera_i* m_this;
 
+			/*
+			 * Operator to copy a camera
+			 * @param copy This is the camera to copy
+			 */
+			virtual Camera& operator=(const Camera& copy);
+
+			/*
+			 * Copy constructor
+			 * @param copy This is the camera to copy
+			 */
+			explicit Camera(const Camera& copy);
+
 		protected:
 			/*
 			 * Default constructor, it initializes the camera with default settings :
@@ -70,12 +82,6 @@ namespace Gnoll
 			 * 					   instance name of the Ogre Camera
 			 */
 			explicit Camera(const Glib::ustring& instanceName);
-
-			/*
-			 * Copy constructor
-			 * @param copy This is the camera to copy
-			 */
-			explicit Camera(const Camera& copy);
 
 			/*
 			 * Helper method for setTarget()
@@ -88,12 +94,6 @@ namespace Gnoll
 			 * Destructior
 			 */
 			virtual ~Camera();
-
-			/*
-			 * Operator to copy a camera
-			 * @param copy This is the camera to copy
-			 */
-			virtual Camera& operator=(const Camera& copy);
 
 			/*
 			 * Acessor to the near value
