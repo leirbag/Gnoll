@@ -29,6 +29,7 @@
 |               02/15/2008 - Bruno Mahe - Implements destructor             |
 |               04/08/2008 - Gabriel - total refactoring                    |
 |               04/10/2008 - Gabriel - Add the enqueue of listener          |
+|               03/07/2008 - Gabriel - Remove insulation                    |
 \*-------------------------------------------------------------------------*/
 
 #ifndef INCLUDED_CAMERA
@@ -45,21 +46,29 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		/*
-		 * Structure that contains camera attributs
-		 */
-		struct camera_i;
-
 		class CMessageListenerCamera;
 		//class CMessageType;
 
 		class Camera : public Gnoll::DynamicObject::CDynamicObjectProxy
 		{
 		private:
+			typedef std::pair<shared_ptr<CMessageListenerCamera>, shared_ptr<CMessageType> > PairsListener;
+			typedef std::queue<shared_ptr<PairsListener> > QueueListener;
+
 			/*
-			 * This is a pointer to camera attributs
+			 * This is the queue of cameras listener
 			 */
-			camera_i* m_this;
+			QueueListener queueListener;
+
+			/*
+			 * This is a pointer to an Ogre3D Camera
+			 */
+			Ogre::Camera* pOgreCamera;
+
+			/*
+			 * This is a pointer to the scenenode target, can be NULL if no target
+			 */
+			Ogre::SceneNode* pTarget;
 
 			/*
 			 * Operator to copy a camera

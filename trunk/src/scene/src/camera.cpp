@@ -24,8 +24,9 @@
 |   Changelog :                                                             |
 |               04/08/2008 - Gabriel - Initial release                      |
 |               04/10/2008 - Gabriel - Add persistance of near, far and fov |
-|									   value                                |
+|                                      value                                |
 |               04/10/2008 - Gabriel - Add the enqueue of listener          |
+|               03/07/2008 - Gabriel - Remove insulation                    |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camera.h"
@@ -34,6 +35,7 @@
 #include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagetype.h"
 #include "../../dynamicobject/include/float.h"
+#include "../../dynamicobject/include/string.h"
 #include "../../log/include/clogmodule.h"
 #include <sstream>
 #include <queue>
@@ -48,32 +50,14 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		struct camera_i
-		{
-			typedef std::pair<shared_ptr<CMessageListenerCamera>, shared_ptr<CMessageType> > PairsListener;
-			typedef std::queue<shared_ptr<PairsListener> > QueueListener;
-			QueueListener queueListener;
-			Glib::ustring name;
-			Ogre::Camera* pOgreCamera;
-			Ogre::SceneNode* pTarget;
-
-			camera_i() :
-				name(""),
-				pOgreCamera(NULL),
-				pTarget(NULL)
-			{
-			}
-		};
-
 		Camera::Camera(const Glib::ustring& instanceName) :
-			CDynamicObjectProxy(instanceName),
-			m_this(new camera_i)
+			CDynamicObjectProxy(instanceName)
 		{
 
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Loading camera [" + instanceName + "]" );
 
-			m_this->name = instanceName;
-			m_this->pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
+			setAttribute("name", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(instanceName)));
+			pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
 
 			/**
 			 * Extract Camera's near, far and fov value
@@ -105,7 +89,7 @@ namespace Gnoll
 			pos_y = this->getAttributeOrDefault<Float>("pos_y", default_pos);
 			pos_z = this->getAttributeOrDefault<Float>("pos_z", default_pos);
 
-			m_this->pOgreCamera->setPosition(*pos_x, *pos_y, *pos_z);
+			pOgreCamera->setPosition(*pos_x, *pos_y, *pos_z);
 
 			/**
 			 * Extract Camera's direction
@@ -121,7 +105,7 @@ namespace Gnoll
 			dir_y = this->getAttributeOrDefault<Float>("dir_y", default_dir_y);
 			dir_z = this->getAttributeOrDefault<Float>("dir_z", default_dir_z);
 
-			m_this->pOgreCamera->setDirection(*dir_x, *dir_y, *dir_z);
+			pOgreCamera->setDirection(*dir_x, *dir_y, *dir_z);
 		}
 
 		Camera::Camera(const Camera& copy) :
@@ -129,16 +113,21 @@ namespace Gnoll
 		{
 		}
 
+		Camera& Camera::operator=(const Camera& copy)
+		{
+			return *this;
+		}
+
 		Camera::~Camera()
 		{
 			// Destroy all listeners attach to this camera
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 
-			while (!m_this->queueListener.empty())
+			while (!queueListener.empty())
 			{
-				shared_ptr<camera_i::PairsListener> pairs = shared_ptr<camera_i::PairsListener>(m_this->queueListener.front());
+				shared_ptr<PairsListener> pairs = shared_ptr<PairsListener>(queueListener.front());
 				messageModule->getMessageManager()->delListener(shared_ptr<CMessageListenerCamera>(pairs->first), *pairs->second);
-				m_this->queueListener.pop();
+				queueListener.pop();
 			}
 
 			/*
@@ -157,7 +146,7 @@ namespace Gnoll
 			this->setAttribute("fov", fov_value);
 
 			// Position
-			Ogre::Vector3 pos = m_this->pOgreCamera->getPosition();
+			Ogre::Vector3 pos = pOgreCamera->getPosition();
 			shared_ptr<Float> pos_x(new Float(pos.x));
 			this->setAttribute("pos_x", pos_x);
 
@@ -168,7 +157,7 @@ namespace Gnoll
 			this->setAttribute("pos_z", pos_z);
 
 			// Direction
-			Ogre::Vector3 dir = m_this->pOgreCamera->getDirection();
+			Ogre::Vector3 dir = pOgreCamera->getDirection();
 			shared_ptr<Float> dir_x(new Float(dir.x));
 			this->setAttribute("dir_x", dir_x);
 
@@ -179,63 +168,56 @@ namespace Gnoll
 			this->setAttribute("dir_z", dir_z);
 
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Saving camera [" + this->getInstance() + "]" );
-
-			delete m_this;
-		}
-
-		Camera& Camera::operator=(const Camera& copy)
-		{
-			return *this;
 		}
 
 		float Camera::getNearValue() const
 		{
-			return m_this->pOgreCamera->getNearClipDistance();
+			return pOgreCamera->getNearClipDistance();
 		}
 
 		float Camera::getFarValue() const
 		{
-			return m_this->pOgreCamera->getFarClipDistance();
+			return pOgreCamera->getFarClipDistance();
 		}
 
 		float Camera::getFovValue() const
 		{
-			return m_this->pOgreCamera->getAspectRatio();
+			return pOgreCamera->getAspectRatio();
 		}
 
 		const Ogre::Vector3& Camera::getPosition() const
 		{
-			return m_this->pOgreCamera->getPosition();
+			return pOgreCamera->getPosition();
 		}
 
 		Ogre::Vector3 Camera::getDirection() const
 		{
-			return m_this->pOgreCamera->getDirection();
+			return pOgreCamera->getDirection();
 		}
 
 		Ogre::Quaternion Camera::getOrientation() const
 		{
-			return m_this->pOgreCamera->getOrientation();
+			return pOgreCamera->getOrientation();
 		}
 
 		Ogre::SceneNode* Camera::getTarget() const
 		{
-			return m_this->pTarget;
+			return pTarget;
 		}
 
 		Ogre::Camera* Camera::getOgreCamera()
 		{
-			return m_this->pOgreCamera;
+			return pOgreCamera;
 		}
 
 		Ogre::Vector3 Camera::getUp() const
 		{
-			return m_this->pOgreCamera->getUp();
+			return pOgreCamera->getUp();
 		}
 
 		Ogre::Matrix4 Camera::getView() const
 		{
-			return m_this->pOgreCamera->getViewMatrix();
+			return pOgreCamera->getViewMatrix();
 		}
 
 		void Camera::setNearValue(float near)
@@ -243,40 +225,40 @@ namespace Gnoll
 			if(fabs(near) > getFarValue())
 				return;
 
-		    m_this->pOgreCamera->setNearClipDistance(near);
+		    pOgreCamera->setNearClipDistance(near);
 		}
 
 		void Camera::setFarValue(float far)
 		{
-			m_this->pOgreCamera->setFarClipDistance(far);
+			pOgreCamera->setFarClipDistance(far);
 		}
 
 		void Camera::setFovValue(float fov)
 		{
-			m_this->pOgreCamera->setAspectRatio(fov);
+			pOgreCamera->setAspectRatio(fov);
 		}
 
 		void Camera::setPosition(const Ogre::Vector3& position)
 		{
-			m_this->pOgreCamera->setPosition(position);
+			pOgreCamera->setPosition(position);
 		}
 
 		void Camera::setTargetHelper(Ogre::SceneNode* target)
 		{
-			m_this->pTarget = target;
+			pTarget = target;
 		}
 
 		void Camera::setTarget(Ogre::SceneNode* target, bool autofocus)
 		{
 			if(target != NULL)
-				m_this->pOgreCamera->setAutoTracking(autofocus, target);
+				pOgreCamera->setAutoTracking(autofocus, target);
 				setTargetHelper(target);
 
 		}
 
 		void Camera::setOrientation(const Ogre::Quaternion& orientation)
 		{
-			m_this->pOgreCamera->setOrientation(orientation);
+			pOgreCamera->setOrientation(orientation);
 		}
 
 		void Camera::update(float time)
@@ -287,7 +269,7 @@ namespace Gnoll
 		void Camera::enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<CMessageType> type)
 		{
 			// Add the listener to the queue
-			m_this->queueListener.push(shared_ptr<camera_i::PairsListener>(new camera_i::PairsListener(listener, type)));
+			queueListener.push(shared_ptr<PairsListener>(new PairsListener(listener, type)));
 		}
 	};
 };
