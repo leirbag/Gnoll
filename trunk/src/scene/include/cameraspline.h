@@ -39,12 +39,14 @@ namespace Gnoll
 
 	namespace Scene
 	{
-		struct cameraspline_i;
-
 		class CameraSpline : public Camera
 		{
 		private:
-			cameraspline_i *m_this;
+			unsigned long length;
+			Ogre::Animation* pAnim;
+			Ogre::NodeAnimationTrack* pNodeAT;
+			Ogre::AnimationState* pAnimState;
+			std::map<unsigned long, Ogre::Vector3> mapAnim;
 
 		public:
 			/*

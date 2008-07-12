@@ -42,10 +42,14 @@ namespace Gnoll
 	{
 		boost::shared_ptr<Camera> CameraSplineFactory::createCamera(const Glib::ustring& instanceName)
 		{
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(new Gnoll::Scene::DefaultCameraSplineListener);
-			messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
+			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
+
+			shared_ptr<CMessageListenerCamera> listenerInput(new DefaultCameraSplineListener);
+
+			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
+
 			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraSpline(instanceName));
+
 			listenerInput->setCamera(pCam);
 
 			return pCam;

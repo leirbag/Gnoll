@@ -27,104 +27,98 @@
 
 #include "../include/cameraspline.h"
 #include "../../graphic/include/cgraphicmodule.h"
+#include "../../dynamicobject/include/float.h"
 
 using namespace Gnoll::Graphic;
+using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
 	namespace Scene
 	{
-		struct cameraspline_i
-		{
-			unsigned long length;
-			Ogre::Animation* pAnim;
-			Ogre::NodeAnimationTrack* pNodeAT;
-			Ogre::AnimationState* pAnimState;
-			std::map<unsigned long, Ogre::Vector3> mapAnim;
-
-			cameraspline_i() :
-				length(0),
-				pAnim(NULL),
-				pNodeAT(NULL),
-				pAnimState(NULL)
-			{
-			}
-		};
-
 		CameraSpline::CameraSpline(const Glib::ustring& instanceName) :
-			Camera(instanceName),
-			m_this(new cameraspline_i)
+			Camera(instanceName)
 		{
-			// TODO: Serialize
+			shared_ptr<Float> len;
+			shared_ptr<Float> default_length = shared_ptr<Float> (new Float(10.0f));
+			len = this->getAttributeOrDefault<Float>("length", default_length);
+			length = *len;
+
+			// Get the scenemanager
 			Ogre::SceneManager* pSM = CGraphicModule::getInstancePtr()->getSceneManager();
+
+			// Create a scene node of the camera
 			Ogre::SceneNode* camNode = pSM->getRootSceneNode()->createChildSceneNode();
 			camNode->attachObject(getOgreCamera());
 
-			m_this->length  = 10;
-			m_this->pAnim = pSM->createAnimation(instanceName, 10);
-			m_this->pAnim->setInterpolationMode(Ogre::Animation::IM_SPLINE);
-			m_this->pNodeAT = m_this->pAnim->createNodeTrack(0, camNode);
+			// Create the animation with a SPLINE
+			pAnim = pSM->createAnimation(instanceName, length);
+			pAnim->setInterpolationMode(Ogre::Animation::IM_SPLINE);
+			pNodeAT = pAnim->createNodeTrack(0, camNode);
 
-			m_this->pAnimState = pSM->createAnimationState(instanceName);
+			pAnimState = pSM->createAnimationState(instanceName);
+
+			// Get back an ancient animation (if instance existed only)
+			// TODO : need to speak with Paf
+
 		}
 
 		CameraSpline::~CameraSpline()
 		{
-			delete m_this;
 		}
 
 		void CameraSpline::update(float time)
 		{
-			if(m_this->pAnimState->getEnabled())
-				m_this->pAnimState->addTime(time);
+			if(pAnimState->getEnabled())
+				pAnimState->addTime(time);
 		}
 
 		void CameraSpline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)
 		{
-			if(frame > m_this->length)
+			if(frame > length)
 				return;
 
-			Ogre::TransformKeyFrame* key = m_this->pNodeAT->createNodeKeyFrame(frame);
+			Ogre::TransformKeyFrame* key = pNodeAT->createNodeKeyFrame(frame);
 			key->setTranslate(vec3);
-			m_this->mapAnim[frame] = vec3;
+			mapAnim[frame] = vec3;
 		}
 
 		const Ogre::Vector3* CameraSpline::getPoint(unsigned long frame)
 		{
-			if(frame > m_this->length)
+			if(frame > length)
 				return NULL;
 
-			return &m_this->mapAnim[frame];
+			return &mapAnim[frame];
 		}
 
 		void CameraSpline::setLength(unsigned long length)
 		{
-			m_this->length = length;
+			length = length;
 		}
 
 		unsigned long CameraSpline::getLength()
 		{
-			return m_this->length;
+			return length;
 		}
 
 		void CameraSpline::start()
 		{
-			m_this->pAnimState->setEnabled(true);
+			pAnimState->setEnabled(true);
 		}
 
 		void CameraSpline::stop()
 		{
-			m_this->pAnimState->setEnabled(false);
+			pAnimState->setEnabled(false);
 		}
 
 		void CameraSpline::setLoop(bool loop)
 		{
-			m_this->pAnimState->setLoop(loop);
+			pAnimState->setLoop(loop);
 		}
 
 		float CameraSpline::getCurrentKeyFrame()
 		{
-			return m_this->pAnimState->getTimePosition();
+			return pAnimState->getTimePosition();
 		}
 	};
 };

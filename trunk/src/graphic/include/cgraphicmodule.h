@@ -51,6 +51,7 @@
 #include "../../scene/include/abstractcamerafactory.h"
 #include "../../scene/include/camerathirdpersonfactory.h"
 #include "../../scene/include/camerafirstpersonfactory.h"
+#include "../../scene/include/camerasplinefactory.h"
 
 #include "cscenefactorystd.h"
 
