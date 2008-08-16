@@ -52,6 +52,7 @@
 #include "../../scene/include/camerathirdpersonfactory.h"
 #include "../../scene/include/camerafirstpersonfactory.h"
 #include "../../scene/include/camerasplinefactory.h"
+#include "../../scene/include/camerafreeflyfactory.h"
 
 #include "cscenefactorystd.h"
 

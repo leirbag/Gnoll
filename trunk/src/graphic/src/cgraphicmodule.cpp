@@ -90,6 +90,7 @@
 #include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagelistener.h"
 
+#include "../../scene/include/camerafreefly.h"
 #include "../../scene/include/camerafirstperson.h"
 #include "../../scene/include/cameraspline.h"
 
@@ -242,7 +243,7 @@ namespace Gnoll
 			mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 			// Create and configure the camera
-			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraSplineFactory() );
+			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraFreeFlyFactory() );
 			m_camera  = new shared_ptr<Gnoll::Scene::Camera> (acf->createCamera("camTP"));
 			(*m_camera)->setNearValue(5);
 			(*m_camera)->setFarValue(1000);
@@ -375,12 +376,7 @@ namespace Gnoll
 			eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 			eb->setAlwaysOnTop(true);
 
-			(*m_camera)->setTarget(mSceneMgr->getSceneNode("RobotNode"), false);
-			boost::shared_ptr<Gnoll::Scene::CameraSpline> cs = boost::static_pointer_cast<Gnoll::Scene::CameraSpline, Gnoll::Scene::Camera>(*m_camera);
-			cs->addPoint(Ogre::Vector3(0, 200, 24), 0);
-			cs->addPoint(Ogre::Vector3(0, 0, 0), 3);
-			cs->addPoint(Ogre::Vector3(0, 100, 0), 8);
-			cs->start();
+			//boost::shared_ptr<Gnoll::Scene::CameraSpline> cs = boost::static_pointer_cast<Gnoll::Scene::CameraSpline, Gnoll::Scene::Camera>(*m_camera);
 		}
 
 		void CGraphicModule::process()
