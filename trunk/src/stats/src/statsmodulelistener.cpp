@@ -27,6 +27,7 @@
 
 #include "../include/statsmodulelistener.h"
 #include "../include/cstatsmodule.h"
+#include <iostream>
 
 namespace Gnoll
 {
@@ -39,7 +40,6 @@ namespace Gnoll
 		void StatsModuleListener::handle ( shared_ptr<CMessage> message )
 		{
 			unsigned long temp = message->getData<unsigned long>();
-
 			CStatsModule::getInstancePtr()->setRenderTime(temp);
 		}
 

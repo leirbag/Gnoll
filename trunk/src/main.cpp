@@ -85,6 +85,7 @@ using namespace Gnoll::Scene;
 using namespace Gnoll::Graphic;
 using namespace Gnoll::DynamicObject;
 using namespace Gnoll::Log;
+using namespace Gnoll::Stats;
 
 bool done = false;
 
@@ -696,10 +697,6 @@ int main(int argc, char* argv[])
 	soundManager->addLoadSource(loadChannel);
 	soundManager->addSaveSource(saveChannel);
 
-
-
-
-
 	/**
 	 * Now program options have been parsed,
 	 * program is initialized
@@ -733,7 +730,7 @@ int main(int argc, char* argv[])
 	CMessageModule* messageModule = CMessageModule::getInstancePtr();
 	CSoundModule * soundmanager = CSoundModule::getInstancePtr();
 	CInputEventsTranslator* inputEventsTranslator = CInputEventsTranslator::getInstancePtr();
-
+	CStatsModule* statsModule = CStatsModule::getInstancePtr();
 
 	CMessageManager* messageManager = messageModule->getMessageManager();
 
@@ -743,7 +740,7 @@ int main(int argc, char* argv[])
 	timeModule->init();
 	soundmanager->init();
 	inputEventsTranslator->init();
-
+	statsModule->init();
 
 	/*
 	 * We add a listner and send some messages
@@ -778,7 +775,7 @@ int main(int argc, char* argv[])
 
 	while (done == false)
 	{
-
+		statsModule->process();
 		inputmanager.process();
 		inputEventsTranslator->process();
 		messageModule->process();
@@ -833,6 +830,7 @@ int main(int argc, char* argv[])
 	messageModule->exit();
 	soundmanager->exit();
 	logModule->exit();
+	statsModule->exit();
 
 	Gnoll::Stats::CStatsModule::destroy();
 	CSoundModule::destroy();
@@ -841,6 +839,7 @@ int main(int argc, char* argv[])
 	CGraphicModule::destroy();
 	CMessageModule::destroy();
 	CLogModule::destroy();
+	CStatsModule::destroy();
 
 	Gnoll::DynamicObject::AttributeHandlerRegistry::destroy();
 

@@ -29,9 +29,10 @@
 #ifndef INCLUDED_CSTATSMODULE_H
 #define INCLUDED_CSTATSMODULE_H
 
-
+#include "../include/statsmodulelistener.h"
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
+#include <boost/shared_ptr.hpp>
 
 using namespace Gnoll::Core;
 
@@ -47,6 +48,7 @@ namespace Gnoll
 		{
 			private:
 				stats_i* m_pStats;
+				boost::shared_ptr<StatsModuleListener> listenerModule;
 
 			public:
 				/**
