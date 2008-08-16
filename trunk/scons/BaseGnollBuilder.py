@@ -297,7 +297,10 @@ class BaseGnollBuilder:
 			'src/scene/src/defaultcamerasplinelistener.cpp',
 			'src/scene/src/cameraspline.cpp',
 			'src/scene/src/camerasplinefactory.cpp',
-			'src/scene/src/cmessagelistenercamera.cpp'
+			'src/scene/src/cmessagelistenercamera.cpp',
+			'src/scene/src/defaultcamerafreeflylistener.cpp',
+			'src/scene/src/camerafreefly.cpp',
+			'src/scene/src/camerafreeflyfactory.cpp'
 			]
 
 		return sceneSourceFiles
