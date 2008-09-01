@@ -3,17 +3,16 @@
 	<attribute name="200">
 		<list>
 			<string value="ACTION_STEP_FORWARD"/>
-			<string value="ACTION_ROTATE_LEFT"/>
 		</list>
 	</attribute>
 	<attribute name="203">
 		<list>
-			<string value="ACTION_ROTATE_LEFT"/>
+			<string value="ACTION_STRAFE_LEFT"/>
 		</list>
 	</attribute>
 	<attribute name="205">
 		<list>
-			<string value="ACTION_ROTATE_RIGHT"/>
+			<string value="ACTION_STRAFE_RIGHT"/>
 		</list>
 	</attribute>
 	<attribute name="31">
@@ -29,7 +28,6 @@
 	<attribute name="208">
 		<list>
 			<string value="ACTION_STEP_BACKWARD"/>
-			<string value="ACTION_ROTATE_RIGHT"/>
 		</list>
 	</attribute>
 	<attribute name="18">
