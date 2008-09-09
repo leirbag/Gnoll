@@ -25,6 +25,7 @@
 |               01/08/2008 - Paf - Initial release                           |
 |		16/05/2008 - WT	 - Add state based listeners for	     |
 |					keyboard and mouse button	     |
+|		09/09/2008 - WT  - Add support for rule manager              |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -97,6 +98,12 @@ namespace Gnoll
 				shared_ptr<CMessageListener> mouseButtonEventsTrigger;
 
 
+				/**
+				 * Rule manager
+				 */
+				shared_ptr<CMessageListener> ruleManager;
+
+
 
 			public:
 
@@ -154,6 +161,16 @@ namespace Gnoll
 				 * Deactivate mouse button events translation
 				 */
 				void deactivateMouseButtonTranslation();
+
+				/**
+				 * Activate rule manager
+				 */
+				void activateRuleManager();
+
+				/**
+				 * Deactivate rule manager
+				 */
+				void deactivateRuleManager();
 		};
 
 	}

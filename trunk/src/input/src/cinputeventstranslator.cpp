@@ -27,6 +27,7 @@
 |                                           config file                     |
 |		16/05/2008 - WT		- Add state based listeners for	    |
 |					    keyboard and mouse button	    |
+|		09/09/2008 - WT         - Add support for rule manager      |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -39,6 +40,7 @@
 #include "../include/cmousebuttoneventstranslator.h"
 #include "../include/cmousebuttoneventstrigger.h"
 #include "../include/cmousebuttonstatetranslator.h"
+#include "../include/crulemanager.h"
 #include "../../core/include/cmessagelistener.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../../dynamicobject/include/dynamicobject.h"
@@ -71,6 +73,7 @@ namespace Gnoll
 			activateKeyboardTranslation();
 			activateMouseMotionTranslation();
 			activateMouseButtonTranslation();
+			activateRuleManager();
 
 		}
 
@@ -319,6 +322,36 @@ namespace Gnoll
 			shared_ptr<CMessage>  message (new CMessage(updateMouse, m_periodData ));
 			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (*m_periodData) );
 		
+		}
+
+
+		void CInputEventsTranslator::activateRuleManager()
+		{
+			ruleManager = shared_ptr<CMessageListener>( new CRuleManager("ruleManager") );
+
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+			if (messageManager->addListener ( ruleManager, ACTION_EVENT_TYPE ) == true)
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager installed for ACTION_EVENT_TYPE" );
+
+			if (messageManager->addListener ( ruleManager, ACTION_EVENT_STATE_TYPE ) == true)
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager installed for ACTION_EVENT_STATE_TYPE" );
+		}
+
+
+		void CInputEventsTranslator::deactivateRuleManager()
+		{
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+			if (messageManager->delListener ( ruleManager, ACTION_EVENT_TYPE ) == true)
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager removed for ACTION_EVENT_TYPE" );
+
+			if (messageManager->delListener ( ruleManager, ACTION_EVENT_STATE_TYPE ) == true)
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager removed for ACTION_EVENT_STATE_TYPE" );
 		}
 
 
