@@ -273,7 +273,9 @@ class BaseGnollBuilder:
 			'src/input/src/cmousebuttoneventstranslator.cpp',
 			'src/input/src/cmousebuttonstatetranslator.cpp',
 			'src/input/src/ckeyboardeventstrigger.cpp',
-			'src/input/src/cmousebuttoneventstrigger.cpp'
+			'src/input/src/cmousebuttoneventstrigger.cpp',
+			'src/input/src/crule.cpp',
+			'src/input/src/crulemanager.cpp'
 			]
 
 		return inputSourceFiles
