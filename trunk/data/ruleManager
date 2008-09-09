@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<dynamicobject instance="ruleManager">
+	<attribute name="ruleList">
+		<list>
+			<string value="test_rule"/>
+		</list>
+	</attribute>
+</dynamicobject>

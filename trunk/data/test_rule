@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<dynamicobject instance="test_rule">
+	<attribute name="conditions">
+		<list>
+			<string value="ACTION_STEP_FORWARD"/>
+		</list>
+	</attribute>
+	<attribute name="exceptions">
+		<list>
+			<string value="ACTION_STRAFE_LEFT"/>
+		</list>
+	</attribute>
+	<attribute name="rule_trigger">
+		<string value="ACTION_ATTACK"/>
+	</attribute>
+	<attribute name="rule_action">
+		<string value="RULE_FIRED"/>
+	</attribute>
+</dynamicobject>
