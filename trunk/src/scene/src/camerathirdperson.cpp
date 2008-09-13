@@ -38,53 +38,26 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		struct camerathirdperson_i
-		{
-			float offset;
-			float minOffset;
-			float maxOffset;
-			float amountRotationAroundAxisX;
-			float amountRotationAroundAxisY;
-			float amountRotationAroundAxisZ;
-			float limitRotationAroundAxisX;
-			float limitRotationAroundAxisY;
-			float limitRotationAroundAxisZ;
-
-			camerathirdperson_i() :
-				offset(100.0f),
-				minOffset(0.0f),
-				maxOffset(200.0f),
-				amountRotationAroundAxisX(0.0f),
-				amountRotationAroundAxisY(0.0f),
-				amountRotationAroundAxisZ(0.0f),
-				limitRotationAroundAxisX(-1.0f),
-				limitRotationAroundAxisY(-1.0f),
-				limitRotationAroundAxisZ(-1.0f)
-			{
-			}
-		};
-
 		CameraThirdPerson::CameraThirdPerson(const Glib::ustring& instanceName) :
-			Camera(instanceName),
-			m_this(new camerathirdperson_i)
+			Camera(instanceName)
 		{
 			/**
 			 * Extract Camera's offset settings
 			 */
-			shared_ptr<Float> offset;
-			shared_ptr<Float> minOffset;
-			shared_ptr<Float> maxOffset;
+			shared_ptr<Float> off;
+			shared_ptr<Float> minOff;
+			shared_ptr<Float> maxOff;
 			shared_ptr<Float> default_offset = shared_ptr<Float> (new Float(100.0f));
 			shared_ptr<Float> default_minOffset = shared_ptr<Float> (new Float(0.0f));
 			shared_ptr<Float> default_maxOffset = shared_ptr<Float> (new Float(200.0f));
 
-			offset = this->getAttributeOrDefault<Float>("offset", default_offset);
-			minOffset = this->getAttributeOrDefault<Float>("minOffset", default_minOffset);
-			maxOffset = this->getAttributeOrDefault<Float>("maxOffset", default_maxOffset);
+			off = this->getAttributeOrDefault<Float>("offset", default_offset);
+			minOff = this->getAttributeOrDefault<Float>("minOffset", default_minOffset);
+			maxOff = this->getAttributeOrDefault<Float>("maxOffset", default_maxOffset);
 
-			setOffset(*offset);
-			setMinOffset(*minOffset);
-			setMaxOffset(*maxOffset);
+			offset    = (*off);
+			minOffset = (*minOff);
+			maxOffset = (*maxOff);
 
 			/**
 			 * Extract Camera's limit rotation
@@ -98,9 +71,9 @@ namespace Gnoll
 			limit_y = this->getAttributeOrDefault<Float>("limitRotationOnAxisY", default_limit);
 			limit_z = this->getAttributeOrDefault<Float>("limitRotationOnAxisZ", default_limit);
 
-			setLimitRotationAroundAxisX(*limit_x);
-			setLimitRotationAroundAxisY(*limit_y);
-			setLimitRotationAroundAxisZ(*limit_z);
+			limitRotationAroundAxisX = (*limit_x);
+			limitRotationAroundAxisY = (*limit_y);
+			limitRotationAroundAxisZ = (*limit_z);
 
 			/**
 			 * Extract Camera's amount rotation
@@ -114,9 +87,9 @@ namespace Gnoll
 			amount_y = this->getAttributeOrDefault<Float>("amountRotationOnAxisY", default_amount);
 			amount_z = this->getAttributeOrDefault<Float>("amountRotationOnAxisZ", default_amount );
 
-			m_this->amountRotationAroundAxisX = *amount_x;
-			m_this->amountRotationAroundAxisY = *amount_y;
-			m_this->amountRotationAroundAxisZ = *amount_z;
+			amountRotationAroundAxisX = *amount_x;
+			amountRotationAroundAxisY = *amount_y;
+			amountRotationAroundAxisZ = *amount_z;
 		}
 
 		CameraThirdPerson::~CameraThirdPerson()
@@ -147,22 +120,20 @@ namespace Gnoll
 			this->setAttribute("offset", offset);
 			this->setAttribute("minOffset", minOffset);
 			this->setAttribute("maxOffset", maxOffset);
-
-			delete m_this;
 		}
 
-		void CameraThirdPerson::setOffset(float offset)
+		void CameraThirdPerson::setOffset(float value)
 		{
-			if(offset < 1)
+			if(value < 1)
 				return;
 
-			if(offset < getMinOffset())
+			if(value < getMinOffset())
 				return;
 
-			if(offset > getMaxOffset())
+			if(value > getMaxOffset())
 				return;
 
-			m_this->offset = fabs(offset);
+			offset = fabs(value);
 			setTarget(getTarget());
 		}
 
@@ -177,7 +148,7 @@ namespace Gnoll
 			if(value > getOffset())
 				setOffset(value);
 
-			m_this->minOffset = fabs(value);
+			minOffset = fabs(value);
 		}
 
 		void CameraThirdPerson::setMaxOffset(float value)
@@ -188,85 +159,103 @@ namespace Gnoll
 			if(value < getOffset())
 				setOffset(value);
 
-			m_this->maxOffset = fabs(value);
+			maxOffset = fabs(value);
 		}
 
 		float CameraThirdPerson::getOffset()
 		{
-			return m_this->offset;
+			return offset;
 		}
 
 		float CameraThirdPerson::getMinOffset()
 		{
-			return m_this->minOffset;
+			return minOffset;
 		}
 
 		float CameraThirdPerson::getMaxOffset()
 		{
-			return m_this->maxOffset;
+			return maxOffset;
 		}
 
 		float CameraThirdPerson::getLimitRotationAroundAxisX() const
 		{
-			return m_this->limitRotationAroundAxisX;
+			return limitRotationAroundAxisX;
 		}
 
 		float CameraThirdPerson::getLimitRotationAroundAxisY() const
 		{
-			return m_this->limitRotationAroundAxisY;
+			return limitRotationAroundAxisY;
 		}
 
 		float CameraThirdPerson::getLimitRotationAroundAxisZ() const
 		{
-			return m_this->limitRotationAroundAxisZ;
+			return limitRotationAroundAxisZ;
 		}
 
 		float CameraThirdPerson::getAmountRotationAroundAxisX() const
 		{
-			return m_this->amountRotationAroundAxisX;
+			return amountRotationAroundAxisX;
 		}
 
 		float CameraThirdPerson::getAmountRotationAroundAxisY() const
 		{
-			return m_this->amountRotationAroundAxisY;
+			return amountRotationAroundAxisY;
 		}
 
 		float CameraThirdPerson::getAmountRotationAroundAxisZ() const
 		{
-			return m_this->amountRotationAroundAxisZ;
+			return amountRotationAroundAxisZ;
 		}
 
 		void CameraThirdPerson::setLimitRotationAroundAxisX(float xLimit)
 		{
+			if(xLimit == -1)
+			{
+				limitRotationAroundAxisX = -1;
+				return;
+			}
+
 			if(xLimit < 1)
 				return;
 
 			if(xLimit < getAmountRotationAroundAxisX())
 				return;
 
-			m_this->limitRotationAroundAxisX = std::fmod(xLimit, 360);
+			limitRotationAroundAxisX = std::fmod(xLimit, 360);
 		}
 
 		void CameraThirdPerson::setLimitRotationAroundAxisY(float yLimit)
 		{
+			if(yLimit == -1)
+			{
+				limitRotationAroundAxisY = -1;
+				return;
+			}
+
 			if(yLimit < 1)
 				return;
 
 			if(yLimit < getAmountRotationAroundAxisY())
 				return;
 
-			m_this->limitRotationAroundAxisX = std::fmod(yLimit, 360);
+			limitRotationAroundAxisX = std::fmod(yLimit, 360);
 		}
 
 		void CameraThirdPerson::setLimitRotationAroundAxisZ(float zLimit)
 		{
+			if(zLimit == -1)
+			{
+				limitRotationAroundAxisZ = -1;
+				return;
+			}
+
 			if(zLimit < 1)
 				return;
 
 			if(zLimit < getAmountRotationAroundAxisZ())
 				return;
 
-			m_this->limitRotationAroundAxisZ = std::fmod(zLimit, 360);
+			limitRotationAroundAxisZ = std::fmod(zLimit, 360);
 		}
 
 		void CameraThirdPerson::rotateAroundAxisX(float degree)
@@ -275,8 +264,8 @@ namespace Gnoll
 				if(getAmountRotationAroundAxisX() + degree > getLimitRotationAroundAxisX())
 					return;
 
-			m_this->amountRotationAroundAxisX += degree;
-			m_this->amountRotationAroundAxisX = std::fmod(m_this->amountRotationAroundAxisX, 360);
+			amountRotationAroundAxisX += degree;
+			amountRotationAroundAxisX = std::fmod(amountRotationAroundAxisX, 360);
 
 			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(degree)));
 		}
@@ -287,8 +276,8 @@ namespace Gnoll
 				if(getAmountRotationAroundAxisY() + degree > getLimitRotationAroundAxisY())
 					return;
 
-			m_this->amountRotationAroundAxisY += degree;
-			m_this->amountRotationAroundAxisY = std::fmod(m_this->amountRotationAroundAxisY, 360);
+			amountRotationAroundAxisY += degree;
+			amountRotationAroundAxisY = std::fmod(amountRotationAroundAxisY, 360);
 
 			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(degree)));
 		}
@@ -299,8 +288,8 @@ namespace Gnoll
 				if(getAmountRotationAroundAxisZ() + degree > getLimitRotationAroundAxisZ())
 					return;
 
-			m_this->amountRotationAroundAxisZ += degree;
-			m_this->amountRotationAroundAxisZ = std::fmod(m_this->amountRotationAroundAxisZ, 360);
+			amountRotationAroundAxisZ += degree;
+			amountRotationAroundAxisZ = std::fmod(amountRotationAroundAxisZ, 360);
 
 			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(degree)));
 		}

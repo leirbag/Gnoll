@@ -58,6 +58,7 @@ namespace Gnoll
 
 			setAttribute("name", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(instanceName)));
 			pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
+			pTarget     = CGraphicModule::getInstancePtr()->getSceneManager()->createSceneNode();
 
 			/**
 			 * Extract Camera's near, far and fov value
@@ -250,10 +251,12 @@ namespace Gnoll
 
 		void Camera::setTarget(Ogre::SceneNode* target, bool autofocus)
 		{
-			if(target != NULL)
-				pOgreCamera->setAutoTracking(autofocus, target);
-				setTargetHelper(target);
+			if(target == NULL)
+				return;
 
+			pOgreCamera->setAutoTracking(autofocus, target);
+			setTargetHelper(target);
+			update(1.0f);
 		}
 
 		void Camera::setOrientation(const Ogre::Quaternion& orientation)

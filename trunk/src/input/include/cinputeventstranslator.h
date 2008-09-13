@@ -55,8 +55,8 @@ namespace Gnoll
 	{
 
 		/**
-		 *	Interface of all game modules. 
-		 */ 
+		 *	Interface of all game modules.
+		 */
 		class CInputEventsTranslator: public CModule, public Gnoll::Core::Singleton<CInputEventsTranslator>
 		{
 
@@ -111,14 +111,14 @@ namespace Gnoll
 				 * @copydoc CModule::init
 				 */
 				virtual void init();
-		
+
 				/**
 				 * @copydoc CModule::process
 				 */
 				virtual void process();
 
 				/**
-				 * @copydoc CModule::exit 
+				 * @copydoc CModule::exit
 				 */
 				virtual void exit();
 
@@ -126,7 +126,7 @@ namespace Gnoll
 				 * @copydoc CModule::~CModule
 				 */
 				virtual ~CInputEventsTranslator();
-		
+
 				/**
 				 * @copydoc CModule::CModule
 				 */

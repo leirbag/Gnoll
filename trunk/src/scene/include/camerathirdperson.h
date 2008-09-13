@@ -48,15 +48,18 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		/*
-		 * Structure that contains camera attributs
-		 */
-		struct camerathirdperson_i;
-
 		class CameraThirdPerson : public Camera
 		{
 		private:
-			camerathirdperson_i* m_this;
+			float offset;
+			float minOffset;
+			float maxOffset;
+			float amountRotationAroundAxisX;
+			float amountRotationAroundAxisY;
+			float amountRotationAroundAxisZ;
+			float limitRotationAroundAxisX;
+			float limitRotationAroundAxisY;
+			float limitRotationAroundAxisZ;
 
 		public:
 			/*

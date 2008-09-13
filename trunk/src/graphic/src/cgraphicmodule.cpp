@@ -218,7 +218,7 @@ namespace Gnoll
 				shared_ptr<Gnoll::DynamicObject::IAttribute> attrNameRaw = *it;
 				shared_ptr<Gnoll::DynamicObject::String> attrName = static_pointer_cast<Gnoll::DynamicObject::String>(attrNameRaw);
 
-				
+
 				if (*attrName != gRenderSystemAttrName)
 				{
 					shared_ptr<Gnoll::DynamicObject::String> param_value = config->getAttribute< Gnoll::DynamicObject::String >(*attrName);
@@ -243,7 +243,7 @@ namespace Gnoll
 			mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 			// Create and configure the camera
-			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraFreeFlyFactory() );
+			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraThirdPersonFactory() );
 			m_camera  = new shared_ptr<Gnoll::Scene::Camera> (acf->createCamera("camTP"));
 			(*m_camera)->setNearValue(5);
 			(*m_camera)->setFarValue(1000);
@@ -376,7 +376,8 @@ namespace Gnoll
 			eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 			eb->setAlwaysOnTop(true);
 
-			//boost::shared_ptr<Gnoll::Scene::CameraSpline> cs = boost::static_pointer_cast<Gnoll::Scene::CameraSpline, Gnoll::Scene::Camera>(*m_camera);
+			(*m_camera)->setTarget(node1);
+			//boost::shared_ptr<Gnoll::Scene::CameraThirdPerson> ctp = boost::static_pointer_cast<Gnoll::Scene::CameraThirdPerson, Gnoll::Scene::Camera>(*m_camera);
 		}
 
 		void CGraphicModule::process()

@@ -57,7 +57,6 @@ namespace Gnoll
 		{
 			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
 			float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
 
 			/**
 			 * Converts weak ptr m_pCamera to a shared_ptr<>
@@ -76,32 +75,30 @@ namespace Gnoll
 
 			// ZOOM
 			if(ae.action == "ACTION_ZOOM_CAMERA_IN")
-				pCam->setOffset(pCam->getOffset() + (-ae.intensity * lasttime));
+				pCam->setOffset(pCam->getOffset() + (ae.intensity * (lasttime / 1000.0f)));
 			if(ae.action == "ACTION_ZOOM_CAMERA_OUT")
-				pCam->setOffset(pCam->getOffset() + (-ae.intensity * lasttime));
-
-			shared_ptr<Float> maxRotX = pCam->getAttributeOrDefault("MaximumRotationAroundX", shared_ptr<Float> (new Float(300.0f)));
-			shared_ptr<Float> maxRotY = pCam->getAttributeOrDefault("MaximumRotationAroundY", shared_ptr<Float> (new Float(300.0f)));
+				pCam->setOffset(pCam->getOffset() + (ae.intensity * (lasttime / 1000.0f)));
 
 			// KEYBOARD
-			if(ae.action == "ACTION_ROTATE_CAMERA_LEFT")
-				pCam->rotateAroundAxisY(*maxRotY * ae.intensity * lasttime);
-			if(ae.action == "ACTION_ROTATE_CAMERA_RIGHT")
-				pCam->rotateAroundAxisY(*maxRotY * ae.intensity * lasttime);
-			if(ae.action == "ACTION_ROTATE_CAMERA_UP")
-				pCam->rotateAroundAxisX(*maxRotX * ae.intensity * lasttime);
-			if(ae.action == "ACTION_ROTATE_CAMERA_DOWN")
-				pCam->rotateAroundAxisX(*maxRotX * ae.intensity * lasttime);
+			if(ae.action == "ACTION_ROTATE_LEFT")
+				pCam->rotateAroundAxisY(ae.intensity * lasttime);
+			if(ae.action == "ACTION_ROTATE_RIGHT")
+				pCam->rotateAroundAxisY(-ae.intensity * lasttime);
+			if(ae.action == "ACTION_ROTATE_UP")
+				pCam->rotateAroundAxisX(ae.intensity * lasttime);
+			if(ae.action == "ACTION_ROTATE_DOWN")
+				pCam->rotateAroundAxisX(-ae.intensity * lasttime);
 
 			// MOUSE
-			if(ae.action == "ACTION_MROTATE_CAMERA_LEFT")
-				pCam->rotateAroundAxisY(*maxRotY * ae.intensity * lasttime);
-			if(ae.action == "ACTION_MROTATE_CAMERA_RIGHT")
-				pCam->rotateAroundAxisY(*maxRotY * ae.intensity * lasttime);
-			if(ae.action == "ACTION_MROTATE_CAMERA_UP")
-				pCam->rotateAroundAxisX(*maxRotX * ae.intensity * lasttime);
-			if(ae.action == "ACTION_MROTATE_CAMERA_DOWN")
-				pCam->rotateAroundAxisX(*maxRotX * ae.intensity * lasttime);
+			float sensibility = -5.0f;  // Negative pour inverser les axes en meme temps
+			if(ae.action == "ACTION_ROTATE_CAMERA_LEFT")
+				pCam->rotateAroundAxisY(ae.intensity * lasttime * sensibility);
+			if(ae.action == "ACTION_ROTATE_CAMERA_RIGHT")
+				pCam->rotateAroundAxisY(ae.intensity * lasttime * sensibility);
+			if(ae.action == "ACTION_ROTATE_CAMERA_UP")
+				pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
+			if(ae.action == "ACTION_ROTATE_CAMERA_DOWN")
+				pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
 
 			// Update
 			pCam->update(lasttime);
