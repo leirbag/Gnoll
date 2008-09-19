@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*-------------------------CInputEventsTranslator.h-------------------------*\
-|   An input rule based on a dynamicobject			             |
+/*-----------------------------CRuleManager---------------------------------*\
+|   An input rule manager                    		                          |
 |                                                                            |
 |   Changelog :                                                              |
 |               15/08/2008 - WT  - Initial release                           |
@@ -52,31 +52,40 @@ namespace Gnoll
 
 		class CRuleManager : public CMessageListener
 		{
-		public:
+				public:
 
-			/**
-			 * Constructor
-			 */
-			CRuleManager(const std::string &instanceName);
-
-
-			/**
-			 * This method is called in order to process a message
-			 * @param message The message this method will have to process
-			 */
-			virtual void handle ( shared_ptr<CMessage> message );
+					/**
+					 * Constructor
+					 * @param instanceName Instance name of the CRule manager
+					 */
+					CRuleManager(const std::string &instanceName);
 
 
-		private:
+					/**
+					 * This method is called in order to process a message
+					 * @param message The message this method will have to process
+					 */
+					virtual void handle ( shared_ptr<CMessage> message );
 
-			// Rules table
-			std::vector<CRule> m_rules;
 
-			// CMessageType for state messages
-			CMessageType m_stateEvent;
+				private:
 
-			// CMessageType for continuous messages
-			CMessageType m_continuousEvent;
+					/**
+					 * Rules table
+					 */
+					std::vector<CRule> m_rules;
+
+
+					/**
+					 * CMessageType for state messages
+					 */
+					CMessageType m_stateEvent;
+
+
+					/**
+					 * CMessageType for continuous messages
+					 */
+					CMessageType m_continuousEvent;
 		};
 
 	}

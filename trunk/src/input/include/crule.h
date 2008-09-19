@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*-------------------------CInputEventsTranslator.h-------------------------*\
-|   An input rule based on a dynamicobject			             |
+/*-----------------------------------CRule----------------------------------*\
+|   An input rule based on a dynamicobject			                          |
 |                                                                            |
 |   Changelog :                                                              |
 |               15/08/2008 - WT  - Initial release                           |
@@ -42,50 +42,72 @@ namespace Gnoll
 	namespace Input
 	{
 
+		/**
+		 * This is a rule used for complex inputs.
+		 * Depending on the state of some conditions it will trigger a message
+		 */
 		class CRule
 		{
-		public:
 
-			/**
-			 * Constructor
-			 */
-			CRule(const std::string &instanceName);
+			public:
 
-
-			/**
-			 * Update the conditions
-			 */
-			void updateRule(const ActionEvent &ae);
-
-			/**
-			 * Check if the conditions are enabled
-			 */
-			bool checkConditions();
-
-			/**
-			 * Fire the rule action
-			 */
-			bool fireAction() const;
-
-			/**
-			 * Accessor to the rule trigger
-			 */
-			std::string getTrigger() const { return m_trigger; }
+				/**
+				 * Constructor
+				 * @param instanceName Instance name of the rule
+				 */
+				CRule(const std::string &instanceName);
 
 
-		private:
+				/**
+				 * Update the internal copy of its conditions state
+				 * @param ae ActionEvent which need to be updated along with the most recent intensity.
+				 */
+				void updateRule(const ActionEvent &ae);
 
-			// Conditions enabling the rule
-			std::map<std::string, bool> m_conditions;
+				/**
+				 * Check if the conditions are enabled
+				 * @return Returns true if all conditions are true. False otherwise.
+				 */
+				bool checkConditions();
 
-			// Exceptions disabling the rule
-			std::map<std::string, bool> m_exceptions;
+				/**
+				 * Fire the rule action
+				 * @return Return true is the action has been successfully sent
+				 */
+				bool fireAction() const;
 
-			// Trigger fire the action
-			std::string m_trigger;
+				/**
+				 * Accessor to the rule trigger
+				 * @return Returns the rule trigger
+				 */
+				std::string getTrigger() const { return m_trigger; }
 
-			// Action message to be fired
-			std::string m_action;
+
+			private:
+
+				/**
+				 * Conditions enabling the rule
+				 */
+				std::map<std::string, bool> m_conditions;
+
+
+				/**
+				 * Exceptions disabling the rule
+				 */
+				std::map<std::string, bool> m_exceptions;
+
+
+				/**
+				 * Trigger fire the action
+				 */
+				std::string m_trigger;
+
+
+				/**
+				 * Action message to be fired
+				 */
+				std::string m_action;
+
 		};
 
 	}

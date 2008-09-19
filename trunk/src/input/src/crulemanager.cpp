@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-/*-------------------------CInputEventsTranslator.h-------------------------*\
-|   An input rule based on a dynamicobject			             |
+/*--------------------------------CRuleManager------------------------------*\
+|   An input rule manager                                                    |
 |                                                                            |
 |   Changelog :                                                              |
 |               15/08/2008 - WT  - Initial release                           |
@@ -72,7 +72,7 @@ namespace Gnoll
 				{
 					// Add the rule to the table
 					m_rules.push_back(CRule( *rule ));
-					cout << *rule << endl;
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( *rule );
 				}
 			}
 		}
