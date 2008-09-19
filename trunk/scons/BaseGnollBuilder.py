@@ -94,17 +94,24 @@ class BaseGnollBuilder:
 		return configProject
 
 	def checkOgre(self, env, config):
+		# Standard ogre headers
+		headers = ['Ogre.h', 'OgreLogManager.h', 'OgrePlatform.h',
+		'OgreTimer.h']
 
-		configProject = {}
+		if env.Execute('pkg-config --modversion OGRE | grep 1.4.') == 0 :
+			headers.append('OgreMemoryMacros.h')
+		elif env.Execute('pkg-config --modversion OGRE | grep 1.6.') == 0 :
+			configProject['HAVE_OGRE_1_6'] = '1'
 
-		for header in ['Ogre.h', 'OgreLogManager.h', 'OgrePlatform.h', 'OgreTimer.h', 'OgreMemoryMacros.h']:
+		for header in headers:
 			if not config.CheckCXXHeader(header):
-				print "Ogre library not found"
+				print "Ogre is not correctly installed"
 				exit(-1)
 
 		config.CheckLib('OgreMain', None, None, 'c++')
 
 		configProject['HAVE_OGRE'] = '1'
+
 		return configProject
 
 

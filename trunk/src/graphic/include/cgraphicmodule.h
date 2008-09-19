@@ -35,6 +35,7 @@
 |               04/10/2006 - Gabriel - Add namespace Gnoll and Graphic       |
 |               02/05/2008 - WT - Add private method loadOgrePlugins()       |
 |               10/05/2008 - WT - Add private method loadOgreConfig()        |
+|		10/09/2008 - Wetneb - Added Ogre 1.6 compatibility	     |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -63,8 +64,10 @@
 #include <OgrePlatform.h>
 #include <OgreTimer.h>
 
+#ifndef HAVE_OGRE_1_6 // The following include isn't compatible with Ogre 1.6
 //mem probs without this next one
 #include <OgreNoMemoryMacros.h>
+#endif
 #include <CEGUI/CEGUIImageset.h>
 #include <CEGUI/CEGUISystem.h>
 #include <CEGUI/CEGUILogger.h>
@@ -76,8 +79,10 @@
 #include <OGRE/OgreCEGUIRenderer.h>
 #include <OGRE/OgreCEGUIResourceProvider.h>
 #include <CEGUI/elements/CEGUIPushButton.h>
+#ifndef HAVE_OGRE_1_6 // The following include isn't compatible with Ogre 1.6
 //regular mem handler
 #include <OgreMemoryMacros.h>
+#endif
 
 #if OGRE_PLATFORM == PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
