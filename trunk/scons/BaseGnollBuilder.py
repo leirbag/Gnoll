@@ -94,6 +94,9 @@ class BaseGnollBuilder:
 		return configProject
 
 	def checkOgre(self, env, config):
+
+		configProject = {}
+
 		# Standard ogre headers
 		headers = ['Ogre.h', 'OgreLogManager.h', 'OgrePlatform.h',
 		'OgreTimer.h']
