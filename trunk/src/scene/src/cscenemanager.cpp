@@ -190,7 +190,7 @@ namespace Gnoll
 			{
 				if (shared_ptr<Gnoll::DynamicObject::String> pageName = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*it))
 				{
-					tmpString << "1 - Loaded page : " << *pageName;
+					tmpString << "1 - Loaded page : " << *pageName << "\n";
 					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 					tmpString.clear();
 
@@ -199,7 +199,7 @@ namespace Gnoll
 						CPage page(*pageName);
 						visitedPages.insert(*pageName);
 
-						tmpString << "  1 - checking visibility";
+						tmpString << "  1 - checking visibility" << "\n";
 						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 						tmpString.clear();
 
@@ -289,22 +289,22 @@ namespace Gnoll
 
 						if (strcmp(neighbors[i], "northLink") == 0)
 						{
-							neighborOffset = Ogre::Vector3(0.0, 0.0, *pageSize) / 2.0f;
+							neighborOffset = Ogre::Vector3(0.0, 0.0, *pageSize);
 							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
 
 						} else if (strcmp(neighbors[i], "southLink") == 0)
 						{
-							neighborOffset = Ogre::Vector3(0.0, 0.0, -(*pageSize)) / 2.0f;
+							neighborOffset = Ogre::Vector3(0.0, 0.0, -(*pageSize));
 							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
 
 						} else if (strcmp(neighbors[i], "eastLink") == 0)
 						{
-							neighborOffset = Ogre::Vector3( -(*pageSize), 0.0, 0.0 ) / 2.0f;
+							neighborOffset = Ogre::Vector3( -(*pageSize), 0.0, 0.0 );
 							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
 
 						} else if (strcmp(neighbors[i], "westLink") == 0)
 						{
-							neighborOffset = Ogre::Vector3( *pageSize, 0.0, 0.0 ) / 2.0f;
+							neighborOffset = Ogre::Vector3( *pageSize, 0.0, 0.0 );
 							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
 						}
 
