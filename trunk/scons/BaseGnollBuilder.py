@@ -262,8 +262,6 @@ class BaseGnollBuilder:
 
 		graphicSourceFiles = [
 			'src/graphic/src/cgraphicmodule.cpp',
-			'src/graphic/src/cscenefactorystd.cpp',
-			'src/graphic/src/csceneparser.cpp',
 			'src/graphic/src/cceguilogger.cpp',
 			]
 
