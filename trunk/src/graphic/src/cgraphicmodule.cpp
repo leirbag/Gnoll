@@ -243,7 +243,7 @@ namespace Gnoll
 			mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
 
 			// Create and configure the camera
-			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraThirdPersonFactory() );
+			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraFreeFlyFactory() );
 			m_camera  = new shared_ptr<Gnoll::Scene::Camera> (acf->createCamera("camTP"));
 			(*m_camera)->setNearValue(5);
 			(*m_camera)->setFarValue(1000);
@@ -256,11 +256,6 @@ namespace Gnoll
 			(*m_camera)->setFovValue( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
 
 			mSceneMgr->setAmbientLight( ColourValue( 0.6, 0.6, 0.6 ) );
-			/*mSceneMgr->setShadowTechnique( SHADOWTYPE_TEXTURE_ADDITIVE );
-			mSceneMgr->setShadowFarDistance(5000);
-			mSceneMgr->setShadowTextureSize(2048);
-			mSceneMgr->setShadowTextureCount(4);*/
-
 
 
 			/**
@@ -268,10 +263,6 @@ namespace Gnoll
 			 * and add them to Ogre resource manager
 			 */
 			loadOgreResourcesPath();
-
-
-			shared_ptr<ISceneFactory> sf ( new CSceneFactoryStd("scene.xml", this->mRoot) );
-			sf->loadScene();
 
 
 
@@ -312,18 +303,18 @@ namespace Gnoll
 			SceneNode *node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "RobotNode");
 
 			RaySceneQuery* raySceneQuery2 = mSceneMgr->createRayQuery(
-			Ray(Vector3(780,2500,590) , Vector3::NEGATIVE_UNIT_Y));
+			Ray(Vector3(0,2500,0) , Vector3::NEGATIVE_UNIT_Y));
 
-			updateRay.setOrigin( Vector3(780,2500,590) );
+			updateRay.setOrigin( Vector3(0,2500,0) );
 			updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
 			raySceneQuery2->setRay(updateRay);
 			qryResult = raySceneQuery2->execute();
 			i = qryResult.begin();
 			if (i != qryResult.end() && i->worldFragment)
 			{
-				node1->setPosition(780,
+				node1->setPosition(0,
 					i->worldFragment->singleIntersection.y ,
-					590);
+					0);
 			}
 
 			mSceneMgr->destroyQuery(raySceneQuery2);
@@ -376,7 +367,7 @@ namespace Gnoll
 			eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 			eb->setAlwaysOnTop(true);
 
-			(*m_camera)->setTarget(node1);
+			//(*m_camera)->setTarget(node1);
 			//boost::shared_ptr<Gnoll::Scene::CameraThirdPerson> ctp = boost::static_pointer_cast<Gnoll::Scene::CameraThirdPerson, Gnoll::Scene::Camera>(*m_camera);
 		}
 

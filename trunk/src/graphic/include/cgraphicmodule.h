@@ -55,8 +55,6 @@
 #include "../../scene/include/camerasplinefactory.h"
 #include "../../scene/include/camerafreeflyfactory.h"
 
-#include "cscenefactorystd.h"
-
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
 #include <Ogre.h>

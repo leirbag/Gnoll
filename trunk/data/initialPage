@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <dynamicobject instance="initialPage">
   <attribute name="PageRenderer">
-    <CMeshPageRenderer meshName="ninja.mesh"/>
+    <CMeshPageRenderer meshName="page.mesh"/>
   </attribute>
   <attribute name="northLink">
     <string value="northPage"/>

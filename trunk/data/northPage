@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <dynamicobject instance="northPage">
   <attribute name="PageRenderer">
-    <CMeshPageRenderer meshName="ninja.mesh"/>
+    <CMeshPageRenderer meshName="page.mesh"/>
   </attribute>
   <attribute name="size">
     <float value="128"/>
@@ -10,4 +10,3 @@
     <string value="initialPage"/>
   </attribute>
 </dynamicobject>
-
