@@ -1,15 +1,12 @@
 <?xml version="1.0"?>
-<dynamicobject instance="northPage">
+<dynamicobject instance="eastPage">
   <attribute name="PageRenderer">
     <CMeshPageRenderer meshName="page2.mesh"/>
-  </attribute>
-  <attribute name="northLink">
-    <string value="nortNorthPage"/>
   </attribute>
   <attribute name="size">
     <float value="254"/>
   </attribute>
-  <attribute name="southLink">
-    <string value="initialPage"/>
+  <attribute name="westLink">
+    <string value="nortNorthPage"/>
   </attribute>
 </dynamicobject>

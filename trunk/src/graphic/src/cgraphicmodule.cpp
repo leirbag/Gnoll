@@ -240,7 +240,7 @@ namespace Gnoll
 			this->mwindow = mRoot->initialise(true, PACKAGE_STRING);
 
 			mwindow->setActive(true);
-			mSceneMgr = mRoot->createSceneManager("TerrainSceneManager", "TSM");
+			mSceneMgr = mRoot->createSceneManager("OctreeSceneManager", "TSM");
 
 			// Create and configure the camera
 			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraFreeFlyFactory() );

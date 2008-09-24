@@ -138,7 +138,7 @@ namespace Gnoll
 			// Compute AABB box
 			// Check with the current camera if the AABB box is inside the view frustrum
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "       Checking visibility from camera : " + string(*_cameraName) );
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "       Checking visibility from camera : " + string(*_cameraName) + " for page " + this->getInstance());
 			Ogre::Camera* ogreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->getCamera(*_cameraName);
 			Ogre::SceneNode* rootNode = this->getPageRootNode();
 
@@ -148,7 +148,7 @@ namespace Gnoll
 			{
 				std::ostringstream tmpString;
 				tmpString << "        root node available (" <<  this->getInstance() << ")" << endl;
-				tmpString << "         Number of children : " << rootNode->numChildren();
+				tmpString << "         Number of children : " << rootNode->numChildren() << endl;
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 				tmpString.clear();
 
@@ -165,7 +165,6 @@ namespace Gnoll
 				 * So this is computed by hand like does Ogre::SceneNode.
 				 */
 
-
 				// Update bounds from own attached objects
 				SceneNode::ObjectIterator oi = rootNode->getAttachedObjectIterator();
 				while (oi.hasMoreElements())
@@ -173,7 +172,7 @@ namespace Gnoll
 					MovableObject *m = oi.getNext();
 
 					// Merge world bounds of each object
-					aabb.merge(m->getWorldBoundingBox(true));
+					aabb.merge(m->getWorldBoundingBox());
 				}
 
 				// Merge with children

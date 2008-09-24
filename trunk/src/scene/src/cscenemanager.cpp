@@ -118,13 +118,13 @@ namespace Gnoll
 
 			std::ostringstream tmpString;
 			tmpString << "SIZE A: " << loadedPages->size() << endl;
-			tmpString << "Address of loadedPages : " << loadedPages;
+			tmpString << "Address of loadedPages : " << loadedPages << endl;
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 			tmpString.clear();
 
 			this->setupPage(*focusedPageName, loadedPages);
 
-			tmpString << "SIZE B: " << loadedPages->size();
+			tmpString << "SIZE B: " << loadedPages->size() << endl;
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
@@ -179,7 +179,7 @@ namespace Gnoll
 
 			std::ostringstream tmpString;
 			tmpString << "Address of loadedPages : " << loadedPages << endl;
-			tmpString << "Size of loadedPages : " << loadedPages->size();
+			tmpString << "Size of loadedPages : " << loadedPages->size() << endl;
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 			tmpString.clear();
 
@@ -199,13 +199,25 @@ namespace Gnoll
 						CPage page(*pageName);
 						visitedPages.insert(*pageName);
 
-						tmpString << "  1 - checking visibility" << "\n";
+						tmpString << "  1 - checking visibility for " <<  *pageName << endl;
 						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 						tmpString.clear();
 
 						if ( this->isPageVisible(page) )
 						{
 							visiblePages->push_back( pageName );
+
+							tmpString << "    a - " <<  *pageName << " is visible "<< endl;
+							if ( page.isInitialized() == false )
+							{
+								tmpString << "      b - " <<  *pageName << " is not initialized yet. It's going to be initialized "<< endl;
+								page.init();
+							} else
+							{
+								tmpString << "      c - " <<  *pageName << " has already been initialized"<< endl;
+							}
+							Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+							tmpString.clear();
 						}
 
 						const char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
@@ -315,6 +327,10 @@ namespace Gnoll
 						tmpString << "neighbor page root node " << neighborRootNode;
 						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 						neighborRootNode->translate( _offset + neighborOffset, Ogre::Node::TS_LOCAL);
+
+					} else {
+
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("Neighbor ") + string(*neighborInstanceName) + " not visible from " + _pageInstance );
 					}
 				}
 			}
