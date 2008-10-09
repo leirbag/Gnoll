@@ -20,6 +20,18 @@ Requires: openal, freealut, libvorbis, libogg, libsndfile
 %description
 This is a 3D action/rpg game engine
 
+
+
+%package example
+Summary: Example of what people can do with %{name}
+Group: Amusements/Games
+Requires: %{name} = %{version}-%{release}
+
+%description example
+This is an example of what people can do with Gnoll.
+
+
+
 %prep
 %setup -q -n trunk
 
@@ -31,8 +43,6 @@ scons %{?_smp_mflags} gnoll
 %install
 mkdir -p $RPM_BUILD_ROOT/usr
 scons install prefix=$RPM_BUILD_ROOT/usr/
-rm -rf $RPM_BUILD_ROOT/usr/data/*
-rm -rf $RPM_BUILD_ROOT/usr/bin/launch-gnoll
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -43,7 +53,21 @@ rm -rf $RPM_BUILD_ROOT
 %doc README COPYING AUTHORS
 /usr/bin/gnoll
 
+
+%files example
+%defattr(-,root,root,-)
+%doc README COPYING AUTHORS
+/usr/share/gnoll-example/data/*
+/usr/bin/gnoll-example
+
+
+
+
+
 %changelog
+
+* Wed Oct 8 2008 Bruno Mahe <bruno[AT]gnoll.org>
+- Add sub-package gnoll-example containing all the example data
 
 * Tue Oct 7 2008 Bruno Mahe <bruno[AT]gnoll.org>
 - Initial build.
