@@ -23,6 +23,7 @@
 from BaseGnollInstaller import *
 import stat
 import os.path
+import os
 import re
 import SCons.Action
 import SCons.Builder
@@ -56,9 +57,10 @@ class LinuxGnollInstaller (BaseGnollInstaller):
 		# If we are building a rpm,
 		# install_bin and install_data are prefixed by the
 		# rpm script build root
-		if env['RPM_BUILD_ROOT'] :
-			myEnv['install_bin'] = env['install_bin'].replace(env['RPM_BUILD_ROOT'], '')
-			myEnv['install_data'] = env['install_data'].replace(env['RPM_BUILD_ROOT'], '')
+
+		if os.environ.has_key('RPM_BUILD_ROOT') :
+			myEnv['install_bin'] = env['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
+			myEnv['install_data'] = env['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
 
 		launcher.write(launcher_sh % (myEnv))
 
