@@ -132,7 +132,7 @@ def main():
 
 		env['install_prefix'] = ARGUMENTS.get('prefix')
 		if not env['install_prefix']:
-			env['install_prefix'] = "/usr/share/"
+			env['install_prefix'] = "/usr/"
 
 		if env['install_prefix'][-1] != '/' :
 			env['install_prefix'] = env['install_prefix'] + '/'
@@ -148,7 +148,7 @@ def main():
 
 
 		env['install_bin'] = env['install_prefix'] + "bin/"
-		env['install_data'] = env['install_prefix'] + 'data/'
+		env['install_data'] = env['install_prefix'] + 'share/gnoll-example/data/'
 		env['install_config'] = env['install_data']
 
 
