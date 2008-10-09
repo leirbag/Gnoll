@@ -36,9 +36,9 @@ class LinuxGnollInstaller (BaseGnollInstaller):
 
 	def createLauncher(self, env, config):
 
-		launcher_filename = 'launch-gnoll'
+		launcher_filename = 'gnoll-example'
 
-		env.Alias('install_bin_launcher', env.Install(env['install_bin'], 'launch-gnoll'))
+		env.Alias('install_bin_launcher', env.Install(env['install_bin'], 'gnoll-example'))
 		env.Alias('install_bin', ['install_bin_launcher'])
 
 		# We don't want to overwrite any existing file
