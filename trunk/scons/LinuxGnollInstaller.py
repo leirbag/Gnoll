@@ -51,7 +51,16 @@ class LinuxGnollInstaller (BaseGnollInstaller):
 
 		launcher = file( launcher_filename, "w")
 
-		launcher.write(launcher_sh % (env))
+		myEnv = env
+
+		# If we are building a rpm,
+		# install_bin and install_data are prefixed by the
+		# rpm script build root
+		if env['RPM_BUILD_ROOT'] :
+			myEnv['install_bin'] = env['install_bin'].replace(env['RPM_BUILD_ROOT'], '')
+			myEnv['install_data'] = env['install_data'].replace(env['RPM_BUILD_ROOT'], '')
+
+		launcher.write(launcher_sh % (myEnv))
 
 		launcher.close()
 
