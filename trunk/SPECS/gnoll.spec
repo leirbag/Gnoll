@@ -12,7 +12,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: scons, ogre-devel, pkgconfig, boost-devel, libxml++-devel
 BuildRequires: libxml2-devel, glibmm24-devel, cegui-devel, ois-devel
 BuildRequires: openal-devel, freealut-devel, libvorbis-devel, libogg-devel
-BuildRequires: libsndfile-devel
+BuildRequires: libsndfile-devel, gcc-c++
 
 Requires: ogre, boost, libxml++, libxml2, glibmm24, cegui, ois
 Requires: openal, freealut, libvorbis, libogg, libsndfile
