@@ -23,6 +23,7 @@
 import glob
 import re
 import os.path
+import os
 
 class BaseGnollInstaller:
 
@@ -46,7 +47,13 @@ class BaseGnollInstaller:
 		destFile = file(str(dest), "w")
 		sourceFile = file(str(filename), "r")
 
-		destFile.write(sourceFile.read() % env)
+		myEnv = env
+		if os.environ.has_key('RPM_BUILD_ROOT') :
+				myEnv['install_bin'] = env['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
+				myEnv['install_data'] = env['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
+
+
+		destFile.write(sourceFile.read() % myEnv)
 
 		sourceFile.close()
 		destFile.close()
