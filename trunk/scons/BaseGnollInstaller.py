@@ -49,8 +49,8 @@ class BaseGnollInstaller:
 
 		myEnv = env
 		if os.environ.has_key('RPM_BUILD_ROOT') :
-				myEnv['install_bin'] = env['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
-				myEnv['install_data'] = env['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
+				myEnv['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
+				myEnv['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
 
 
 		destFile.write(sourceFile.read() % myEnv)
