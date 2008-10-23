@@ -1,6 +1,6 @@
 Name: gnoll		
-Version: 0.1.4	
-Release: 1%{?dist}
+Version: 0.1.5	
+Release: 0%{?dist}
 Summary: A 3D action/rpg game engine
 
 Group: Amusements/Games	
