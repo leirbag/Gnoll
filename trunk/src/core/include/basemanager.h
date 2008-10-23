@@ -191,7 +191,7 @@ namespace Gnoll {
 		/**
 		 * This a base manager that can manage any kind of objects.
 		 */
-		template <class T, class ObjectNotFoundPolicy = ObjectNotFoundError<T> > class BaseManager : public ObjectNotFoundPolicy
+		template <class T, class ObjectNotFoundPolicy = ObjectNotFoundNewObject<T> > class BaseManager : public ObjectNotFoundPolicy
 		{
 
 			private:
