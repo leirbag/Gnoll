@@ -271,6 +271,8 @@ namespace Gnoll {
 					{
 						shared_ptr<ISource> temp = *iter;
 
+						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Checking if " + _instance + " can be loaded through a source");
+
 						/**
 						 * Can the resource be loaded by this source ?
 						 */
@@ -429,6 +431,8 @@ namespace Gnoll {
 				shared_ptr<T> load(string _instance)
 				{
 					boost::recursive_mutex::scoped_lock lock(m_mutex);
+
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Loading " + _instance);
 
 					// First we check if this instance exists in the cache
 					CacheIterator iter = m_cache.find(_instance);

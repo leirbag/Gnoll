@@ -185,7 +185,11 @@ namespace Gnoll
 			// For each plugin path
 			for (ListIterator itAttrs = pluginList->begin(); itAttrs != pluginList->end(); itAttrs++)
 				if (shared_ptr<Gnoll::DynamicObject::String> path = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*itAttrs))
+				{
+					string pathStr(*path);
+					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Loading Ogre Plugin : " + pathStr);
 					mRoot->loadPlugin( (*path) );
+				}
 		}
 
 
@@ -206,6 +210,7 @@ namespace Gnoll
 			if(rs == NULL)
 			{
 				// Ogre throws an exception if there's no RenderSystem defined
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ogre_config file doesn't contain any 'Render System' attribute");
 				return;
 			}
 

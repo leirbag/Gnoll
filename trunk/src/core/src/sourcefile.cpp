@@ -39,6 +39,9 @@
 #include "boost/filesystem/convenience.hpp"
 #include "boost/filesystem/operations.hpp" 
 
+#include "../../log/include/clogmodule.h"
+
+
 using namespace boost::filesystem;       
 
 
@@ -84,6 +87,12 @@ namespace Gnoll
 			file = file / _url;
 
 			result = exists( file );
+
+			if (result) {
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Source [" + m_path + "] checking if [" + file.string() + "] exists : TRUE");
+			} else {
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Source [" + m_path + "] checking if [" + file.string() + "] exists : FALSE" );
+			}
 
 			if (m_overWrite)
 			{

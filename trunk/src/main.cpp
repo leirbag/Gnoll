@@ -635,12 +635,12 @@ void analyzeArguments (int argc, char* argv[])
 	if (vm.count("load-source-directory"))
 	{
 
-		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Adding new load source directory : ");
 
 		vector<string> lsd = vm["load-source-directory"].as< vector<string> >();
 		for (vector<string>::iterator it = lsd.begin(); it != lsd.end(); it++)
 		{
 
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Adding new load source directory : " + *it);
 			shared_ptr<ISource> userLoadChannel(new SourceFile(*it, false, 10));
 			pom->addLoadSource(userLoadChannel);
 			soundManager->addLoadSource(userLoadChannel);
@@ -653,12 +653,12 @@ void analyzeArguments (int argc, char* argv[])
 	 */
 	if (vm.count("save-source-directory"))
 	{
-		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Adding new save source directory : ");
 
 		vector<string> lsd = vm["save-source-directory"].as< vector<string> >();
 		for (vector<string>::iterator it = lsd.begin(); it != lsd.end(); it++)
 		{
 
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Adding new save source directory : " + *it);
 			shared_ptr<ISource> userSaveChannel(new SourceFile( *it, true, 10 ));
 			pom->addSaveSource(userSaveChannel);
 			soundManager->addSaveSource(userSaveChannel);
@@ -680,6 +680,7 @@ int main(int argc, char* argv[])
 
 	analyzeArguments (argc, argv);
 
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Arguments analyzed [DONE]");
 
 
 
@@ -691,9 +692,11 @@ int main(int argc, char* argv[])
 	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 	SoundManager *soundManager = SoundManager::getInstancePtr();
 
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Adding load/save source for current path to the DynamicObjectManager");
 	pom->addLoadSource(loadChannel);
 	pom->addSaveSource(saveChannel);
 
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Adding load/save source for current path to the SoundManager");
 	soundManager->addLoadSource(loadChannel);
 	soundManager->addSaveSource(saveChannel);
 
@@ -713,6 +716,7 @@ int main(int argc, char* argv[])
 	CMessageType framerendered("GRAPHIC_FRAME_RENDERED");
 
 	// A listener
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Creating Hack listeners");
 	shared_ptr<CMessageListener> mylistener(new MyMessageListener);
 	shared_ptr<CMessageListener> mylistener2(new robotcontroler);	
 	shared_ptr<CMessageListener> mylistener3(new AnimationListener);	
@@ -723,6 +727,7 @@ int main(int argc, char* argv[])
 	shared_ptr<CMessageListener> mylistener8(new MousePressedListener);
 
 
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Instanciating modules...");
 	CLogModule *logModule = CLogModule::getInstancePtr();
 	CGraphicModule* graphicmanager = CGraphicModule::getInstancePtr();
 	COISInputModule inputmanager;
@@ -731,16 +736,29 @@ int main(int argc, char* argv[])
 	CSoundModule * soundmanager = CSoundModule::getInstancePtr();
 	CInputEventsTranslator* inputEventsTranslator = CInputEventsTranslator::getInstancePtr();
 	CStatsModule* statsModule = CStatsModule::getInstancePtr();
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Instanciating modules...[DONE]");
 
 	CMessageManager* messageManager = messageModule->getMessageManager();
 
-	messageModule->init();
-	graphicmanager->init();
-	inputmanager.init();
-	timeModule->init();
-	soundmanager->init();
-	inputEventsTranslator->init();
-	statsModule->init();
+	try
+	{
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Initializing message module");
+		messageModule->init();
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Initializing message module [DONE]");
+
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Initializing graphic module");
+		graphicmanager->init();
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Initializing graphic module [DONE]");
+
+		inputmanager.init();
+		timeModule->init();
+		soundmanager->init();
+		inputEventsTranslator->init();
+		statsModule->init();
+	} catch (Glib::ustring str)
+	{
+		cout << str << endl;
+	}
 
 	/*
 	 * We add a listner and send some messages
