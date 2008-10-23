@@ -41,7 +41,7 @@ scons %{?_smp_mflags} gnoll
 
 
 %install
-mkdir -p $RPM_BUILD_ROOT/usr
+mkdir -p $RPM_BUILD_ROOT/usr/
 scons install prefix=$RPM_BUILD_ROOT/usr/
 
 %clean
