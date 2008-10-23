@@ -157,6 +157,9 @@ def main():
 		opts.Save('gnoll.conf', env)
 
 		print "install_prefix = [%s]" % (env['install_prefix'])
+		print "install_bin    = [%s]" % (env['install_bin'])
+		print "install_data   = [%s]" % (env['install_data'])
+		print "install_config = [%s]" % (env['install_config'])
 
 		Help(opts.GenerateHelpText(env))
 
@@ -234,6 +237,7 @@ def main():
 			# This proceeds only if 'install_data' doesn't exists
 			if not os.path.exists(env['install_data']):
 				try:
+					print "Copying data [Destination dir: %s]..." % (env['install_data'])
 					shutil.copytree('./data/', env['install_data'], True)
 
 				except (IOError, os.error), why:
