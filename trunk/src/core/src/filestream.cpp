@@ -30,6 +30,7 @@
 
 
 #include "../include/filestream.h"
+#include "../../log/include/clogmodule.h"
 
 
 
@@ -40,12 +41,12 @@ namespace Gnoll {
 
 		FileStream::FileStream( string _filename, bool _overWrite) : m_filename(_filename)
 		{
-			ios::openmode mode = ios::out | ios::in | ios::binary; 
+			ios::openmode mode = ios::in | ios::binary;
 			m_isOpen = false;
 
 			if (_overWrite)
 			{
-				mode = mode | ios::trunc;
+				mode = mode | ios::trunc | ios::out;
 			}
 
 			m_stream.open (m_filename.c_str(), mode); 
@@ -53,6 +54,9 @@ namespace Gnoll {
 			if (m_stream.good())
 			{
 				m_isOpen = true;
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( m_filename + " succesfully opened" );
+			} else {
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( m_filename + " UNsuccesfully opened" );
 			}
 		}
 
@@ -62,18 +66,21 @@ namespace Gnoll {
 			if (m_isOpen)
 			{
 				this->close();
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Closing file " + m_filename );
 			}
 		}
 
 
 		size_t FileStream::read( char* _buff, size_t _size)
 		{
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Reading " + m_filename );
 			if (m_isOpen)
 			{
 				m_stream.read(_buff, _size);
 				return m_stream.gcount();
 			} else 
 			{
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( m_filename + "was not opened" );
 				return 0;
 			}
 		}
@@ -107,6 +114,7 @@ namespace Gnoll {
 				return m_stream.eof();
 			} else 
 			{ 
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Trying to get an EOF on a closed file: " + m_filename );
 				return 1;		  
 			}
 		}
