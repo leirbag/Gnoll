@@ -47,10 +47,12 @@ class BaseGnollInstaller:
 		destFile = file(str(dest), "w")
 		sourceFile = file(str(filename), "r")
 
-		myEnv = env
+		myEnv = env.Clone()
+
 		if os.environ.has_key('RPM_BUILD_ROOT') :
-				myEnv['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
-				myEnv['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
+				print "Detecting RPM building process : Fixing paths in config files"
+				myEnv['install_bin'] = myEnv['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
+				myEnv['install_data'] = myEnv['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
 
 
 		destFile.write(sourceFile.read() % myEnv)
