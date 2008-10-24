@@ -36,6 +36,8 @@
 #include "../../core/include/cmessagemanager.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../../core/include/cmessagelistener.h"
+#include <OgreRoot.h>
+#include <OgreSceneManager.h>
 
 #include <set>
 
@@ -96,10 +98,36 @@ namespace Gnoll
 		CSceneManager::CSceneManager(string _instanceName) : CDynamicObjectProxy(_instanceName)
 		{
 
+
 			if (this->hasAttribute("focusedPage") == false)
 			{
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "No focusedPage attribute found for CSceneManager " + _instanceName );
 				return;
+			}
+
+
+			/**
+			 * A sky is defined by two attributes :
+			 * - skyType which defines the type of sky (eg. dome)
+			 * - skyMaterial which is the material used for drawing the sky
+			 */
+			if (this->hasAttribute("skyType") == true)
+			{
+
+				Ogre::Root *ogreRoot = Ogre::Root::getSingletonPtr();
+
+				shared_ptr< Gnoll::DynamicObject::String > skyType = this->getAttribute< Gnoll::DynamicObject::String > ("skyType");
+				shared_ptr< Gnoll::DynamicObject::String > skyMaterialName( new Gnoll::DynamicObject::String() );
+
+				if (this->hasAttribute("skyMaterial") == true)
+				{
+					skyMaterialName = this->getAttribute< Gnoll::DynamicObject::String > ("skyMaterial");
+				}
+
+				Ogre::SceneManager* sm = ogreRoot->getSceneManager("TSM");
+
+				sm->setSkyDome(true, *skyMaterialName);
+
 			}
 
 

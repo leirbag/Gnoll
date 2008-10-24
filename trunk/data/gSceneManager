@@ -6,4 +6,10 @@
   <attribute name="currentCamera">
     <string value="camTP"/>
   </attribute>
+  <attribute name="skyType">
+    <string value="dome"/>
+  </attribute>
+  <attribute name="skyMaterial">
+    <string value="Examples/CloudySky"/>
+  </attribute>
 </dynamicobject>
