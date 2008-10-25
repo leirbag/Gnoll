@@ -32,7 +32,8 @@ In order to build Gnoll you will need these packages :
 
 To build it, just launch these commands :
 scons gnoll 
-You can compile gnoll with debug options by passing 'debug=1' to the build command line
+You can compile Gnoll with debug options by passing 'debug=1' to the build command line.
+Gnoll can also log everything to a file if the parameter do_log=1 is passed to the build command line.
 
 
 To install it to a specific directory :
