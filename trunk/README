@@ -16,7 +16,7 @@ In order to build Gnoll you will need these packages :
 - g++
 - libxml++2.6
 - glibmm
-- Ogre 3d 1.4.x 
+- Ogre 3d 1.4.x or 1.6.x
 - CEGUI 0.5.0
 - OIS 1.0rc1
 - boost_filesystem
