@@ -12,4 +12,16 @@
   <attribute name="southLink">
     <string value="northPage"/>
   </attribute>
+  <attribute name="staticObjects">
+    <list>
+      <cstaticgobject instance="">
+        <attribute name="mesh">
+          <string value="ninja.mesh"/>
+        </attribute>
+        <attribute name="name">
+          <string value="poo"/>
+        </attribute>
+      </cstaticgobject>
+    </list>
+  </attribute>
 </dynamicobject>

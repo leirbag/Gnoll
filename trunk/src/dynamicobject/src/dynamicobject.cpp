@@ -37,6 +37,7 @@
 
 
 #include "../include/dynamicobject.h"
+#include "../../log/include/clogmodule.h"
 
 
 namespace Gnoll
@@ -174,11 +175,6 @@ namespace Gnoll
 				return;
 			}
 
-			if (_element->get_name() != "dynamicobject")
-			{
-				return;
-			}
-
 			xmlpp::Attribute* instanceName = _element->get_attribute("instance");
 			if(instanceName)
 			{
@@ -219,11 +215,13 @@ namespace Gnoll
 							// We need a handler for this attribute
 							Gnoll::DynamicObject::AttributeHandlerRegistry* registry = Gnoll::DynamicObject::AttributeHandlerRegistry::getInstancePtr();
 
+							Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "DO: Looking for a handler for attribute " + name);
 							shared_ptr<Gnoll::DynamicObject::IAttributeHandler> handler = registry->getHandler(name);
 
 							// Check if a handler is available for this attribute
 							if (handler.get() != NULL)
 							{
+								Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "DO: Handler found for attribute " + name);
 								// The handler returns an shared_pointer to a new IAttribute
 								shared_ptr<IAttribute> attribute = handler->handle(elementChild, this);
 

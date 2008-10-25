@@ -32,6 +32,7 @@
 #include "../../dynamicobject/include/float.h"
 #include "../include/cpage.h"
 #include "../include/ipagerenderer.h"
+#include "../include/cstaticgobject.h"
 #include <OgreCamera.h>
 
 #include <sstream>
@@ -62,6 +63,10 @@ namespace Gnoll
 			// Creating root page node
 			root->createChildSceneNode( this->getInstance() );
 
+
+			/**
+			 * Load the page renderer
+			 */
 			if (this->hasAttribute("PageRenderer"))
 			{
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "From " + this->getInstance() + " // Initializing PageRenderer" );
@@ -69,19 +74,51 @@ namespace Gnoll
 				pRenderer->init(this);
 			}
 
+
+			/**
+			 * Load static objects
+			 */
+			if (this->hasAttribute("staticObjects"))
+			{
+				shared_ptr< Gnoll::DynamicObject::List > listStaticObjects = this->getAttribute < Gnoll::DynamicObject::List > ("staticObjects");
+
+				typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+
+				for( ListIterator it = listStaticObjects->begin(); it != listStaticObjects->end(); it++)
+				{
+					if (shared_ptr<Gnoll::Scene::CStaticGObject> staticGObject = dynamic_pointer_cast<Gnoll::Scene::CStaticGObject>(*it))
+					{
+						staticGObject->init(this);
+					}
+				}
+			}
 		}
 
 		void CPage::unInit()
 		{
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "!!!!!!!!!!!!!!!! DE-INIT OF PAGE " + this->getInstance() );
 
-			/**
-			 * The way to check if a page has been initialized, is to check if the Page Root Node has
-			 * been created.
-			 */
-			if (this->getPageRootNode())
+			if (this->isInitialized())
 			{
 				Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+
+				/**
+				 * Unload static objects
+				 */
+				if (this->hasAttribute("staticObjects"))
+				{
+					shared_ptr< Gnoll::DynamicObject::List > listStaticObjects = this->getAttribute < Gnoll::DynamicObject::List > ("staticObjects");
+
+					typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+
+					for( ListIterator it = listStaticObjects->begin(); it != listStaticObjects->end(); it++)
+					{
+						if (shared_ptr<Gnoll::Scene::CStaticGObject> staticGObject = dynamic_pointer_cast<Gnoll::Scene::CStaticGObject>(*it))
+						{
+							staticGObject->exit(this);
+						}
+					}
+				}
 
 
 				if (this->hasAttribute("PageRenderer"))
@@ -121,6 +158,10 @@ namespace Gnoll
 		{
 			bool result = false;
 
+			/**
+			 * The way to check if a page has been initialized, is to check if the Page Root Node has
+			 * been created.
+			 */
 			if (this->getPageRootNode())
 			{
 				result = true;
