@@ -14,12 +14,32 @@
   </attribute>
   <attribute name="staticObjects">
     <list>
-      <cstaticgobject instance="">
+       <cstaticgobject instance="poo">
         <attribute name="mesh">
           <string value="ninja.mesh"/>
         </attribute>
-        <attribute name="name">
-          <string value="poo"/>
+        <attribute name="pos_x">
+          <float value="-30"/>
+        </attribute>
+        <attribute name="pos_y">
+          <float value="0"/>
+        </attribute>
+        <attribute name="pos_z">
+          <float value="-30"/>
+        </attribute>
+      </cstaticgobject>
+      <cstaticgobject instance="paa">
+        <attribute name="mesh">
+          <string value="ninja.mesh"/>
+        </attribute>
+        <attribute name="pos_x">
+          <float value="30"/>
+        </attribute>
+        <attribute name="pos_y">
+          <float value="0"/>
+        </attribute>
+        <attribute name="pos_z">
+          <float value="30"/>
         </attribute>
       </cstaticgobject>
     </list>

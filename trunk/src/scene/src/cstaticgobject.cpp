@@ -29,6 +29,7 @@
 #include "../../log/include/clogmodule.h"
 #include "../include/cpage.h"
 #include <glibmm/ustring.h>
+#include "../../dynamicobject/include/float.h"
 
 #include <iostream>
 using namespace std;
@@ -58,14 +59,16 @@ namespace Gnoll
 		void CStaticGObject::init(CPage* _parentPage)
 		{
 
+			/**
+			 * A parent page must exist
+			 */
 			if (_parentPage == NULL) 
 			{
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "CStaticGObject object initialized without any parent page");
 				return;
 			}
 
-			shared_ptr< Gnoll::DynamicObject::String > instanceName = this->getAttribute < Gnoll::DynamicObject::String > ("name");
-			string instanceNameStr(*instanceName);
+			string instanceNameStr = this->getInstance();
 
 			shared_ptr< Gnoll::DynamicObject::String > meshName = this->getAttribute < Gnoll::DynamicObject::String > ("mesh");
 			string meshNameStr(*meshName);
@@ -78,6 +81,18 @@ namespace Gnoll
 			
 			Ogre::Entity *ent = sm->createEntity( entName, meshNameStr );
 			staticGObjectNode->attachObject( ent );
+
+
+			/**
+			 * Translate the object
+			 */
+			shared_ptr< Gnoll::DynamicObject::Float > zero ( new Gnoll::DynamicObject::Float(0.0f));
+			shared_ptr< Gnoll::DynamicObject::Float > posX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("pos_x", zero);
+			shared_ptr< Gnoll::DynamicObject::Float > posY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("pos_y", zero);
+			shared_ptr< Gnoll::DynamicObject::Float > posZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("pos_z", zero);
+
+			Ogre::Vector3 posGObject(*posX, *posY, *posZ);
+			staticGObjectNode->translate( posGObject, Ogre::Node::TS_LOCAL);
 
 		}
 
