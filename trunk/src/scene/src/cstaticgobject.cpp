@@ -83,10 +83,40 @@ namespace Gnoll
 			staticGObjectNode->attachObject( ent );
 
 
+
+			shared_ptr< Gnoll::DynamicObject::Float > zero ( new Gnoll::DynamicObject::Float(0.0f));
+			shared_ptr< Gnoll::DynamicObject::Float > one ( new Gnoll::DynamicObject::Float(1.0f));
+
+
+
+			/**
+			 * Scale the object
+			 */
+
+			shared_ptr< Gnoll::DynamicObject::Float > scaleX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("scale_x", one);
+			shared_ptr< Gnoll::DynamicObject::Float > scaleY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("scale_y", one);
+			shared_ptr< Gnoll::DynamicObject::Float > scaleZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("scale_z", one);
+
+
+			staticGObjectNode->setScale(*scaleX, *scaleY, *scaleZ);
+
+
+			/**
+			 * Rotate the object
+			 */
+
+			shared_ptr< Gnoll::DynamicObject::Float > rotX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("rot_x", zero);
+			shared_ptr< Gnoll::DynamicObject::Float > rotY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("rot_y", zero);
+			shared_ptr< Gnoll::DynamicObject::Float > rotZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("rot_z", zero);
+
+			staticGObjectNode->rotate(Ogre::Vector3(1,0,0), Ogre::Radian(*rotX));
+			staticGObjectNode->rotate(Ogre::Vector3(0,1,0), Ogre::Radian(*rotY));
+			staticGObjectNode->rotate(Ogre::Vector3(0,0,1), Ogre::Radian(*rotZ));
+
+
 			/**
 			 * Translate the object
 			 */
-			shared_ptr< Gnoll::DynamicObject::Float > zero ( new Gnoll::DynamicObject::Float(0.0f));
 			shared_ptr< Gnoll::DynamicObject::Float > posX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("pos_x", zero);
 			shared_ptr< Gnoll::DynamicObject::Float > posY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("pos_y", zero);
 			shared_ptr< Gnoll::DynamicObject::Float > posZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > ("pos_z", zero);
