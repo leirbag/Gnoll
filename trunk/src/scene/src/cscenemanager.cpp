@@ -27,10 +27,11 @@
 \*-------------------------------------------------------------------------*/
 
 
-
+#include "../include/cameramanager.h"
 #include "../include/cscenemanager.h"
 #include "../include/cpage.h"
 #include "../../time/include/ctimemodule.h"
+#include "../../core/include/sourcefile.h"
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
 #include "../../core/include/cmessagemanager.h"
@@ -40,7 +41,7 @@
 #include <OgreSceneManager.h>
 
 #include <set>
-
+#include "../../graphic/include/cgraphicmodule.h"
 #include "../../log/include/clogmodule.h"
 #include <sstream>
 
@@ -97,7 +98,8 @@ namespace Gnoll
 
 		CSceneManager::CSceneManager(string _instanceName) : CDynamicObjectProxy(_instanceName)
 		{
-
+			// Allocate a camera manager
+			CameraManager* cameraManager = CameraManager::getInstancePtr();
 
 			if (this->hasAttribute("focusedPage") == false)
 			{
@@ -130,6 +132,30 @@ namespace Gnoll
 
 			}
 
+			/*
+			 * Load current camera
+			 */
+			if(this->hasAttribute("currentCamera") == true)
+			{
+				// Get back the name of the instance
+				shared_ptr< Gnoll::DynamicObject::String > instanceCamera = this->getAttribute< Gnoll::DynamicObject::String > ("currentCamera");
+
+				// Load the camera about him extension
+				shared_ptr<Camera> currentCamera = cameraManager->load(*instanceCamera);
+
+				Ogre::Root *ogreRoot = Ogre::Root::getSingletonPtr();
+				if (ogreRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
+				{
+					currentCamera->setFarValue(0);
+				}
+
+				// Get back the RenderWindow to set the camera
+				Ogre::RenderWindow* renderWindow = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getRenderWindow();
+
+				// Set the camera in the viewport [Current camera]
+				Viewport* vp = renderWindow->addViewport(currentCamera->getOgreCamera());
+				vp->setBackgroundColour(ColourValue(0.5, 1, 0));
+			}
 
 			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ("loadedPages");
 			if (loadedPages->size() == 0)

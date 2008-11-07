@@ -311,6 +311,7 @@ class BaseGnollBuilder:
 			'src/scene/src/defaultcamerafreeflylistener.cpp',
 			'src/scene/src/camerafreefly.cpp',
 			'src/scene/src/camerafreeflyfactory.cpp',
+			'src/scene/src/cameramanager.cpp',
 			'src/scene/src/cstaticgobject.cpp'
 			]
 

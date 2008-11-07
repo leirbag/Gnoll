@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <dynamicobject instance="gSceneManager">
+  <attribute name="currentCamera">
+    <string value="camera.camfreefly"/>
+  </attribute>
   <attribute name="focusedPage">
     <string value="initialPage"/>
   </attribute>
-  <attribute name="currentCamera">
-    <string value="camTP"/>
+  <attribute name="skyMaterial">
+    <string value="Examples/CloudySky"/>
   </attribute>
   <attribute name="skyType">
     <string value="dome"/>
-  </attribute>
-  <attribute name="skyMaterial">
-    <string value="Examples/CloudySky"/>
   </attribute>
 </dynamicobject>

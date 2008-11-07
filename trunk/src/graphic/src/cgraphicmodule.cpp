@@ -248,17 +248,17 @@ namespace Gnoll
 			mSceneMgr = mRoot->createSceneManager("OctreeSceneManager", "TSM");
 
 			// Create and configure the camera
-			shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraFreeFlyFactory() );
+			/*shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraFreeFlyFactory() );
 			m_camera  = new shared_ptr<Gnoll::Scene::Camera> (acf->createCamera("camTP"));
 			(*m_camera)->setNearValue(5);
-			(*m_camera)->setFarValue(1000);
+			(*m_camera)->setFarValue(1000);*/
 
 			// Create one viewport, entire window
-			Viewport* vp = mwindow->addViewport((*m_camera)->getOgreCamera());
-			vp->setBackgroundColour(ColourValue(0.5,1,0));
+			//Viewport* vp = mwindow->addViewport((*m_camera)->getOgreCamera());
+			//vp->setBackgroundColour(ColourValue(0.5,1,0));
 
 			// Alter the camera aspect ratio to match the viewport
-			(*m_camera)->setFovValue( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
+			//(*m_camera)->setFovValue( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
 
 			mSceneMgr->setAmbientLight( ColourValue( 0.6, 0.6, 0.6 ) );
 
@@ -281,12 +281,12 @@ namespace Gnoll
 
 
 			// Infinite far plane?
-			if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
-			{
-				(*m_camera)->setFarValue(0);
-			}
+			//if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
+			//{
+			//	(*m_camera)->setFarValue(0);
+			//}
 
-			RaySceneQuery* raySceneQuery = mSceneMgr->createRayQuery(
+			/*RaySceneQuery* raySceneQuery = mSceneMgr->createRayQuery(
 			Ray((*m_camera)->getPosition(), Vector3::NEGATIVE_UNIT_Y));
 
 			Ray updateRay;
@@ -300,14 +300,14 @@ namespace Gnoll
 				(*m_camera)->setPosition(Vector3((*m_camera)->getPosition().x,
 				i->worldFragment->singleIntersection.y + 5,
 				(*m_camera)->getPosition().z));
-			}
+			}*/
 
 			//mSceneMgr->destroyQuery(raySceneQuery);
 
 			Entity *ent1 = mSceneMgr->createEntity( "Robot", "ninja.mesh" );
 			SceneNode *node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "RobotNode");
 
-			RaySceneQuery* raySceneQuery2 = mSceneMgr->createRayQuery(
+			/*RaySceneQuery* raySceneQuery2 = mSceneMgr->createRayQuery(
 			Ray(Vector3(0,2500,0) , Vector3::NEGATIVE_UNIT_Y));
 
 			updateRay.setOrigin( Vector3(0,2500,0) );
@@ -322,7 +322,7 @@ namespace Gnoll
 					0);
 			}
 
-			mSceneMgr->destroyQuery(raySceneQuery2);
+			mSceneMgr->destroyQuery(raySceneQuery2);*/
 
 
 			node1->scale(0.2, 0.2, 0.2);
@@ -438,10 +438,10 @@ namespace Gnoll
 
 			mwindow->removeAllViewports();
 
-			if (m_camera)
-			{
+			/*if (m_camera)
+			/{
 				delete m_camera;
-			}
+			}*/
 
 			mSceneMgr->destroyAllCameras();
 			mRoot->destroySceneManager(mSceneMgr);

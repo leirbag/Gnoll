@@ -14,7 +14,7 @@
   </attribute>
   <attribute name="staticObjects">
     <list>
-       <cstaticgobject instance="poo">
+      <cstaticgobject instance="poo">
         <attribute name="mesh">
           <string value="ninja.mesh"/>
         </attribute>

@@ -18,104 +18,62 @@
  ***************************************************************************/
 
 
-/*-----------------------------CSceneManager-------------------------------*\
-|   This is the scene manager                                               |
+/*-----------------------------CameraManager ------------------------------*\
+|   This is the camera manager                                              |
 |                                                                           |
 |   Changelog :                                                             |
-|               12/05/2007 - Paf - Initial release                          |
-|               31/10/2008 - Gabriel - Add cameramanager           GHOST    |
+|               07/10/2008 - Gabriel - Initial release                      |
 \*-------------------------------------------------------------------------*/
 
 
-#ifndef __CSCENEMANAGER_H__
-#define __CSCENEMANAGER_H__
+#ifndef __CAMERAMANAGER_H__
+#define __CAMERAMANAGER_H__
 
-
+#include <map>
 #include <boost/shared_ptr.hpp>
-#include <libxml++/libxml++.h>
-#include <glibmm/ustring.h>
-
-
-#include "../../dynamicobject/include/cdynamicobjectproxy.h"
-#include "../../core/include/cpoolthreads.h"
-#include "../include/cpage.h"
-#include "../../core/include/cmessagelistener.h"
-
-#include "../../dynamicobject/include/string.h"
-#include "../../dynamicobject/include/float.h"
-#include "../../dynamicobject/include/set.h"
+#include "../include/abstractcamerafactory.h"
+#include "../../core/include/basemanager.h"
+#include "../include/camera.h"
+#include "../../core/include/singleton.h"
 
 using namespace std;
 using namespace boost;
-using namespace Gnoll::Core;
-using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
 	namespace Scene
 	{
-
-
-		class CSceneManager : public CDynamicObjectProxy
+		class CameraManager : public BaseManager<Camera, ObjectNotFoundError<Camera> >, public Gnoll::Core::Singleton<CameraManager>
 		{
-
 			private:
+				map<string, shared_ptr<AbstractCameraFactory> > extensionsMap;
+
+			protected:
 
 				/**
-				 * Pool of threads used for all sort of jobs
+				 * @copydoc BaseManager::loadImpl
 				 */
-				CPoolThreads m_poolOfThreads;
-
+				virtual shared_ptr<Camera> loadImpl( shared_ptr<IStream> _stream, string _instance);
 
 				/**
-				 * Listener which will update the scene manager
+				 * @copydoc BaseManager::saveImpl
 				 */
-				shared_ptr<CMessageListener> sceneUpdateListener;
+				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<Camera> _obj, string _instance);
 
 			public:
 
 				/**
 				 * This is a constructor
 				 */
-				CSceneManager(string _instanceName);
+				CameraManager();
 
 
 				/**
 				 * This is a destructor
 				 */
-				~CSceneManager();
-
-
-				/**
-				 * Update scene module
-				 */
-				void update();
-
-
-				/**
-				 * Enqueue a job in the pool of threads
-				 */
-				void queueJob( shared_ptr<CJob> _job);
-
-
-				/**
-				 * Check if a CPage object is within the camera frustrum
-				 * @param _page CPage object to check
-				 * @return Whether or not that page is visible
-				 */
-				bool isPageVisible(const CPage& _page);
-
-
-				/**
-				 * Set up a page (position, etc.)
-				 * @param _pageInstance Page Instance to setup
-				 * @param _loadedPages List of loaded pages
-				 * @param _offset Page offset
-				 */
-				void setupPage( const string _pageInstance, shared_ptr< Gnoll::DynamicObject::List > _loadedPages, const Ogre::Vector3 _offset = Ogre::Vector3());
+				~CameraManager();
 		};
-
 	}
 }
 
-#endif // __CSCENEMANAGER_H__
+#endif

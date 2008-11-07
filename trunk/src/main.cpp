@@ -62,6 +62,7 @@
 #include "time/include/ctimemodule.h"
 #include "sound/include/csoundmodule.h"
 #include "scene/include/cscenemanager.h"
+#include "scene/include/cameramanager.h"
 #include "stats/include/cstatsmodule.h"
 #include "log/include/clogmodule.h"
 
@@ -628,6 +629,7 @@ void analyzeArguments (int argc, char* argv[])
 
 	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 	SoundManager *soundManager = SoundManager::getInstancePtr();
+	CameraManager *cameraManager = CameraManager::getInstancePtr();
 
 	/**
 	 * If a loading source has to be added
@@ -644,6 +646,7 @@ void analyzeArguments (int argc, char* argv[])
 			shared_ptr<ISource> userLoadChannel(new SourceFile(*it, false, 10));
 			pom->addLoadSource(userLoadChannel);
 			soundManager->addLoadSource(userLoadChannel);
+			cameraManager->addLoadSource(userLoadChannel);
 		}
 	}
 
@@ -662,6 +665,7 @@ void analyzeArguments (int argc, char* argv[])
 			shared_ptr<ISource> userSaveChannel(new SourceFile( *it, true, 10 ));
 			pom->addSaveSource(userSaveChannel);
 			soundManager->addSaveSource(userSaveChannel);
+			cameraManager->addLoadSource(userSaveChannel);
 		}
 	}
 
