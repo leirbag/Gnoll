@@ -1,6 +1,6 @@
 Format: 1.0
-Source: gnoll-0.1.4
-Version: 0.1.4
+Source: gnoll-0.1.6rc1
+Version: 0.1.6rc1
 Binary: gnoll
 Maintainer: Bruno Mahe <bruno@gnoll.org>
 Architecture: any
