@@ -101,6 +101,8 @@ void COISInputManager::initialise(  ) {
 			 */
 #ifdef HAVE_OIS_1RC
 			int numKeyboards = mInputSystem->numKeyBoards();
+#elif defined HAVE_OIS_1_2
+			int numKeyboards = mInputSystem->getNumberOfDevices( OIS::OISKeyboard );
 #else
 			int numKeyboards = mInputSystem->numKeyboards();
 #endif
@@ -113,7 +115,11 @@ void COISInputManager::initialise(  ) {
 
 
         // If possible create a buffered mouse
+#ifdef HAVE_OIS_1_2
+	if( mInputSystem->getNumberOfDevices( OIS::OISMouse ) > 0 ) {
+#else
         if( mInputSystem->numMice() > 0 ) {
+#endif
             mMouse = static_cast<OIS::Mouse*>( mInputSystem->createInputObject( OIS::OISMouse, true ) );
             mMouse->setEventCallback( this );
 

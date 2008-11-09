@@ -132,6 +132,9 @@ class BaseGnollBuilder:
 		if config.CheckLibWithHeader( 'OIS', 'OISInputManager.h', 'c++', 'OIS::InputManager::createInputSystem(0)->numKeyBoards();' ):
 			configProject['HAVE_OIS_1RC'] = '1'
 
+		elif config.CheckLibWithHeader( 'OIS', 'OISInputManager.h', 'c++', 'OIS::InputManager::createInputSystem(0)->getNumberOfDevices( OIS::OISKeyboard );' ):
+			configProject['HAVE_OIS_1_2'] = '1'
+
 
 		configProject['HAVE_OIS'] = '1'
 		return configProject
