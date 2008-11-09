@@ -36,6 +36,7 @@
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
 
+#include <sstream>
 
 using namespace Gnoll::Core;
 using namespace std;
@@ -87,7 +88,28 @@ namespace Gnoll
 				 * Log a message
 				 * @param msg Message to log
 				 */
-				void logMessage(string msg);
+				void logMessage(string msg, bool logIt = true);
+
+
+				/**
+				 * Return a reference to the log module
+				 */
+				CLogModule& log() const { return *(this->getInstancePtr()); }
+
+
+				/**
+				 * Overloaded << operator
+				 */
+				template <class T>
+				CLogModule& operator<<(const T &toLog)
+				{
+					std::ostringstream stream;
+					stream << toLog;
+					logMessage(stream.str(), false);
+
+					// Chain << calls
+					return log();
+				}
 
 
 			private:

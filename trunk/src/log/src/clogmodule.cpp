@@ -94,10 +94,26 @@ namespace Gnoll
 		}
 
 
-		void CLogModule::logMessage(string msg)
+		void CLogModule::logMessage(string msg, bool logIt)
 		{
 #if DO_LOG
-			Ogre::LogManager::getSingleton().logMessage( msg );
+			static std::string str;
+			if(logIt)
+			{
+				Ogre::LogManager::getSingleton().logMessage( msg );
+			}
+			else
+			{
+				if( msg.find("\n") != std::string::npos )
+				{
+					logMessage(str);
+					str.erase();
+				}
+				else
+				{
+					str += msg;
+				}
+			}
 #endif
 		}
 	}
