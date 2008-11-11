@@ -38,6 +38,10 @@ namespace Gnoll
 	{
 		class CameraFreeFly : public Camera
 		{
+		private:
+			float rotationX;
+			float rotationY;
+			float rotationZ;
 		public:
 			/*
 			 * Default constructor, (see camera) + offset set at 100, min offset to 0 and max offset to 200

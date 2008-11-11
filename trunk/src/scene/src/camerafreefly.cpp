@@ -27,6 +27,7 @@
 
 #include "../include/camerafreefly.h"
 #include "../../dynamicobject/include/float.h"
+#include "../../log/include/clogmodule.h"
 #include <cmath>
 
 using namespace Gnoll::DynamicObject;
@@ -38,6 +39,7 @@ namespace Gnoll
 		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName) :
 			Camera(instanceName)
 		{
+			rotationX = rotationY = rotationZ = 0.0f;
 		}
 
 		CameraFreeFly::~CameraFreeFly()
@@ -61,21 +63,28 @@ namespace Gnoll
 
 		void CameraFreeFly::rotateAroundAxisX(float degree)
 		{
-			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(degree)));
+			rotationX += degree;
 		}
 
 		void CameraFreeFly::rotateAroundAxisY(float degree)
 		{
-			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(degree)));
+			rotationY += degree;
 		}
 
 		void CameraFreeFly::rotateAroundAxisZ(float degree)
 		{
-			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(degree)));
+			rotationZ += degree;
 		}
 
 		void CameraFreeFly::update(float time)
 		{
+			Ogre::Quaternion q = getOgreCamera()->getOrientation();
+			q.normalise();
+			getOgreCamera()->setOrientation(q);
+			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(rotationY)));
+			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(rotationX)));
+			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(rotationZ)));
+			rotationX = rotationY = rotationZ = 0.0f;
 		}
 	};
 };
