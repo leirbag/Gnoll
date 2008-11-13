@@ -4,7 +4,7 @@
     <CMeshPageRenderer meshName="page2.mesh"/>
   </attribute>
   <attribute name="size">
-    <float value="254"/>
+    <float value="256"/>
   </attribute>
   <attribute name="westLink">
     <string value="nortNorthPage"/>

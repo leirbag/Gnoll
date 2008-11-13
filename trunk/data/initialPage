@@ -7,6 +7,6 @@
     <string value="northPage"/>
   </attribute>
   <attribute name="size">
-    <float value="254"/>
+    <float value="256"/>
   </attribute>
 </dynamicobject>

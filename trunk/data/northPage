@@ -7,7 +7,7 @@
     <string value="nortNorthPage"/>
   </attribute>
   <attribute name="size">
-    <float value="254"/>
+    <float value="256"/>
   </attribute>
   <attribute name="southLink">
     <string value="initialPage"/>
