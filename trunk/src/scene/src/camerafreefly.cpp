@@ -78,13 +78,13 @@ namespace Gnoll
 
 		void CameraFreeFly::update(float time)
 		{
-			Ogre::Quaternion q = getOgreCamera()->getOrientation();
-			q.normalise();
-			getOgreCamera()->setOrientation(q);
 			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(rotationY)));
 			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(rotationX)));
 			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(rotationZ)));
 			rotationX = rotationY = rotationZ = 0.0f;
+			Ogre::Quaternion q = getOgreCamera()->getOrientation();
+			q.normalise();
+			getOgreCamera()->setOrientation(q);
 		}
 	};
 };
