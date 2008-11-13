@@ -267,7 +267,7 @@ namespace Gnoll
 			amountRotationAroundAxisX += degree;
 			amountRotationAroundAxisX = std::fmod(amountRotationAroundAxisX, 360);
 
-			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(degree)));
+			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(degree * mapMovement["ROTATION_AXIS_X"])));
 		}
 
 		void CameraThirdPerson::rotateAroundAxisY(float degree)
@@ -279,7 +279,7 @@ namespace Gnoll
 			amountRotationAroundAxisY += degree;
 			amountRotationAroundAxisY = std::fmod(amountRotationAroundAxisY, 360);
 
-			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(degree)));
+			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(degree * mapMovement["ROTATION_AXIS_Y"])));
 		}
 
 		void CameraThirdPerson::rotateAroundAxisZ(float degree)
@@ -291,7 +291,7 @@ namespace Gnoll
 			amountRotationAroundAxisZ += degree;
 			amountRotationAroundAxisZ = std::fmod(amountRotationAroundAxisZ, 360);
 
-			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(degree)));
+			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(degree * mapMovement["ROTATION_AXIS_Z"])));
 		}
 
 		void CameraThirdPerson::update(float time)

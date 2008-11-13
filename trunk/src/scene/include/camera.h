@@ -83,12 +83,12 @@ namespace Gnoll
 			 */
 			explicit Camera(const Camera& copy);
 
+		protected:
 			/*
 			 * This is a map for the speed movement of camera
 			 */
 			std::map<std::string, float> mapMovement;
 
-		protected:
 			/*
 			 * Default constructor, it initializes the camera with default settings :
 			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,

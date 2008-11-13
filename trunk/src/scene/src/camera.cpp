@@ -74,6 +74,10 @@ namespace Gnoll
 			far_value = this->getAttributeOrDefault<Float>("far", default_far);
 			fov_value = this->getAttributeOrDefault<Float>("fov", default_fov);
 
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Near: " << *near_value << "\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Far: " << *far_value << "\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Fov: " << *fov_value << "\t";
+
 			setNearValue(*near_value);
 			setFarValue(*far_value);
 			setFovValue(*fov_value);
@@ -89,6 +93,8 @@ namespace Gnoll
 			pos_x = this->getAttributeOrDefault<Float>("pos_x", default_pos);
 			pos_y = this->getAttributeOrDefault<Float>("pos_y", default_pos);
 			pos_z = this->getAttributeOrDefault<Float>("pos_z", default_pos);
+
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Position: (" << *pos_x << ", " << *pos_y << ", " << *pos_z << ")\t";
 
 			pOgreCamera->setPosition(*pos_x, *pos_y, *pos_z);
 
@@ -106,6 +112,8 @@ namespace Gnoll
 			dir_y = this->getAttributeOrDefault<Float>("dir_y", default_dir_y);
 			dir_z = this->getAttributeOrDefault<Float>("dir_z", default_dir_z);
 
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Direction: (" << *dir_x << ", " << *dir_y << ", " << *dir_z << ")\t";
+
 			pOgreCamera->setDirection(*dir_x, *dir_y, *dir_z);
 
 			/**
@@ -116,6 +124,8 @@ namespace Gnoll
 			mapMovement["ROTATION_AXIS_Y"] = *(this->getAttributeOrDefault<Float>("ROTATION_AXIS_Y", default_value));
 			mapMovement["ROTATION_AXIS_Z"] = *(this->getAttributeOrDefault<Float>("ROTATION_AXIS_Z", default_value));
 
+			mapMovement["STRAFE_UP"]     = *(this->getAttributeOrDefault<Float>("STRAFE_UP", default_value));
+			mapMovement["STRAFE_DOWN"]    = *(this->getAttributeOrDefault<Float>("STRAFE_DOWN", default_value));
 			mapMovement["STRAFE_LEFT"]     = *(this->getAttributeOrDefault<Float>("STRAFE_LEFT", default_value));
 			mapMovement["STRAFE_RIGHT"]    = *(this->getAttributeOrDefault<Float>("STRAFE_RIGHT", default_value));
 			mapMovement["MOVE_FORWARD"]    = *(this->getAttributeOrDefault<Float>("MOVE_FORWARD", default_value));

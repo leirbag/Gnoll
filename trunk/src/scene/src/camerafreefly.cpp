@@ -48,17 +48,32 @@ namespace Gnoll
 
 		void CameraFreeFly::strafeLR(float speed)
 		{
-			getOgreCamera()->setPosition(getOgreCamera()->getPosition() + getOgreCamera()->getRight() * speed);
+			Ogre::Vector3 distance = getOgreCamera()->getPosition() + getOgreCamera()->getRight() * speed;
+			if(speed < 0)
+				distance *= mapMovement["STRAFE_LEFT"];
+			else
+				distance *= mapMovement["STRAFE_RIGHT"];
+			getOgreCamera()->setPosition(distance);
 		}
 
 		void CameraFreeFly::strafeUD(float speed)
 		{
-			getOgreCamera()->setPosition(getOgreCamera()->getPosition() + getOgreCamera()->getUp() * speed);
+			Ogre::Vector3 distance = getOgreCamera()->getPosition() + getOgreCamera()->getUp() * speed;
+			if(speed < 0)
+				distance *= mapMovement["STRAFE_DOWN"];
+			else
+				distance *= mapMovement["STRAFE_UP"];
+			getOgreCamera()->setPosition(distance);
 		}
 
 		void CameraFreeFly::move(float speed)
 		{
-			getOgreCamera()->setPosition(getOgreCamera()->getPosition() + getOgreCamera()->getDirection() * speed);
+			Ogre::Vector3 distance = getOgreCamera()->getPosition() + getOgreCamera()->getDirection() * speed;
+			if(speed < 0)
+				distance *= mapMovement["MOVE_BACK"];
+			else
+				distance *= mapMovement["MOVE_FORWARD"];
+			getOgreCamera()->setPosition(distance);
 		}
 
 		void CameraFreeFly::rotateAroundAxisX(float degree)
@@ -78,9 +93,9 @@ namespace Gnoll
 
 		void CameraFreeFly::update(float time)
 		{
-			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(rotationY)));
-			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(rotationX)));
-			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(rotationZ)));
+			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(rotationY * mapMovement["ROTATION_AXIS_X"])));
+			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(rotationX * mapMovement["ROTATION_AXIS_Y"])));
+			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(rotationZ * mapMovement["ROTATION_AXIS_Z"])));
 			rotationX = rotationY = rotationZ = 0.0f;
 			Ogre::Quaternion q = getOgreCamera()->getOrientation();
 			q.normalise();

@@ -69,7 +69,6 @@ namespace Gnoll
 			shared_ptr<CameraFreeFly> pCam = static_pointer_cast<CameraFreeFly>(cam);
 
 			// KEYBOARD
-			int speed = 10;
 			if(ae.action == "ACTION_ROTATE_LEFT")
 				pCam->rotateAroundAxisY(ae.intensity * lasttime);
 			if(ae.action == "ACTION_ROTATE_RIGHT")
@@ -84,9 +83,9 @@ namespace Gnoll
 			if(ae.action == "ACTION_STRAFE_RIGHT")
 				pCam->strafeLR(ae.intensity * lasttime);
 			if(ae.action == "ACTION_STEP_FORWARD")
-				pCam->move(speed * ae.intensity * lasttime);
+				pCam->move(ae.intensity * lasttime);
 			if(ae.action == "ACTION_STEP_BACKWARD")
-				pCam->move(speed * ae.intensity * lasttime * -1);
+				pCam->move(ae.intensity * lasttime * -1);
 
 			// MOUSE
 			float sensibility = -20.0f;  // Negative pour inverser les axes en meme temps
