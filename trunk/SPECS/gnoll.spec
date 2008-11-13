@@ -18,7 +18,7 @@ Requires: ogre, boost, libxml++, libxml2, glibmm24, cegui, ois
 Requires: openal, freealut, libvorbis, libogg, libsndfile
 
 %description
-This is a 3D action/rpg game engine
+This is a multi-platform 3D action/rpg game engine
 
 
 
