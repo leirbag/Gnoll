@@ -291,6 +291,16 @@ namespace Gnoll
 			update(1.0f);
 		}
 
+		const std::map<std::string, float>& Camera::getMovementInformation()
+		{
+			return mapMovement;
+		}
+
+		void Camera::setMovementInformation(const std::map<std::string, float>& mapConfiguration)
+		{
+			mapMovement = mapConfiguration;
+		}
+
 		void Camera::setOrientation(const Ogre::Quaternion& orientation)
 		{
 			pOgreCamera->setOrientation(orientation);
