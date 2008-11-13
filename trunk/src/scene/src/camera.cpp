@@ -107,6 +107,19 @@ namespace Gnoll
 			dir_z = this->getAttributeOrDefault<Float>("dir_z", default_dir_z);
 
 			pOgreCamera->setDirection(*dir_x, *dir_y, *dir_z);
+
+			/**
+			 * Extract Camera's movement configuration
+			 */
+			shared_ptr<Float> default_value = shared_ptr<Float> (new Float(1.0f));
+			mapMovement["ROTATION_AXIS_X"] = *(this->getAttributeOrDefault<Float>("ROTATION_AXIS_X", default_value));
+			mapMovement["ROTATION_AXIS_Y"] = *(this->getAttributeOrDefault<Float>("ROTATION_AXIS_Y", default_value));
+			mapMovement["ROTATION_AXIS_Z"] = *(this->getAttributeOrDefault<Float>("ROTATION_AXIS_Z", default_value));
+
+			mapMovement["STRAFE_LEFT"]     = *(this->getAttributeOrDefault<Float>("STRAFE_LEFT", default_value));
+			mapMovement["STRAFE_RIGHT"]    = *(this->getAttributeOrDefault<Float>("STRAFE_RIGHT", default_value));
+			mapMovement["MOVE_FORWARD"]    = *(this->getAttributeOrDefault<Float>("MOVE_FORWARD", default_value));
+			mapMovement["MOVE_BACK"]       = *(this->getAttributeOrDefault<Float>("MOVE_BACK", default_value));
 		}
 
 		Camera::Camera(const Camera& copy) :
@@ -167,6 +180,15 @@ namespace Gnoll
 
 			shared_ptr<Float> dir_z(new Float(dir.z));
 			this->setAttribute("dir_z", dir_z);
+
+			// Camera's movement configuration
+			std::map<std::string, float>::iterator it = mapMovement.begin();
+			while(it != mapMovement.end())
+			{
+				shared_ptr<Float> configValue(new Float(it->second));
+				this->setAttribute(it->first, configValue);
+				it++;
+			}
 
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Saving camera [" + this->getInstance() + "]" );
 		}

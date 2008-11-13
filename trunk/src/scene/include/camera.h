@@ -39,6 +39,7 @@
 #include <OgreSceneNode.h>
 #include <OgreVector3.h>
 #include <OgreCamera.h>
+#include <map>
 #include "../../dynamicobject/include/cdynamicobjectproxy.h"
 #include "../../core/include/cmessagetype.h"
 
@@ -81,6 +82,11 @@ namespace Gnoll
 			 * @param copy This is the camera to copy
 			 */
 			explicit Camera(const Camera& copy);
+
+			/*
+			 * This is a map for the speed movement of camera
+			 */
+			std::map<std::string, float> mapMovement;
 
 		protected:
 			/*
@@ -210,6 +216,20 @@ namespace Gnoll
 			 * @param type This is the type of message associate to the listener
 			 */
 			void enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<Gnoll::Core::CMessageType> type);
+
+			/*
+			 * This method provide the configuration of each speed movement
+			 * element
+			 * @return The map between the name of the movement with the value
+			 */
+			const std::map<std::string, float>& getMovementInformation();
+
+			/*
+			 * This method set up the configuration of each speed movement
+			 * element
+			 * @param The map between the name of the movement with the value
+			 */
+			void setMovementInformation(const std::map<std::string, float>& mapConfiguration);
 
 			/*
 			 * This method is call each frame
