@@ -67,7 +67,7 @@ namespace Gnoll
 	    if (extensionsMap.find(type) != extensionsMap.end())
 		return extensionsMap[type]->createCamera(_instance);
 	    else
-		return shared_ptr<Camera>();
+		return extensionsMap["camfreefly"]->createCamera(_instance);
 	}
 
 	bool CameraManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<Camera> _obj, string _instance)
