@@ -46,7 +46,15 @@ namespace Gnoll
 		class CameraManager : public BaseManager<Camera, ObjectNotFoundError<Camera> >, public Gnoll::Core::Singleton<CameraManager>
 		{
 			private:
+				/*
+				 * Map between camera's extension recognize and their factory
+				 */
 				map<string, shared_ptr<AbstractCameraFactory> > extensionsMap;
+
+				/*
+				 * Map between camera's instance name and the instance
+				 */
+				map<string, shared_ptr<Camera> > camerasMap;
 
 			protected:
 

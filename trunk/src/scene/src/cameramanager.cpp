@@ -19,11 +19,11 @@
 
 
 /*-----------------------------CameraManager ------------------------------*\
-|   This is the camera manager                                              |
-|                                                                           |
-|   Changelog :                                                             |
-|               07/10/2008 - Gabriel - Initial release                      |
-\*-------------------------------------------------------------------------*/
+  |   This is the camera manager                                              |
+  |                                                                           |
+  |   Changelog :                                                             |
+  |               07/10/2008 - Gabriel - Initial release                      |
+  \*-------------------------------------------------------------------------*/
 
 #include "../include/cameramanager.h"
 #include "../../dynamicobject/include/list.h"
@@ -36,43 +36,51 @@
 
 namespace Gnoll
 {
-    namespace Scene
-    {
-	CameraManager::CameraManager()
+	namespace Scene
 	{
-	    // Map extension with factory
-	    extensionsMap["camfreefly"]     = shared_ptr<AbstractCameraFactory>(new CameraFreeFlyFactory());
-	    extensionsMap["camfixe"]        = shared_ptr<AbstractCameraFactory>(new CameraFixeFactory());
-	    extensionsMap["camfirstperson"] = shared_ptr<AbstractCameraFactory>(new CameraSplineFactory());
-	    extensionsMap["camthisperson"]  = shared_ptr<AbstractCameraFactory>(new CameraThirdPersonFactory());
-	    extensionsMap["camspline"]      = shared_ptr<AbstractCameraFactory>(new CameraFirstPersonFactory());
+		CameraManager::CameraManager()
+		{
+			// Map extension with factory
+			extensionsMap["camfreefly"]     = shared_ptr<AbstractCameraFactory>(new CameraFreeFlyFactory());
+			extensionsMap["camfixe"]        = shared_ptr<AbstractCameraFactory>(new CameraFixeFactory());
+			extensionsMap["camfirstperson"] = shared_ptr<AbstractCameraFactory>(new CameraSplineFactory());
+			extensionsMap["camthisperson"]  = shared_ptr<AbstractCameraFactory>(new CameraThirdPersonFactory());
+			extensionsMap["camspline"]      = shared_ptr<AbstractCameraFactory>(new CameraFirstPersonFactory());
+		}
+
+		CameraManager::~CameraManager()
+		{
+		}
+
+		shared_ptr<Camera> CameraManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
+		{
+			string type;
+
+			/**
+			 * Get camera from the file extension
+			 */
+			size_t pos = _instance.find_last_of('.') + 1;
+
+			if(pos != string::npos)
+				type = _instance.substr(pos);
+
+			if (extensionsMap.find(type) != extensionsMap.end())
+			{
+				camerasMap[_instance] = extensionsMap[type]->createCamera(_instance);
+				return camerasMap[_instance];
+			}
+			else
+			{
+				camerasMap[_instance] = extensionsMap["camfreefly"]->createCamera(_instance);
+				return camerasMap[_instance];
+			}
+		}
+
+		bool CameraManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<Camera> _obj, string _instance)
+		{
+			camerasMap[_instance].reset();
+			camerasMap.erase(camerasMap.find(_instance));
+			return true;
+		}
 	}
-
-	CameraManager::~CameraManager()
-	{
-	}
-
-	shared_ptr<Camera> CameraManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
-	{
-	    string type;
-
-	    /**
-	     * Get camera from the file extension
-	     */
-	    size_t pos = _instance.find_last_of('.') + 1;
-
-	    if(pos != string::npos)
-		type = _instance.substr(pos);
-
-	    if (extensionsMap.find(type) != extensionsMap.end())
-		return extensionsMap[type]->createCamera(_instance);
-	    else
-		return extensionsMap["camfreefly"]->createCamera(_instance);
-	}
-
-	bool CameraManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<Camera> _obj, string _instance)
-	{
-		return true;
-	}
-    }
 }

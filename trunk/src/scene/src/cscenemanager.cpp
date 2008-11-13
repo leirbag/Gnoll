@@ -208,7 +208,7 @@ namespace Gnoll
 
 			messageManager->delListener ( sceneUpdateListener, updateMsgType );
 
-
+			CameraManager::destroy();
 			this->deleteAttribute("loadedPages");
 		}
 
