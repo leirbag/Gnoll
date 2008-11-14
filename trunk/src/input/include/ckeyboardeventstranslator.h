@@ -51,9 +51,14 @@ namespace Gnoll
 			private:
 
 				/**
-				 * PersistentObject that contains a translation map for events from keyboard
+				 * DynamicObject which contains a translation map for events from keyboard
 				 */
 				shared_ptr<Gnoll::DynamicObject::DynamicObject> keyboardEventTranslationMap;
+
+				/**
+				 * DynamicObject which contains keyboard config
+				 */
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> keyboardConfig;
 
 				/**
 				 * CMessageType for KeyUp messages

@@ -35,6 +35,7 @@
 #include "../include/ckeyboardeventstranslator.h"
 #include "../include/ctranslationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
+#include "../../dynamicobject/include/float.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../../log/include/clogmodule.h"
 #include "../include/cinputmouseevents.h"
@@ -63,6 +64,12 @@ namespace Gnoll
 			 * Loading translation map : Keycode -> Action
 			 */
 			this->keyboardEventTranslationMap = pom->load("keyboardEventTranslationMap");
+
+			/**
+			 * Keyboard config
+			 */
+			this->keyboardConfig = pom->load("keyboardConfig");
+
 
 		}
 
@@ -121,6 +128,9 @@ namespace Gnoll
 			CMessageType actionEventType(ACTION_EVENT_TYPE);
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
+			shared_ptr<Float> defaultKeyboardSensibility = shared_ptr<Float> (new Float(1.0f));
+			shared_ptr< Gnoll::DynamicObject::Float > keyboardSensibility = keyboardConfig->getAttributeOrDefault<Float>("sensibility", defaultKeyboardSensibility);
+
 			unsigned long int now = timeModule->getMsecs();
 			unsigned long int period = now - m_lastTimeTriggerCalled;
 
@@ -140,7 +150,7 @@ namespace Gnoll
 				if (timePressed > 0)
 				{
 
-					float intensity = (float) timePressed / (float) period;
+					float intensity = (float) timePressed / (float) period * (*keyboardSensibility);
 
 					shared_ptr<List> actionList = keyboardEventTranslationMap->getAttribute<List>( it->first );
 					typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
