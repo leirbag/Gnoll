@@ -30,13 +30,15 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <OIS/OISKeyboard.h>
+
 #include "../include/ckeyboardstatetranslator.h"
 #include "../include/ctranslationevents.h"
+#include "../include/cinputmouseevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
+#include "../../dynamicobject/include/float.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../../log/include/clogmodule.h"
-#include "../include/cinputmouseevents.h"
-#include <OIS/OISKeyboard.h>
 #include "../../time/include/ctimemodule.h"
 
 #include "../../config.h"
@@ -64,6 +66,11 @@ namespace Gnoll
 			 */
 			this->keyboardEventTranslationMap = pom->load("keyboardEventTranslationMap");
 
+			/**
+			 * Keyboard config
+			 */
+			this->keyboardConfig = pom->load("keyboardConfig");
+
 		}
 
 		CKeyboardStateTranslator::~CKeyboardStateTranslator()
@@ -78,6 +85,10 @@ namespace Gnoll
 			 * Get the key code
 			 */
 			OIS::KeyCode keyCode = message->getData<OIS::KeyCode>();
+
+
+			shared_ptr<Float> defaultKeyboardSensibility = shared_ptr<Float> (new Float(1.0f));
+			shared_ptr< Gnoll::DynamicObject::Float > keyboardSensibility = keyboardConfig->getAttributeOrDefault<Float>("sensibility", defaultKeyboardSensibility);
 
 
 			/**
@@ -95,7 +106,7 @@ namespace Gnoll
 				shared_ptr<List> actionList = keyboardEventTranslationMap->getAttribute<List>( keyCodeValue );
 				typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
 
-				float intensity = 1.0f;
+				float intensity = *keyboardSensibility;
 				if( message->getType() == keyUp )
 					intensity = 0.0f;
 
