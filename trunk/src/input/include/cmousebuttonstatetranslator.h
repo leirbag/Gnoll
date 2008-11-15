@@ -51,9 +51,16 @@ namespace Gnoll
 			private:
 
 				/**
-				 * PersistentObject that contains a translation map for events from mouse
+				 * DynamicObject which contains a translation map for events from mouse
 				 */
 				shared_ptr<Gnoll::DynamicObject::DynamicObject> mouseButtonEventTranslationMap;
+
+
+				/**
+				 * DynamicObject which contains keyboard config
+				 */
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> mouseConfig;
+
 
 				/**
 				 * CMessageType for MOUSE_PRESSED messages

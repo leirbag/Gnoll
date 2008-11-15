@@ -18,14 +18,14 @@
 ***************************************************************************/
 
 
-/*------------------------CMouseStateTranslator----------------------------*\
+/*----------------------CMouseButtonStateTranslator------------------------*\
 |   This is translate mouse events to action events                         |
 |                                                                           |
 |   Changelog :                                                             |
 |               01/11/2008 - Paf - Initial release                          |
 |                                                                           |
-|		16/05/2008 - WT  - Send a list of action messages instead   |
-|				     of a unique message per input	    |
+|		16/05/2008 - WT  - Send a list of action messages instead             |
+|				     of a unique message per input	                            |
 \*-------------------------------------------------------------------------*/
 
 
@@ -33,11 +33,12 @@
 #include <boost/lexical_cast.hpp>
 
 #include "../include/cmousebuttonstatetranslator.h"
-#include "../../dynamicobject/include/dynamicobjectmanager.h"
-#include "../../core/include/cmessagemodule.h"
-#include "../../log/include/clogmodule.h"
 #include "../include/cinputmouseevents.h"
 #include "../include/ctranslationevents.h"
+#include "../../dynamicobject/include/dynamicobjectmanager.h"
+#include "../../dynamicobject/include/float.h"
+#include "../../core/include/cmessagemodule.h"
+#include "../../log/include/clogmodule.h"
 #include <OIS/OISMouse.h>
 
 #include "../../config.h"
@@ -63,6 +64,12 @@ namespace Gnoll
 			 * Loading translation map : Keycode -> Action
 			 */
 			this->mouseButtonEventTranslationMap = pom->load("mouseButtonEventTranslationMap");
+
+
+			/**
+			 * Keyboard config
+			 */
+			this->mouseConfig = pom->load("mouseConfig");
 
 		}
 
@@ -98,8 +105,12 @@ namespace Gnoll
 				typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
 
 
+				shared_ptr<Float> defaultMouseSensibility = shared_ptr<Float> (new Float(1.0f));
+				shared_ptr< Gnoll::DynamicObject::Float > mouseSensibility = mouseConfig->getAttributeOrDefault<Float>("sensibility", defaultMouseSensibility);
+
+
 				CMessageType messageType = message->getType();
-				float intensity = 1.0;
+				float intensity = *mouseSensibility;
 
 				if (messageType == mouseButtonPressedEvent)
 				{

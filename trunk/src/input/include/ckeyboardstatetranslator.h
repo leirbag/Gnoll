@@ -55,15 +55,18 @@ namespace Gnoll
 				 */
 				shared_ptr<Gnoll::DynamicObject::DynamicObject> keyboardEventTranslationMap;
 
+
 				/**
 				 * DynamicObject which contains keyboard config
 				 */
 				shared_ptr<Gnoll::DynamicObject::DynamicObject> keyboardConfig;
 
+
 				/**
 				 * CMessageType for KeyUp messages
 				 */
 				CMessageType keyUp;
+
 
 				/**
 				 * CMessageType for KeyDown messages

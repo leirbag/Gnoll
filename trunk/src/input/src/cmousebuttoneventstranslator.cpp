@@ -30,12 +30,14 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <OIS/OISMouse.h>
+
 #include "../include/cmousebuttoneventstranslator.h"
-#include "../../dynamicobject/include/dynamicobjectmanager.h"
-#include "../../core/include/cmessagemodule.h"
 #include "../include/cinputmouseevents.h"
 #include "../include/ctranslationevents.h"
-#include <OIS/OISMouse.h>
+#include "../../dynamicobject/include/dynamicobjectmanager.h"
+#include "../../dynamicobject/include/float.h"
+#include "../../core/include/cmessagemodule.h"
 #include "../../time/include/ctimemodule.h"
 #include "../../log/include/clogmodule.h"
 
@@ -63,6 +65,13 @@ namespace Gnoll
 			 * Loading translation map : Keycode -> Action
 			 */
 			this->mouseButtonEventTranslationMap = pom->load("mouseButtonEventTranslationMap");
+
+
+			/**
+			 * Mouse config
+			 */
+			this->mouseConfig = pom->load("mouseConfig");
+
 
 		}
 
@@ -131,6 +140,9 @@ namespace Gnoll
 			unsigned long int now = timeModule->getMsecs();
 			unsigned long int period = now - m_lastTimeTriggerCalled;
 
+			shared_ptr<Float> defaultMouseSensibility = shared_ptr<Float> (new Float(1.0f));
+			shared_ptr< Gnoll::DynamicObject::Float > mouseSensibility = mouseConfig->getAttributeOrDefault<Float>("sensibility", defaultMouseSensibility);
+
 
 			for( map<string, unsigned long int>::iterator it = m_durationButtonPressed.begin(); it != m_durationButtonPressed.end(); it++)
 			{
@@ -147,7 +159,7 @@ namespace Gnoll
 				if (timePressed > 0)
 				{
 
-					float intensity = (float) timePressed / (float) period;
+					float intensity = (float) timePressed / (float) period * (*mouseSensibility);
 
 					shared_ptr<List> actionList = mouseButtonEventTranslationMap->getAttribute<List>( it->first );
 					typedef list< shared_ptr<IAttribute> >::iterator ListIterator;

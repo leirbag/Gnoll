@@ -54,9 +54,15 @@ namespace Gnoll
 			private:
 
 				/**
-				 * DynamicObject that contains a translation map for events from mouse
+				 * DynamicObject which contains a translation map for events from mouse
 				 */
 				shared_ptr<Gnoll::DynamicObject::DynamicObject> mouseMotionEventTranslationMap;
+
+
+				/**
+				 * DynamicObject which contains mouse config
+				 */
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> mouseConfig;
 
 
 				/**

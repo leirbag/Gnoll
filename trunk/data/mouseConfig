@@ -3,4 +3,7 @@
   <attribute name="period">
     <integer value="500"/>
   </attribute>
+  <attribute name="sensibility">
+    <float value="1.0"/>
+  </attribute>
 </dynamicobject>

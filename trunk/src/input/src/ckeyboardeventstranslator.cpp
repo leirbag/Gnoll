@@ -60,22 +60,25 @@ namespace Gnoll
 
 			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
+
 			/**
 			 * Loading translation map : Keycode -> Action
 			 */
 			this->keyboardEventTranslationMap = pom->load("keyboardEventTranslationMap");
+
 
 			/**
 			 * Keyboard config
 			 */
 			this->keyboardConfig = pom->load("keyboardConfig");
 
-
 		}
+
 
 		CKeyboardEventsTranslator::~CKeyboardEventsTranslator()
 		{
 		}
+
 
 		void CKeyboardEventsTranslator::handle ( shared_ptr<CMessage> message )
 		{

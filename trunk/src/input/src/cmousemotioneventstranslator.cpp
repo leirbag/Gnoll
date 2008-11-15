@@ -34,18 +34,18 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <OIS/OISMouse.h>
+#include <OgreRenderWindow.h>
+
 #include "../include/cmousemotioneventstranslator.h"
 #include "../include/cinputmouseevents.h"
 #include "../include/ctranslationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
+#include "../../dynamicobject/include/float.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../../log/include/clogmodule.h"
-#include "../include/cinputmouseevents.h"
-#include <OIS/OISMouse.h>
-
-#include <OgreRenderWindow.h>
-
 #include "../../graphic/include/cgraphicmodule.h"
+
 
 #include "../../config.h"
 
@@ -68,6 +68,11 @@ namespace Gnoll
 			 * Loading translation map : Keycode -> Action
 			 */
 			this->mouseMotionEventTranslationMap = pom->load("mouseMotionEventTranslationMap");
+
+			/**
+			 * Mouse config
+			 */
+			this->mouseConfig = pom->load("mouseConfig");
 
 
 			Ogre::RenderWindow* renderWindow = CGraphicModule::getInstancePtr()->getRenderWindow();
@@ -101,6 +106,11 @@ namespace Gnoll
 		{
 			CMessageType actionEventType(ACTION_EVENT_TYPE);
 
+			shared_ptr<Float> defaultMouseSensibility = shared_ptr<Float> (new Float(1.0f));
+			shared_ptr< Gnoll::DynamicObject::Float > mouseSensibility = mouseConfig->getAttributeOrDefault<Float>("sensibility", defaultMouseSensibility);
+
+			float intensity = _intensity * (*mouseSensibility);
+
 			/**
 			 * If an action is associated to this key code, a list of action messages is sent
 			 */
@@ -116,7 +126,7 @@ namespace Gnoll
 				{
 					if (shared_ptr<String> actionName = dynamic_pointer_cast<String>(*itAttrs))
 					{
-						ActionEvent actionEvent(*actionName, _intensity);
+						ActionEvent actionEvent(*actionName, intensity);
 
 						shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 						shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
