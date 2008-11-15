@@ -65,7 +65,7 @@ namespace Gnoll {
 			}
 
 			xmlpp::Document* document;
-			shared_ptr<DynamicObject> po (new DynamicObject("NULL"));
+			shared_ptr<DynamicObject> po (new DynamicObject(_instance));
 
 			// Second : XML -> DynamicObject
 			// Only if some data are available
