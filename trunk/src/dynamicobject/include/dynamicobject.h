@@ -128,7 +128,7 @@ namespace Gnoll
 				 * This is the constructor.
 				 * @param _instance This is the instance name; the DynamicObject's name
 				 */
-				DynamicObject(Glib::ustring _instance);
+				DynamicObject(Glib::ustring _instance = "NULL");
 
 				/**
 				 * This is the destructor
