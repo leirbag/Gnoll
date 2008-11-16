@@ -38,7 +38,7 @@ namespace Gnoll
 		class CameraFirstPerson : public Camera
 		{
 		private:
-			Ogre::Vector3* m_headPosition;
+			Ogre::Vector3 m_headPosition;
 
 		public:
 			/*

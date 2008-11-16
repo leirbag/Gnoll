@@ -41,9 +41,7 @@ namespace Gnoll
 		CameraThirdPerson::CameraThirdPerson(const Glib::ustring& instanceName) :
 			Camera(instanceName)
 		{
-			/**
-			 * Extract Camera's offset settings
-			 */
+			// Extract Camera's offset settings
 			shared_ptr<Float> off;
 			shared_ptr<Float> minOff;
 			shared_ptr<Float> maxOff;
@@ -59,9 +57,7 @@ namespace Gnoll
 			minOffset = (*minOff);
 			maxOffset = (*maxOff);
 
-			/**
-			 * Extract Camera's limit rotation
-			 */
+			// Extract Camera's limit rotation
 			shared_ptr<Float> limit_x;
 			shared_ptr<Float> limit_y;
 			shared_ptr<Float> limit_z;
@@ -75,9 +71,7 @@ namespace Gnoll
 			limitRotationAroundAxisY = (*limit_y);
 			limitRotationAroundAxisZ = (*limit_z);
 
-			/**
-			 * Extract Camera's amount rotation
-			 */
+			// Extract Camera's amount rotation
 			shared_ptr<Float> amount_x;
 			shared_ptr<Float> amount_y;
 			shared_ptr<Float> amount_z;
@@ -94,9 +88,6 @@ namespace Gnoll
 
 		CameraThirdPerson::~CameraThirdPerson()
 		{
-			/*
-			 * Save the current configuration of the camera
-			 */
 			// limit
 			shared_ptr<Float> limitX(new Float(getLimitRotationAroundAxisX()));
 			shared_ptr<Float> limitY(new Float(getLimitRotationAroundAxisY()));

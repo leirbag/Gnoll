@@ -28,6 +28,8 @@
 #include "../include/cameraspline.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../dynamicobject/include/float.h"
+#include "../../dynamicobject/include/dynamicobject.h"
+#include <boost/lexical_cast.hpp>
 
 using namespace Gnoll::Graphic;
 using namespace Gnoll::DynamicObject;
@@ -36,13 +38,44 @@ namespace Gnoll
 {
 	namespace Scene
 	{
+		CameraSpline::Spline::Spline(const Glib::ustring& instanceName, Ogre::NodeAnimationTrack* nodeAT, unsigned long len) :
+			Gnoll::DynamicObject::CDynamicObjectProxy(instanceName)
+		{
+			length = len;
+			pNodeAT = nodeAT;
+			for(Gnoll::DynamicObject::DynamicObject::mapAttributes::const_iterator it = begin(); it != end(); it++)
+			{
+				addPoint(*dynamic_pointer_cast<Ogre::Vector3>(it->second), lexical_cast<unsigned long>(it->first));
+			}
+		}
+
+		CameraSpline::Spline::~Spline()
+		{
+			std::map<unsigned long, Ogre::Vector3>::iterator it = mapAnim.begin();
+			while(it != mapAnim.end())
+			{
+				setAttribute(lexical_cast<string>(it->first), shared_ptr<Gnoll::DynamicObject::Vector3>(
+							new Gnoll::DynamicObject::Vector3(it->second)));
+				it++;
+			}
+		}
+
+		void CameraSpline::Spline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)
+		{
+			if(frame > length)
+				return;
+
+			Ogre::TransformKeyFrame* key = pNodeAT->createNodeKeyFrame(frame);
+			key->setTranslate(vec3);
+			mapAnim[frame] = vec3;
+		}
+
 		CameraSpline::CameraSpline(const Glib::ustring& instanceName) :
 			Camera(instanceName)
 		{
 			shared_ptr<Float> len;
-			shared_ptr<Float> default_length = shared_ptr<Float> (new Float(10.0f));
+			shared_ptr<Float> default_length = shared_ptr<Float> (new Float(30.0f));
 			len = this->getAttributeOrDefault<Float>("length", default_length);
-			length = *len;
 
 			// Get the scenemanager
 			Ogre::SceneManager* pSM = CGraphicModule::getInstancePtr()->getSceneManager();
@@ -52,19 +85,33 @@ namespace Gnoll
 			camNode->attachObject(getOgreCamera());
 
 			// Create the animation with a SPLINE
-			pAnim = pSM->createAnimation(instanceName, length);
+			pAnim = pSM->createAnimation(instanceName, *len);
 			pAnim->setInterpolationMode(Ogre::Animation::IM_SPLINE);
 			pNodeAT = pAnim->createNodeTrack(0, camNode);
 
 			pAnimState = pSM->createAnimationState(instanceName);
 
-			// Get back an ancient animation (if instance existed only)
-			// TODO : need to speak with Paf
-
+			// Get back an ancient animation
+			shared_ptr<Gnoll::DynamicObject::String> default_name_spline = shared_ptr<Gnoll::DynamicObject::String> (
+					new Gnoll::DynamicObject::String(getInstance() + ".spline"));
+			shared_ptr<Gnoll::DynamicObject::String> name_spline = this->getAttributeOrDefault<Gnoll::DynamicObject::String>("Spline", default_name_spline);
+			spline = shared_ptr<Spline>(new Spline(*name_spline, pNodeAT, *len));
 		}
 
 		CameraSpline::~CameraSpline()
 		{
+			this->setAttribute("length", shared_ptr<Float>(new Float(spline->length)));
+
+			shared_ptr<Gnoll::DynamicObject::DynamicObject> list_animation = shared_ptr<Gnoll::DynamicObject::DynamicObject>(
+					new Gnoll::DynamicObject::DynamicObject("Animation list"));
+			std::map<unsigned long, Ogre::Vector3>::iterator it = spline->mapAnim.begin();
+			while(it != spline->mapAnim.end())
+			{
+				list_animation->setAttribute(lexical_cast<string>(it->first), shared_ptr<Vector3>(new Vector3(it->second)));
+				it++;
+			}
+
+			setAttribute("Spline", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(getInstance() + ".spline")));
 		}
 
 		void CameraSpline::update(float time)
@@ -75,30 +122,17 @@ namespace Gnoll
 
 		void CameraSpline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)
 		{
-			if(frame > length)
-				return;
-
-			Ogre::TransformKeyFrame* key = pNodeAT->createNodeKeyFrame(frame);
-			key->setTranslate(vec3);
-			mapAnim[frame] = vec3;
-		}
-
-		const Ogre::Vector3* CameraSpline::getPoint(unsigned long frame)
-		{
-			if(frame > length)
-				return NULL;
-
-			return &mapAnim[frame];
+			spline->addPoint(vec3, frame);
 		}
 
 		void CameraSpline::setLength(unsigned long length)
 		{
-			length = length;
+			spline->length = spline->length;
 		}
 
 		unsigned long CameraSpline::getLength()
 		{
-			return length;
+			return spline->length;
 		}
 
 		void CameraSpline::start()

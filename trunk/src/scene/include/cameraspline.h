@@ -33,6 +33,7 @@
 #include <OgreAnimation.h>
 #include <OgreAnimationState.h>
 #include "camera.h"
+#include "../../dynamicobject/include/vector3.h"
 
 namespace Gnoll
 {
@@ -42,12 +43,24 @@ namespace Gnoll
 		class CameraSpline : public Camera
 		{
 		private:
-			unsigned long length;
 			Ogre::Animation* pAnim;
 			Ogre::NodeAnimationTrack* pNodeAT;
 			Ogre::AnimationState* pAnimState;
-			std::map<unsigned long, Ogre::Vector3> mapAnim;
 
+			struct Spline : public Gnoll::DynamicObject::CDynamicObjectProxy
+			{
+				unsigned long length;
+				Ogre::NodeAnimationTrack* pNodeAT;
+				std::map<unsigned long, Ogre::Vector3> mapAnim;
+
+				Spline(const Glib::ustring& instanceName, Ogre::NodeAnimationTrack* nodeAT, unsigned long len);
+
+				~Spline();
+
+				void addPoint(const Ogre::Vector3& vec3, unsigned long frame);
+			};
+
+			shared_ptr<Spline> spline;
 		public:
 			/*
 			 * Default constructor

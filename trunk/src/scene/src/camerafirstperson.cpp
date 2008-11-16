@@ -26,32 +26,37 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../include/camerafirstperson.h"
+#include "../../dynamicobject/include/float.h"
+#include "../../log/include/clogmodule.h"
+#include "../../dynamicobject/include/vector3.h"
+
+using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
 	namespace Scene
 	{
 		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName) :
-			Camera(instanceName),
-			m_headPosition(NULL)
+			Camera(instanceName)
 		{
+			// Extract head position
+			shared_ptr<Gnoll::DynamicObject::Vector3> default_head = shared_ptr<Gnoll::DynamicObject::Vector3> (new Gnoll::DynamicObject::Vector3());
+			shared_ptr<Gnoll::DynamicObject::Vector3> temp_head = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>("Head_position", default_head);
+
+			// We need to convert the DO Vector3 to Ogre::Vector3 (inheritance)
+			setHeadPosition(*dynamic_pointer_cast<Ogre::Vector3>(temp_head));
+
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Head position: " << *dynamic_pointer_cast<Ogre::Vector3>(temp_head) << "\t";
 		}
 
 		CameraFirstPerson::~CameraFirstPerson()
 		{
-			// NOTHING TO DO
-			// NOTHING TO SERIALISE
-			if(m_headPosition != NULL)
-			    delete m_headPosition;
+			setAttribute("Head_position", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(m_headPosition)));
 		}
 
 		void CameraFirstPerson::setHeadPosition(const Ogre::Vector3& head)
 		{
-			if(m_headPosition != NULL)
-				delete m_headPosition;
-
-			m_headPosition = new Ogre::Vector3();
-			(*m_headPosition) = head;
+			m_headPosition = head;
 		}
 
 		void CameraFirstPerson::update(float time)
@@ -63,11 +68,8 @@ namespace Gnoll
 			static Ogre::Vector3 oldPosition = getTarget()->getPosition();
 
 			Ogre::Vector3 position = getTarget()->getPosition();
-			if(m_headPosition != NULL)
-			{
-				(*m_headPosition) += (position - oldPosition);
-				position = (*m_headPosition);
-			}
+			m_headPosition += (position - oldPosition);
+			position = m_headPosition;
 
 			getOgreCamera()->setPosition(position);
 			getOgreCamera()->setDirection(-getTarget()->getOrientation().zAxis());

@@ -43,9 +43,9 @@ namespace Gnoll
 			// Map extension with factory
 			extensionsMap["camfreefly"]     = shared_ptr<AbstractCameraFactory>(new CameraFreeFlyFactory());
 			extensionsMap["camfixe"]        = shared_ptr<AbstractCameraFactory>(new CameraFixeFactory());
-			extensionsMap["camfirstperson"] = shared_ptr<AbstractCameraFactory>(new CameraSplineFactory());
+			extensionsMap["camfirstperson"] = shared_ptr<AbstractCameraFactory>(new CameraFirstPersonFactory());
 			extensionsMap["camthirdperson"]  = shared_ptr<AbstractCameraFactory>(new CameraThirdPersonFactory());
-			extensionsMap["camspline"]      = shared_ptr<AbstractCameraFactory>(new CameraFirstPersonFactory());
+			extensionsMap["camspline"]      = shared_ptr<AbstractCameraFactory>(new CameraSplineFactory());
 		}
 
 		CameraManager::~CameraManager()
