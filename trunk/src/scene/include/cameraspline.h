@@ -53,10 +53,24 @@ namespace Gnoll
 				Ogre::NodeAnimationTrack* pNodeAT;
 				std::map<unsigned long, Ogre::Vector3> mapAnim;
 
+				/*
+				 * Default constructor
+				 * @param instanceName This is the instance name of the spline
+				 * @param nodeAT This is the a pointer to a NodeAnimationTrack
+				 * @param len This is the max length of the animation
+				 */
 				Spline(const Glib::ustring& instanceName, Ogre::NodeAnimationTrack* nodeAT, unsigned long len);
 
+				/*
+				 * Destructior
+				 */
 				~Spline();
 
+				/**
+				 * This add a point at a frame of the animation
+				 * @param vec3 position of the camera
+				 * @param frame specify the frame number
+				 */
 				void addPoint(const Ogre::Vector3& vec3, unsigned long frame);
 			};
 
@@ -86,6 +100,12 @@ namespace Gnoll
 			 * @param frame specify the frame number
 			 */
 			void addPoint(const Ogre::Vector3& vec3, unsigned long frame);
+
+			/**
+			 * This remove a point at a frame of the animation
+			 * @param frame specify the frame number
+			 */
+			void removePoint(unsigned long frame);
 
 			/**
 			 * This return the position of camera at a frame number

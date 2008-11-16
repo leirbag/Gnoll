@@ -38,11 +38,19 @@ namespace Gnoll
 {
 	namespace Scene
 	{
+		/*
+		 * PRIVATE STRUCTURE
+		 */
 		CameraSpline::Spline::Spline(const Glib::ustring& instanceName, Ogre::NodeAnimationTrack* nodeAT, unsigned long len) :
 			Gnoll::DynamicObject::CDynamicObjectProxy(instanceName)
 		{
+			// Set the max length
 			length = len;
+
+			// Set the Node Animation Track
 			pNodeAT = nodeAT;
+
+			// Extract each point of each Key Frame
 			for(Gnoll::DynamicObject::DynamicObject::mapAttributes::const_iterator it = begin(); it != end(); it++)
 			{
 				addPoint(*dynamic_pointer_cast<Ogre::Vector3>(it->second), lexical_cast<unsigned long>(it->first));
@@ -51,6 +59,7 @@ namespace Gnoll
 
 		CameraSpline::Spline::~Spline()
 		{
+			// Save each point of each Key Frame
 			std::map<unsigned long, Ogre::Vector3>::iterator it = mapAnim.begin();
 			while(it != mapAnim.end())
 			{
@@ -62,6 +71,7 @@ namespace Gnoll
 
 		void CameraSpline::Spline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)
 		{
+			// Check if we dont want to add a point at an invalidate key frame
 			if(frame > length)
 				return;
 
@@ -70,9 +80,13 @@ namespace Gnoll
 			mapAnim[frame] = vec3;
 		}
 
+		/*
+		 * CLASS
+		 */
 		CameraSpline::CameraSpline(const Glib::ustring& instanceName) :
 			Camera(instanceName)
 		{
+			// Extract the length of the animation
 			shared_ptr<Float> len;
 			shared_ptr<Float> default_length = shared_ptr<Float> (new Float(30.0f));
 			len = this->getAttributeOrDefault<Float>("length", default_length);
@@ -91,7 +105,7 @@ namespace Gnoll
 
 			pAnimState = pSM->createAnimationState(instanceName);
 
-			// Get back an ancient animation
+			// Extract the animation
 			shared_ptr<Gnoll::DynamicObject::String> default_name_spline = shared_ptr<Gnoll::DynamicObject::String> (
 					new Gnoll::DynamicObject::String(getInstance() + ".spline"));
 			shared_ptr<Gnoll::DynamicObject::String> name_spline = this->getAttributeOrDefault<Gnoll::DynamicObject::String>("Spline", default_name_spline);
@@ -100,17 +114,10 @@ namespace Gnoll
 
 		CameraSpline::~CameraSpline()
 		{
+			// Save the length
 			this->setAttribute("length", shared_ptr<Float>(new Float(spline->length)));
 
-			shared_ptr<Gnoll::DynamicObject::DynamicObject> list_animation = shared_ptr<Gnoll::DynamicObject::DynamicObject>(
-					new Gnoll::DynamicObject::DynamicObject("Animation list"));
-			std::map<unsigned long, Ogre::Vector3>::iterator it = spline->mapAnim.begin();
-			while(it != spline->mapAnim.end())
-			{
-				list_animation->setAttribute(lexical_cast<string>(it->first), shared_ptr<Vector3>(new Vector3(it->second)));
-				it++;
-			}
-
+			// Save the Spline
 			setAttribute("Spline", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(getInstance() + ".spline")));
 		}
 
@@ -122,12 +129,15 @@ namespace Gnoll
 
 		void CameraSpline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)
 		{
+			if(frame > spline->length)
+				return;
+
 			spline->addPoint(vec3, frame);
 		}
 
 		void CameraSpline::setLength(unsigned long length)
 		{
-			spline->length = spline->length;
+			spline->length = length;
 		}
 
 		unsigned long CameraSpline::getLength()
@@ -153,6 +163,30 @@ namespace Gnoll
 		float CameraSpline::getCurrentKeyFrame()
 		{
 			return pAnimState->getTimePosition();
+		}
+
+		const Ogre::Vector3* CameraSpline::getPoint(unsigned long frame)
+		{
+			if(frame > spline->length)
+				return NULL;
+
+			if(spline->mapAnim.find(frame) == spline->mapAnim.end())
+				return NULL;
+
+			return &spline->mapAnim[frame];
+		}
+
+		void CameraSpline::removePoint(unsigned long frame)
+		{
+			if(frame > spline->length)
+				return;
+
+			std::map<unsigned long, Ogre::Vector3>::iterator it = spline->mapAnim.find(frame);
+
+			if(it == spline->mapAnim.end())
+				return;
+
+			spline->mapAnim.erase(it);
 		}
 	};
 };
