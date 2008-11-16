@@ -241,7 +241,8 @@ class BaseGnollBuilder:
 			'src/dynamicobject/src/inheritsattributehandler.cpp',
 			'src/dynamicobject/src/inherits.cpp',
 			'src/dynamicobject/src/cdynamicobjectproxy.cpp',
-			'src/dynamicobject/src/set.cpp'
+			'src/dynamicobject/src/set.cpp',
+			'src/dynamicobject/src/vector3.cpp'
 			]
 
 

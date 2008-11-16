@@ -46,6 +46,7 @@
 #include "../include/float.h"
 #include "../include/string.h"
 #include "../include/double.h"
+#include "../include/vector3.h"
 #include "../include/list.h"
 #include "../include/set.h"
 #include "../include/inherits.h"
@@ -54,7 +55,7 @@
 
 
 
-namespace Gnoll 
+namespace Gnoll
 {
 
 	namespace DynamicObject
@@ -63,7 +64,7 @@ namespace Gnoll
 		AttributeHandlerRegistry::AttributeHandlerRegistry()
 		{
 			// Default handlers are added here
-
+			this->registerHandler(string("Vector3"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Vector3>()));
 			this->registerHandler(string("integer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Integer>()));
 			this->registerHandler(string("float"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Float>()));
 			this->registerHandler(string("string"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<String>()));
@@ -83,7 +84,7 @@ namespace Gnoll
 		}
 
 
-		
+
 		void AttributeHandlerRegistry::registerHandler(string _attributeType, shared_ptr<IAttributeHandler> _handler)
 		{
 			m_handlersMap[_attributeType] = _handler;
