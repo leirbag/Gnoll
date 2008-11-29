@@ -45,12 +45,15 @@ namespace Gnoll
 			Gnoll::DynamicObject::CDynamicObjectProxy(instanceName)
 		{
 			// Set the max length
+			// ------------------
 			length = len;
 
 			// Set the Node Animation Track
+			// ----------------------------
 			pNodeAT = nodeAT;
 
 			// Extract each point of each Key Frame
+			// ------------------------------------
 			for(Gnoll::DynamicObject::DynamicObject::mapAttributes::const_iterator it = begin(); it != end(); it++)
 			{
 				addPoint(*dynamic_pointer_cast<Ogre::Vector3>(it->second), lexical_cast<unsigned long>(it->first));
@@ -60,6 +63,7 @@ namespace Gnoll
 		CameraSpline::Spline::~Spline()
 		{
 			// Save each point of each Key Frame
+			// ---------------------------------
 			std::map<unsigned long, Ogre::Vector3>::iterator it = mapAnim.begin();
 			while(it != mapAnim.end())
 			{
@@ -72,6 +76,7 @@ namespace Gnoll
 		void CameraSpline::Spline::addPoint(const Ogre::Vector3& vec3, unsigned long frame)
 		{
 			// Check if we dont want to add a point at an invalidate key frame
+			// ---------------------------------------------------------------
 			if(frame > length)
 				return;
 
@@ -87,18 +92,22 @@ namespace Gnoll
 			Camera(instanceName)
 		{
 			// Extract the length of the animation
+			// -----------------------------------
 			shared_ptr<Float> len;
 			shared_ptr<Float> default_length = shared_ptr<Float> (new Float(30.0f));
 			len = this->getAttributeOrDefault<Float>("length", default_length);
 
 			// Get the scenemanager
+			// --------------------
 			Ogre::SceneManager* pSM = CGraphicModule::getInstancePtr()->getSceneManager();
 
 			// Create a scene node of the camera
+			// ---------------------------------
 			Ogre::SceneNode* camNode = pSM->getRootSceneNode()->createChildSceneNode();
 			camNode->attachObject(getOgreCamera());
 
 			// Create the animation with a SPLINE
+			// ----------------------------------
 			pAnim = pSM->createAnimation(instanceName, *len);
 			pAnim->setInterpolationMode(Ogre::Animation::IM_SPLINE);
 			pNodeAT = pAnim->createNodeTrack(0, camNode);
@@ -106,6 +115,7 @@ namespace Gnoll
 			pAnimState = pSM->createAnimationState(instanceName);
 
 			// Extract the animation
+			// ---------------------
 			shared_ptr<Gnoll::DynamicObject::String> default_name_spline = shared_ptr<Gnoll::DynamicObject::String> (
 					new Gnoll::DynamicObject::String(getInstance() + ".spline"));
 			shared_ptr<Gnoll::DynamicObject::String> name_spline = this->getAttributeOrDefault<Gnoll::DynamicObject::String>("Spline", default_name_spline);
@@ -115,9 +125,11 @@ namespace Gnoll
 		CameraSpline::~CameraSpline()
 		{
 			// Save the length
+			// ---------------
 			this->setAttribute("length", shared_ptr<Float>(new Float(spline->length)));
 
 			// Save the Spline
+			// ---------------
 			setAttribute("Spline", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(getInstance() + ".spline")));
 		}
 

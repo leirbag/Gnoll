@@ -51,6 +51,9 @@ namespace Gnoll
 		class CameraThirdPerson : public Camera
 		{
 		private:
+			/*
+			 * Parameters of the camera
+			 */
 			float offset;
 			float minOffset;
 			float maxOffset;

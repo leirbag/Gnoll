@@ -67,9 +67,9 @@ namespace Gnoll
 				Ogre::Camera* pOgreCamera;
 
 				/*
-				 * This is a pointer to the scenenode target, can be NULL if no target
+				 * This is the name of the target (load from scenemanager, "" means no target
 				 */
-				Ogre::SceneNode* pTarget;
+				Glib::ustring target;
 
 				/*
 				 * Operator to copy a camera
@@ -102,7 +102,7 @@ namespace Gnoll
 				 * Helper method for setTarget()
 				 * @param (see setTarget)
 				 */
-				void setTargetHelper(Ogre::SceneNode* target);
+				void setTargetHelper(const Glib::ustring& target);
 
 			public:
 				/*
@@ -141,8 +141,14 @@ namespace Gnoll
 				Ogre::Vector3 getDirection() const;
 
 				/*
+				 * Accessor to get the target name
+				 * @return the name of the target in the scenemanager
+				 */
+				const Glib::ustring& getTargetName() const;
+
+				/*
 				 * Accessor to get the target
-				 * @return the scene node of the current target, NULL if default setting
+				 * @return a pointer to the SceneNode
 				 */
 				Ogre::SceneNode* getTarget() const;
 
@@ -199,10 +205,10 @@ namespace Gnoll
 
 				/*
 				 * Settor to set the new target of the camera
-				 * @param target This is the new target, NULL for no target
+				 * @param target This is the name in the scenemanager of the target
 				 * @param autofocus This specify if the camera follow the object (orientation)
 				 */
-				virtual void setTarget(Ogre::SceneNode* target, bool autofocus = true);
+				virtual void setTarget(const Glib::ustring& target, bool autofocus = true);
 
 				/*
 				 * Settor to set the orientation

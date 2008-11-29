@@ -42,6 +42,7 @@ namespace Gnoll
 			Camera(instanceName)
 		{
 			// Extract Camera's offset settings
+			// --------------------------------
 			shared_ptr<Float> off;
 			shared_ptr<Float> minOff;
 			shared_ptr<Float> maxOff;
@@ -58,6 +59,7 @@ namespace Gnoll
 			maxOffset = (*maxOff);
 
 			// Extract Camera's limit rotation
+			// -------------------------------
 			shared_ptr<Float> limit_x;
 			shared_ptr<Float> limit_y;
 			shared_ptr<Float> limit_z;
@@ -72,6 +74,7 @@ namespace Gnoll
 			limitRotationAroundAxisZ = (*limit_z);
 
 			// Extract Camera's amount rotation
+			// --------------------------------
 			shared_ptr<Float> amount_x;
 			shared_ptr<Float> amount_y;
 			shared_ptr<Float> amount_z;
@@ -89,6 +92,7 @@ namespace Gnoll
 		CameraThirdPerson::~CameraThirdPerson()
 		{
 			// limit
+			// -----
 			shared_ptr<Float> limitX(new Float(getLimitRotationAroundAxisX()));
 			shared_ptr<Float> limitY(new Float(getLimitRotationAroundAxisY()));
 			shared_ptr<Float> limitZ(new Float(getLimitRotationAroundAxisZ()));
@@ -97,6 +101,7 @@ namespace Gnoll
 			this->setAttribute("limitRotationOnAxisZ", limitZ);
 
 			// amount
+			// ------
 			shared_ptr<Float> amountX(new Float(getAmountRotationAroundAxisX()));
 			shared_ptr<Float> amountY(new Float(getAmountRotationAroundAxisY()));
 			shared_ptr<Float> amountZ(new Float(getAmountRotationAroundAxisZ()));
@@ -105,6 +110,7 @@ namespace Gnoll
 			this->setAttribute("amountRotationOnAxisZ", amountZ);
 
 			// offset settings
+			// ---------------
 			shared_ptr<Float> offset(new Float(getOffset()));
 			shared_ptr<Float> minOffset(new Float(getMinOffset()));
 			shared_ptr<Float> maxOffset(new Float(getMaxOffset()));
@@ -125,7 +131,7 @@ namespace Gnoll
 				return;
 
 			offset = fabs(value);
-			setTarget(getTarget());
+			setTarget(getTargetName());
 		}
 
 		void CameraThirdPerson::setMinOffset(float value)
@@ -287,6 +293,11 @@ namespace Gnoll
 
 		void CameraThirdPerson::update(float time)
 		{
+			// Check if we have a target
+			// -------------------------
+			if(getTargetName() == "")
+				return;
+
 			setPosition(getTarget()->getPosition() + (getDirection() * getOffset() * -1.0f));
 		}
 	};

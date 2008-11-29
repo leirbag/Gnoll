@@ -57,17 +57,16 @@ namespace Gnoll
 
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Loading camera [" + instanceName + "]" );
 
-			// Name of the camera
+			// Set in the DO the name of the camera
+			// ------------------------------------
 			setAttribute("name", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(instanceName)));
 
 			// Create the camera in the scenemanager
+			// -------------------------------------
 			pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
 
-			// By default we have a target, NEED TO FIXE IT !!! only camera who need the target have
-			// to initialise this
-			pTarget     = CGraphicModule::getInstancePtr()->getSceneManager()->createSceneNode();
-
 			// Extract Camera's near, far and fov value
+			// ----------------------------------------
 			shared_ptr<Float> near_value;
 			shared_ptr<Float> far_value;
 			shared_ptr<Float> fov_value;
@@ -88,25 +87,30 @@ namespace Gnoll
 			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Fov: " << *fov_value << "\t";
 
 			// Extract Camera's position
+			// -------------------------
 			shared_ptr<Gnoll::DynamicObject::Vector3> default_pos = shared_ptr<Gnoll::DynamicObject::Vector3> (new Gnoll::DynamicObject::Vector3());
 			shared_ptr<Gnoll::DynamicObject::Vector3> temp_pos = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>("Position", default_pos);
 
 			// We need to convert the DO Vector3 to Ogre::Vector3 (inheritance)
+			// ----------------------------------------------------------------
 			pOgreCamera->setPosition(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
 
 			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Position: " << pOgreCamera->getPosition() << "\t";
 
 			// Extract Camera's direction
+			// --------------------------
 			shared_ptr<Gnoll::DynamicObject::Vector3> default_dir = shared_ptr<Gnoll::DynamicObject::Vector3> (
 					new Gnoll::DynamicObject::Vector3(Ogre::Vector3(0, 0, -1)));
 			shared_ptr<Gnoll::DynamicObject::Vector3> temp_dir = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>("Direction", default_dir);
 
 			// We need to convert the DO Vector3 to Ogre::Vector3 (inheritance)
+			// ----------------------------------------------------------------
 			pOgreCamera->setDirection(*dynamic_pointer_cast<Ogre::Vector3>(temp_dir));
 
 			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Direction: " << pOgreCamera->getDirection() << "\t";
 
 			// Extract Camera's movement configuration
+			// ---------------------------------------
 			shared_ptr<Float> default_value = shared_ptr<Float> (new Float(1.0f));
 			mapMovement["ROTATION_AXIS_X"] = *(this->getAttributeOrDefault<Float>("ROTATION_AXIS_X", default_value));
 			mapMovement["ROTATION_AXIS_Y"] = *(this->getAttributeOrDefault<Float>("ROTATION_AXIS_Y", default_value));
@@ -118,6 +122,13 @@ namespace Gnoll
 			mapMovement["STRAFE_RIGHT"]    = *(this->getAttributeOrDefault<Float>("STRAFE_RIGHT", default_value));
 			mapMovement["MOVE_FORWARD"]    = *(this->getAttributeOrDefault<Float>("MOVE_FORWARD", default_value));
 			mapMovement["MOVE_BACK"]       = *(this->getAttributeOrDefault<Float>("MOVE_BACK", default_value));
+
+			// Extract Camera's target
+			// -----------------------
+			shared_ptr<Gnoll::DynamicObject::String> default_target = shared_ptr<Gnoll::DynamicObject::String> (
+					new Gnoll::DynamicObject::String(""));
+			shared_ptr<Gnoll::DynamicObject::String> tempTarget = this->getAttributeOrDefault<Gnoll::DynamicObject::String>("Target", default_target);
+			target = std::string(*tempTarget);
 		}
 
 		Camera::Camera(const Camera& copy) :
@@ -133,6 +144,7 @@ namespace Gnoll
 		Camera::~Camera()
 		{
 			// Destroy all listeners attach to this camera
+			// -------------------------------------------
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 
 			while (!queueListener.empty())
@@ -143,24 +155,34 @@ namespace Gnoll
 			}
 
 			// near
+			// ----
 			shared_ptr<Float> near_value(new Float(getNearValue()));
 			this->setAttribute("near", near_value);
 
 			// far
+			// ---
 			shared_ptr<Float> far_value(new Float(getFarValue()));
 			this->setAttribute("far", far_value);
 
 			// fov
+			// ---
 			shared_ptr<Float> fov_value(new Float(getFovValue()));
 			this->setAttribute("fov", fov_value);
 
 			// Position
+			// --------
 			setAttribute("Position", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(pOgreCamera->getPosition())));
 
 			// Direction
+			// ---------
 			setAttribute("Direction", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(pOgreCamera->getDirection())));
 
+			// Target
+			// ------
+			setAttribute("Target", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(getTargetName())));
+
 			// Camera's movement configuration
+			// -------------------------------
 			std::map<std::string, float>::iterator it = mapMovement.begin();
 			while(it != mapMovement.end())
 			{
@@ -202,9 +224,17 @@ namespace Gnoll
 			return pOgreCamera->getOrientation();
 		}
 
+		const Glib::ustring& Camera::getTargetName() const
+		{
+			return target;
+		}
+
 		Ogre::SceneNode* Camera::getTarget() const
 		{
-			return pTarget;
+			if(getTargetName() == "")
+				return NULL;
+
+			return CGraphicModule::getInstancePtr()->getSceneManager()->getSceneNode(target);
 		}
 
 		Ogre::Camera* Camera::getOgreCamera()
@@ -245,18 +275,20 @@ namespace Gnoll
 			pOgreCamera->setPosition(position);
 		}
 
-		void Camera::setTargetHelper(Ogre::SceneNode* target)
+		void Camera::setTargetHelper(const Glib::ustring& target)
 		{
-			pTarget = target;
+			this->target = target;
 		}
 
-		void Camera::setTarget(Ogre::SceneNode* target, bool autofocus)
+		void Camera::setTarget(const Glib::ustring& target, bool autofocus)
 		{
-			if(target == NULL)
-				return;
-
-			pOgreCamera->setAutoTracking(autofocus, target);
+			// Set the auto tracking on the target
+			// -----------------------------------
+			pOgreCamera->setAutoTracking(autofocus, getTarget());
 			setTargetHelper(target);
+
+			// Update the camera
+			// -----------------
 			update(1.0f);
 		}
 
@@ -277,12 +309,12 @@ namespace Gnoll
 
 		void Camera::update(float time)
 		{
-			// Do nothing
 		}
 
 		void Camera::enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<CMessageType> type)
 		{
 			// Add the listener to the queue
+			// -----------------------------
 			queueListener.push(shared_ptr<PairsListener>(new PairsListener(listener, type)));
 		}
 	};
