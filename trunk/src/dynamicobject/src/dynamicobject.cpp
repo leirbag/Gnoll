@@ -60,7 +60,7 @@ namespace Gnoll
 		}
 
 
-		bool DynamicObject::hasAttribute ( Glib::ustring _name ) const
+		bool DynamicObject::hasAttribute ( const Glib::ustring _name ) const
 		{
 			mapAttributes::const_iterator iter = m_attributes.find(_name);
 

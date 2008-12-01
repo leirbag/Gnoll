@@ -127,7 +127,7 @@ namespace Gnoll
 				 * @param _name Name of the attribute
 				 * @return It returns true if an attribute with such a name exists, or false if it doesn't
 				 */
-				bool hasAttribute ( Glib::ustring _name ) const;
+				bool hasAttribute ( const Glib::ustring & _name ) const;
 
 
 				/**

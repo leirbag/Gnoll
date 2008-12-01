@@ -317,7 +317,7 @@ namespace Gnoll
 
 		void CSceneManager::setupPage( const string _pageInstance, shared_ptr< Gnoll::DynamicObject::List > _loadedPages, const Ogre::Vector3 _offset )
 		{
-			char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
+			const char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
 			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>("focusedPage");
 
 			CPage page(_pageInstance);

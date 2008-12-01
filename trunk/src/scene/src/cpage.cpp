@@ -256,7 +256,7 @@ namespace Gnoll
 				// Add offset to get current page world position
 				// Construct an Ogre::AxisAlignedBox
 				// Check if visible from ogrecamera
-				char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
+				const char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
 				DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 
@@ -358,7 +358,9 @@ namespace Gnoll
 					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( "westLink"))).c_str()) == 0)
 					{
 						neighborOffset = Ogre::Vector3( -(*pageSize), 0.0, 0.0 ) / 2.0f;
-					}
+					} else {
+						neighborOffset = Ogre::Vector3( 0.0, 0.0, 0.0 );
+                                        }
 
 					Ogre::AxisAlignedBox aabb(
 														min.x + neighborOffset.x,

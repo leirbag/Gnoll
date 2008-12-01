@@ -65,7 +65,7 @@ namespace Gnoll
 		}
 
 
-		bool CDynamicObjectProxy::hasAttribute ( Glib::ustring _name ) const
+		bool CDynamicObjectProxy::hasAttribute ( const Glib::ustring & _name ) const
 		{
 			return m_self->hasAttribute(_name);
 		}
