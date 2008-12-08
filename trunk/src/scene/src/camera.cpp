@@ -82,9 +82,9 @@ namespace Gnoll
 			setFarValue(*far_value);
 			setFovValue(*fov_value);
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Near: " << *near_value << "\t";
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Far: " << *far_value << "\t";
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Fov: " << *fov_value << "\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Near: " << *near_value << ";\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Far: " << *far_value << ";\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Fov: " << *fov_value << "\n";
 
 			// Extract Camera's position
 			// -------------------------
@@ -95,7 +95,7 @@ namespace Gnoll
 			// ----------------------------------------------------------------
 			pOgreCamera->setPosition(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Position: " << pOgreCamera->getPosition() << "\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Position: " << pOgreCamera->getPosition() << "\n";
 
 			// Extract Camera's direction
 			// --------------------------
@@ -107,7 +107,7 @@ namespace Gnoll
 			// ----------------------------------------------------------------
 			pOgreCamera->setDirection(*dynamic_pointer_cast<Ogre::Vector3>(temp_dir));
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Direction: " << pOgreCamera->getDirection() << "\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Direction: " << pOgreCamera->getDirection() << "\n";
 
 			// Extract Camera's movement configuration
 			// ---------------------------------------
