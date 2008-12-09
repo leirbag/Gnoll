@@ -84,7 +84,7 @@ def createDoc():
 		if srcPath[-1] != '/':
 			srcpath = "%s/" % (srcPath)
 
-		p = subprocess.Popen("doxygen", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd="%s/trunk/"%(srcPath))
+		p = subprocess.Popen("doxygen", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd="%s/"%(srcPath))
 		for i in p.stdout:
 			buffer.append(i)
 			sys.stdout.write( i )
@@ -127,7 +127,7 @@ def uploadDoc():
 		if srcPath[-1] != '/':
 			srcPath = srcPath + '/'
 
-		docPath = "%s/trunk/doc/" % (srcPath)
+		docPath = "%s/doc/" % (srcPath)
 
 		rsyncArgs = " -zvvruclt --delete --chmod=ugo+r,u+x,u+w,Dugo+x --rsh=ssh %s* %s@%s:%s" % (docPath, login, server, dstPath)
 
