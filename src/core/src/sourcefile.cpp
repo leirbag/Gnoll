@@ -70,6 +70,7 @@ namespace Gnoll
 
 		shared_ptr<IStream> SourceFile::loadStream( const string _url)
 		{
+			setOverWrite(false);
 			return newStream(_url);
 		}
 
