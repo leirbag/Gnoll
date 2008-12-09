@@ -67,12 +67,10 @@ namespace Gnoll
 			 * a file deactivated (if last parameter of createLog())
 			 */
 #if DO_LOG
-			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog(m_logFileName, true, false, false);
-			log = NULL;
+			Ogre::LogManager::getSingleton().createLog(m_logFileName, true, false, false);
 #else
 
-			Ogre::Log* log = Ogre::LogManager::getSingleton().createLog("", true, false, true);
-			log = NULL;
+			Ogre::LogManager::getSingleton().createLog("", true, false, true);
 #endif
 		}
 
