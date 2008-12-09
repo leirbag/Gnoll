@@ -1,12 +1,12 @@
-Name: gnoll		
-Version: 0.1.6rc1	
+Name: gnoll
+Version: 0.1.6rc1
 Release: 0%{?dist}
 Summary: A 3D action/rpg game engine
 
-Group: Amusements/Games	
-License: GPLv2+	
-URL: http://www.gnoll.org		
-Source0: http://www.gnoll.org/download/%{name}-%{version}.tar.gz	
+Group: Amusements/Games
+License: GPLv2+
+URL: http://www.gnoll.org
+Source0: http://www.gnoll.org/download/%{name}-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: scons, ogre-devel, pkgconfig, boost-devel, libxml++-devel
@@ -33,7 +33,7 @@ This is an example of what people can do with Gnoll.
 
 
 %prep
-%setup -q -n trunk
+%setup -q
 
 
 %build
