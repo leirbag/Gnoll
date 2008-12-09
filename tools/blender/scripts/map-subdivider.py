@@ -1,4 +1,4 @@
- 
+
 #####################################
 #          MAP SUBDIVIDER           #
 #####################################
@@ -28,7 +28,7 @@
 # I'm a newbie in Plug-in developing for
 # Blender. This script can be improved :
 # Optimize it, fix some bugs, add settings
-# to control the cut in a better way... 
+# to control the cut in a better way...
 # If you have any trouble using this script,
 # just mail me.
 #
@@ -61,9 +61,9 @@ def getSettings():
 	if(SquareSize.val == 0):
 		print "Error : The size of the pages can't be null."
 		Exit()
-		
+
 	selectedObj = Object.GetSelected()
-	
+
 	if(len(selectedObj) < 1):
 		print "Error : You must select the object to subdivide."
 		Exit()
@@ -76,10 +76,10 @@ def getSettings():
 		return (SquareSize.val, selectedObj[0])
 	Exit()
 
-# Read bounding box informations 
+# Read bounding box informations
 def getBoundBox(object):
 	boundBox = object.getBoundBox()
-	
+
 	# Find the lowest X coordinate
 	xmin = boundBox[0].x
 	i = 1
@@ -87,7 +87,7 @@ def getBoundBox(object):
 		if(boundBox[i].x < xmin):
 			xmin = boundBox[i].x
 		i = i + 1
-		
+
 	# Find the highest X coordinate
 	xmax = boundBox[0].x
 	i = 1
@@ -95,7 +95,7 @@ def getBoundBox(object):
 		if(boundBox[i].x > xmax):
 			xmax = boundBox[i].x
 		i = i + 1
-		
+
 	# Find the lowest Y coordinate
 	ymin = boundBox[0].y
 	i = 1
@@ -103,7 +103,7 @@ def getBoundBox(object):
 		if(boundBox[i].y < ymin):
 			ymin = boundBox[i].y
 		i = i + 1
-		
+
 	# Find the highest Y coordinate
 	ymax = boundBox[0].y
 	i = 1
@@ -111,7 +111,7 @@ def getBoundBox(object):
 		if(boundBox[i].y > ymax):
 			ymax = boundBox[i].y
 		i = i + 1
-		
+
 	# Find the lowest Z coordinate
 	zmin = boundBox[0].z
 	i = 1
@@ -119,7 +119,7 @@ def getBoundBox(object):
 		if(boundBox[i].z < zmin):
 			zmin = boundBox[i].z
 		i = i + 1
-		
+
 	# Find the highest Z coordinate
 	zmax = boundBox[0].z
 	i = 1
@@ -127,7 +127,7 @@ def getBoundBox(object):
 		if(boundBox[i].z > zmax):
 			zmax = boundBox[i].z
 		i = i + 1
-		
+
 	return (xmin, xmax, ymin, ymax, zmin, zmax)
 
 # Generate list of planes (which corresponds to grid's lines)
@@ -135,29 +135,29 @@ def getPlanes(stepSize, boundBox):
 	xPlanes = []
 	yPlanes = []
 	(xmin, xmax, ymin, ymax, zmin, zmax) = boundBox
-	
+
 	# Generate planes along the Y axis
 	print "   Generate planes along the Y axis..."
 	x = xmax - SquareSize.val
 	while x > xmin:
 		xPlanes.append(((x+1,0,0),(x,0,0)))
 		x = x - SquareSize.val
-	if xmin - x > Epsilon: 
+	if xmin - x > Epsilon:
 		xPlanes.append(((xmin+1,0,0),(xmin,0,0)))
  	print "  ", len(xPlanes), "planes along Y generated."
-	
+
 	# Generate places along the X axis
-	print "   Generate planes along the X axis..."	
+	print "   Generate planes along the X axis..."
 	y = ymax - SquareSize.val
 	while y > ymin:
 		yPlanes.append(((0,y+1,0),(0,y,0)))
 		y = y - SquareSize.val
-	if ymin - y > Epsilon: 
+	if ymin - y > Epsilon:
 		yPlanes.append(((ymin+1,0,0),(ymin,0,0)))
-		
+
 	# Debug
 	print "  ", len(yPlanes), "planes along X generated."
-	
+
 	return (xPlanes, yPlanes)
 
 # Move the center of a mesh without moving the vertices
@@ -166,12 +166,12 @@ def moveMesh(object, x, y, z):
 	vecx = x - object.loc[0]
 	vecy = y - object.loc[1]
 	vecz = z - object.loc[2]
-	
+
 	print "Moving object ", object.getData(True), "to pos ", x, y, z, "(translation : ", vecx, vecy, vecz, ")"
-	
+
 	# Move the center of the object
 	object.setLocation(x, y, z)
-	
+
 	# Move (inversed) the each verts of the mesh
 	me = object.getData()
 	i = 0
@@ -181,7 +181,7 @@ def moveMesh(object, x, y, z):
 		vert.co[2] -= vecz
 		me.verts[i] = vert
 		i = i + 1
-		
+
 	# Update it !
 	me.update()
 
@@ -189,41 +189,41 @@ def moveMesh(object, x, y, z):
 def createColumns(rootObj, xPlanes, arePages, startingIndex, rootName, boundBox, squareSize):
 	columns = []
 	sce = Blender.Scene.GetCurrent()
-	
+
 	# Generate names
 	finalName = '-Col-'
 	tempName = '-Temp-'
 	if(arePages):
 		finalName = '-Page-'
 		tempName = '-TempPg-'
-		
+
 	# Set if the algorithm has tu use UV coordinates
 	useUVCoords = rootObj.getData().hasFaceUV()
-	
+
 	# Init the loop
 	cuttingObject = rootObj
 	i = 0
-	
+
 	while i < len(xPlanes):
 		# Create a new object containing the new part
 		newObj = Blender.Object.New('Mesh', rootName + finalName + str(startingIndex+i+1))
 		tempObj = Blender.Object.New('Mesh', rootName + tempName + str(startingIndex+i+1))
-				
+
 		# Get the meshes
 		newMe = newObj.getData()
 		tempMe = tempObj.getData()
 		newMe.hasFaceUV(useUVCoords)
 		tempMe.hasFaceUV(useUVCoords)
-			
+
 		# Cut the object
 		(CN,CC) = xPlanes[i];
 		d0 = CC[0]*CN[0]+CC[1]*CN[1]+CC[2]*CN[2]
 		Cut(cuttingObject, CN, d0, newMe, tempMe)
-		
+
 		# Update the objects
 		newMe.update()
 		tempMe.update()
-		
+
 		# If it's the last cut, the temp object is also a final object
 		if(i == len(xPlanes)-1):
 			# Move the temp object
@@ -232,20 +232,20 @@ def createColumns(rootObj, xPlanes, arePages, startingIndex, rootName, boundBox,
 			else:
 				xtemp = xPlanes[i][1][0] + squareSize/2
 			# moveMesh(tempObj, xtemp,ytemp,ztemp)
-			
+
 			# Add the temp object to the scene
 			columns.append(tempObj)
 			tempObj.setName(rootName + finalName + str(startingIndex+i+1))
 			sce.objects.link(columns[i])
 		else:
-			cuttingObject = tempObj		
+			cuttingObject = tempObj
 			columns.append(newObj)
-			
+
 			if(arePages): # Link to the scene if needed (only if we are generating pages)
-				sce.objects.link(newObj)		
-		
+				sce.objects.link(newObj)
+
 		i = i + 1
-		
+
 	return columns
 
 # Map subdividing (main process)
@@ -255,29 +255,29 @@ def subdivide():
 Grid Subdivide Tool v0.1 by Antonin <Wetneb> Delpeuch"
 	print "Released under Blender Artistic Licence"
 	print "Based on Blender Knife Tool v0.6 by Stefano <S68> Selleri"
-	
+
 	### Check settings and selected object ###
 	(stepSize, rootObj) = getSettings()
-	
-	### Extract mesh and bounding box. ###		
+
+	### Extract mesh and bounding box. ###
 	mesh = rootObj.getData(False, True)
 	boundBox = getBoundBox(rootObj)
-		
+
 	### Generate list of planes for cutting ###
 	(xPlanes, yPlanes) = getPlanes(stepSize, boundBox)
-	
+
 	### Cut the mesh along the planes ###
 	pages = []
-	
+
 	# Create columns
 	columns = createColumns(rootObj, xPlanes, False, 0, rootObj.getData(True), boundBox, stepSize)
-	
+
 	# Create pages
-	i = 0 
+	i = 0
 	while i < len(columns):
 		pages.append(createColumns(columns[i], yPlanes, True, i*len(yPlanes), rootObj.getData(True), boundBox, stepSize))
 		i = i + 1
-		
+
 	# Move pages
 	i = 0
 	while i < len(columns):
@@ -286,7 +286,7 @@ Grid Subdivide Tool v0.1 by Antonin <Wetneb> Delpeuch"
 			moveMesh(pages[i][j], boundBox[1]-(i+0.5)*stepSize, boundBox[3]-(j+0.5)*stepSize, (boundBox[5]+boundBox[4])/2)
 			j = j +1
 		i = i + 1
-	
+
 	print "Done. You can delete temporary objects (just save and restart Blender)."
 	print "You should also remove all the double vertices using W -> Remove doubles in edit mode."
 	return 0
@@ -295,39 +295,39 @@ Grid Subdivide Tool v0.1 by Antonin <Wetneb> Delpeuch"
 def draw():
 	global SquareSize
 	global EVT_NOEVT, EVT_QUIT, EVT_SUBD
-	
+
 	# Preparing
 	glClear(GL_COLOR_BUFFER_BIT)
     # BGL.glRasterPos2d(4,4)
 
 	# Drawing text
 	# Text("Map Subdivider")
-	
+
 	# Drawing input controls
 	SquareSize = Number("Size of pages: ", EVT_NOEVT, 10, 55, 170, 18, SquareSize.val,
 		0.00001, 20, "Size of the squared pages.");
-		
+
 	# Drawing main buttons
 	Button("Quit", EVT_QUIT, 10, 35, 80, 18)
 	Button("Subdivide", EVT_SUBD, 100, 35, 80, 18)
-	
+
 
 # Event handling
 def event(evt, val):
 	if(evt == QKEY and not val):
 		Exit()
-		
+
 def bevent(evt):
 	global SquareSize
 	global EVT_NOEVT, EVT_QUIT, EVT_SUBD
-	
+
 	if(evt == EVT_QUIT):
 		Exit()
 	elif(evt == EVT_SUBD):
 		if(subdivide()):
 			Exit()
 		Blender.Redraw()
-		
+
 Register(draw, event, bevent)
 
 #############################################################
@@ -368,7 +368,7 @@ msg = ''
 BL_VERSION = Blender.Get('version')
 if (BL_VERSION<=223):
 	import Blender210
-  
+
 #############################################################
 # SUBS from LOCAL to GLOBAL coordinates                     #
 #############################################################
@@ -382,7 +382,7 @@ def GlobalPosition(P, Obj):
 		m = Obj.matrix
 	else:
 		m = Obj.getMatrix()
-		
+
 	PX = P[0]*m[0][0] + P[1]*m[1][0] + P[2]*m[2][0] + m[3][0]
 	PY = P[0]*m[0][1] + P[1]*m[1][1] + P[2]*m[2][1] + m[3][1]
 	PZ = P[0]*m[0][2] + P[1]*m[1][2] + P[2]*m[2][2] + m[3][2]
@@ -397,7 +397,7 @@ def LocalPosition(P, Obj):
 		m = Blender210.getObject(Obj.name).inverseMatrix
 	else:
 		m = Obj.getInverseMatrix()
-		
+
 	PX = P[0]*m[0][0] + P[1]*m[1][0] + P[2]*m[2][0] + m[3][0]
 	PY = P[0]*m[0][1] + P[1]*m[1][1] + P[2]*m[2][1] + m[3][1]
 	PZ = P[0]*m[0][2] + P[1]*m[1][2] + P[2]*m[2][2] + m[3][2]
@@ -409,7 +409,7 @@ def LocalPosition(P, Obj):
 
 def CutData(Plane):
 	#
-	# Traduce il secondo oggetto in un punto (Il suo centro) 
+	# Traduce il secondo oggetto in un punto (Il suo centro)
 	# ed in una direzione (la normale alla faccia 0)
 	#
 	if (BL_VERSION<=223):
@@ -431,7 +431,7 @@ def CutData(Plane):
 			v0 = GlobalPosition(PlaneMesh.faces[0].v[0].co, Plane)
 			v1 = GlobalPosition(PlaneMesh.faces[0].v[1].co, Plane)
 			v2 = GlobalPosition(PlaneMesh.faces[0].v[2].co, Plane)
-			
+
 			NormX   = (v1[1]-v0[1])*(v2[2]-v0[2]) - (v1[2]-v0[2])*(v2[1]-v0[1])
 			NormY   = (v1[2]-v0[2])*(v2[0]-v0[0]) - (v1[0]-v0[0])*(v2[2]-v0[2])
 			NormZ   = (v1[0]-v0[0])*(v2[1]-v0[1]) - (v1[1]-v0[1])*(v2[0]-v0[0])
@@ -467,7 +467,7 @@ def FacePosition(f, Obj, N, d0):
 		elif (d<0):
 			nn += 1
 		else:
-			nz += 1 
+			nz += 1
 
 	if (np==0):
 		return -1
@@ -487,7 +487,7 @@ def FaceAppend(me, f):
 	idx = len(me.verts)
 	for v in f.v:
 		me.verts.append(NMesh.Vert(v.co[0], v.co[1], v.co[2]))
-  
+
 	nf = NMesh.Face()
 	for i in range(len(f.v)):
 		nf.v.append(me.verts[idx+i])
@@ -502,17 +502,17 @@ def FaceMake(me, vl, vu, image):
 	# Crea una o due nuove facce da un elenco di vertici
 	#
 	idx = len(me.verts)
-	
+
 	for v in vl:
 		me.verts.append(NMesh.Vert(v[0], v[1], v[2]))
-  
+
  	if (len(vl)<=4):
 		nf = NMesh.Face()
 		for i in range(len(vl)):
 			nf.v.append(me.verts[idx+i])
 			if(len(vu)):
 				nf.uv.append(vu[i])
-			
+
 		if(image):
 			nf.image = image
 		me.faces.append(nf)
@@ -542,13 +542,13 @@ def FaceMake(me, vl, vu, image):
 			nf.uv.append(vu[4])
 			nf.uv.append(vu[0])
 		me.faces.append(nf)
-   
+
 #############################################################
 # SUBS Generating vertex lists for splitting faces          #
 #############################################################
 
 def Split(Obj, f, N, d0):
-	# 
+	#
 	# Genera una lista di vertici da una parte e dall'altra e relativi punti intermedi
 	#
 
@@ -556,7 +556,7 @@ def Split(Obj, f, N, d0):
 	V = []
 	d = []
 	v = f.v
- 
+
 	vp = []
 	vpu = []
 	vn = []
@@ -566,19 +566,19 @@ def Split(Obj, f, N, d0):
 		V.append(GlobalPosition(vl.co, Obj))
 		d.append(Distance(V[i], N, d0))
 		i += 1
- 
+
 	for i in range(0,len(d)):
 		if (i==0):
 			dim1 = d[len(d)-1]
 			Vim1 = V[len(V)-1]
-			
+
 			# UV Coords...
 			if(len(f.uv)):
 				Viu1 = f.uv[len(f.uv)-1]
 		else:
 			dim1 = d[i-1]
 			Vim1 = V[i-1]
-			
+
 			# UV Coords...
 			if(len(f.uv)):
 				Viu1 = f.uv[i-1]
@@ -587,7 +587,7 @@ def Split(Obj, f, N, d0):
 			# Appartiene a entrambi
 			vp.append(tuple(v[i].co))
 			vn.append(tuple(v[i].co))
-			
+
 			# UV Coords...
 			if(len(f.uv)):
 				vpu.append(tuple(f.uv[i]))
@@ -617,7 +617,7 @@ def Split(Obj, f, N, d0):
 				else:
 					# INTERSEZIONE!!!
 					Den = (Vim1[1]-V[i][1])*N[1] + (Vim1[0]-V[i][0])*N[0] + (Vim1[2]-V[i][2])*N[2]
-          
+
 					Vi = []
 					Vi.append (- ((Vim1[0]*V[i][1]-Vim1[1]*V[i][0])*N[1]+(Vim1[0]*V[i][2]-Vim1[2]*V[i][0])*N[2]+(V[i][0]-Vim1[0])*d0)/Den)
 					Vi.append (- ((Vim1[1]*V[i][0]-Vim1[0]*V[i][1])*N[0]+(Vim1[1]*V[i][2]-Vim1[2]*V[i][1])*N[2]+(V[i][1]-Vim1[1])*d0)/Den)
@@ -627,7 +627,7 @@ def Split(Obj, f, N, d0):
 
 					vp.append(ViL)
 					vn.append(ViL)
-					
+
 					# UV Coords managment
 					if(len(f.uv)):
 						cutRatio = fabs(dim1)/(fabs(dim1)+fabs(d[i]))
@@ -644,9 +644,9 @@ def Split(Obj, f, N, d0):
 						vn.append(tuple(v[i].co))
 						if(len(f.uv)):
 							vnu.append(tuple(f.uv[i]))
-  	
+
 	return ((vp, vpu),(vn, vnu))
-              
+
 #############################################################
 # SUBS Splitting a face intersected by the Cut Plane        #
 #############################################################
@@ -655,7 +655,7 @@ def FaceSplit(Obj, mp, mn, f, N, d0):
 	#
 	# Divide la faccia in due pezi e crea le facce necessarie
 	#
-  
+
 	# Crea le liste dei vertici
 	((vlp,vlpu), (vln, vlnu)) = Split(Obj, f, N, d0)
 
@@ -686,6 +686,6 @@ def Cut(Obj, Normal, d0, MeshPos, MeshNeg):
 			# Tutta nel negativo
 			FaceAppend(MeshNeg, oface)
 		if (fp==0):
-			# Un po' qua un po' lÃ�Â 
+			# Un po' qua un po' lÃ�Â
 			FaceSplit(Obj, MeshPos, MeshNeg, oface, Normal, d0)
 
