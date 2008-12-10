@@ -1,10 +1,10 @@
-
-#####################################
-#          MAP SUBDIVIDER           #
+ #####################################
+#         MAP SUBDIVIDER            #
 #####################################
 #
 # by Antonin Delpeuch <Wetneb>
 # antonin@delpeuch.eu
+# http://www.antonin.delpeuch.eu/
 #
 # Based on Blender Knife Tool (see below)
 # Released under Blender Artistic Licence
@@ -19,13 +19,19 @@
 # This script cuts a mesh along a grid.
 # Your mesh's propreties must be blank :
 # No translation, rotation or scale.
+# If not, the object's center will be
+# moved at the center of the world,
+# applying all the transformations to the
+# mesh (as if it were done in edit mode).
 #
 # 1. Run the script
 # 2. Select only one object (the one you
 #    want to cut)
 # 3. Press Subdivide !
+# 4. Try again : change the SquareSize
+#    parameter.
 #
-# I'm a newbie in Plug-in developing for
+# I'm a newbie in Plug-in developping for
 # Blender. This script can be improved :
 # Optimize it, fix some bugs, add settings
 # to control the cut in a better way...
@@ -33,7 +39,40 @@
 # just mail me.
 #
 # Enjoy !
-
+#
+#####################################
+#             ALGORITHM             #
+#####################################
+#
+# Requirements : we need to cut a mesh
+# into equal squares. Each square must
+# be a unique object and each object's
+# center has to be at the center of the
+# cutting square (even if the square
+# isn't fully filled with faces).
+#
+# Steps :
+# 1 - The script generates a list of
+#     "planes" : each plane corresponds
+#     to a cut line. I called it "planes"
+#     because Blender Knife Tool needs
+#     a plane to cut an object.
+#
+# 2 - Then it cuts the mesh into "columns" :
+#     it just cuts the mesh with many
+#     lines along the Y axis (which are
+#     defined by "xPlanes" because the
+#     only coordinate that change is the
+#     X coordinate).
+#     The columns aren't linked to the
+#     scene since we don't want to keep it.
+#
+# 3 - Then it cuts each column into "pages":
+#     A page is a grid's square (same process
+#     as upper).
+#
+# 4 - Then it moves each object's center at
+#     the right position (see requirements).
 
 # Modules
 import Blender
@@ -75,6 +114,22 @@ def getSettings():
 	else:
 		return (SquareSize.val, selectedObj[0])
 	Exit()
+
+# Globalize the mesh
+def globalize(obj):
+	if(obj.type == "Mesh"):
+		mesh = obj.getData()
+
+		i = 0
+		for v in mesh.verts:
+			(v.co[0], v.co[1], v.co[2]) = GlobalPosition(v.co, obj)
+			mesh.verts[i] = v
+			i = i + 1
+
+		obj.setLocation(0,0,0)
+		obj.rot = (0,0,0)
+		obj.setSize(1,1,1)
+		mesh.update()
 
 # Read bounding box informations
 def getBoundBox(object):
@@ -141,9 +196,8 @@ def getPlanes(stepSize, boundBox):
 	x = xmax - SquareSize.val
 	while x > xmin:
 		xPlanes.append(((x+1,0,0),(x,0,0)))
+		print "      ", x
 		x = x - SquareSize.val
-	if xmin - x > Epsilon:
-		xPlanes.append(((xmin+1,0,0),(xmin,0,0)))
  	print "  ", len(xPlanes), "planes along Y generated."
 
 	# Generate places along the X axis
@@ -151,9 +205,8 @@ def getPlanes(stepSize, boundBox):
 	y = ymax - SquareSize.val
 	while y > ymin:
 		yPlanes.append(((0,y+1,0),(0,y,0)))
+		print "      ", y
 		y = y - SquareSize.val
-	if ymin - y > Epsilon:
-		yPlanes.append(((ymin+1,0,0),(ymin,0,0)))
 
 	# Debug
 	print "  ", len(yPlanes), "planes along X generated."
@@ -166,8 +219,6 @@ def moveMesh(object, x, y, z):
 	vecx = x - object.loc[0]
 	vecy = y - object.loc[1]
 	vecz = z - object.loc[2]
-
-	print "Moving object ", object.getData(True), "to pos ", x, y, z, "(translation : ", vecx, vecy, vecz, ")"
 
 	# Move the center of the object
 	object.setLocation(x, y, z)
@@ -225,19 +276,16 @@ def createColumns(rootObj, xPlanes, arePages, startingIndex, rootName, boundBox,
 		tempMe.update()
 
 		# If it's the last cut, the temp object is also a final object
-		if(i == len(xPlanes)-1):
-			# Move the temp object
-			if arePages:
-				ytemp = xPlanes[i][1][1] - squareSize
-			else:
-				xtemp = xPlanes[i][1][0] + squareSize/2
-			# moveMesh(tempObj, xtemp,ytemp,ztemp)
-
+		if (i == len(xPlanes)-1):
 			# Add the temp object to the scene
 			columns.append(tempObj)
-			tempObj.setName(rootName + finalName + str(startingIndex+i+1))
-			sce.objects.link(columns[i])
-		else:
+			tempObj.setName(rootName + finalName + str(startingIndex+i+2))
+
+			if(arePages): # Link to the scene if needed (only if we are generating pages)
+				sce.objects.link(tempObj)
+
+			i = i + 1
+		if True:#else:
 			cuttingObject = tempObj
 			columns.append(newObj)
 
@@ -260,6 +308,7 @@ Grid Subdivide Tool v0.1 by Antonin <Wetneb> Delpeuch"
 	(stepSize, rootObj) = getSettings()
 
 	### Extract mesh and bounding box. ###
+	globalize(rootObj)
 	mesh = rootObj.getData(False, True)
 	boundBox = getBoundBox(rootObj)
 
@@ -275,7 +324,7 @@ Grid Subdivide Tool v0.1 by Antonin <Wetneb> Delpeuch"
 	# Create pages
 	i = 0
 	while i < len(columns):
-		pages.append(createColumns(columns[i], yPlanes, True, i*len(yPlanes), rootObj.getData(True), boundBox, stepSize))
+		pages.append(createColumns(columns[i], yPlanes, True, i*(len(yPlanes)+1), rootObj.getData(True), boundBox, stepSize))
 		i = i + 1
 
 	# Move pages
@@ -298,10 +347,6 @@ def draw():
 
 	# Preparing
 	glClear(GL_COLOR_BUFFER_BIT)
-    # BGL.glRasterPos2d(4,4)
-
-	# Drawing text
-	# Text("Map Subdivider")
 
 	# Drawing input controls
 	SquareSize = Number("Size of pages: ", EVT_NOEVT, 10, 55, 170, 18, SquareSize.val,
@@ -357,6 +402,9 @@ Register(draw, event, bevent)
 #                       Theeth too adviced me               #
 #    0.0.6 - 18-12-02 - Better error messages               #
 #############################################################
+
+# Note: I (wetneb) added some stuff so the UV coordinates are
+# correctly handled.
 
 import Blender
 from Blender import *
@@ -454,7 +502,7 @@ def Distance(P, N, d0):
 
 def FacePosition(f, Obj, N, d0):
 	#
-	# Valuta se una faccia Ã�Â¨ tutta da una parte, da un'altra, o Ã�Â¨ intersecata
+	# Valuta se una faccia Ã¨ tutta da una parte, da un'altra, o Ã¨ intersecata
 	#
 	np, nn, nz = 0, 0, 0
 
@@ -670,7 +718,7 @@ def FaceSplit(Obj, mp, mn, f, N, d0):
 
 def Cut(Obj, Normal, d0, MeshPos, MeshNeg):
 	#
-	# VabbuÃ�Â², scandiamoci tutte le faccine...
+	# VabbuÃ², scandiamoci tutte le faccine...
 	#
 	if BL_VERSION<=223:
 		ObjMesh = Obj.data
@@ -686,6 +734,5 @@ def Cut(Obj, Normal, d0, MeshPos, MeshNeg):
 			# Tutta nel negativo
 			FaceAppend(MeshNeg, oface)
 		if (fp==0):
-			# Un po' qua un po' lÃ�Â
+			# Un po' qua un po' lÃ
 			FaceSplit(Obj, MeshPos, MeshNeg, oface, Normal, d0)
-
