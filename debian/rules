@@ -43,8 +43,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package
-	# The DESTDIR Has To Be Exactly /usr/src/packages/BUILD/debian/debian/<nameOfPackage>
-	scons install prefix=/usr/src/packages/BUILD/debian/gnoll
+	RPM_BUILD_ROOT=debian/gnoll scons install prefix=debian/gnoll/usr
 	# --- end custom part for installing
 
 # Build architecture-independent files here.
@@ -56,17 +55,17 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 #	dh_installdebconf
-	dh_installdocs
-	dh_installexamples
-	dh_installmenu
+#	dh_installdocs
+#	dh_installexamples
+#	dh_installmenu
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installpam
 #	dh_installmime
 #	dh_installinit
-	dh_installcron
-	dh_installman
-	dh_installinfo
+#	dh_installcron
+#	dh_installman
+#	dh_installinfo
 #	dh_undocumented
 	dh_installchangelogs
 	dh_link
