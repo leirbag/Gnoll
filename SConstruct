@@ -104,7 +104,14 @@ def main():
 
 
 	opts = Options('gnoll.conf')
-	opts.Add(PathOption('prefix', 'Directory to install under', '/usr/share'))
+	opts.Add(
+					PathOption(
+							'prefix',
+							'Directory to install under',
+							'/usr/share',
+							SCons.Options.PathOption.PathAccept
+							)
+				)
 
 
 	# Do we want to compile in debug mode ?

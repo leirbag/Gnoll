@@ -1,7 +1,7 @@
 Source: gnoll
 Section: games
 Priority: extra
-Maintainer: Bruno Mahe <bruno@gnoll.org>
+Maintainer: Bruno Mahé <bruno@gnoll.org>
 Build-Depends: debhelper (>= 7)
 Standards-Version: 3.7.3
 Homepage: http://www.gnoll.org
