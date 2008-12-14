@@ -95,7 +95,6 @@ namespace Gnoll
 		void CLogModule::logMessage(string msg, bool logIt)
 		{
 #if DO_LOG
-			static std::string str;
 			if(logIt)
 			{
 				Ogre::LogManager::getSingleton().logMessage( msg );
@@ -105,20 +104,20 @@ namespace Gnoll
 				size_t blankPosition = msg.find("\n");
 				if( blankPosition != std::string::npos )
 				{
-					str += msg.substr(0, blankPosition);
-					logMessage(str);
+					strBuffer += msg.substr(0, blankPosition);
+					logMessage(strBuffer);
 					if (blankPosition <= msg.size())
 					{
-						str = msg.substr(blankPosition + 1);
+						strBuffer = msg.substr(blankPosition + 1);
 					}
 					else
 					{
-						str.erase();
+						strBuffer.erase();
 					}
 				}
 				else
 				{
-					str += msg;
+					strBuffer += msg;
 				}
 			}
 #endif

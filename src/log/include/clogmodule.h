@@ -119,6 +119,12 @@ namespace Gnoll
 				 */
 				string m_logFileName;
 
+
+				/**
+				 * String buffer.<br/>
+				 * It will hold log messages until it encounters a '\n'
+				 */
+				std::string strBuffer;
 		};
 	}
 }
