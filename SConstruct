@@ -96,9 +96,9 @@ def main():
 				"DO_LOG"  : "0",
 				"DEFAULT_LOG_FILENAME"  : '"./gnoll.log"',
 				"PACKAGE_NAME": '"Gnoll"',
-				"PACKAGE_VERSION": '"0.1.6rc1"' ,
+				"PACKAGE_VERSION": '"0.1.6"' ,
 				"PACKAGE_BUGREPORT": '"gnoll-devel@lists.gnoll.org"',
-				"PACKAGE_STRING": '"Gnoll 0.1.6rc1"',
+				"PACKAGE_STRING": '"Gnoll 0.1.6"',
 				"PACKAGE_TARNAME": '"gnoll"'
 			}
 
