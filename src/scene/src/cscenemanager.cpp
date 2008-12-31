@@ -43,6 +43,7 @@
 #include <set>
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../log/include/clogmodule.h"
+#include "../../log/include/clogmacros.h"
 #include <sstream>
 
 using namespace std;
@@ -86,9 +87,9 @@ namespace Gnoll
 
 					if (sceneManager)
 					{
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Updating scene..." );
+						GNOLL_LOG() << "Updating scene...\n";
 						sceneManager->update();
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( " done" );
+						GNOLL_LOG() << " done\n";
 					}
 
 				}
@@ -103,7 +104,7 @@ namespace Gnoll
 
 			if (this->hasAttribute("focusedPage") == false)
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "No focusedPage attribute found for CSceneManager " + _instanceName );
+				GNOLL_LOG() << "No focusedPage attribute found for scene manager " + _instanceName << "\n";
 				return;
 			}
 
@@ -155,6 +156,9 @@ namespace Gnoll
 				// Set the camera in the viewport [Current camera]
 				Viewport* vp = renderWindow->addViewport(currentCamera->getOgreCamera());
 				vp->setBackgroundColour(ColourValue(0.5, 1, 0));
+			} else
+			{
+				GNOLL_LOG() << "No currentCamera attribute found for scene manager " + _instanceName << "\n";
 			}
 
 			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ("loadedPages");
@@ -170,16 +174,12 @@ namespace Gnoll
 			 */
 			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>("focusedPage");
 
-			std::ostringstream tmpString;
-			tmpString << "SIZE A: " << loadedPages->size() << endl;
-			tmpString << "Address of loadedPages : " << loadedPages << endl;
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
-			tmpString.clear();
+			GNOLL_LOG() << "Number of loaded pages : " << loadedPages->size() << "\n";
+			GNOLL_LOG() << "Address of loadedPages : " << loadedPages << "\n";
 
 			this->setupPage(*focusedPageName, loadedPages);
 
-			tmpString << "SIZE B: " << loadedPages->size() << endl;
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			GNOLL_LOG() << "SIZE B: " << loadedPages->size() << "\n";
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
@@ -231,11 +231,8 @@ namespace Gnoll
 			 */
 			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ("loadedPages");
 
-			std::ostringstream tmpString;
-			tmpString << "Address of loadedPages : " << loadedPages << endl;
-			tmpString << "Size of loadedPages : " << loadedPages->size() << endl;
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
-			tmpString.clear();
+			GNOLL_LOG() << "Address of loadedPages : " << loadedPages << "\n";
+			GNOLL_LOG() << "Size of loadedPages : " << loadedPages->size() << "\n";
 
 			/**
 			 * Loop through all loaded pages and check if they are still visible
@@ -244,49 +241,43 @@ namespace Gnoll
 			{
 				if (shared_ptr<Gnoll::DynamicObject::String> pageName = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*it))
 				{
-					tmpString << "1 - Loaded page : " << *pageName << "\n";
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
-					tmpString.clear();
+					GNOLL_LOG() << "1 - Loaded page : " << *pageName << "\n";
 
 					if (visitedPages.find(*pageName) == visitedPages.end())
 					{
 						CPage page(*pageName);
 						visitedPages.insert(*pageName);
 
-						tmpString << "  1 - checking visibility for " <<  *pageName << endl;
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
-						tmpString.clear();
+						GNOLL_LOG() << "  1 - checking visibility for " <<  *pageName << "\n";
 
 						if ( this->isPageVisible(page) )
 						{
 							visiblePages->push_back( pageName );
 
-							tmpString << "    a - " <<  *pageName << " is visible "<< endl;
+							GNOLL_LOG() << "    a - " <<  *pageName << " is visible "<< "\n";
 							if ( page.isInitialized() == false )
 							{
-								tmpString << "      b - " <<  *pageName << " is not initialized yet. It's going to be initialized "<< endl;
+								GNOLL_LOG() << "      b - " <<  *pageName << " is not initialized yet. It's going to be initialized "<< "\n";
 								page.init();
 							} else
 							{
-								tmpString << "      c - " <<  *pageName << " has already been initialized"<< endl;
+								GNOLL_LOG() << "      c - " <<  *pageName << " has already been initialized"<< "\n";
 							}
-							Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
-							tmpString.clear();
 						}
 
 						const char* neighbors[] = {"northLink", "southLink", "eastLink", "westLink"};
 
 						for (unsigned int i = 0; i < 4; i++)
 						{
-							Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  Checking neighbor : " + string( neighbors[i] ) );
+							GNOLL_LOG() << "  Checking neighbor : " + string( neighbors[i] ) << "\n";
 							if (page.hasAttribute(neighbors[i]))
 							{
 								shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
 
-								Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("    neighbor found : ") + string(*neighborInstanceName) );
+								GNOLL_LOG() << "    neighbor found : " << string(*neighborInstanceName) << "\n";
 								if (visitedPages.find(*neighborInstanceName) == visitedPages.end())
 								{
-									Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("      appending : ") + string(*neighborInstanceName) );
+									GNOLL_LOG() << "      appending : " << string(*neighborInstanceName) << "\n";
 									loadedPages->push_back( neighborInstanceName );
 								}
 							}
@@ -327,12 +318,12 @@ namespace Gnoll
 				return;
 			}
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "taking care of page " + _pageInstance );
+			GNOLL_LOG() << "taking care of page " << _pageInstance << "\n";
 
 			page.init();
 			_loadedPages->push_back(shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(_pageInstance)));
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "page " + _pageInstance + " initialized" );
+			GNOLL_LOG() << "page " << _pageInstance << " initialized" << "\n";
 			shared_ptr<Gnoll::DynamicObject::Float> pageSize = page.getAttribute<Float>("size");
 
 
@@ -345,9 +336,9 @@ namespace Gnoll
 				if (page.hasAttribute(neighbors[i]))
 				{
 					shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("Loading neighbor ") + string(*neighborInstanceName) );
+					GNOLL_LOG() << "Loading neighbor " << string(*neighborInstanceName) << "\n";
 					CPage neighbor(*neighborInstanceName);
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("Neighbor ") + string(*neighborInstanceName) + " loaded" );
+					GNOLL_LOG() << "Neighbor " << string(*neighborInstanceName) << " loaded" << "\n";
 
 					if (this->isPageVisible(neighbor))
 					{
@@ -374,17 +365,19 @@ namespace Gnoll
 							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
 						}
 
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "asking for neighbor page root node" );
+						GNOLL_LOG() << "asking for neighbor page root node" << "\n";
 						Ogre::SceneNode* neighborRootNode = neighbor.getPageRootNode();
 
 						std::ostringstream tmpString;
 						tmpString << "neighbor page root node " << neighborRootNode;
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+						GNOLL_LOG() << tmpString.str() << "\n";
 						neighborRootNode->translate( _offset + neighborOffset, Ogre::Node::TS_LOCAL);
 
 					} else {
 
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( string("Neighbor ") + string(*neighborInstanceName) + " not visible from " + _pageInstance );
+						GNOLL_LOG() << "Neighbor " << string(*neighborInstanceName);
+						GNOLL_LOG()	<< " not visible from " << _pageInstance ;
+						GNOLL_LOG() << "\n";
 					}
 				}
 			}
