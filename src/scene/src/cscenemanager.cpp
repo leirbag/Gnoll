@@ -158,7 +158,7 @@ namespace Gnoll
 				vp->setBackgroundColour(ColourValue(0.5, 1, 0));
 			} else
 			{
-				GNOLL_LOG() << "No currentCamera attribute found for scene manager " + _instanceName << "\n";
+				GNOLL_LOG() << "No currentCamera attribute found for scene manager " << _instanceName << "\n";
 			}
 
 			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ("loadedPages");
@@ -257,11 +257,11 @@ namespace Gnoll
 							GNOLL_LOG() << "    a - " <<  *pageName << " is visible "<< "\n";
 							if ( page.isInitialized() == false )
 							{
-								GNOLL_LOG() << "      b - " <<  *pageName << " is not initialized yet. It's going to be initialized "<< "\n";
+								GNOLL_LOG() << "      b - " <<  *pageName << " is not initialized yet. It's going to be initialized\n";
 								page.init();
 							} else
 							{
-								GNOLL_LOG() << "      c - " <<  *pageName << " has already been initialized"<< "\n";
+								GNOLL_LOG() << "      c - " <<  *pageName << " has already been initialized\n";
 							}
 						}
 
@@ -269,7 +269,7 @@ namespace Gnoll
 
 						for (unsigned int i = 0; i < 4; i++)
 						{
-							GNOLL_LOG() << "  Checking neighbor : " + string( neighbors[i] ) << "\n";
+							GNOLL_LOG() << "  Checking neighbor : " << string( neighbors[i] ) << "\n";
 							if (page.hasAttribute(neighbors[i]))
 							{
 								shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
@@ -323,7 +323,7 @@ namespace Gnoll
 			page.init();
 			_loadedPages->push_back(shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(_pageInstance)));
 
-			GNOLL_LOG() << "page " << _pageInstance << " initialized" << "\n";
+			GNOLL_LOG() << "page " << _pageInstance << " initialized\n";
 			shared_ptr<Gnoll::DynamicObject::Float> pageSize = page.getAttribute<Float>("size");
 
 
@@ -338,7 +338,7 @@ namespace Gnoll
 					shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
 					GNOLL_LOG() << "Loading neighbor " << string(*neighborInstanceName) << "\n";
 					CPage neighbor(*neighborInstanceName);
-					GNOLL_LOG() << "Neighbor " << string(*neighborInstanceName) << " loaded" << "\n";
+					GNOLL_LOG() << "Neighbor " << string(*neighborInstanceName) << " loaded\n";
 
 					if (this->isPageVisible(neighbor))
 					{
@@ -365,7 +365,7 @@ namespace Gnoll
 							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
 						}
 
-						GNOLL_LOG() << "asking for neighbor page root node" << "\n";
+						GNOLL_LOG() << "asking for neighbor page root node\n";
 						Ogre::SceneNode* neighborRootNode = neighbor.getPageRootNode();
 
 						std::ostringstream tmpString;
