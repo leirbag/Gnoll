@@ -380,4 +380,15 @@ class BaseGnollBuilder:
 		env.Program('gnoll', sourceFiles)
 
 
+	def buildTests(self, env, config):
+		sourceFiles = []
+
+		sourceFiles.extend( self.gatherCoreSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherLogSourceFiles(env, config) )
+		sourceFiles.append( 'src/core/unittests/testcore.cpp' )
+		sourceFiles.append( 'src/core/unittests/testsingleton.cpp' )
+
+		env['LIBS'].append('boost_unit_test_framework')
+		# env.Program('testcore', sourceFiles, LIBS='boost_unit_test_framework')
+		env.Program('testcore', sourceFiles)
 

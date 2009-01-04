@@ -204,6 +204,7 @@ def main():
 
 			# Build Gnoll
 			gnollBuilder.buildGnoll(env, config)
+			gnollBuilder.buildTests(env, config)
 
 
 
