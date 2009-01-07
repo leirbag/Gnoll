@@ -42,7 +42,6 @@
 
 #include <set>
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../log/include/clogmodule.h"
 #include "../../log/include/clogmacros.h"
 #include <sstream>
 
@@ -96,18 +95,8 @@ namespace Gnoll
 		};
 
 
-
-		CSceneManager::CSceneManager(string _instanceName) : CDynamicObjectProxy(_instanceName)
+		void CSceneManager::setupSky()
 		{
-			// Allocate a camera manager
-			CameraManager* cameraManager = CameraManager::getInstancePtr();
-
-			if (this->hasAttribute("focusedPage") == false)
-			{
-				GNOLL_LOG() << "No focusedPage attribute found for scene manager " + _instanceName << "\n";
-				return;
-			}
-
 
 			/**
 			 * A sky is defined by two attributes :
@@ -132,6 +121,16 @@ namespace Gnoll
 				sm->setSkyDome(true, *skyMaterialName);
 
 			}
+		}
+
+
+		void CSceneManager::setupCamera()
+		{
+			/**
+			 * Allocate a camera manager
+			 */
+			CameraManager* cameraManager = CameraManager::getInstancePtr();
+
 
 			/*
 			 * Load current camera
@@ -158,8 +157,14 @@ namespace Gnoll
 				vp->setBackgroundColour(ColourValue(0.5, 1, 0));
 			} else
 			{
-				GNOLL_LOG() << "No currentCamera attribute found for scene manager " << _instanceName << "\n";
+				GNOLL_LOG() << "No currentCamera attribute found for scene manager " << this->getInstance() << "\n";
 			}
+
+		}
+
+
+		void CSceneManager::setupLoadedPages()
+		{
 
 			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ("loadedPages");
 			if (loadedPages->size() == 0)
@@ -168,34 +173,96 @@ namespace Gnoll
 				this->setAttribute("loadedPages", loadedPages);
 			}
 
+			GNOLL_LOG() << "Number of loaded pages : " << loadedPages->size() << "\n";
+		}
+
+
+		void CSceneManager::setupMessages()
+		{
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+			/**
+			 * Message type indicating scene manager has to update scene
+			 */
+			CMessageType updateMsgType("UPDATE_SCENE_CONTENT");
+
+
+			/**
+			 * Message for updating scene has no data
+			 */
+			shared_ptr<boost::any> msgData (new boost::any()) ;
+			shared_ptr<CMessage>  message (new CMessage(updateMsgType, msgData) );
+
+
+			/**
+			 * Create a timer for updating the scene
+			 * Every 1 000 milliseconds a message to update scene content will be sent.
+			 * But this will happen in 1 000 millisecondes
+			 */
+			timeModule->addPeriodicEvent(1000, message, 1000);
+
+
+			/**
+			 * Create the listener which will update the scene whenever
+			 * an UPDATE_SCENE_CONTENT message is received
+			 */
+			sceneUpdateListener = shared_ptr<CMessageListener> (new SceneUpdateListener(this));
+			messageManager->addListener ( sceneUpdateListener, updateMsgType );
+
+		}
+
+
+		CSceneManager::CSceneManager(string _instanceName) : CDynamicObjectProxy(_instanceName)
+		{
+
+			/**
+			 * A focusedPage attribute MUST be defined
+			 */
+			if (this->hasAttribute("focusedPage") == false)
+			{
+				GNOLL_LOG() << "No focusedPage attribute found for scene manager " + _instanceName << "\n";
+				return;
+			}
+
+
+			/**
+			 * First we setup the sky
+			 */
+			this->setupSky();
+
+
+			/**
+			 * Load and setup the camera
+			 */
+			this->setupCamera();
+
+
+			/**
+			 * Setup and initialize the loadedPages attribute
+			 */
+			this->setupLoadedPages();
+
 
 			/**
 			 * Set up focused Page
 			 */
 			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>("focusedPage");
+			shared_ptr<Gnoll::DynamicObject::List> loadedPages = this->getAttribute<Gnoll::DynamicObject::List>("loadedPage");
 
-			GNOLL_LOG() << "Number of loaded pages : " << loadedPages->size() << "\n";
-			GNOLL_LOG() << "Address of loadedPages : " << loadedPages << "\n";
 
 			this->setupPage(*focusedPageName, loadedPages);
 
-			GNOLL_LOG() << "SIZE B: " << loadedPages->size() << "\n";
+			GNOLL_LOG() << "Number of loadedPages after setup: " << loadedPages->size() << "\n";
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
-			CMessageType updateMsgType("UPDATE_SCENE_CONTENT");
 
-			shared_ptr<boost::any> msgData (new boost::any()) ;
-			shared_ptr<CMessage>  message (new CMessage(updateMsgType, msgData) );
 
-			sceneUpdateListener = shared_ptr<CMessageListener> (new SceneUpdateListener(this));
-
-			// Every 1 000 milliseconds a message to update scene content will be sent. But this will happen in 1 000 millisecondes
-			timeModule->addPeriodicEvent(1000, message, 1000);
-
-			messageManager->addListener ( sceneUpdateListener, updateMsgType );
-
+			/**
+			 * Setup message listeners and such
+			 */
+			this->setupMessages();
 		}
 
 
