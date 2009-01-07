@@ -103,7 +103,20 @@ namespace Gnoll
 				 */
 				void setupMessages();
 
+
 			public:
+
+
+				/**
+				 * String for message type signaling the scene should be updated
+				 */
+				static const char * UPDATE_MSG_TYPE_STR() {return "UPDATE_SCENE_CONTENT";};
+
+
+				/**
+				 * Message type signaling the scene should be updated
+				 */
+				static const CMessageType UPDATE_MSG_TYPE() {return CMessageType( UPDATE_MSG_TYPE_STR() );};
 
 				/**
 				 * This is a constructor

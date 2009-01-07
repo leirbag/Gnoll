@@ -187,7 +187,7 @@ namespace Gnoll
 			/**
 			 * Message type indicating scene manager has to update scene
 			 */
-			CMessageType updateMsgType("UPDATE_SCENE_CONTENT");
+			CMessageType updateMsgType( UPDATE_MSG_TYPE() );
 
 
 			/**
@@ -252,7 +252,6 @@ namespace Gnoll
 			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>("focusedPage");
 			shared_ptr<Gnoll::DynamicObject::List> loadedPages = this->getAttribute<Gnoll::DynamicObject::List>("loadedPage");
 
-
 			this->setupPage(*focusedPageName, loadedPages);
 
 			GNOLL_LOG() << "Number of loadedPages after setup: " << loadedPages->size() << "\n";
@@ -271,9 +270,7 @@ namespace Gnoll
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CMessageManager* messageManager = messageModule->getMessageManager();
 
-			CMessageType updateMsgType("UPDATE_SCENE_CONTENT");
-
-			messageManager->delListener ( sceneUpdateListener, updateMsgType );
+			messageManager->delListener ( sceneUpdateListener, UPDATE_MSG_TYPE() );
 
 			CameraManager::destroy();
 			this->deleteAttribute("loadedPages");
