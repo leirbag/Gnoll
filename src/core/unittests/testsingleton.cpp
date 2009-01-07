@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE( GetInstancePointerIsNotNull )
 BOOST_AUTO_TEST_CASE( GettingInstanceInitializesClass )
 {
     BOOST_CHECK( !DummyClass::initialized );
-    DummyClass * dummy = Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
+    Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
     BOOST_CHECK( DummyClass::initialized );
 
     Gnoll::Core::Singleton<DummyClass>::destroy();
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE( GettingInstanceInitializesClass )
 
 BOOST_AUTO_TEST_CASE( DestroyingSingletonCallsDestructor )
 {
-    DummyClass * dummy = Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
+    Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
     Gnoll::Core::Singleton<DummyClass>::destroy();
     BOOST_CHECK( !DummyClass::initialized );
 }
@@ -59,4 +59,5 @@ BOOST_AUTO_TEST_CASE( GettingPointerTwiceGivesSameInstance )
 
     BOOST_CHECK_EQUAL(dummy1, dummy2);
 }
+
 

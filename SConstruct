@@ -27,7 +27,15 @@ import shutil
 import scons.BaseGnollInstaller
 import SCons.Defaults
 
+# Taken from scons Wiki
+def builder_unit_test(target, source, env):
+	app = str(source[0].abspath)
+	if os.spawnl(os.P_WAIT, app, app) == 0:
+		open(str(target[0]), 'w').write("PASSED\n")
+	else:
+		return 1
 
+test_builder = Builder(action = builder_unit_test)
 
 def checkDoxygen(env, config):
 	return not env.Execute('doxygen --version')
@@ -86,6 +94,34 @@ def generateConfigFile(config, newSymbols, srcFile, destFile):
 
 		print
 
+
+def constructGnollEnvironment(env, configProject, config):
+	gnollBuilder = None
+
+	if (env['PLATFORM'] == 'posix'):
+
+		from  scons.LinuxGnollBuilder import LinuxGnollBuilder
+		gnollBuilder = LinuxGnollBuilder()
+
+
+	if (gnollBuilder == None):
+
+		print "Sorry, your platform [%s] is not supported." % (env['PLATFORM'])
+		exit(-1)
+
+	# If debug is activated, add some flags to ad debugging symbols
+	if configProject['DEBUG'] == '1':
+		env.MergeFlags([ ' -g ', ' -pg '])
+	else:
+		env.MergeFlags([ ' -O3 '])
+
+	# Check if all libraries needed by Gnoll are installed and configured
+	gnollConfig = gnollBuilder.checkGnoll(env, config)
+
+	# Generate config.h file
+	generateConfigFile(configProject, gnollConfig, ['./src/config.h.in'], ['./src/config.h'])
+
+	return gnollBuilder
 
 
 def main():
@@ -174,38 +210,18 @@ def main():
 
 
 		if target == 'gnoll':
-
-			gnollBuilder = None
-
-			if (env['PLATFORM'] == 'posix'):
-
-				from  scons.LinuxGnollBuilder import LinuxGnollBuilder
-				gnollBuilder = LinuxGnollBuilder()
-
-
-
-			if (gnollBuilder == None):
-
-				print "Sorry, your platform [%s] is not supported." % (env['PLATFORM'])
-				exit(-1)
-
-
-			# If debug is activated, add some flags to ad debugging symbols
-			if configProject['DEBUG'] == '1':
-				env.MergeFlags([ ' -g ', ' -pg '])
-			else:
-				env.MergeFlags([ ' -O3 '])
-
-			# Check if all libraries needed by Gnoll are installed and configured
-			gnollConfig = gnollBuilder.checkGnoll(env, config)
-
-			# Generate config.h file
-			generateConfigFile(configProject, gnollConfig, ['./src/config.h.in'], ['./src/config.h'])
+			gnollBuilder = constructGnollEnvironment(env, configProject, config)
 
 			# Build Gnoll
 			gnollBuilder.buildGnoll(env, config)
-			gnollBuilder.buildTests(env, config)
 
+		# testcore will be replaced by a list of test targets
+		if target == 'tests':
+			env.Append(BUILDERS = {'Test' : test_builder })
+			gnollBuilder = constructGnollEnvironment(env, configProject, config)
+
+			# Build Gnoll
+			gnollBuilder.buildTests(env, config)
 
 
 		if target == 'doc':
