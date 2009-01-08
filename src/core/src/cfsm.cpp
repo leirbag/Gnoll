@@ -93,7 +93,7 @@ namespace Gnoll
 				m_activestate->onProcess();
 
 				// Then we will evaluate each of the active state's transitions.
-				// If a transition is evaluated to True, wi will activate its associated state.
+				// If a transition is evaluated to True, it will activate its associated state.
 				bool done = false;
 				for ( multimap< shared_ptr<CState>, shared_ptr<superTransition> >::iterator it = m_graph.lower_bound(m_activestate);
 						( (it != m_graph.upper_bound(m_activestate)) && (done == false ) );

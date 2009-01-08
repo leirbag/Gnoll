@@ -35,7 +35,7 @@
 |                                  Add a policy for objects not found       |
 |                                    when saving                            |
 |               01/09/2008 - Soax - Add a parameter _instance to loadImpl   |
-|                                    and saveImpl	                         |
+|                                    and saveImpl	                    |
 |               02/14/2008 - Bruno Mahe - Take in account a source priority |
 |                                    when looking for a suitable source for |
 |                                    loading or saving a resource           |

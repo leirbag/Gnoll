@@ -224,7 +224,7 @@ class BaseGnollBuilder:
 			'src/core/src/cpoolthreads.cpp',
 			'src/core/src/cthreadstopper.cpp',
 			'src/core/src/cworker.cpp',
-			'src/core/src/cfsm.cpp'
+			'src/core/src/cfsm.cpp',
 			]
 
 
@@ -387,10 +387,11 @@ class BaseGnollBuilder:
 		sourceFiles.extend( self.gatherLogSourceFiles(env, config) )
 		sourceFiles.append( 'src/core/unittests/testcore.cpp' )
 		sourceFiles.append( 'src/core/unittests/testsingleton.cpp' )
+		sourceFiles.append( 'src/core/unittests/testcfsm.cpp' )
 
 		env['LIBS'].append('boost_unit_test_framework')
 		# env.Program('testcore', sourceFiles, LIBS='boost_unit_test_framework')
 		testcore = env.Program('tests/testcore', sourceFiles)
-		env.Test('test.passed', testcore)
-		env.Alias('tests', 'test.passed')
+		env.Test('tests/test.passed', testcore)
+		env.Alias('tests', 'tests/test.passed')
 
