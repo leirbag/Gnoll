@@ -224,6 +224,7 @@ class BaseGnollBuilder:
 			'src/core/src/cpoolthreads.cpp',
 			'src/core/src/cthreadstopper.cpp',
 			'src/core/src/cworker.cpp',
+			'src/core/src/cfsm.cpp'
 			]
 
 
