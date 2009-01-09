@@ -1,0 +1,20 @@
+PARTICIPATING
+-------------
+
+Everyone is welcome to participate and help Gnoll.
+Just send your patches to Gnoll's mailing-list to get it reviewed and integrated. 
+Your changes may also be pulled into the main branch.
+
+
+Commits template
+----------------
+
+Commits descriptions should follow a specific template. 
+It will help us when we will extract some commit information and enable us to have 
+a common standard. This is pretty simple and requires just 2 lines at most.
+Here is the template:
+Summary: <Description of the commit>
+Ticket: <Ticket ID>
+
+The description of the commit describe the context of the change. What is this doing and why.
+The ticket ID is the ticket number this change is related to, if the corresponding ticket exists.

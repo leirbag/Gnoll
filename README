@@ -39,3 +39,5 @@ Gnoll can also log everything to a file if the parameter do_log=1 is passed to t
 To install it to a specific directory :
 scons install prefix=/where/to/install/gnoll/
 
+
+If you wish to help and participate to the development of Gnoll, you should also read the file PARTICIPATING
