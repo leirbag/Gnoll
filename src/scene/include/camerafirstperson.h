@@ -17,14 +17,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------CameraFirstPerson-----------------------*\
-|   This is a camera first person                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-|               06/30/2008 - Gabriel - Integration of a HEAD position       |
-\*-------------------------------------------------------------------------*/
+/****************************** Summary ************************************
+ * This is an implementation of a First Person Camera, it provides some    *
+ * services:                                                               *
+ * 	- Set up of a "head" position                                      *
+ ***************************************************************************/
 
 #ifndef INCLUDED_CAMERAFIRSTPERSON
 #define INCLUDED_CAMERAFIRSTPERSON

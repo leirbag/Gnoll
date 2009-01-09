@@ -17,17 +17,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------Camera------------------------------------*\
-  |   This is the interface of camera                                         |
-  |                                                                           |
-  |   Changelog :                                                             |
-  |               04/08/2008 - Gabriel - Initial release                      |
-  |               04/10/2008 - Gabriel - Add persistance of near, far and fov |
-  |                                      value                                |
-  |               04/10/2008 - Gabriel - Add the enqueue of listener          |
-  |               03/07/2008 - Gabriel - Remove insulation                    |
-  \*-------------------------------------------------------------------------*/
+/****************************** Summary ************************************
+ * This is an abstract class of camera. We can't directly use this camera  *
+ * but it provides some services:                                          *
+ * 	- Management of listener                                           *
+ * 	- Management of target                                             *
+ * 	- Set up of serveral parameters: up, eye, at, far, near, fov,      *
+ * 	  movement factor                                                  *
+ * This camera can change the orientation and the position too.            *
+ ***************************************************************************/
 
 #include "../include/camera.h"
 #include "../include/cmessagelistenercamera.h"

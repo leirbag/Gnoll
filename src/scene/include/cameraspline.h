@@ -17,13 +17,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------cameraspline------------------------------*\
-|   This is a spline camera                                                 |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-\*-------------------------------------------------------------------------*/
+/****************************** Summary ************************************
+ * This is an implementation of a Spline Camera, it provides some          *
+ * services:                                                               *
+ * 	- Add/Get/Remove a point at a time                                 *
+ * 	- Define the length of the spline                                  *
+ * 	- Start/Stop/Loop the animation                                    *
+ * A spline camera, it's an animation camera that will follow a path       *
+ * (spline) defined by the user                                            *
+ ***************************************************************************/
 
 #ifndef __CAMERASPLINE_H__
 #define __CAMERASPLINE_H__

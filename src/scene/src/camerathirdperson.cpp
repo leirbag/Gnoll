@@ -17,16 +17,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------CameraThirdPerson-------------------------*\
-|   This is a first person camera                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|               04/10/2008 - Gabriel - Add persistance of attributs         |
-|               06/28/2008 - Gabriel - Fix critical bug on serialisation of |
-|                                       offset                              |
-\*-------------------------------------------------------------------------*/
+/****************************** Summary ************************************
+ * This is an implementation of a Third Person Camera, it provides some    *
+ * services:                                                               *
+ * 	- Set up of a "head" position                                      *
+ * 	- Set up of an offset between the camera and target                *
+ * 	- Set up of a min and max offset                                   *
+ * 	- Defines a rotation limit for each axes                           *
+ * 	- Rotation on each axe around the target                           *
+ ***************************************************************************/
 
 #include "../include/camerathirdperson.h"
 #include "../../dynamicobject/include/float.h"

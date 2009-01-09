@@ -1,5 +1,3 @@
-
-
 /***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
@@ -19,25 +17,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------CameraThirdPerson-----------------------------*\
-|   This is a free fly camera                                               |
-|                                                                           |
-|   Changelog :                                                             |
-|               10/06/2007 - Gabriel - Initial release                      |
-|               19/06/2007 - Gabriel - Change all variables for listener    |
-|                                       by a map.                           |
-|                                      Add limitation of rotation           |
-|                                      Add time to the transformation       |
-|               10/30/2007 - Gabriel - add time to update()                 |
-|               11/16/2007 - Paf - Remove all references to                 |
-|                                   CGenericMessageManager                  |
-|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
-|               03/14/2008 - Gabriel - add minOffset and maxOffset          |
-|               04/05/2006 - Gabriel - change return type of rotation       |
-|                                      methods                              |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+/****************************** Summary ************************************
+ * This is an implementation of a Third Person Camera, it provides some    *
+ * services:                                                               *
+ * 	- Set up of a "head" position                                      *
+ * 	- Set up of an offset between the camera and target                *
+ * 	- Set up of a min and max offset                                   *
+ * 	- Defines a rotation limit for each axes                           *
+ * 	- Rotation on each axe around the target                           *
+ ***************************************************************************/
 
 #ifndef INCLUDED_CAMERATHIRDPERSON
 #define INCLUDED_CAMERATHIRDPERSON

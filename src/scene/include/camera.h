@@ -17,20 +17,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------camera----------------------------------*\
-  |   This is the interface of all camera                                     |
-  |                                                                           |
-  |   Changelog :                                                             |
-  |               08/30/2007 - Gabriel - Initial release                      |
-  |               10/30/2007 - Gabriel - add time to update()                 |
-  |               12/17/2007 - Paf - Camera inherits of CPersistentObjectProxy|
-  |               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
-  |               02/15/2008 - Bruno Mahe - Implements destructor             |
-  |               04/08/2008 - Gabriel - total refactoring                    |
-  |               04/10/2008 - Gabriel - Add the enqueue of listener          |
-  |               03/07/2008 - Gabriel - Remove insulation                    |
-  \*-------------------------------------------------------------------------*/
+/****************************** Summary ************************************
+ * This is an abstract class of camera. We can't directly use this camera  *
+ * but it provides some services:                                          *
+ * 	- Management of listener                                           *
+ * 	- Management of target                                             *
+ * 	- Set up of serveral parameters: up, eye, at, far, near, fov,      *
+ * 	  movement factor                                                  *
+ * This camera can change the orientation and the position too.            *
+ ***************************************************************************/
 
 #ifndef INCLUDED_CAMERA
 #define INCLUDED_CAMERA

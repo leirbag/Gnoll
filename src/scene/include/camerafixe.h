@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
@@ -18,16 +17,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------CameraFixe------------------------------*\
-|   This is a fixed camera                                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               08/30/2007 - Gabriel - Initial release                      |
-|               10/30/2007 - Gabriel - add time to update()                 |
-|               12/24/2007 - Gabriel - delete scenemanager from Ctor        |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+/****************************** Summary ************************************
+ * This is an implementation of a Fixe (not movable) camera                *
+ ***************************************************************************/
 
 #ifndef INCLUDED_CAMERAFIXE
 #define INCLUDED_CAMERAFIXE

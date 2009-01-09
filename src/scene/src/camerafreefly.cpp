@@ -17,13 +17,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------CameraFreeFly-------------------------*\
-|   This is a first person camera                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               12/08/2008 - Gabriel - Initial release                      |
-\*-------------------------------------------------------------------------*/
+/****************************** Summary ************************************
+ * This is an implementation of a Free Fly Camera, it provides some        *
+ * services:                                                               *
+ * 	- Move forward and backward                                        *
+ * 	- Strafe on left/right/up/down                                     *
+ * 	- Rotate the "at" position on each axes                            *
+ ***************************************************************************/
 
 #include "../include/camerafreefly.h"
 #include "../../dynamicobject/include/float.h"
