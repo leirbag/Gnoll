@@ -5,59 +5,59 @@
 
 struct DummyClass
 {
-    DummyClass()
-    {
-        initialized = true;
-    }
+	DummyClass()
+	{
+		initialized = true;
+	}
 
-    ~DummyClass()
-    {
-        initialized = false;
-    }
+	~DummyClass()
+	{
+		initialized = false;
+	}
 
-    static bool initialized;
+	static bool initialized;
 };
 
 bool DummyClass::initialized = false;
 
 BOOST_AUTO_TEST_CASE( GetInstancePointerIsNotNull )
 {
-    DummyClass * dummy = Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
+	DummyClass * dummy = Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
 
-    BOOST_CHECK(NULL != dummy);
+	BOOST_CHECK(NULL != dummy);
 
-    Gnoll::Core::Singleton<DummyClass>::destroy();
+	Gnoll::Core::Singleton<DummyClass>::destroy();
 }
 
 BOOST_AUTO_TEST_CASE( GettingInstanceInitializesClass )
 {
-    BOOST_CHECK( !DummyClass::initialized );
-    Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
-    BOOST_CHECK( DummyClass::initialized );
+	BOOST_CHECK( !DummyClass::initialized );
+	Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
+	BOOST_CHECK( DummyClass::initialized );
 
-    Gnoll::Core::Singleton<DummyClass>::destroy();
+	Gnoll::Core::Singleton<DummyClass>::destroy();
 }
 
 BOOST_AUTO_TEST_CASE( DestroyingSingletonCallsDestructor )
 {
-    Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
-    Gnoll::Core::Singleton<DummyClass>::destroy();
-    BOOST_CHECK( !DummyClass::initialized );
+	Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
+	Gnoll::Core::Singleton<DummyClass>::destroy();
+	BOOST_CHECK( !DummyClass::initialized );
 }
 
 BOOST_AUTO_TEST_CASE( DestroyingWithoutGettingPointerIsSafe )
 {
-    BOOST_CHECK( !DummyClass::initialized );
-    Gnoll::Core::Singleton<DummyClass>::destroy();
-    BOOST_CHECK( !DummyClass::initialized );
+	BOOST_CHECK( !DummyClass::initialized );
+	Gnoll::Core::Singleton<DummyClass>::destroy();
+	BOOST_CHECK( !DummyClass::initialized );
 }
 
 BOOST_AUTO_TEST_CASE( GettingPointerTwiceGivesSameInstance )
 {
-    DummyClass * dummy1 = Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
-    DummyClass * dummy2 = Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
+	DummyClass * dummy1 = Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
+	DummyClass * dummy2 = Gnoll::Core::Singleton<DummyClass>::getInstancePtr();
 
-    BOOST_CHECK_EQUAL(dummy1, dummy2);
+	BOOST_CHECK_EQUAL(dummy1, dummy2);
 }
 
 
