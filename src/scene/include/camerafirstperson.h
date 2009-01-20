@@ -21,6 +21,7 @@
  * This is an implementation of a First Person Camera, it provides some    *
  * services:                                                               *
  * 	- Set up of a "head" position                                      *
+ * The
  ***************************************************************************/
 
 #ifndef INCLUDED_CAMERAFIRSTPERSON
@@ -35,22 +36,19 @@ namespace Gnoll
 		class CameraFirstPerson : public Camera
 		{
 		private:
-			Ogre::Vector3 m_headPosition;
+			/*
+			 * Parameters of the camera
+			 */
+			Ogre::Vector3* headPosition;
 
 		public:
 			/*
-			 * Default constructor
+			 * Default constructor, if no head positon is defined, the head position will be set
+			 *                      to the target position
 			 * @param instanceName This is the instance name of the camera, it will be use for the
 			 * 					   instance name of the Ogre Camera
 			 */
 			explicit CameraFirstPerson(const Glib::ustring& instanceName);
-
-			/*
-			 * This method set the head position, by default we use the position of
-			 * the target
-			 * @param head This is the head position
-			 */
-			void setHeadPosition(const Ogre::Vector3& head);
 
 			/*
 			 * Destructior
@@ -62,6 +60,20 @@ namespace Gnoll
 			 * @param time This is the time between 2 frames
 			 */
 			virtual void update(float time);
+
+			/**
+			 * This set the offset between the target position and the real head position
+			 * @param offset This is the offset, it's an offset in a 3 dimensions due to the
+			 *               non-alignement of the head and target position
+			 */
+			void setHeadPosition(const Ogre::Vector3& value);
+
+			/**
+			 * This is the gettor of the head positon offset
+			 * @param value The offset in 3 dimensions between the position of the target and the
+			 *              real head position
+			 */
+			const Ogre::Vector3* getHeadPosition();
 		};
 	};
 };

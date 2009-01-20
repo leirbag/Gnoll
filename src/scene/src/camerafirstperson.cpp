@@ -25,7 +25,7 @@
 
 #include "../include/camerafirstperson.h"
 #include "../../dynamicobject/include/float.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/clogmacros.h"
 #include "../../dynamicobject/include/vector3.h"
 
 using namespace Gnoll::DynamicObject;
@@ -37,50 +37,54 @@ namespace Gnoll
 		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName) :
 			Camera(instanceName)
 		{
-			// Extract head position
-			// ---------------------
-			shared_ptr<Gnoll::DynamicObject::Vector3> default_head = shared_ptr<Gnoll::DynamicObject::Vector3> (new Gnoll::DynamicObject::Vector3());
-			shared_ptr<Gnoll::DynamicObject::Vector3> temp_head = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>("Head_position", default_head);
+            Ogre::Vector3* pPosition = NULL;
+            Ogre::SceneNode* pTarget = getTarget();
+            if(pTarget == NULL)
+                pPosition = new Ogre::Vector3();
+            else
+                pPosition = new Ogre::Vector3(pTarget->getPosition());
 
-			// We need to convert the DO Vector3 to Ogre::Vector3 (inheritance)
-			// ----------------------------------------------------------------
-			setHeadPosition(*dynamic_pointer_cast<Ogre::Vector3>(temp_head));
-
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Head position: " << *dynamic_pointer_cast<Ogre::Vector3>(temp_head) << "\t";
+            shared_ptr<Gnoll::DynamicObject::Vector3> default_pos = shared_ptr<Gnoll::DynamicObject::Vector3> (new Gnoll::DynamicObject::Vector3(*pPosition));
+            shared_ptr<Gnoll::DynamicObject::Vector3> temp_pos = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>("HeadPosition", default_pos);
+            headPosition = new Ogre::Vector3(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
 		}
 
 		CameraFirstPerson::~CameraFirstPerson()
 		{
-			setAttribute("Head_position", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(m_headPosition)));
+            setAttribute("HeadPosition", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(*getHeadPosition())));
 		}
 
-		void CameraFirstPerson::setHeadPosition(const Ogre::Vector3& head)
+		void CameraFirstPerson::setHeadPosition(const Ogre::Vector3& value)
 		{
-			m_headPosition = head;
+            *headPosition = value;
 		}
 
-		// TODO: A REVOIR
+        const Ogre::Vector3* CameraFirstPerson::getHeadPosition()
+		{
+            return headPosition;
+		}
+
 		void CameraFirstPerson::update(float time)
 		{
-			// Check if we have a target
-			// -------------------------
-			if(getTargetName() == "")
+			// Get back the position of the target
+			// -----------------------------------
+			Ogre::SceneNode* pTarget = getTarget();
+			if(pTarget == NULL) {
+				GNOLL_LOG() << "No target\n";
 				return;
+			}
 
-			static Ogre::Vector3 oldPosition = getTarget()->getPosition();
+            // Check the validity of the head position
+            // ---------------------------------------
+            if(getHeadPosition() == NULL) {
+                GNOLL_LOG() << "No head position defined\n";
+				return;
+            }
 
-			// Set the position at the target position
-			// ---------------------------------------
-			Ogre::Vector3 position = getTarget()->getPosition();
-			m_headPosition += (position - oldPosition);
-			position = m_headPosition;
-
-			getOgreCamera()->setPosition(position);
-			getOgreCamera()->setDirection(-getTarget()->getOrientation().zAxis());
-
-			// Store the old position
-			// ----------------------
-			oldPosition = getTarget()->getPosition();
+			// Process to the position of the camera
+			// -------------------------------------
+			Ogre::Vector3* newPosition = new Ogre::Vector3(pTarget->getPosition() + *getHeadPosition());
+			setPosition(*newPosition);
 		}
 	};
 };
