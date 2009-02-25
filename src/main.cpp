@@ -97,7 +97,7 @@ int tourne = 0;
 bool toucheavance = false;
 bool toucherecule = false;
 
-string state = "Idle1";
+string state = "Idle";
 
 Ogre::Radian direction(0.0);
 
@@ -106,13 +106,13 @@ int objcnt = 0;
 
 
 /**
- * An idiot message listener 
+ * An idiot message listener
  */
 class MousePressedListener : public CMessageListener
 {
 
 	public:
-		
+
 		/**
 		 * This is a constructor
 		 */
@@ -127,8 +127,8 @@ class MousePressedListener : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
-		{ 
+		virtual void handle ( shared_ptr<CMessage> message )
+		{
 			/*
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
@@ -147,13 +147,13 @@ class MousePressedListener : public CMessageListener
 
 
 /**
- * An idiot message listener 
+ * An idiot message listener
  */
 class AllMessageListener : public CMessageListener
 {
 
 	public:
-		
+
 		/**
 		 * This is a constructor
 		 */
@@ -168,8 +168,8 @@ class AllMessageListener : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
-		{ 
+		virtual void handle ( shared_ptr<CMessage> message )
+		{
 			/*
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
@@ -178,10 +178,10 @@ class AllMessageListener : public CMessageListener
 
 			std::ostringstream tmpString;
 			tmpString << '(' << event.relX
-							<< ", " << event.relY 
-							<< ", " << event.relZ 
-							<< ", " << event.abX 
-							<< ", " << event.abY 
+							<< ", " << event.relY
+							<< ", " << event.relZ
+							<< ", " << event.abX
+							<< ", " << event.abY
 							<< ", " << event.abZ
 							<< ", " << event.absOnly << ')';
 			GNOLL_LOG() << tmpString.str() << "\n";
@@ -193,13 +193,13 @@ class AllMessageListener : public CMessageListener
 
 
 /**
- * An idiot message listener 
+ * An idiot message listener
  */
 class MyMessageListener : public CMessageListener
 {
 
 	public:
-		
+
 		/**
 		 * This is a constructor
 		 */
@@ -214,8 +214,8 @@ class MyMessageListener : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
-		{ 
+		virtual void handle ( shared_ptr<CMessage> message )
+		{
 			/*
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
@@ -243,7 +243,7 @@ class robotcontroler : public CMessageListener
 {
 
 	public:
-		
+
 		/**
 		 * This is a constructor
 		 */
@@ -258,8 +258,8 @@ class robotcontroler : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
-		{ 
+		virtual void handle ( shared_ptr<CMessage> message )
+		{
 			/*
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
@@ -280,7 +280,7 @@ class robotcontroler : public CMessageListener
  			RaySceneQuery* raySceneQuery = scenetemp->createRayQuery(
 																			Ray(pos, Vector3::NEGATIVE_UNIT_Y));
 			Ray updateRay;
-  
+
 			updateRay.setOrigin( pos );
 			updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
 			raySceneQuery->setRay(updateRay);
@@ -288,11 +288,11 @@ class robotcontroler : public CMessageListener
 			RaySceneQueryResult::iterator i = qryResult.begin();
 			if (i != qryResult.end() && i->worldFragment)
 			{
-				robotnode->setPosition(pos.x, 
-												i->worldFragment->singleIntersection.y , 
+				robotnode->setPosition(pos.x,
+												i->worldFragment->singleIntersection.y ,
 												pos.z);
 			}
-		
+
 			scenetemp->destroyQuery(raySceneQuery);
 
 		}
@@ -322,7 +322,7 @@ class keydown : public CMessageListener
 
 
 	public:
-		
+
 		/**
 		 * This is a constructor
 		 */
@@ -337,8 +337,8 @@ class keydown : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
-		{ 
+		virtual void handle ( shared_ptr<CMessage> message )
+		{
 			/*
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
@@ -356,7 +356,7 @@ class keydown : public CMessageListener
 				while(!found) {
 					Ogre::Vector3 pos(rand()  % 1500,
 							  rand() % 1500,
-							rand() % 1500);	
+							rand() % 1500);
 
 					Ogre::RaySceneQuery* raySceneQuery = sceneMgr->createRayQuery(
             				Ogre::Ray(pos, Ogre::Vector3::NEGATIVE_UNIT_Y));
@@ -368,10 +368,10 @@ class keydown : public CMessageListener
 					Ogre::RaySceneQueryResult& qryResult = raySceneQuery->execute();
 					Ogre::RaySceneQueryResult::iterator i = qryResult.begin();
 					if (i != qryResult.end() && i->worldFragment) {
-						node1->setPosition(pos.x, 
-						i->worldFragment->singleIntersection.y + 5, 
+						node1->setPosition(pos.x,
+						i->worldFragment->singleIntersection.y + 5,
 						pos.z);
-	
+
 						std::ostringstream tmpString;
 						tmpString << "Objet ajoute : " << objcnt;
 						GNOLL_LOG() <<  tmpString.str() << "\n";
@@ -397,7 +397,7 @@ class keydown : public CMessageListener
 			if (temp2 == OIS::KC_LEFT) {
 				tourne = -1;
 			}
-				
+
 			if (temp2 == OIS::KC_RIGHT) {
 				tourne = 1;
 			}
@@ -448,7 +448,7 @@ class keyup : public CMessageListener
 {
 
 	public:
-		
+
 		/**
 		 * This is a constructor
 		 */
@@ -463,8 +463,8 @@ class keyup : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
-		{ 
+		virtual void handle ( shared_ptr<CMessage> message )
+		{
 			/*
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
@@ -473,23 +473,23 @@ class keyup : public CMessageListener
 			OIS::KeyCode temp2 = message->getData<OIS::KeyCode>();
 
 			if (temp2 == OIS::KC_LEFT) {
-				tourne = 0;	
+				tourne = 0;
 			}
 
 			if (temp2 == OIS::KC_RIGHT) {
-				tourne = 0;	
+				tourne = 0;
 			}
 
 			if (temp2 == OIS::KC_DOWN)
 			{
 				toucherecule = false;
-				state = "Idle1";
+				state = "Idle";
 			}
 
 			if (temp2 == OIS::KC_UP)
 			{
 				toucheavance = false;
-				state = "Idle1";
+				state = "Idle";
 			}
 
 
@@ -502,10 +502,10 @@ class AnimationListener : public CMessageListener
 	private:
 
 		SceneManager* scenetemp;
-	
+
 
 	public:
-		
+
 		/**
 		 * This is a constructor
 		 */
@@ -520,8 +520,8 @@ class AnimationListener : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
-		{ 
+		virtual void handle ( shared_ptr<CMessage> message )
+		{
 			/*
 			 * A string is embeded in the message and is displayed
 			 * A very dirty thing but it works ;)
@@ -540,12 +540,12 @@ class AnimationListener : public CMessageListener
 
 			scenetemp = CGraphicModule::getInstancePtr()->getSceneManager();
 			Ogre::SceneNode* robotnode = scenetemp->getSceneNode("RobotNode");
-			if (tourne == -1) 
+			if (tourne == -1)
 			{
 				direction -= Degree(vtourne * lasttime / 1000.0);
 				robotnode->setOrientation(Quaternion(-Radian(direction), Vector3(0.0, 1.0, 0.0)));
 			}
-			else if (tourne == 1) 
+			else if (tourne == 1)
 			{
 				direction += Degree(vtourne * lasttime / 1000.0);
 				robotnode->setOrientation(Quaternion(-Radian(direction), Vector3(0.0, 1.0, 0.0)));
@@ -567,7 +567,7 @@ class AnimationListener : public CMessageListener
 			    RaySceneQuery* raySceneQuery = scenetemp->createRayQuery(
 			    Ray(pos, Vector3::NEGATIVE_UNIT_Y));
 				Ray updateRay;
-  
+
 				updateRay.setOrigin( pos );
 				updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
 				raySceneQuery->setRay(updateRay);
@@ -575,8 +575,8 @@ class AnimationListener : public CMessageListener
 				RaySceneQueryResult::iterator i = qryResult.begin();
 			    if (i != qryResult.end() && i->worldFragment)
 				{
-					robotnode->setPosition(pos.x, 
-			       i->worldFragment->singleIntersection.y , 
+					robotnode->setPosition(pos.x,
+			       i->worldFragment->singleIntersection.y ,
 			       pos.z);
 				}
 			}
@@ -599,7 +599,7 @@ void analyzeArguments (int argc, char* argv[])
 
 	variables_map vm;
 	store(parse_command_line(argc, argv, desc), vm);
-	notify(vm);    
+	notify(vm);
 
 
 	/**
@@ -710,7 +710,7 @@ int main(int argc, char* argv[])
 	 */
 
 
-	// A message type called "string" 
+	// A message type called "string"
 	CMessageType mytype("KEYBOARD_KEYDOWN");
 	CMessageType mytype2("KEYBOARD_KEYUP");
 	CMessageType alltype("MOUSE_MOVED");
@@ -722,11 +722,11 @@ int main(int argc, char* argv[])
 	// A listener
 	GNOLL_LOG() << "Creating Hack listeners\n";
 	shared_ptr<CMessageListener> mylistener(new MyMessageListener);
-	shared_ptr<CMessageListener> mylistener2(new robotcontroler);	
-	shared_ptr<CMessageListener> mylistener3(new AnimationListener);	
-	shared_ptr<CMessageListener> mylistener4(new keyup);	
-	shared_ptr<CMessageListener> mylistener5(new keydown);	
-	shared_ptr<CMessageListener> mylistener6(new AllMessageListener);	
+	shared_ptr<CMessageListener> mylistener2(new robotcontroler);
+	shared_ptr<CMessageListener> mylistener3(new AnimationListener);
+	shared_ptr<CMessageListener> mylistener4(new keyup);
+	shared_ptr<CMessageListener> mylistener5(new keydown);
+	shared_ptr<CMessageListener> mylistener6(new AllMessageListener);
 	shared_ptr<CMessageListener> mylistener7(new MousePressedListener);
 	shared_ptr<CMessageListener> mylistener8(new MousePressedListener);
 
@@ -810,7 +810,7 @@ int main(int argc, char* argv[])
 
 	/*
 	 * If the listener is deleted, no one care about the message.
-	 * The message manager rejects the message since there is no listener 
+	 * The message manager rejects the message since there is no listener
 	 *  which care about this message type
 	 */
 
@@ -838,7 +838,7 @@ int main(int argc, char* argv[])
 	if (messageManager->delListener ( mylistener8, mrtype ) == true)
 		GNOLL_LOG() << "Listener supprime\n";
 
-	 
+
 	while(objcnt >=0) {
 		deleteRobot();
 	}
@@ -871,7 +871,7 @@ int main(int argc, char* argv[])
 	DynamicObjectManager::destroy();
 
 
-	// Bye bye 
+	// Bye bye
 	GNOLL_LOG() << "Au revoir !\n";
 	return 0;
 }

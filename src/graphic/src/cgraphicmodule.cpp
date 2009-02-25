@@ -304,7 +304,7 @@ namespace Gnoll
 
 			//mSceneMgr->destroyQuery(raySceneQuery);
 
-			Entity *ent1 = mSceneMgr->createEntity( "Robot", "ninja.mesh" );
+			Entity *ent1 = mSceneMgr->createEntity( "Robot", "alexandre.mesh" );
 			SceneNode *node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "RobotNode");
 
 			/*RaySceneQuery* raySceneQuery2 = mSceneMgr->createRayQuery(
@@ -329,7 +329,7 @@ namespace Gnoll
 			node1->attachObject( ent1 );
 			ent1->setCastShadows( true );
 
-			AnimationState * anim = ent1->getAnimationState( "Idle1" );
+			AnimationState * anim = ent1->getAnimationState( "Idle" );
 			anim->setLoop( true );
 			anim->setEnabled( true );
 
