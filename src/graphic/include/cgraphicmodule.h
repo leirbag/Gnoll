@@ -118,8 +118,6 @@ namespace Gnoll
 				shared_ptr<boost::any> data;
 
 
-				boost::shared_ptr<Gnoll::Scene::Camera> *m_camera;
-
 				/**
 				 * Load resources path
 				 */

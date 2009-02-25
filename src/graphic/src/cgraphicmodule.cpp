@@ -109,17 +109,14 @@ namespace Gnoll
 	{
 		CGraphicModule::CGraphicModule() : mwindow(0), framerendered("GRAPHIC_FRAME_RENDERED")
 		{
-		/*unsigned int gni = (unsigned int) this;
-		LogManager::getSingleton().logMessage("GRApHICMANAGER : " + string(gni) );*/
 			unsigned long time = 0;
 			data = shared_ptr<boost::any>(new boost::any(time));
 
 			mGUIRenderer = 0;
 			mGUISystem = 0;
 			mEditorGuiSheet = 0;
-
-
 		}
+
 
 		void CGraphicModule::loadOgreResourcesPath()
 		{
@@ -246,20 +243,6 @@ namespace Gnoll
 
 			mwindow->setActive(true);
 			mSceneMgr = mRoot->createSceneManager("OctreeSceneManager", "TSM");
-
-			// Create and configure the camera
-			/*shared_ptr<Gnoll::Scene::AbstractCameraFactory> acf ( new Gnoll::Scene::CameraFreeFlyFactory() );
-			m_camera  = new shared_ptr<Gnoll::Scene::Camera> (acf->createCamera("camTP"));
-			(*m_camera)->setNearValue(5);
-			(*m_camera)->setFarValue(1000);*/
-
-			// Create one viewport, entire window
-			//Viewport* vp = mwindow->addViewport((*m_camera)->getOgreCamera());
-			//vp->setBackgroundColour(ColourValue(0.5,1,0));
-
-			// Alter the camera aspect ratio to match the viewport
-			//(*m_camera)->setFovValue( Real(vp->getActualWidth()) / Real(vp->getActualHeight()) );
-
 			mSceneMgr->setAmbientLight( ColourValue( 0.6, 0.6, 0.6 ) );
 
 
@@ -280,49 +263,8 @@ namespace Gnoll
 			l->setType( Light::LT_POINT );
 
 
-			// Infinite far plane?
-			//if (mRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
-			//{
-			//	(*m_camera)->setFarValue(0);
-			//}
-
-			/*RaySceneQuery* raySceneQuery = mSceneMgr->createRayQuery(
-			Ray((*m_camera)->getPosition(), Vector3::NEGATIVE_UNIT_Y));
-
-			Ray updateRay;
-			updateRay.setOrigin((*m_camera)->getPosition());
-			updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
-			raySceneQuery->setRay(updateRay);
-			RaySceneQueryResult& qryResult = raySceneQuery->execute();
-			RaySceneQueryResult::iterator i = qryResult.begin();
-			if (i != qryResult.end() && i->worldFragment)
-			{
-				(*m_camera)->setPosition(Vector3((*m_camera)->getPosition().x,
-				i->worldFragment->singleIntersection.y + 5,
-				(*m_camera)->getPosition().z));
-			}*/
-
-			//mSceneMgr->destroyQuery(raySceneQuery);
-
 			Entity *ent1 = mSceneMgr->createEntity( "Robot", "alexandre.mesh" );
 			SceneNode *node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "RobotNode");
-
-			/*RaySceneQuery* raySceneQuery2 = mSceneMgr->createRayQuery(
-			Ray(Vector3(0,2500,0) , Vector3::NEGATIVE_UNIT_Y));
-
-			updateRay.setOrigin( Vector3(0,2500,0) );
-			updateRay.setDirection(Vector3::NEGATIVE_UNIT_Y);
-			raySceneQuery2->setRay(updateRay);
-			qryResult = raySceneQuery2->execute();
-			i = qryResult.begin();
-			if (i != qryResult.end() && i->worldFragment)
-			{
-				node1->setPosition(0,
-					i->worldFragment->singleIntersection.y ,
-					0);
-			}
-
-			mSceneMgr->destroyQuery(raySceneQuery2);*/
 
 
 			node1->scale(0.2, 0.2, 0.2);
@@ -349,7 +291,6 @@ namespace Gnoll
 			CEGUI::SchemeManager::getSingleton().loadScheme((CEGUI::utf8*)"TaharezLook.scheme");
 			mGUISystem->setDefaultMouseCursor((CEGUI::utf8*)"TaharezLook", (CEGUI::utf8*)"MouseArrow");
 			CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseMoveCursor");
-			//mGUISystem->setDefaultFont((CEGUI::utf8*)"DejaVuSans-10.font");
 
 			CEGUI::FontManager::getSingleton().createFont("Commonwealth-10.font");
 
@@ -372,14 +313,10 @@ namespace Gnoll
 			eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
 			eb->setAlwaysOnTop(true);
 
-			//(*m_camera)->setTarget(node1);
-			//boost::shared_ptr<Gnoll::Scene::CameraThirdPerson> ctp = boost::static_pointer_cast<Gnoll::Scene::CameraThirdPerson, Gnoll::Scene::Camera>(*m_camera);
 		}
 
 		void CGraphicModule::process()
 		{
-			//mRoot->startRendering();
-
 
 			// Get the last FPS and the Tri counts
 			float fps = mRoot->getRenderTarget(mRoot->getAutoCreatedWindow()->getName())->getLastFPS();
@@ -393,7 +330,6 @@ namespace Gnoll
 			mEditorGuiSheet->getChild("fpsText")->setText(str);
 
 			mRoot->renderOneFrame();
-		//	mWindow->update();
 
 
 			unsigned long newframe = m_timer->getMilliseconds ();
@@ -437,12 +373,6 @@ namespace Gnoll
 
 
 			mwindow->removeAllViewports();
-
-			/*if (m_camera)
-			/{
-				delete m_camera;
-			}*/
-
 			mSceneMgr->destroyAllCameras();
 			mRoot->destroySceneManager(mSceneMgr);
 			mwindow->destroy();
