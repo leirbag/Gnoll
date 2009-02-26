@@ -67,18 +67,69 @@ namespace Gnoll
 		class CPage : public CDynamicObjectProxy
 		{
 			private:
-			
+
 			public:
+
+				/**
+				 * Returns attribute size name.<br/>
+				 * A page must be squared and have a length of "size"
+				 * @return Returns the name of the size attribute
+				 */
+				inline static const char * ATTRIBUTE_SIZE() {return "size";}
+				inline static const char * ATTRIBUTE_NORTH_LINK() {return "northLink";}
+				inline static const char * ATTRIBUTE_EAST_LINK() {return "eastLink";}
+				inline static const char * ATTRIBUTE_WEST_LINK() {return "westLink";}
+				inline static const char * ATTRIBUTE_SOUTH_LINK() {return "southLink";}
+				inline static const char * ATTRIBUTE_PAGE_RENDERER() {return "PageRenderer";}
+				inline static const char * ATTRIBUTE_STATIC_OBJECTS() {return "staticObjects";}
+
+
+				/**
+				 * Constructor
+				 * @param _instanceName Name of the instance
+				 */
 				CPage(string _instanceName);
-				
+
+
+				/**
+				 * Destructor
+				 */
 				~CPage();
 
+				/**
+				 * Initialize the page. This include all Ogre related operations <br/>
+				 * like creating and attaching scene nodes
+				 */
 				void init();
+
+
+				/**
+				 * De-initialize the page. This include all Ogre related operations <br/>
+				 * like destroying scene nodes
+				 */
 				void unInit();
+
+
+				/**
+				 * Indicates if this page has been initialized or not
+				 * @return Returns whether this page has been initialized or not
+				 */
 				bool isInitialized();
-				
+
+
+				/**
+				 * Retrieve the root scene node of this page
+				 * @return Returns the root scene node of this page
+				 *
+				 */
 				Ogre::SceneNode * getPageRootNode() const;
 
+
+				/**
+				 * Checks if this page is visible from a given camera
+				 * @param _cameraName Instance name of the camera which might see this page
+				 * @return Returns whether this page is visible from the camera name passed
+				 */
 				bool isVisibleFromCamera(shared_ptr< Gnoll::DynamicObject::String > _cameraName) const;
 		};
 	}

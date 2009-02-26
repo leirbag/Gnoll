@@ -104,6 +104,13 @@ namespace Gnoll
 				void setupMessages();
 
 
+				/**
+				 * Translate all visible pages by vector _translate
+				 * @param _translate amount to translate pages of
+				 */
+				void translateVisiblePages(const  Ogre::Vector3 _translate);
+
+
 			public:
 
 
