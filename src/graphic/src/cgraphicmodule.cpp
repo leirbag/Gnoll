@@ -242,7 +242,7 @@ namespace Gnoll
 			this->mwindow = mRoot->initialise(true, PACKAGE_STRING);
 
 			mwindow->setActive(true);
-			mSceneMgr = mRoot->createSceneManager("OctreeSceneManager", "TSM");
+			mSceneMgr = mRoot->createSceneManager("OctreeSceneManager", CGraphicModule::DEFAULT_OGRE_SCENE_MANAGER_NAME());
 			mSceneMgr->setAmbientLight( ColourValue( 0.6, 0.6, 0.6 ) );
 
 

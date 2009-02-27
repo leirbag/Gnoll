@@ -133,7 +133,16 @@ namespace Gnoll
 				  */
 				 void loadOgreConfig();
 
+
 			public:
+
+
+				/**
+				 * The default ogre scene manager name
+				 * @return The default name of the ogre scene manager
+				 */
+				inline static const char * DEFAULT_OGRE_SCENE_MANAGER_NAME() {return "TSM";}
+
 
 				/**
 				 * A constructor
