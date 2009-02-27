@@ -19,10 +19,8 @@
 
 
 /*--------------------------------CPage------------------------------------*\
-|   This is a page                                                          |
+|   This is a page. A page is a chunk of the scene.                         |
 |                                                                           |
-|   Changelog :                                                             |
-|               12/04/2007 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -54,15 +52,8 @@ namespace Gnoll
 	{
 
 		/**
-		 * Dynamic attributes :
-		 *  * size -> lentgh of one side
-		 *  * northLink    -> Instance name of the northern neighbor
-		 *  * southLink    -> Instance name of the southern neighbor
-		 *  * eastLink     -> Instance name of the eastern neighbor
-		 *  * westLink     -> Instance name of the western neighbor
-		 *  * initialized  -> Is that page initialized ? yes or non-existant
-		 *  * PageRenderer -> IPageREnderer object in charge of displaying the ground
-		 *
+		 * A page is a chunk of the scene.<br/>
+		 * A scene is made of tiles named pages
 		 */
 		class CPage : public CDynamicObjectProxy
 		{
@@ -71,16 +62,51 @@ namespace Gnoll
 			public:
 
 				/**
-				 * Returns attribute size name.<br/>
-				 * A page must be squared and have a length of "size"
-				 * @return Returns the name of the size attribute
+				 * Returns attribute name "size".<br/>
+				 * A page must be square and have a length of "size"
+				 * @return The attribute name "size"
 				 */
 				inline static const char * ATTRIBUTE_SIZE() {return "size";}
+
+
+				/**
+				 * This attribute is the instance name of the northern neighbor
+				 * @return Attribute name for the instance name of the northern neighbor
+				 */
 				inline static const char * ATTRIBUTE_NORTH_LINK() {return "northLink";}
+
+
+				/**
+				 * This attribute is the instance name of the eastern neighbor
+				 * @return Attribute name for the instance name of the eastern neighbor
+				 */
 				inline static const char * ATTRIBUTE_EAST_LINK() {return "eastLink";}
+
+
+				/**
+				 * This attribute is the instance name of the western neighbor
+				 * @return Attribute name for the instance name of the western neighbor
+				 */
 				inline static const char * ATTRIBUTE_WEST_LINK() {return "westLink";}
+
+
+				/**
+				 * This attribute is the instance name of the southern neighbor
+				 * @return Attribute name for the instance name of the southern neighbor
+				 */
 				inline static const char * ATTRIBUTE_SOUTH_LINK() {return "southLink";}
+
+
+				/**
+				 * Page renderer is the object in charge of rendering the page itself
+				 * @return The page renderer which is rendering the page
+				 */
 				inline static const char * ATTRIBUTE_PAGE_RENDERER() {return "PageRenderer";}
+
+				/**
+				 * This is a list of all static objects included in the page
+				 * @return List of static objects to be rendered
+				 */
 				inline static const char * ATTRIBUTE_STATIC_OBJECTS() {return "staticObjects";}
 
 
