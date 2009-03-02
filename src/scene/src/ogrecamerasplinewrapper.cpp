@@ -18,39 +18,34 @@
  ***************************************************************************/
 
 /****************************** Summary ************************************
- * This is an implementation of a Fixe (not movable) camera                *
+ * This is an implement of camera spline wrapper for Ogre                  *
  ***************************************************************************/
 
-#ifndef INCLUDED_CAMERAFIXE
-#define INCLUDED_CAMERAFIXE
+#include "../include/ogrecamerasplinewrapper.h"
+#include "../../graphic/include/cgraphicmodule.h"
 
-#include "camera.h"
+using namespace Gnoll::Graphic;
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {
 	namespace Scene
 	{
-		/*
-		 * Structure that contains camera attributs
-		 */
-		class CameraFixe : public Camera
+		OgreCameraSplineWrapper::OgreCameraSplineWrapper(const Glib::ustring& name) :
+			OgreCameraWrapper(name)
 		{
-		public:
-			/*
-			 * Default constructor, it initializes the camera with default settings :
-			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
-			 */
-			explicit CameraFixe(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
+			// Create a scene node for the spline camera, the name is fixed
+			// ------------------------------------------------------------
+			Ogre::SceneNode* camNode = CGraphicModule::getInstancePtr()->getSceneManager()->getRootSceneNode()->createChildSceneNode("GNOLL_CAMERA_SPLINE_NODE");
+			camNode->attachObject(camera);
+		}
 
-			/*
-			 * Destructior
-			 */
-			virtual ~CameraFixe();
-		};
+		OgreCameraSplineWrapper::~OgreCameraSplineWrapper()
+		{
+			// Detach the camera from the scene node
+			// -------------------------------------
+			Ogre::SceneNode* camNode = CGraphicModule::getInstancePtr()->getSceneManager()->getRootSceneNode()->createChildSceneNode("GNOLL_CAMERA_SPLINE_NODE");
+			camNode->detachObject(camera);
+		}
 	};
 };
-
-#endif

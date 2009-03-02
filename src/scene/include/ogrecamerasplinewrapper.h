@@ -18,37 +18,31 @@
  ***************************************************************************/
 
 /****************************** Summary ************************************
- * This is an implementation of a Fixe (not movable) camera                *
+ * This is an implement of camera spline wrapper for Ogre                  *
  ***************************************************************************/
 
-#ifndef INCLUDED_CAMERAFIXE
-#define INCLUDED_CAMERAFIXE
+#ifndef INCLUDED_OGRECAMERASPLINEWRAPPER
+#define INCLUDED_OGRECAMERASPLINEWRAPPER
 
-#include "camera.h"
+#include "ogrecamerawrapper.h"
 
 namespace Gnoll
 {
 	namespace Scene
 	{
-		/*
-		 * Structure that contains camera attributs
-		 */
-		class CameraFixe : public Camera
+		class OgreCameraSplineWrapper : public OgreCameraWrapper
 		{
-		public:
-			/*
-			 * Default constructor, it initializes the camera with default settings :
-			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
-			 */
-			explicit CameraFixe(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
+			public:
+				/*
+				 * Constructor
+				 * @param name The name of the camera
+				 */
+				OgreCameraSplineWrapper(const Glib::ustring& name);
 
-			/*
-			 * Destructior
-			 */
-			virtual ~CameraFixe();
+				/*
+				 * Destructor
+				 */
+				virtual ~OgreCameraSplineWrapper();
 		};
 	};
 };

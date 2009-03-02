@@ -26,6 +26,7 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
+#include "../include/ogrecamerawrapper.h"
 #include "../include/camerafreeflyfactory.h"
 #include "../include/camerafreefly.h"
 #include "../include/defaultcamerafreeflylistener.h"
@@ -43,10 +44,14 @@ namespace Gnoll
 	{
 		boost::shared_ptr<Camera> CameraFreeFlyFactory::createCamera(const Glib::ustring& instanceName)
 		{
+            // Create the wrapper
+            // ------------------
+			shared_ptr<OgreCameraWrapper> wrapper = shared_ptr<OgreCameraWrapper>(new OgreCameraWrapper(instanceName));
+
 			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
 			shared_ptr<CMessageListenerCamera> listenerInput(new DefaultCameraFreeFlyListener);
 			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
-			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFreeFly(instanceName));
+			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFreeFly(instanceName, wrapper));
 			listenerInput->setCamera(pCam);
 
 			return pCam;

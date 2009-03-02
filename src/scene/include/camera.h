@@ -32,9 +32,8 @@
 
 #include <glibmm/ustring.h>
 #include <OgreSceneNode.h>
-#include <OgreVector3.h>
-#include <OgreCamera.h>
 #include <map>
+#include "camerawrapper.h"
 #include "../../dynamicobject/include/cdynamicobjectproxy.h"
 #include "../../core/include/cmessagetype.h"
 
@@ -57,11 +56,6 @@ namespace Gnoll
 				QueueListener queueListener;
 
 				/*
-				 * This is a pointer to an Ogre3D Camera
-				 */
-				Ogre::Camera* pOgreCamera;
-
-				/*
 				 * This is the name of the target (load from scenemanager, "" means no target
 				 */
 				Glib::ustring target;
@@ -79,6 +73,11 @@ namespace Gnoll
 				explicit Camera(const Camera& copy);
 
 			protected:
+                /*
+				 * This is a pointer to a Camera Wrapper
+				 */
+				shared_ptr<CameraWrapper> cameraWrapper;
+
 				/*
 				 * This is a map for the speed movement of camera
 				 */
@@ -91,7 +90,7 @@ namespace Gnoll
 				 * @param instanceName This is the instance name of the camera, it will be use for the
 				 * 					   instance name of the Ogre Camera
 				 */
-				explicit Camera(const Glib::ustring& instanceName);
+				explicit Camera(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
 
 				/*
 				 * Helper method for setTarget()
@@ -106,36 +105,6 @@ namespace Gnoll
 				virtual ~Camera();
 
 				/*
-				 * Acessor to the near value
-				 * @return the near value
-				 */
-				float getNearValue() const;
-
-				/*
-				 * Acessor to the far value
-				 * @return the far value
-				 */
-				float getFarValue() const;
-
-				/*
-				 * Acessor to the fov value
-				 * @return the fov value
-				 */
-				float getFovValue() const;
-
-				/*
-				 * Accessor to get the position
-				 * @return the current position of the camera
-				 */
-				const Ogre::Vector3& getPosition() const;
-
-				/*
-				 * Accessor to get the direction
-				 * @return the current direction of the camera
-				 */
-				Ogre::Vector3 getDirection() const;
-
-				/*
 				 * Accessor to get the target name
 				 * @return the name of the target in the scenemanager
 				 */
@@ -148,55 +117,10 @@ namespace Gnoll
 				Ogre::SceneNode* getTarget() const;
 
 				/*
-				 * Accessor to get the orientation
-				 * @return the current orientation of the camera
+				 * Accessor to get the Camera Wrapper
+				 * @return the Camera Wrapper
 				 */
-				Ogre::Quaternion getOrientation() const;
-
-				/*
-				 * Accessor to get the up vector
-				 * @return the current up vector
-				 */
-				Ogre::Vector3 getUp() const;
-
-				/*
-				 * Accessor to get the current view matrix
-				 * @return the current view matrix
-				 */
-				Ogre::Matrix4 getView() const;
-
-				/*
-				 * Accessor to get the OgreCamera
-				 * @return the OgreCamera
-				 */
-				Ogre::Camera* getOgreCamera();
-
-				/*
-				 * Settor to set the near value
-				 * @param near This is the near value to set, the method take the absolute value
-				 * 			   of this parameter, and must be more less than far value (not equal)
-				 */
-				void setNearValue(float near);
-
-				/*
-				 * Settor to set the far value
-				 * @param far This is the far value to set, the method take the absolute value
-				 * 			  of this parameter, and must be greater than near value (not equal)
-				 */
-				void setFarValue(float far);
-
-				/*
-				 * Settor to set the fov value
-				 * @param fov This is the fov value to set, the method take the absolute value
-				 */
-				void setFovValue(float fov);
-
-				/*
-				 * Settor to set the new position of the camera
-				 * @param position This is the new position, it must be different to the target
-				 * 				   position (see setPosition of OgreCamera)
-				 */
-				void setPosition(const Ogre::Vector3& position);
+			    CameraWrapper* getCameraWrapper();
 
 				/*
 				 * Settor to set the new target of the camera
@@ -204,12 +128,6 @@ namespace Gnoll
 				 * @param autofocus This specify if the camera follow the object (orientation)
 				 */
 				virtual void setTarget(const Glib::ustring& target, bool autofocus = true);
-
-				/*
-				 * Settor to set the orientation
-				 * @param orientation This is the new orientation
-				 */
-				void setOrientation(const Ogre::Quaternion& orientation);
 
 				/*
 				 * Put a new listener in the queue of the camera

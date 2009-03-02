@@ -25,6 +25,7 @@
 |               04/12/2008 - Gabriel - Initial release                      |
 \*-------------------------------------------------------------------------*/
 
+#include "../include/ogrecamerawrapper.h"
 #include "../include/camerafirstpersonfactory.h"
 #include "../include/camerafirstperson.h"
 #include "../include/defaultcamerafirstpersonlistener.h"
@@ -42,14 +43,15 @@ namespace Gnoll
 	{
 		boost::shared_ptr<Camera> CameraFirstPersonFactory::createCamera(const Glib::ustring& instanceName)
 		{
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+            // Create the wrapper
+            // ------------------
+            shared_ptr<OgreCameraWrapper> wrapper = shared_ptr<OgreCameraWrapper>(new OgreCameraWrapper(instanceName));
 
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(
 															   new Gnoll::Scene::DefaultCameraFirstPersonListener);
 			messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
-
-			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFirstPerson(instanceName));
-
+			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFirstPerson(instanceName, wrapper));
 			listenerInput->setCamera(pCam);
 
 			return pCam;

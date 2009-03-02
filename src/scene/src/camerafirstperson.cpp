@@ -34,8 +34,8 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName) :
-			Camera(instanceName)
+		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper) :
+			Camera(instanceName, wrapper)
 		{
             Ogre::Vector3* pPosition = NULL;
             Ogre::SceneNode* pTarget = getTarget();
@@ -84,7 +84,7 @@ namespace Gnoll
 			// Process to the position of the camera
 			// -------------------------------------
 			Ogre::Vector3* newPosition = new Ogre::Vector3(pTarget->getPosition() + *getHeadPosition());
-			setPosition(*newPosition);
+			cameraWrapper->setPosition(*newPosition);
 		}
 	};
 };

@@ -31,6 +31,10 @@
 #include <sstream>
 #include <OgreRoot.h>
 #include <OgreSceneManager.h>
+#include "../include/ogrecamerawrapper.h"
+#include "../include/cameramanager.h"
+#include "../include/cscenemanager.h"
+#include "../include/cpage.h"
 #include "../../time/include/ctimemodule.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../core/include/sourcefile.h"
@@ -142,19 +146,6 @@ namespace Gnoll
 
 				// Load the camera
 				shared_ptr<Camera> currentCamera = cameraManager->load(*instanceCamera);
-
-				Ogre::Root *ogreRoot = Ogre::Root::getSingletonPtr();
-				if (ogreRoot->getRenderSystem()->getCapabilities()->hasCapability(RSC_INFINITE_FAR_PLANE))
-				{
-					currentCamera->setFarValue(0);
-				}
-
-				// Get back the RenderWindow to set the camera
-				Ogre::RenderWindow* renderWindow = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getRenderWindow();
-
-				// Set the camera in the viewport [Current camera]
-				Viewport* vp = renderWindow->addViewport(currentCamera->getOgreCamera());
-				vp->setBackgroundColour(ColourValue(0.5, 1, 0));
 			} else
 			{
 				GNOLL_LOG() << "No currentCamera attribute found for scene manager " << this->getInstance() << "\n";
@@ -380,7 +371,7 @@ namespace Gnoll
 				// Load the camera
 				shared_ptr<Camera> currentCamera = cameraManager->load(*instanceCamera);
 
-				Ogre::Vector3 cameraPos = currentCamera->getPosition();
+				Ogre::Vector3 cameraPos = currentCamera->getCameraWrapper()->getPosition();
 
 				shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>( CSceneManager::ATTRIBUTE_FOCUSED_PAGE() );
 				shared_ptr<CPage> page = shared_ptr<CPage>( new CPage(*focusedPageName));
@@ -420,7 +411,7 @@ namespace Gnoll
 
 							// Translate all visible pages and camera
 							this->translateVisiblePages( translatingVector );
-							currentCamera->setPosition( currentCamera->getPosition() - translatingVector );
+							currentCamera->getCameraWrapper()->setPosition( currentCamera->getCameraWrapper()->getPosition() - translatingVector );
 
 							// Set focused page
 							this->setAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE(), neighborInstanceName);
@@ -439,7 +430,7 @@ namespace Gnoll
 							GNOLL_LOG() << "    Translating vector : " << translatingVector;
 							// Translate all visible pages and camera
 							this->translateVisiblePages( translatingVector );
-							currentCamera->setPosition( currentCamera->getPosition() - translatingVector );
+							currentCamera->getCameraWrapper()->setPosition( currentCamera->getCameraWrapper()->getPosition() - translatingVector );
 
 							// Set focused page
 							this->setAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE(), neighborInstanceName);
@@ -460,7 +451,7 @@ namespace Gnoll
 							GNOLL_LOG() << "    Translating vector : " << translatingVector;
 							// Translate all visible pages and camera
 							this->translateVisiblePages( translatingVector );
-							currentCamera->setPosition( currentCamera->getPosition() - translatingVector );
+							currentCamera->getCameraWrapper()->setPosition( currentCamera->getCameraWrapper()->getPosition() - translatingVector );
 
 							// Set focused page
 							this->setAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE(), neighborInstanceName);
@@ -477,7 +468,7 @@ namespace Gnoll
 							GNOLL_LOG() << "    Translating vector : " << translatingVector;
 							// Translate all visible pages and camera
 							this->translateVisiblePages( translatingVector );
-							currentCamera->setPosition( currentCamera->getPosition() - translatingVector );
+							currentCamera->getCameraWrapper()->setPosition( currentCamera->getCameraWrapper()->getPosition() - translatingVector );
 
 							// Set focused page
 							this->setAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE(), neighborInstanceName);
@@ -495,7 +486,7 @@ namespace Gnoll
 
 
 					// Check conditions
-					cameraPos = currentCamera->getPosition();
+					cameraPos = currentCamera->getCameraWrapper()->getPosition();
 					if (abs(cameraPos.x) > *pageSize )
 					{
 						cameraInDifferentPageX = true;

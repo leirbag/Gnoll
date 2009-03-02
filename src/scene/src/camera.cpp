@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "../include/camera.h"
+#include "../include/camerawrapper.h"
 #include "../include/cmessagelistenercamera.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../core/include/cmessagemodule.h"
@@ -38,6 +39,7 @@
 #include "../../dynamicobject/include/vector3.h"
 #include <sstream>
 #include <queue>
+#include <OgreRoot.h>
 
 #include "../../config.h"
 
@@ -49,7 +51,7 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		Camera::Camera(const Glib::ustring& instanceName) :
+		Camera::Camera(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper) :
 			CDynamicObjectProxy(instanceName)
 		{
 
@@ -61,7 +63,7 @@ namespace Gnoll
 
 			// Create the camera in the scenemanager
 			// -------------------------------------
-			pOgreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(instanceName);
+			cameraWrapper = shared_ptr<CameraWrapper>(wrapper);
 
 			// Extract Camera's near, far and fov value
 			// ----------------------------------------
@@ -69,20 +71,28 @@ namespace Gnoll
 			shared_ptr<Float> far_value;
 			shared_ptr<Float> fov_value;
 			shared_ptr<Float> default_near = shared_ptr<Float> (new Float(1.0f));
-			shared_ptr<Float> default_far = shared_ptr<Float> (new Float(200.0f));
+			shared_ptr<Float> default_far = shared_ptr<Float> (new Float(1000.0f));
 			shared_ptr<Float> default_fov = shared_ptr<Float> (new Float(3.14/4.0f)); // TODO : change this to the real value
 
 			near_value = this->getAttributeOrDefault<Float>("near", default_near);
 			far_value = this->getAttributeOrDefault<Float>("far", default_far);
 			fov_value = this->getAttributeOrDefault<Float>("fov", default_fov);
 
-			setNearValue(*near_value);
-			setFarValue(*far_value);
-			setFovValue(*fov_value);
+			cameraWrapper->setNearValue(*near_value);
+			cameraWrapper->setFarValue(*far_value);
+			cameraWrapper->setFovValue(*fov_value);
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Near: " << *near_value << ";\t";
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Far: " << *far_value << ";\t";
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Fov: " << *fov_value << "\n";
+			// Infinite far plane?
+			// -------------------
+			Ogre::Root* ogreRoot = Ogre::Root::getSingletonPtr();
+			if (ogreRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
+			{
+				cameraWrapper->setFarValue(0);
+			}
+
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Near: " << cameraWrapper->getNearValue() << ";\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Far: " << cameraWrapper->getFarValue() << ";\t";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Fov: " << cameraWrapper->getFovValue() << "\n";
 
 			// Extract Camera's position
 			// -------------------------
@@ -91,9 +101,9 @@ namespace Gnoll
 
 			// We need to convert the DO Vector3 to Ogre::Vector3 (inheritance)
 			// ----------------------------------------------------------------
-			pOgreCamera->setPosition(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
+			cameraWrapper->setPosition(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Position: " << pOgreCamera->getPosition() << "\n";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Position: " << cameraWrapper->getPosition() << "\n";
 
 			// Extract Camera's direction
 			// --------------------------
@@ -103,9 +113,9 @@ namespace Gnoll
 
 			// We need to convert the DO Vector3 to Ogre::Vector3 (inheritance)
 			// ----------------------------------------------------------------
-			pOgreCamera->setDirection(*dynamic_pointer_cast<Ogre::Vector3>(temp_dir));
+			cameraWrapper->setDirection(*dynamic_pointer_cast<Ogre::Vector3>(temp_dir));
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Direction: " << pOgreCamera->getDirection() << "\n";
+			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Direction: " << cameraWrapper->getDirection() << "\n";
 
 			// Extract Camera's movement configuration
 			// ---------------------------------------
@@ -154,26 +164,26 @@ namespace Gnoll
 
 			// near
 			// ----
-			shared_ptr<Float> near_value(new Float(getNearValue()));
+			shared_ptr<Float> near_value(new Float(cameraWrapper->getNearValue()));
 			this->setAttribute("near", near_value);
 
 			// far
 			// ---
-			shared_ptr<Float> far_value(new Float(getFarValue()));
+			shared_ptr<Float> far_value(new Float(cameraWrapper->getFarValue()));
 			this->setAttribute("far", far_value);
 
 			// fov
 			// ---
-			shared_ptr<Float> fov_value(new Float(getFovValue()));
+			shared_ptr<Float> fov_value(new Float(cameraWrapper->getFovValue()));
 			this->setAttribute("fov", fov_value);
 
 			// Position
 			// --------
-			setAttribute("Position", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(pOgreCamera->getPosition())));
+			setAttribute("Position", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(cameraWrapper->getPosition())));
 
 			// Direction
 			// ---------
-			setAttribute("Direction", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(pOgreCamera->getDirection())));
+			setAttribute("Direction", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(cameraWrapper->getDirection())));
 
 			// Target
 			// ------
@@ -192,36 +202,6 @@ namespace Gnoll
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Saving camera [" + this->getInstance() + "]" );
 		}
 
-		float Camera::getNearValue() const
-		{
-			return pOgreCamera->getNearClipDistance();
-		}
-
-		float Camera::getFarValue() const
-		{
-			return pOgreCamera->getFarClipDistance();
-		}
-
-		float Camera::getFovValue() const
-		{
-			return pOgreCamera->getAspectRatio();
-		}
-
-		const Ogre::Vector3& Camera::getPosition() const
-		{
-			return pOgreCamera->getPosition();
-		}
-
-		Ogre::Vector3 Camera::getDirection() const
-		{
-			return pOgreCamera->getDirection();
-		}
-
-		Ogre::Quaternion Camera::getOrientation() const
-		{
-			return pOgreCamera->getOrientation();
-		}
-
 		const Glib::ustring& Camera::getTargetName() const
 		{
 			return target;
@@ -235,42 +215,9 @@ namespace Gnoll
 			return CGraphicModule::getInstancePtr()->getSceneManager()->getSceneNode(target);
 		}
 
-		Ogre::Camera* Camera::getOgreCamera()
+		CameraWrapper* Camera::getCameraWrapper()
 		{
-			return pOgreCamera;
-		}
-
-		Ogre::Vector3 Camera::getUp() const
-		{
-			return pOgreCamera->getUp();
-		}
-
-		Ogre::Matrix4 Camera::getView() const
-		{
-			return pOgreCamera->getViewMatrix();
-		}
-
-		void Camera::setNearValue(float near)
-		{
-			if(fabs(near) > getFarValue())
-				return;
-
-			pOgreCamera->setNearClipDistance(near);
-		}
-
-		void Camera::setFarValue(float far)
-		{
-			pOgreCamera->setFarClipDistance(far);
-		}
-
-		void Camera::setFovValue(float fov)
-		{
-			pOgreCamera->setAspectRatio(fov);
-		}
-
-		void Camera::setPosition(const Ogre::Vector3& position)
-		{
-			pOgreCamera->setPosition(position);
+			return cameraWrapper.get();
 		}
 
 		void Camera::setTargetHelper(const Glib::ustring& target)
@@ -282,7 +229,7 @@ namespace Gnoll
 		{
 			// Set the auto tracking on the target
 			// -----------------------------------
-			pOgreCamera->setAutoTracking(autofocus, getTarget());
+			cameraWrapper->setAutoTracking(autofocus, getTarget());
 			setTargetHelper(target);
 
 			// Update the camera
@@ -298,11 +245,6 @@ namespace Gnoll
 		void Camera::setMovementInformation(const std::map<std::string, float>& mapConfiguration)
 		{
 			mapMovement = mapConfiguration;
-		}
-
-		void Camera::setOrientation(const Ogre::Quaternion& orientation)
-		{
-			pOgreCamera->setOrientation(orientation);
 		}
 
 		void Camera::update(float time)

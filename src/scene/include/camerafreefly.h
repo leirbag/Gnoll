@@ -20,9 +20,9 @@
 /****************************** Summary ************************************
  * This is an implementation of a Free Fly Camera, it provides some        *
  * services:                                                               *
- * 	- Move forward and backward                                        *
- * 	- Strafe on left/right/up/down                                     *
- * 	- Rotate the "at" position on each axes                            *
+ * 	- Move forward and backward                                            *
+ * 	- Strafe on left/right/up/down                                         *
+ * 	- Rotate the "at" position on each axes                                *
  ***************************************************************************/
 
 #ifndef INCLUDED_CAMERAFREEFLY
@@ -47,7 +47,7 @@ namespace Gnoll
 			 * @param instanceName This is the instance name of the camera, it will be use for the
 			 * 					   instance name of the Ogre Camera
 			 */
-			explicit CameraFreeFly(const Glib::ustring& instanceName);
+			explicit CameraFreeFly(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
 
 			/*
 			 * Destructior

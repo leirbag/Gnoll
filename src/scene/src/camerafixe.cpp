@@ -27,8 +27,8 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		CameraFixe::CameraFixe(const Glib::ustring& instanceName) :
-			Camera(instanceName)
+		CameraFixe::CameraFixe(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper) :
+			Camera(instanceName, wrapper)
 		{
 		}
 

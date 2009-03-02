@@ -26,8 +26,10 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
+#include "../include/ogrecamerawrapper.h"
 #include "../include/camerafixefactory.h"
 #include "../include/camerafixe.h"
+#include "../include/ogrecamerawrapper.h"
 
 namespace Gnoll
 {
@@ -35,7 +37,8 @@ namespace Gnoll
 	{
 		boost::shared_ptr<Camera> CameraFixeFactory::createCamera(const Glib::ustring& instanceName)
 		{
-			return boost::shared_ptr<Camera>(new CameraFixe(instanceName));
+            shared_ptr<OgreCameraWrapper> wrapper(new OgreCameraWrapper(instanceName));
+			return boost::shared_ptr<Camera>(new CameraFixe(instanceName, wrapper));
 		}
 	};
 };

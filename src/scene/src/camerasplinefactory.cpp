@@ -25,6 +25,7 @@
 |               04/12/2008 - Gabriel - Initial release                      |
 \*-------------------------------------------------------------------------*/
 
+#include "../include/ogrecamerasplinewrapper.h"
 #include "../include/camerasplinefactory.h"
 #include "../include/cameraspline.h"
 #include "../include/defaultcamerasplinelistener.h"
@@ -42,14 +43,14 @@ namespace Gnoll
 	{
 		boost::shared_ptr<Camera> CameraSplineFactory::createCamera(const Glib::ustring& instanceName)
 		{
+            // Create the wrapper
+            // ------------------
+            shared_ptr<OgreCameraSplineWrapper> wrapper = shared_ptr<OgreCameraSplineWrapper>(new OgreCameraSplineWrapper(instanceName));
+
 			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
-
 			shared_ptr<CMessageListenerCamera> listenerInput(new DefaultCameraSplineListener);
-
 			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
-
-			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraSpline(instanceName));
-
+			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraSpline(instanceName, wrapper));
 			listenerInput->setCamera(pCam);
 
 			return pCam;

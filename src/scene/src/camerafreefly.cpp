@@ -20,12 +20,13 @@
 /****************************** Summary ************************************
  * This is an implementation of a Free Fly Camera, it provides some        *
  * services:                                                               *
- * 	- Move forward and backward                                        *
- * 	- Strafe on left/right/up/down                                     *
- * 	- Rotate the "at" position on each axes                            *
+ * 	- Move forward and backward                                            *
+ * 	- Strafe on left/right/up/down                                         *
+ * 	- Rotate the "at" position on each axes                                *
  ***************************************************************************/
 
 #include "../include/camerafreefly.h"
+#include "../include/camerawrapper.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../log/include/clogmodule.h"
 #include <cmath>
@@ -36,8 +37,8 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName) :
-			Camera(instanceName)
+		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper) :
+			Camera(instanceName, wrapper)
 		{
 			rotationX = rotationY = rotationZ = 0.0f;
 		}
@@ -48,32 +49,32 @@ namespace Gnoll
 
 		void CameraFreeFly::strafeLR(float speed)
 		{
-			Ogre::Vector3 distance = getOgreCamera()->getPosition() + getOgreCamera()->getRight() * speed;
+			Ogre::Vector3 distance = cameraWrapper->getPosition() + cameraWrapper->getRight() * speed;
 			if(speed < 0)
 				distance *= mapMovement["STRAFE_LEFT"];
 			else
 				distance *= mapMovement["STRAFE_RIGHT"];
-			getOgreCamera()->setPosition(distance);
+		    cameraWrapper->setPosition(distance);
 		}
 
 		void CameraFreeFly::strafeUD(float speed)
 		{
-			Ogre::Vector3 distance = getOgreCamera()->getPosition() + getOgreCamera()->getUp() * speed;
+			Ogre::Vector3 distance = cameraWrapper->getPosition() + cameraWrapper->getUp() * speed;
 			if(speed < 0)
 				distance *= mapMovement["STRAFE_DOWN"];
 			else
 				distance *= mapMovement["STRAFE_UP"];
-			getOgreCamera()->setPosition(distance);
+			cameraWrapper->setPosition(distance);
 		}
 
 		void CameraFreeFly::move(float speed)
 		{
-			Ogre::Vector3 distance = getOgreCamera()->getPosition() + getOgreCamera()->getDirection() * speed;
+			Ogre::Vector3 distance = cameraWrapper->getPosition() + cameraWrapper->getDirection() * speed;
 			if(speed < 0)
 				distance *= mapMovement["MOVE_BACK"];
 			else
 				distance *= mapMovement["MOVE_FORWARD"];
-			getOgreCamera()->setPosition(distance);
+			cameraWrapper->setPosition(distance);
 		}
 
 		void CameraFreeFly::rotateAroundAxisX(float degree)
@@ -93,13 +94,13 @@ namespace Gnoll
 
 		void CameraFreeFly::update(float time)
 		{
-			getOgreCamera()->yaw(Ogre::Radian(Ogre::Degree(rotationY * mapMovement["ROTATION_AXIS_X"])));
-			getOgreCamera()->pitch(Ogre::Radian(Ogre::Degree(rotationX * mapMovement["ROTATION_AXIS_Y"])));
-			getOgreCamera()->roll(Ogre::Radian(Ogre::Degree(rotationZ * mapMovement["ROTATION_AXIS_Z"])));
+			cameraWrapper->yaw(Ogre::Radian(Ogre::Degree(rotationY * mapMovement["ROTATION_AXIS_Y"])));
+			cameraWrapper->pitch(Ogre::Radian(Ogre::Degree(rotationX * mapMovement["ROTATION_AXIS_X"])));
+			cameraWrapper->roll(Ogre::Radian(Ogre::Degree(rotationZ * mapMovement["ROTATION_AXIS_Z"])));
 			rotationX = rotationY = rotationZ = 0.0f;
-			Ogre::Quaternion q = getOgreCamera()->getOrientation();
+			Ogre::Quaternion q = cameraWrapper->getOrientation();
 			q.normalise();
-			getOgreCamera()->setOrientation(q);
+			cameraWrapper->setOrientation(q);
 		}
 	};
 };

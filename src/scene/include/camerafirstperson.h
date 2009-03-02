@@ -20,8 +20,7 @@
 /****************************** Summary ************************************
  * This is an implementation of a First Person Camera, it provides some    *
  * services:                                                               *
- * 	- Set up of a "head" position                                      *
- * The
+ * 	- Set up of a "head" position                                          *
  ***************************************************************************/
 
 #ifndef INCLUDED_CAMERAFIRSTPERSON
@@ -48,7 +47,7 @@ namespace Gnoll
 			 * @param instanceName This is the instance name of the camera, it will be use for the
 			 * 					   instance name of the Ogre Camera
 			 */
-			explicit CameraFirstPerson(const Glib::ustring& instanceName);
+			explicit CameraFirstPerson(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
 
 			/*
 			 * Destructior

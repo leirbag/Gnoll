@@ -20,14 +20,15 @@
 /****************************** Summary ************************************
  * This is an implementation of a Spline Camera, it provides some          *
  * services:                                                               *
- * 	- Add/Get/Remove a point at a time                                 *
- * 	- Define the length of the spline                                  *
- * 	- Start/Stop/Loop the animation                                    *
+ * 	- Add/Get/Remove a point at a time                                     *
+ * 	- Define the length of the spline                                      *
+ * 	- Start/Stop/Loop the animation                                        *
  * A spline camera, it's an animation camera that will follow a path       *
  * (spline) defined by the user                                            *
  ***************************************************************************/
 
 #include "../include/cameraspline.h"
+#include "../include/ogrecamerawrapper.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../dynamicobject/include/dynamicobject.h"
@@ -90,8 +91,8 @@ namespace Gnoll
 		/*
 		 * CLASS
 		 */
-		CameraSpline::CameraSpline(const Glib::ustring& instanceName) :
-			Camera(instanceName)
+		CameraSpline::CameraSpline(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper) :
+			Camera(instanceName, wrapper)
 		{
 			// Extract the length of the animation
 			// -----------------------------------
@@ -103,10 +104,9 @@ namespace Gnoll
 			// --------------------
 			Ogre::SceneManager* pSM = CGraphicModule::getInstancePtr()->getSceneManager();
 
-			// Create a scene node of the camera
-			// ---------------------------------
-			Ogre::SceneNode* camNode = pSM->getRootSceneNode()->createChildSceneNode();
-			camNode->attachObject(getOgreCamera());
+			// Get back the camera Scene Node
+			// ------------------------------
+			Ogre::SceneNode* camNode = pSM->getRootSceneNode()->createChildSceneNode("GNOLL_CAMERA_SPLINE_NODE");
 
 			// Create the animation with a SPLINE
 			// ----------------------------------

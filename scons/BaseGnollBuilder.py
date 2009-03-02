@@ -317,7 +317,9 @@ class BaseGnollBuilder:
 			'src/scene/src/camerafreefly.cpp',
 			'src/scene/src/camerafreeflyfactory.cpp',
 			'src/scene/src/cameramanager.cpp',
-			'src/scene/src/cstaticgobject.cpp'
+			'src/scene/src/cstaticgobject.cpp',
+            'src/scene/src/ogrecamerawrapper.cpp',
+            'src/scene/src/ogrecamerasplinewrapper.cpp'
 			]
 
 		return sceneSourceFiles
