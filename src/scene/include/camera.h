@@ -20,10 +20,10 @@
 /****************************** Summary ************************************
  * This is an abstract class of camera. We can't directly use this camera  *
  * but it provides some services:                                          *
- * 	- Management of listener                                           *
- * 	- Management of target                                             *
- * 	- Set up of serveral parameters: up, eye, at, far, near, fov,      *
- * 	  movement factor                                                  *
+ * 	- Management of listener                                             *
+ * 	- Management of target                                               *
+ * 	- Set up of serveral parameters: up, eye, at, far, near, fov,        *
+ * 	  movement factor                                                    *
  * This camera can change the orientation and the position too.            *
  ***************************************************************************/
 
@@ -73,7 +73,7 @@ namespace Gnoll
 				explicit Camera(const Camera& copy);
 
 			protected:
-                /*
+				/*
 				 * This is a pointer to a Camera Wrapper
 				 */
 				shared_ptr<CameraWrapper> cameraWrapper;
@@ -120,7 +120,7 @@ namespace Gnoll
 				 * Accessor to get the Camera Wrapper
 				 * @return the Camera Wrapper
 				 */
-			    CameraWrapper* getCameraWrapper();
+				CameraWrapper* getCameraWrapper();
 
 				/*
 				 * Settor to set the new target of the camera

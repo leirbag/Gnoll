@@ -37,7 +37,7 @@ namespace Gnoll
 	{
 		boost::shared_ptr<Camera> CameraFixeFactory::createCamera(const Glib::ustring& instanceName)
 		{
-            shared_ptr<OgreCameraWrapper> wrapper(new OgreCameraWrapper(instanceName));
+			shared_ptr<OgreCameraWrapper> wrapper(new OgreCameraWrapper(instanceName));
 			return boost::shared_ptr<Camera>(new CameraFixe(instanceName, wrapper));
 		}
 	};

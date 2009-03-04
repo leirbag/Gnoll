@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 
-/*-------------------------------CameraFreeFlyFactory------------------*\
+/*----------------------------CameraFreeFlyFactory-------------------------*\
 |   This is a first person camera factory                                   |
 |                                                                           |
 |   Changelog :                                                             |
@@ -44,8 +44,8 @@ namespace Gnoll
 	{
 		boost::shared_ptr<Camera> CameraFreeFlyFactory::createCamera(const Glib::ustring& instanceName)
 		{
-            // Create the wrapper
-            // ------------------
+			// Create the wrapper
+			// ------------------
 			shared_ptr<OgreCameraWrapper> wrapper = shared_ptr<OgreCameraWrapper>(new OgreCameraWrapper(instanceName));
 
 			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();

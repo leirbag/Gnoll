@@ -20,9 +20,9 @@
 /****************************** Summary ************************************
  * This is an implementation of a Free Fly Camera, it provides some        *
  * services:                                                               *
- * 	- Move forward and backward                                            *
- * 	- Strafe on left/right/up/down                                         *
- * 	- Rotate the "at" position on each axes                                *
+ * 	- Move forward and backward                                           *
+ * 	- Strafe on left/right/up/down                                        *
+ * 	- Rotate the "at" position on each axes                               *
  ***************************************************************************/
 
 #include "../include/camerafreefly.h"
@@ -54,7 +54,7 @@ namespace Gnoll
 				distance *= mapMovement["STRAFE_LEFT"];
 			else
 				distance *= mapMovement["STRAFE_RIGHT"];
-		    cameraWrapper->setPosition(distance);
+			cameraWrapper->setPosition(distance);
 		}
 
 		void CameraFreeFly::strafeUD(float speed)

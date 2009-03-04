@@ -20,11 +20,11 @@
 /****************************** Summary ************************************
  * This is an implementation of a Third Person Camera, it provides some    *
  * services:                                                               *
- * 	- Set up of a "head" position                                          *
- * 	- Set up of an offset between the camera and target                    *
- * 	- Set up of a min and max offset                                       *
- * 	- Defines a rotation limit for each axes                               *
- * 	- Rotation on each axe around the target                               *
+ * 	- Set up of a "head" position                                        *
+ * 	- Set up of an offset between the camera and target                  *
+ * 	- Set up of a min and max offset                                     *
+ * 	- Defines a rotation limit for each axes                             *
+ * 	- Rotation on each axe around the target                             *
  ***************************************************************************/
 
 #ifndef INCLUDED_CAMERATHIRDPERSON

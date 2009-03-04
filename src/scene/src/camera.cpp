@@ -20,10 +20,10 @@
 /****************************** Summary ************************************
  * This is an abstract class of camera. We can't directly use this camera  *
  * but it provides some services:                                          *
- * 	- Management of listener                                           *
- * 	- Management of target                                             *
- * 	- Set up of serveral parameters: up, eye, at, far, near, fov,      *
- * 	  movement factor                                                  *
+ * 	- Management of listener                                              *
+ * 	- Management of target                                                *
+ * 	- Set up of serveral parameters: up, eye, at, far, near, fov,         *
+ * 	  movement factor                                                     *
  * This camera can change the orientation and the position too.            *
  ***************************************************************************/
 

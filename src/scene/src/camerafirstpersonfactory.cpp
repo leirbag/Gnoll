@@ -43,9 +43,9 @@ namespace Gnoll
 	{
 		boost::shared_ptr<Camera> CameraFirstPersonFactory::createCamera(const Glib::ustring& instanceName)
 		{
-            // Create the wrapper
-            // ------------------
-            shared_ptr<OgreCameraWrapper> wrapper = shared_ptr<OgreCameraWrapper>(new OgreCameraWrapper(instanceName));
+			// Create the wrapper
+			// ------------------
+			shared_ptr<OgreCameraWrapper> wrapper = shared_ptr<OgreCameraWrapper>(new OgreCameraWrapper(instanceName));
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(

@@ -20,7 +20,7 @@
 /****************************** Summary ************************************
  * This is an implementation of a First Person Camera, it provides some    *
  * services:                                                               *
- * 	- Set up of a "head" position                                          *
+ * 	- Set up of a "head" position                                         *
  ***************************************************************************/
 
 #ifndef INCLUDED_CAMERAFIRSTPERSON

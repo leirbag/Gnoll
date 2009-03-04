@@ -20,9 +20,9 @@
 /****************************** Summary ************************************
  * This is an implementation of a Spline Camera, it provides some          *
  * services:                                                               *
- * 	- Add/Get/Remove a point at a time                                     *
- * 	- Define the length of the spline                                      *
- * 	- Start/Stop/Loop the animation                                        *
+ * 	- Add/Get/Remove a point at a time                                    *
+ * 	- Define the length of the spline                                     *
+ * 	- Start/Stop/Loop the animation                                       *
  * A spline camera, it's an animation camera that will follow a path       *
  * (spline) defined by the user                                            *
  ***************************************************************************/
