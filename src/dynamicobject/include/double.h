@@ -50,7 +50,18 @@ namespace Gnoll
 		{
 			public:
 
-				Double(double _value = 0.0f) : Scalar<double>("double", _value) {};
+
+				/**
+				 * Returns Double's DynamicObject name
+				 * @return Double's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "double";}
+
+
+				/*
+				 * This is a constructor
+				 */
+				Double(double _value = 0.0f) : Scalar<double>(Double::DYNAMIC_OBJECT_NAME(), _value) {};
 
 		};
 
