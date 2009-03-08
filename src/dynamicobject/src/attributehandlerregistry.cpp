@@ -65,17 +65,17 @@ namespace Gnoll
 		AttributeHandlerRegistry::AttributeHandlerRegistry()
 		{
 			// Default handlers are added here
-			this->registerHandler(string("Vector3"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Vector3>()));
-			this->registerHandler(string("integer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Integer>()));
-			this->registerHandler(string("float"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Float>()));
-			this->registerHandler(string("string"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<String>()));
-			this->registerHandler(string("double"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Double>()));
-			this->registerHandler(string("list"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<List>()));
-			this->registerHandler(string("set"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Set>()));
-			this->registerHandler(string("inherits"), shared_ptr<IAttributeHandler>(new InheritsAttributeHandler()));
-			this->registerHandler(string("CMeshPageRenderer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CMeshPageRenderer>()));
-			this->registerHandler(string("cstaticgobject"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CStaticGObject>()));
-			this->registerHandler( Gnoll::Scene::GObject::DYNAMIC_OBJECT_NAME() , shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::GObject>()));
+			this->registerHandler(Vector3::DYNAMIC_OBJECT_NAME(),  shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Vector3>()));
+			this->registerHandler(Integer::DYNAMIC_OBJECT_NAME(),  shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Integer>()));
+			this->registerHandler(Float::DYNAMIC_OBJECT_NAME(),    shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Float>()));
+			this->registerHandler(String::DYNAMIC_OBJECT_NAME(),   shared_ptr<IAttributeHandler>(new GenericAttributeHandler<String>()));
+			this->registerHandler(Double::DYNAMIC_OBJECT_NAME(),   shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Double>()));
+			this->registerHandler(List::DYNAMIC_OBJECT_NAME(),     shared_ptr<IAttributeHandler>(new GenericAttributeHandler<List>()));
+			this->registerHandler(Set::DYNAMIC_OBJECT_NAME(),      shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Set>()));
+			this->registerHandler(Inherits::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new InheritsAttributeHandler()));
+			this->registerHandler(Gnoll::Scene::CMeshPageRenderer::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CMeshPageRenderer>()));
+			this->registerHandler(Gnoll::Scene::CStaticGObject::DYNAMIC_OBJECT_NAME(),    shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CStaticGObject>()));
+			this->registerHandler(Gnoll::Scene::GObject::DYNAMIC_OBJECT_NAME() ,          shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::GObject>()));
 
 		}
 
