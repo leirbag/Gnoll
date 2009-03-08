@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Paf                                             *
+ *   Copyright (C) 2009 by Bruno Mahe                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,9 +21,6 @@
 /*---------------------------------String----------------------------------*\
 |   This is a string attribute for DynamicObject                            |
 |                                                                           |
-|   Changelog :                                                             |
-|               10/03/2007 - Paf - Initial release                          |
-|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
@@ -39,7 +36,7 @@ namespace Gnoll {
 		 * Constructor
 		 * @param _value Initialiazion of the String value
 		 */
-		String::String(string _value) : Scalar<string>("string", _value)
+		String::String(string _value) : Scalar<string>(String::DYNAMIC_OBJECT_NAME(), _value)
 		{
 		}
 
@@ -59,15 +56,15 @@ namespace Gnoll {
 		 *
 	  	 * @param _element This is the XML tree containing the state of this object
 		 */
-		void String::deSerializeXML( xmlpp::Element* _element ) 
+		void String::deSerializeXML( xmlpp::Element* _element )
 		{
-				
+
 			if (_element == NULL)
 			{
 				return;
 			}
 
-			xmlpp::Attribute* attr = _element->get_attribute("value");
+			xmlpp::Attribute* attr = _element->get_attribute(String::ATTRIBUTE_VALUE());
 
 			if (attr == NULL)
 			{
@@ -75,14 +72,14 @@ namespace Gnoll {
 			}
 
 			this->setValue(attr->get_value());
-	
-		};		
+
+		};
 
 
 		/**
 		 * Overloading of the conversion string -> String operator
 		 * @param _rValue Value to convert from
-		 * @return Converted value 
+		 * @return Converted value
 		 */
 	 	Scalar<string> const & String::operator=(string _rValue)
 		{
@@ -93,7 +90,7 @@ namespace Gnoll {
 
 		/**
 		 * Overloading of the conversion String -> string operator
-		 * @return Converted value 
+		 * @return Converted value
 		 */
   		String::operator string()
 		{
@@ -151,7 +148,7 @@ namespace Gnoll {
 		{
 
 			string value;
-			if (_stream >> value)    
+			if (_stream >> value)
 			{
 				_str.setValue(value);
 			}

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Paf                                             *
+ *   Copyright (C) 2009 by Bruno Mahe                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,11 +21,6 @@
 /*---------------------------------string----------------------------------*\
 |   This is a string attribute for DynamicObject                            |
 |                                                                           |
-|   Changelog :                                                             |
-|               09/26/2007 - Paf - Initial release                          |
-|               10/03/2007 - Paf - Add some operators                       |
-|                                - Put definitions in string.cpp            |
-|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
@@ -34,9 +29,9 @@
 #define __STRING_H__
 
 
-#include "iattribute.h" 
-#include "scalar.h" 
-#include <string> 
+#include "iattribute.h"
+#include "scalar.h"
+#include <string>
 
 using namespace std;
 using namespace boost;
@@ -47,14 +42,29 @@ namespace Gnoll
 	{
 
 		/**
-		 *	This is a simple attribute. 
-		 */ 
+		 *	This is a simple attribute.
+		 */
 		class String : public Scalar<string>
 		{
 			public:
-	
+
 				/**
-		   	 * Constructor
+				 * Returns String's DynamicObject name
+				 * @return String's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "string";}
+
+
+				/**
+				 * Returns attribute name "value".<br/>
+				 * This attribute contains the value of a string
+				 * @return The attribute name "value"
+				 */
+				inline static const char * ATTRIBUTE_VALUE() {return "value";}
+
+
+				/**
+				 * Constructor
 				 * @param _value Initialiazion of the String value
 				 */
 				String(string _value = "");
@@ -79,14 +89,14 @@ namespace Gnoll
 				/**
 				 * Overloading of the conversion string -> String operator
 				 * @param _rValue Value to convert from
-				 * @return Converted value 
+				 * @return Converted value
 				 */
 			 	virtual Scalar<string> const &operator=(string _rValue);
 
 
 				/**
 				 * Overloading of the conversion String -> string operator
-				 * @return Converted value 
+				 * @return Converted value
 				 */
 		  		virtual operator string();
 
