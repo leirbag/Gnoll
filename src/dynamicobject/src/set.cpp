@@ -21,9 +21,6 @@
 /*---------------------------------Set-------------------------------------*\
 |   This is a set attribute for DynamicObject                               |
 |                                                                           |
-|   Changelog :                                                             |
-|               03/19/2008 - Bruno Mahe - Initial release                   |
-|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
@@ -54,7 +51,7 @@ namespace Gnoll {
 		{
 			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));
 
-			xmlpp::Element* root = document->create_root_node( "set" );
+			xmlpp::Element* root = document->create_root_node( Set::DYNAMIC_OBJECT_NAME() );
 
 			/**
 			 * We are going to serialize each child and add them as children of the list node
@@ -78,7 +75,7 @@ namespace Gnoll {
 				return;
 			}
 
-			if (_element->get_name() != "set")
+			if (_element->get_name() != Set::DYNAMIC_OBJECT_NAME())
 			{
 				return;
 			}

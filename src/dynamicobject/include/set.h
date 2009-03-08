@@ -21,9 +21,6 @@
 /*---------------------------------Set-------------------------------------*\
 |   This is a Set attribute for DynamicObject                               |
 |                                                                           |
-|   Changelog :                                                             |
-|               03/19/2008 - Bruno Mahe - Initial release                   |
-|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
@@ -66,6 +63,13 @@ namespace Gnoll
 		{
 
 			public:
+
+				/**
+				 * Returns Set's DynamicObject name
+				 * @return Set's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "set";}
+
 
 				/**
 				 * This is a constructor
