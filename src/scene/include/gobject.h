@@ -54,8 +54,8 @@ namespace Gnoll
 			public:
 
 				/**
-				 * Returns name a GObject DynamicObject
-				 * @return The name a GObject DynamicObject
+				 * Returns GObject's DynamicObject name
+				 * @return GObject's DynamicObject name
 				 */
 				inline static const char * DYNAMIC_OBJECT_NAME() {return "gobject";}
 
