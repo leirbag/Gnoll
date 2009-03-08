@@ -62,7 +62,7 @@ namespace Gnoll
 
 			if (root != NULL)
 			{
-				root->set_name( "gobject" );
+				root->set_name( GObject::DYNAMIC_OBJECT_NAME() );
 			}
 
 			return document;

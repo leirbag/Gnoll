@@ -52,6 +52,7 @@
 #include "../include/inherits.h"
 #include "../../scene/include/cmeshpagerenderer.h"
 #include "../../scene/include/cstaticgobject.h"
+#include "../../scene/include/gobject.h"
 
 
 
@@ -74,6 +75,7 @@ namespace Gnoll
 			this->registerHandler(string("inherits"), shared_ptr<IAttributeHandler>(new InheritsAttributeHandler()));
 			this->registerHandler(string("CMeshPageRenderer"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CMeshPageRenderer>()));
 			this->registerHandler(string("cstaticgobject"), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CStaticGObject>()));
+			this->registerHandler( Gnoll::Scene::GObject::DYNAMIC_OBJECT_NAME() , shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::GObject>()));
 
 		}
 

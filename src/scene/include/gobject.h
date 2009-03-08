@@ -54,6 +54,12 @@ namespace Gnoll
 			public:
 
 				/**
+				 * Returns name a GObject DynamicObject
+				 * @return The name a GObject DynamicObject
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "gobject";}
+
+				/**
 				 * Returns attribute name "components".<br/>
 				 * This attribute contains the list of all components belonging to the GObject
 				 * @return The attribute name "components"
