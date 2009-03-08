@@ -18,11 +18,9 @@
  ***************************************************************************/
 
 
-/*---------------------------------Vector3----------------------------------*\
+  /*---------------------------------Vector3----------------------------------*\
   |   This is a vector3 attribute for DynamicObject                            |
-  |                                                                           |
-  |   Changelog :                                                             |
-  |               11/16/2008 - Gabriel - Initial release                          |
+  |                                                                            |
   \*-------------------------------------------------------------------------*/
 
 
@@ -49,13 +47,17 @@ namespace Gnoll
 		shared_ptr<xmlpp::Document> Vector3::serializeXML()
 		{
 			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));
-			xmlpp::Element* root = document->create_root_node( "Vector3" );
+			xmlpp::Element* root = document->create_root_node( Vector3::DYNAMIC_OBJECT_NAME() );
+
 			string finalString = lexical_cast<string> (x);
-			root->set_attribute("x", finalString);
+			root->set_attribute(Vector3::ATTRIBUTE_X(), finalString);
+
 			finalString = lexical_cast<string> (y);
-			root->set_attribute("y", finalString);
+			root->set_attribute(Vector3::ATTRIBUTE_Y(), finalString);
+
 			finalString = lexical_cast<string> (z);
-			root->set_attribute("z", finalString);
+			root->set_attribute(Vector3::ATTRIBUTE_Z(), finalString);
+
 			return document;
 		}
 
@@ -66,9 +68,9 @@ namespace Gnoll
 				return;
 			}
 
-			xmlpp::Attribute* attrX = _element->get_attribute("x");
-			xmlpp::Attribute* attrY = _element->get_attribute("y");
-			xmlpp::Attribute* attrZ = _element->get_attribute("z");
+			xmlpp::Attribute* attrX = _element->get_attribute(Vector3::ATTRIBUTE_X());
+			xmlpp::Attribute* attrY = _element->get_attribute(Vector3::ATTRIBUTE_Y());
+			xmlpp::Attribute* attrZ = _element->get_attribute(Vector3::ATTRIBUTE_Z());
 
 			if (attrX == NULL || attrY == NULL || attrZ == NULL)
 			{

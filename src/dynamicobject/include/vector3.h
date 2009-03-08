@@ -18,11 +18,9 @@
  ***************************************************************************/
 
 
-/*---------------------------------vector3---------------------------------*\
+  /*---------------------------------Vector3---------------------------------*\
   |   This is a basic container supposed to a vector3 basic type              |
   |                                                                           |
-  |   Changelog :                                                             |
-  |               11/16/2008 - Gabriel - Initial release                      |
   \*-------------------------------------------------------------------------*/
 
 
@@ -43,7 +41,43 @@ namespace Gnoll
 		class Vector3 : public IAttribute, public Ogre::Vector3
 		{
 			public:
+
+				/**
+				 * Returns Vector3's DynamicObject name
+				 * @return Vector3's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "vector3";}
+
+
+				/**
+				 * Returns attribute name "x".<br/>
+				 * This attribute contains the X component of a vector
+				 * @return The attribute name "x"
+				 */
+				inline static const char * ATTRIBUTE_X() {return "x";}
+
+
+				/**
+				 * Returns attribute name "y".<br/>
+				 * This attribute contains the Y component of a vector
+				 * @return The attribute name "y"
+				 */
+				inline static const char * ATTRIBUTE_Y() {return "y";}
+
+
+				/**
+				 * Returns attribute name "z".<br/>
+				 * This attribute contains the Z component of a vector
+				 * @return The attribute name "z"
+				 */
+				inline static const char * ATTRIBUTE_Z() {return "z";}
+
+
+				/**
+				 * This is a constructor
+				 */
 				Vector3(const Ogre::Vector3& vec = Ogre::Vector3(0, 0, 0));
+
 
 				/**
 				 * This is a destructor
@@ -72,4 +106,4 @@ namespace Gnoll
 	};
 };
 
-#endif // __INTEGER_H__
+#endif // __VECTOR3_H__
