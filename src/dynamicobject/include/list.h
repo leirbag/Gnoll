@@ -21,9 +21,6 @@
 /*----------------------------------List-----------------------------------*\
 |   This is a List attribute for DynamicObject                              |
 |                                                                           |
-|   Changelog :                                                             |
-|               09/26/2007 - Paf - Initial release                          |
-|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
@@ -53,10 +50,15 @@ namespace Gnoll
 		 */
 		class List : public list< shared_ptr<IAttribute> >, public IAttribute
 		{
-			private:
-
 
 			public:
+
+				/**
+				 * Returns List's DynamicObject name
+				 * @return List's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "list";}
+
 
 				/**
 				 * This is a constructor

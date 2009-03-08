@@ -44,12 +44,12 @@ namespace Gnoll {
 		}
 
 
-		shared_ptr<xmlpp::Document> List::serializeXML() 
+		shared_ptr<xmlpp::Document> List::serializeXML()
 		{
-			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));  
+			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));
 
-			xmlpp::Element* root = document->create_root_node( "list" );
-	
+			xmlpp::Element* root = document->create_root_node( List::DYNAMIC_OBJECT_NAME() );
+
 			/**
 			 * We are going to serialize each child and add them as children of the list node
 			 */
@@ -61,18 +61,18 @@ namespace Gnoll {
 			}
 
 			return document;
-		};		
+		};
 
 
-		void List::deSerializeXML( xmlpp::Element* _element ) 
+		void List::deSerializeXML( xmlpp::Element* _element )
 		{
-					
+
 			if (_element == NULL)
 			{
 				return;
 			}
 
-			if (_element->get_name() != "list")
+			if (_element->get_name() != List::DYNAMIC_OBJECT_NAME())
 			{
 				return;
 			}
@@ -92,7 +92,7 @@ namespace Gnoll {
 				{
 
 					shared_ptr<Gnoll::DynamicObject::IAttributeHandler> handler = registry->getHandler(name);
-	
+
 					// Check if a handler is available for this attribute
 					if (handler.get() != NULL)
 					{
@@ -106,7 +106,7 @@ namespace Gnoll {
 
 			}
 
-		};		
+		};
 
 	}
 }
