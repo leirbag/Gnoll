@@ -32,8 +32,8 @@
 #define __FLOAT_H__
 
 
-#include "iattribute.h" 
-#include "scalar.h" 
+#include "iattribute.h"
+#include "scalar.h"
 
 using namespace std;
 using namespace boost;
@@ -44,14 +44,23 @@ namespace Gnoll
 	{
 
 		/**
-		 *	This is a simple attribute. 
-		 */ 
+		 *	This is a simple attribute.
+		 */
 		class Float : public Scalar<float>
 		{
 			public:
-		
-				Float(float _value = 0.0f) : Scalar<float>("float", _value) {};
-		
+
+
+				/**
+				 * Returns Float's DynamicObject name
+				 * @return Float's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "float";}
+
+
+
+				Float(float _value = 0.0f) : Scalar<float>(Float::DYNAMIC_OBJECT_NAME(), _value) {};
+
 		};
 
 	}
