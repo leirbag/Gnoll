@@ -43,16 +43,16 @@ namespace Gnoll
 	namespace Scene
 	{
 
-		
+
 		CMeshPageRenderer::CMeshPageRenderer()
 		{
 		}
 
-				
+
 		CMeshPageRenderer::~CMeshPageRenderer()
 		{
 		}
-				
+
 
 		void CMeshPageRenderer::init( CPage*  _parentPage )
 		{
@@ -65,56 +65,56 @@ namespace Gnoll
 
 			std::string entName = _parentPage->getInstance() + "_entity";
 			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
-			
+
 			Ogre::Entity *ent = sm->createEntity( entName, m_meshName );
 			pageNode->attachObject( ent );
-			
+
 		}
-		
-				
+
+
 		void CMeshPageRenderer::update()
 		{
 		}
-		
-				
+
+
 		void CMeshPageRenderer::exit()
 		{
 			std::string entName = m_parentPage->getInstance() + "_entity";
 			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
-			
+
 			SceneNode* pageNode = sm->getSceneNode( m_parentPage->getInstance() + "_renderer" );
 			pageNode->detachObject( entName );
 
 			sm->destroyEntity(entName);
 			sm->destroySceneNode( m_parentPage->getInstance() );
-				
-		
+
+
 		}
-		 
-		 
+
+
 		shared_ptr<xmlpp::Document> CMeshPageRenderer::serializeXML()
 		{
-			
-			// First a new document is created
-			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));  
 
-			xmlpp::Element* root = document->create_root_node("CMeshPageRenderer");
-			root->set_attribute("meshName", m_meshName);
-	
+			// First a new document is created
+			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));
+
+			xmlpp::Element* root = document->create_root_node(CMeshPageRenderer::DYNAMIC_OBJECT_NAME());
+			root->set_attribute(CMeshPageRenderer::DYNAMIC_OBJECT_NAME(), m_meshName);
+
 
 			return document;
 		}
-		
+
 
 		void CMeshPageRenderer::deSerializeXML( xmlpp::Element* _element )
 		{
-		
+
 			if (_element == NULL)
 			{
 				return;
 			}
 
-			xmlpp::Attribute* attr = _element->get_attribute("meshName");
+			xmlpp::Attribute* attr = _element->get_attribute(CMeshPageRenderer::DYNAMIC_OBJECT_NAME());
 
 			if (attr == NULL)
 			{

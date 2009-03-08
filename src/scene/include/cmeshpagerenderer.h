@@ -54,20 +54,36 @@ namespace Gnoll
 		{
 
 			private:
-			
+
 				string m_meshName;
-			
+
 				CPage*  m_parentPage;
-				
+
 			public:
 
-			
+
+
+				/**
+				 * Returns CMeshPageRenderer's DynamicObject name
+				 * @return CMeshPageRenderer's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "CMeshPageRenderer";}
+
+
+				/**
+				 * Returns attribute name "meshName".<br/>
+				 * This attribute contains the name of the mesh to be rendered
+				 * @return The attribute name "meshName"
+				 */
+				inline static const char * ATTRIBUTE_MESH_NAME() {return "meshName";}
+
+
 				/**
 				 * This is a constructor
 				 */
 				CMeshPageRenderer();
 
-				
+
 				/**
 				 * This is a destructor
 				 */
@@ -78,27 +94,27 @@ namespace Gnoll
 				 * Page Renderer initialization
 				 */
 				void init( CPage* _parentPage );
-				
-				
+
+
 				/**
 				 * Update method
-				 */		
+				 */
 				void update();
 
-				
+
 				/**
 				 * Page Renderer exits
 				 */
 				 void exit();
-				
-				
+
+
 				/**
 				 * This method serialize the object. <br/>
 				 * It has to be implemented by all classes that inherits from this class.
 				 *
-				 * @return This return the object as a XML tree 
+				 * @return This return the object as a XML tree
 				 */
-				virtual shared_ptr<xmlpp::Document> serializeXML();		
+				virtual shared_ptr<xmlpp::Document> serializeXML();
 
 
 				/**
@@ -108,7 +124,7 @@ namespace Gnoll
 				 *
 				 * @param _element This is the XML tree containing the state of this object
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element );		
+				virtual void deSerializeXML( xmlpp::Element* _element );
 
 		};
 	}
