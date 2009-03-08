@@ -33,8 +33,8 @@
 #define __INTEGER_H__
 
 
-#include "iattribute.h" 
-#include "scalar.h" 
+#include "iattribute.h"
+#include "scalar.h"
 #include <sstream>
 
 using namespace std;
@@ -48,15 +48,22 @@ namespace Gnoll
 	{
 
 		/**
-		*	This is a simple attribute. </br> 
+		*	This is a simple attribute. </br>
 		*	This hold a signed integer.
-		*/ 
+		*/
 		class Integer : public Scalar<int>
 		{
 
 			public:
 
-				Integer(int _value = 0) : Scalar<int>("integer", _value) {};
+
+				/**
+				 * Returns Integer's DynamicObject name
+				 * @return Integer's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "integer";}
+
+				Integer(int _value = 0) : Scalar<int>(Integer::DYNAMIC_OBJECT_NAME(), _value) {};
 
 		};
 	};
