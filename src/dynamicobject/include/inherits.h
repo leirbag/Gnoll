@@ -21,9 +21,6 @@
 /*-------------------------------Inherits----------------------------------*\
 |   This is an inheritance attribute for DynamicObject                      |
 |                                                                           |
-|   Changelog :                                                             |
-|               10/07/2007 - Paf - Initial release                          |
-|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
@@ -55,6 +52,14 @@ namespace Gnoll
 				String m_parent;
 
 			public:
+
+
+				/**
+				 * Returns Inherits's DynamicObject name
+				 * @return Inherits's DynamicObject name
+				 */
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "inherits";}
+
 
 				/**
 				 * This is a constructor

@@ -21,9 +21,6 @@
 /*---------------------------------inherits--------------------------------*\
 |   This is an inheritance attribute for DynamicObject                      |
 |                                                                           |
-|   Changelog :                                                             |
-|               09/27/2007 - Paf - Initial release                          |
-|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 
@@ -58,12 +55,12 @@ namespace Gnoll {
 		}
 
 
-		shared_ptr<xmlpp::Document> Inherits::serializeXML() 
+		shared_ptr<xmlpp::Document> Inherits::serializeXML()
 		{
-			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));  
+			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));
 
-			xmlpp::Element* root = document->create_root_node( "inherits" );
-	
+			xmlpp::Element* root = document->create_root_node( Inherits::DYNAMIC_OBJECT_NAME() );
+
 			/**
 			 * We are going to serialize the parent and add it as a children of the inheritance node
 			 */
@@ -72,18 +69,18 @@ namespace Gnoll {
 			root->import_node(rootChild);
 
 			return document;
-		};		
+		};
 
 
-		void Inherits::deSerializeXML( xmlpp::Element* _element ) 
+		void Inherits::deSerializeXML( xmlpp::Element* _element )
 		{
-					
+
 			if (_element == NULL)
 			{
 				return;
 			}
 
-			if (_element->get_name() != "inherits")
+			if (_element->get_name() != Inherits::DYNAMIC_OBJECT_NAME())
 			{
 				return;
 			}
@@ -98,11 +95,11 @@ namespace Gnoll {
 				string name= (*iter)->get_name();
 				xmlpp::Element* elementChild = dynamic_cast<xmlpp::Element*>(*iter);
 
-				if (elementChild && (name == "string"))
+				if (elementChild && (name == String::DYNAMIC_OBJECT_NAME()))
 				{
 
 					shared_ptr<Gnoll::DynamicObject::IAttributeHandler> handler = registry->getHandler(name);
-	
+
 					// Check if a handler is available for this attribute
 					if (handler.get() != NULL)
 					{
@@ -116,7 +113,7 @@ namespace Gnoll {
 
 			}
 
-		};		
+		};
 
 	}
 }
