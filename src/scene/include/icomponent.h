@@ -38,7 +38,9 @@ namespace Gnoll
 	{
 		class GObject;
 
-
+		/**
+		 * This an interface describing components
+		 */
 		class IComponent : public Gnoll::DynamicObject::DynamicObject
 		{
 
