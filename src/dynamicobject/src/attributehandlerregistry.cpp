@@ -53,6 +53,7 @@
 #include "../../scene/include/cmeshpagerenderer.h"
 #include "../../scene/include/cstaticgobject.h"
 #include "../../scene/include/gobject.h"
+#include "../../scene/include/cogremeshcomponent.h"
 
 
 
@@ -73,9 +74,10 @@ namespace Gnoll
 			this->registerHandler(List::DYNAMIC_OBJECT_NAME(),     shared_ptr<IAttributeHandler>(new GenericAttributeHandler<List>()));
 			this->registerHandler(Set::DYNAMIC_OBJECT_NAME(),      shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Set>()));
 			this->registerHandler(Inherits::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new InheritsAttributeHandler()));
-			this->registerHandler(Gnoll::Scene::CMeshPageRenderer::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CMeshPageRenderer>()));
-			this->registerHandler(Gnoll::Scene::CStaticGObject::DYNAMIC_OBJECT_NAME(),    shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CStaticGObject>()));
-			this->registerHandler(Gnoll::Scene::GObject::DYNAMIC_OBJECT_NAME() ,          shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::GObject>()));
+			this->registerHandler(Gnoll::Scene::CMeshPageRenderer::DYNAMIC_OBJECT_NAME(),  shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CMeshPageRenderer>()));
+			this->registerHandler(Gnoll::Scene::CStaticGObject::DYNAMIC_OBJECT_NAME(),     shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CStaticGObject>()));
+			this->registerHandler(Gnoll::Scene::GObject::DYNAMIC_OBJECT_NAME() ,           shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::GObject>()));
+			this->registerHandler(Gnoll::Scene::COgreMeshComponent::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::COgreMeshComponent>()));
 
 		}
 

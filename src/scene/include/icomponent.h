@@ -29,6 +29,7 @@
 
 
 #include "../../dynamicobject/include/dynamicobject.h"
+#include "cpage.h"
 
 
 
@@ -65,13 +66,14 @@ namespace Gnoll
 				 * @param parent DynamicObject this component belongs to
 				 * @param page Page where is located the parent DynamicObject
 				 */
-				virtual void init(Gnoll::Scene::GObject* parent, CPage* page) = 0;
+				virtual void init(Gnoll::Scene::GObject* parent, Gnoll::Scene::CPage* page) = 0;
 
 
 				/**
 				 * Component exits
 				 */
 				 virtual void exit() = 0;
+
 		};
 	}
 }
