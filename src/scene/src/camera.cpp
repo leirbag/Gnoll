@@ -85,7 +85,11 @@ namespace Gnoll
 			// Infinite far plane?
 			// -------------------
 			Ogre::Root* ogreRoot = Ogre::Root::getSingletonPtr();
-			if (ogreRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
+			if(ogreRoot == NULL)
+			{
+				cameraWrapper->setFarValue(500);
+			}
+			else if (ogreRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
 			{
 				cameraWrapper->setFarValue(0);
 			}
@@ -212,6 +216,9 @@ namespace Gnoll
 			if(getTargetName() == "")
 				return NULL;
 
+			if(CGraphicModule::getInstancePtr()->getSceneManager() == NULL)
+				return NULL;
+
 			return CGraphicModule::getInstancePtr()->getSceneManager()->getSceneNode(target);
 		}
 
@@ -227,10 +234,14 @@ namespace Gnoll
 
 		void Camera::setTarget(const Glib::ustring& target, bool autofocus)
 		{
+			if(target == "")
+				return;
+
 			// Set the auto tracking on the target
 			// -----------------------------------
-			cameraWrapper->setAutoTracking(autofocus, getTarget());
 			setTargetHelper(target);
+			Ogre::SceneNode* sceneTarget = getTarget();
+			cameraWrapper->setAutoTracking(autofocus, sceneTarget);
 
 			// Update the camera
 			// -----------------

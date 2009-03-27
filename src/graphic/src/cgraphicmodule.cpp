@@ -115,6 +115,7 @@ namespace Gnoll
 			mGUIRenderer = 0;
 			mGUISystem = 0;
 			mEditorGuiSheet = 0;
+			mSceneMgr = 0;
 		}
 
 
