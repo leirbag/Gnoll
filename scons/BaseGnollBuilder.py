@@ -385,11 +385,22 @@ class BaseGnollBuilder:
 	def buildTests(self, env, config):
 		sourceFiles = []
 
+		sourceFiles.extend( self.gatherSoundSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherSceneSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherInputSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherStatsSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherGraphicSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherTimeSourceFiles(env, config) )
+		sourceFiles.extend( self.gatherDynamicObjectSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherCoreSourceFiles(env, config) )
 		sourceFiles.extend( self.gatherLogSourceFiles(env, config) )
+
 		sourceFiles.append( 'src/core/unittests/testcore.cpp' )
 		sourceFiles.append( 'src/core/unittests/testsingleton.cpp' )
 		sourceFiles.append( 'src/core/unittests/testcfsm.cpp' )
+
+		sourceFiles.append( 'src/scene/unittests/testcamera.cpp' )
+
 
 		env['LIBS'].append('boost_unit_test_framework')
 		# env.Program('testcore', sourceFiles, LIBS='boost_unit_test_framework')
