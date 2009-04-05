@@ -122,8 +122,19 @@ namespace Gnoll
 
 				Ogre::SceneManager* sm = ogreRoot->getSceneManager( Gnoll::Graphic::CGraphicModule::DEFAULT_OGRE_SCENE_MANAGER_NAME() );
 
-				sm->setSkyDome(true, *skyMaterialName);
 
+				if (skyType->getValue() == "dome")
+				{
+					sm->setSkyDome(true, *skyMaterialName);
+				}
+				else if (skyType->getValue() == "box")
+				{
+					sm->setSkyBox(true, *skyMaterialName);
+				}
+				else
+				{
+					GNOLL_LOG() << "Cannot setup a sky of type " << *skyType << " (unknown).\n";
+				}
 			}
 		}
 
