@@ -36,6 +36,7 @@
 |               02/05/2008 - WT - Add private method loadOgrePlugins()       |
 |               10/05/2008 - WT - Add private method loadOgreConfig()        |
 |		10/09/2008 - Wetneb - Added Ogre 1.6 compatibility	     |
+|               07/05/2009 - Wetneb - Added GUI layout support               |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
@@ -112,7 +113,7 @@ namespace Gnoll
 				//CEGUI::Renderer* mGUIRenderer;
 				CEGUI::OgreCEGUIRenderer* mGUIRenderer;
 				CEGUI::System* mGUISystem;
-				CEGUI::Window* mEditorGuiSheet;
+				CEGUI::Window* mRootWindow;
 
 				CMessageType framerendered;
 				shared_ptr<boost::any> data;
@@ -133,6 +134,10 @@ namespace Gnoll
 				  */
 				 void loadOgreConfig();
 
+				/**
+				 * Load GUI layouts from gGUI file
+				 */
+				void loadGui();
 
 			public:
 

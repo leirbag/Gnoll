@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<dynamicobject instance="gGUI">
+  <attribute name="defaultLayout">
+    <string value="defaultLayout.layout"/>
+  </attribute>
+  <attribute name="scheme">
+    <string value="TaharezLook"/>
+  </attribute>
+  <attribute name="defaultFont">
+    <string value="Commonwealth-10.font"/>
+  </attribute>
+  <attribute name="mouseCursor">
+    <string value="MouseArrow"/>
+  </attribute>
+  <attribute name="cursorImage">
+    <string value="MouseMoveCursor"/>
+  </attribute>
+</dynamicobject>

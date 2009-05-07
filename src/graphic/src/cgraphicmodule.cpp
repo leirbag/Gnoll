@@ -79,6 +79,9 @@
 |          10/05/2008 - WT - Put Ogre config loading in a private method    |
 |                               and use DynamicObject instead of Ogre       |
 |                               display.cfg to load the Renderer config     |
+|                                                                           |
+|          07/05/2009 - Wetneb - Added .layout support and so on            |
+|									    |
 \*-------------------------------------------------------------------------*/
 
 #include "../include/cgraphicmodule.h"
@@ -114,7 +117,7 @@ namespace Gnoll
 
 			mGUIRenderer = 0;
 			mGUISystem = 0;
-			mEditorGuiSheet = 0;
+			mRootWindow = 0;
 			mSceneMgr = 0;
 		}
 
@@ -234,6 +237,46 @@ namespace Gnoll
 			this->mRoot->setRenderSystem(rs);
 		}
 
+		void CGraphicModule::loadGui()
+		{
+			/**
+			 * Set up a logger for cegui which will redirect CEGUI's logs to Ogre's one
+			 */
+			CCEGUILogger* ceguiLogger = new CCEGUILogger();
+			mGUIRenderer = new CEGUI::OgreCEGUIRenderer(mwindow, Ogre::RENDER_QUEUE_OVERLAY, false, 3000, mSceneMgr);
+			mGUISystem = new CEGUI::System(mGUIRenderer);
+			CEGUI::Logger::getSingleton().setLoggingLevel(CEGUI::Informative);
+
+			/**
+			 * Set up the GUI environment using the gGUI file
+			 */
+			Gnoll::DynamicObject::DynamicObjectManager *pom = Gnoll::DynamicObject::DynamicObjectManager::getInstancePtr();
+			shared_ptr<Gnoll::DynamicObject::DynamicObject> guiConfig = pom->load("gGUI");
+
+
+			shared_ptr<Gnoll::DynamicObject::String> schemeName = guiConfig->getAttribute<Gnoll::DynamicObject::String>("scheme");
+			shared_ptr<Gnoll::DynamicObject::String> mouseCursor = guiConfig->getAttribute<Gnoll::DynamicObject::String>("mouseCursor");
+			shared_ptr<Gnoll::DynamicObject::String> cursorImage = guiConfig->getAttribute<Gnoll::DynamicObject::String>("cursorImage");
+			shared_ptr<Gnoll::DynamicObject::String> fontName = guiConfig->getAttribute<Gnoll::DynamicObject::String>("defaultFont");
+			shared_ptr<Gnoll::DynamicObject::String> defaultLayoutName = guiConfig->getAttribute<Gnoll::DynamicObject::String>("defaultLayout");
+
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(string("[GUI]   Loading GUI scheme named "+(string)(*schemeName.get())).c_str());
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(string("[GUI]   Loading mouse cursor named "+(string)(*mouseCursor.get())).c_str());
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(string("[GUI]   Loading cursor image named "+(string)(*cursorImage.get())).c_str());
+
+			CEGUI::SchemeManager::getSingleton().loadScheme( ((*(schemeName.get()))+Glib::ustring(".scheme")).c_str() );
+			mGUISystem->setDefaultMouseCursor( ((string)(*schemeName.get()) ).c_str(), ((string)(*mouseCursor.get()) ).c_str());
+			CEGUI::MouseCursor::getSingleton().setImage(((string)(*schemeName.get()) ).c_str(), ((string)(*cursorImage.get()) ).c_str());
+
+			CEGUI::FontManager::getSingleton().createFont(((string)(*fontName.get()) ).c_str());
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(string("[GUI]   Loading GUI layout from "+(string)(*defaultLayoutName.get())).c_str());
+
+			mRootWindow = CEGUI::WindowManager::getSingleton().loadWindowLayout(((string)(*defaultLayoutName.get()) ).c_str());
+			CEGUI::System::getSingleton().setGUISheet(mRootWindow);
+
+			mRootWindow->setAlwaysOnTop(true);
+
+		}
 
 		void CGraphicModule::init()
 		{
@@ -281,43 +324,16 @@ namespace Gnoll
 
 			// -----------  Set up GUI system -----------
 
-			/**
-			 * Set up a logger for cegui which will redirect CEGUI's logs to Ogre's one
-			 */
-			CCEGUILogger* ceguiLogger = new CCEGUILogger();
-			mGUIRenderer = new CEGUI::OgreCEGUIRenderer(mwindow, Ogre::RENDER_QUEUE_OVERLAY, false, 3000, mSceneMgr);
-			mGUISystem = new CEGUI::System(mGUIRenderer);
-			CEGUI::Logger::getSingleton().setLoggingLevel(CEGUI::Informative);
-
-			CEGUI::SchemeManager::getSingleton().loadScheme((CEGUI::utf8*)"TaharezLook.scheme");
-			mGUISystem->setDefaultMouseCursor((CEGUI::utf8*)"TaharezLook", (CEGUI::utf8*)"MouseArrow");
-			CEGUI::MouseCursor::getSingleton().setImage("TaharezLook", "MouseMoveCursor");
-
-			CEGUI::FontManager::getSingleton().createFont("Commonwealth-10.font");
-
-
-			mEditorGuiSheet= CEGUI::WindowManager::getSingleton().createWindow((CEGUI::utf8*)"DefaultWindow", (CEGUI::utf8*)"Sheet");
-			mGUISystem->setGUISheet(mEditorGuiSheet);
-
-			CEGUI::PushButton* btn = static_cast<CEGUI::PushButton*>(CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/Button", "QuitButton"));
-			mEditorGuiSheet->addChildWindow(btn);
-			btn->setText("Quit!");
-			btn->setPosition(CEGUI::UVector2(CEGUI::UDim(0.035f, 0.0f), CEGUI::UDim(0.035f, 0.0f)));
-			btn->setSize(CEGUI::UVector2(cegui_reldim(0.1f), cegui_reldim( 0.036f)));
-			//btn->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Demo4Sample::handleQuit, this));
-			btn->setAlwaysOnTop(true);
-
-			CEGUI::Window* eb = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/Editbox","fpsText");
-			mEditorGuiSheet->addChildWindow(eb);
-			eb->setText("FPS :");
-			eb->setPosition(CEGUI::UVector2(cegui_reldim(0.025f), cegui_reldim(0.85f)));
-			eb->setSize(CEGUI::UVector2(cegui_absdim(100), cegui_absdim(70)));
-			eb->setAlwaysOnTop(true);
+			this->loadGui();
 
 		}
 
 		void CGraphicModule::process()
 		{
+			//mRoot->startRendering();
+
+			//! @todo : Read every string defined in the XML GUI layout an replace the variables with their values
+
 
 			// Get the last FPS and the Tri counts
 			float fps = mRoot->getRenderTarget(mRoot->getAutoCreatedWindow()->getName())->getLastFPS();
@@ -328,9 +344,10 @@ namespace Gnoll
 			s+="TRI : ";
 			s+=Ogre::StringConverter::toString(tri);
 			CEGUI::String str(s);
-			mEditorGuiSheet->getChild("fpsText")->setText(str);
+			//mEditorGuiSheet->getChild("fpsText")->setText(str);
 
 			mRoot->renderOneFrame();
+		//	mWindow->update();
 
 
 			unsigned long newframe = m_timer->getMilliseconds ();
@@ -357,9 +374,9 @@ namespace Gnoll
 		CGraphicModule::~CGraphicModule()
 		{
 
-			if(mEditorGuiSheet)
+			if(mRootWindow)
 			{
-				CEGUI::WindowManager::getSingleton().destroyWindow(mEditorGuiSheet);
+				CEGUI::WindowManager::getSingleton().destroyWindow(mRootWindow);
 			}
 			if(mGUISystem)
 			{
