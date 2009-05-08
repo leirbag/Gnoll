@@ -99,6 +99,49 @@ namespace Gnoll
 				void setTargetHelper(const Glib::ustring& target);
 
 			public:
+
+				/**
+				 * Returns attribute name "name".<br/>
+				 * @return The attribute name "name"
+				 */
+				inline static const char * ATTRIBUTE_NAME() {return "name";}
+
+				/**
+				 * Returns attribute name "far".<br/>
+				 * @return The attribute name "far"
+				 */
+				inline static const char * ATTRIBUTE_FAR() {return "far";}
+
+				/**
+				 * Returns attribute name "near".<br/>
+				 * @return The attribute name "near"
+				 */
+				inline static const char * ATTRIBUTE_NEAR() {return "near";}
+
+				/**
+				 * Returns attribute name "fov".<br/>
+				 * @return The attribute name "fov"
+				 */
+				inline static const char * ATTRIBUTE_FOV() {return "fov";}
+
+				/**
+				 * Returns attribute name "position".<br/>
+				 * @return The attribute name "position"
+				 */
+				inline static const char * ATTRIBUTE_POSITION() {return "position";}
+
+				/**
+				 * Returns attribute name "direction".<br/>
+				 * @return The attribute name "direction"
+				 */
+				inline static const char * ATTRIBUTE_DIRECTION() {return "direction";}
+
+				/**
+				 * Returns attribute name "target".<br/>
+				 * @return The attribute name "target"
+				 */
+				inline static const char * ATTRIBUTE_TARGET() {return "target";}
+
 				/*
 				 * Destructior
 				 */

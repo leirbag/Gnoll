@@ -98,7 +98,7 @@ namespace Gnoll
 			// -----------------------------------
 			shared_ptr<Float> len;
 			shared_ptr<Float> default_length = shared_ptr<Float> (new Float(30.0f));
-			len = this->getAttributeOrDefault<Float>("length", default_length);
+			len = this->getAttributeOrDefault<Float>(ATTRIBUTE_LENGTH(), default_length);
 
 			// Get the scenemanager
 			// --------------------
@@ -120,7 +120,7 @@ namespace Gnoll
 			// ---------------------
 			shared_ptr<Gnoll::DynamicObject::String> default_name_spline = shared_ptr<Gnoll::DynamicObject::String> (
 					new Gnoll::DynamicObject::String(getInstance() + ".spline"));
-			shared_ptr<Gnoll::DynamicObject::String> name_spline = this->getAttributeOrDefault<Gnoll::DynamicObject::String>("Spline", default_name_spline);
+			shared_ptr<Gnoll::DynamicObject::String> name_spline = this->getAttributeOrDefault<Gnoll::DynamicObject::String>(ATTRIBUTE_SPLINE(), default_name_spline);
 			spline = shared_ptr<Spline>(new Spline(*name_spline, pNodeAT, *len));
 		}
 
@@ -128,11 +128,11 @@ namespace Gnoll
 		{
 			// Save the length
 			// ---------------
-			this->setAttribute("length", shared_ptr<Float>(new Float(spline->length)));
+			this->setAttribute(ATTRIBUTE_LENGTH(), shared_ptr<Float>(new Float(spline->length)));
 
 			// Save the Spline
 			// ---------------
-			setAttribute("Spline", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(getInstance() + ".spline")));
+			setAttribute(ATTRIBUTE_SPLINE(), shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(getInstance() + ".spline")));
 		}
 
 		void CameraSpline::update(float time)

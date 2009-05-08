@@ -59,7 +59,7 @@ namespace Gnoll
 
 			// Set in the DO the name of the camera
 			// ------------------------------------
-			setAttribute("name", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(instanceName)));
+			setAttribute(ATTRIBUTE_NAME(), shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(instanceName)));
 
 			// Create the camera in the scenemanager
 			// -------------------------------------
@@ -74,9 +74,9 @@ namespace Gnoll
 			shared_ptr<Float> default_far = shared_ptr<Float> (new Float(1000.0f));
 			shared_ptr<Float> default_fov = shared_ptr<Float> (new Float(3.14/4.0f)); // TODO : change this to the real value
 
-			near_value = this->getAttributeOrDefault<Float>("near", default_near);
-			far_value = this->getAttributeOrDefault<Float>("far", default_far);
-			fov_value = this->getAttributeOrDefault<Float>("fov", default_fov);
+			near_value = this->getAttributeOrDefault<Float>(ATTRIBUTE_NEAR(), default_near);
+			far_value = this->getAttributeOrDefault<Float>(ATTRIBUTE_FAR(), default_far);
+			fov_value = this->getAttributeOrDefault<Float>(ATTRIBUTE_FOV(), default_fov);
 
 			cameraWrapper->setNearValue(*near_value);
 			cameraWrapper->setFarValue(*far_value);
@@ -101,7 +101,7 @@ namespace Gnoll
 			// Extract Camera's position
 			// -------------------------
 			shared_ptr<Gnoll::DynamicObject::Vector3> default_pos = shared_ptr<Gnoll::DynamicObject::Vector3> (new Gnoll::DynamicObject::Vector3());
-			shared_ptr<Gnoll::DynamicObject::Vector3> temp_pos = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>("Position", default_pos);
+			shared_ptr<Gnoll::DynamicObject::Vector3> temp_pos = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>(ATTRIBUTE_POSITION(), default_pos);
 
 			// We need to convert the DO Vector3 to Ogre::Vector3 (inheritance)
 			// ----------------------------------------------------------------
@@ -113,7 +113,7 @@ namespace Gnoll
 			// --------------------------
 			shared_ptr<Gnoll::DynamicObject::Vector3> default_dir = shared_ptr<Gnoll::DynamicObject::Vector3> (
 					new Gnoll::DynamicObject::Vector3(Ogre::Vector3(0, 0, -1)));
-			shared_ptr<Gnoll::DynamicObject::Vector3> temp_dir = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>("Direction", default_dir);
+			shared_ptr<Gnoll::DynamicObject::Vector3> temp_dir = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>(ATTRIBUTE_DIRECTION(), default_dir);
 
 			// We need to convert the DO Vector3 to Ogre::Vector3 (inheritance)
 			// ----------------------------------------------------------------
@@ -139,7 +139,7 @@ namespace Gnoll
 			// -----------------------
 			shared_ptr<Gnoll::DynamicObject::String> default_target = shared_ptr<Gnoll::DynamicObject::String> (
 					new Gnoll::DynamicObject::String(""));
-			shared_ptr<Gnoll::DynamicObject::String> tempTarget = this->getAttributeOrDefault<Gnoll::DynamicObject::String>("Target", default_target);
+			shared_ptr<Gnoll::DynamicObject::String> tempTarget = this->getAttributeOrDefault<Gnoll::DynamicObject::String>(ATTRIBUTE_TARGET(), default_target);
 			target = std::string(*tempTarget);
 		}
 
@@ -169,29 +169,29 @@ namespace Gnoll
 			// near
 			// ----
 			shared_ptr<Float> near_value(new Float(cameraWrapper->getNearValue()));
-			this->setAttribute("near", near_value);
+			this->setAttribute(ATTRIBUTE_NEAR(), near_value);
 
 			// far
 			// ---
 			shared_ptr<Float> far_value(new Float(cameraWrapper->getFarValue()));
-			this->setAttribute("far", far_value);
+			this->setAttribute(ATTRIBUTE_FAR(), far_value);
 
 			// fov
 			// ---
 			shared_ptr<Float> fov_value(new Float(cameraWrapper->getFovValue()));
-			this->setAttribute("fov", fov_value);
+			this->setAttribute(ATTRIBUTE_FOV(), fov_value);
 
 			// Position
 			// --------
-			setAttribute("Position", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(cameraWrapper->getPosition())));
+			setAttribute(ATTRIBUTE_POSITION(), shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(cameraWrapper->getPosition())));
 
 			// Direction
 			// ---------
-			setAttribute("Direction", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(cameraWrapper->getDirection())));
+			setAttribute(ATTRIBUTE_DIRECTION(), shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(cameraWrapper->getDirection())));
 
 			// Target
 			// ------
-			setAttribute("Target", shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(getTargetName())));
+			setAttribute(ATTRIBUTE_TARGET(), shared_ptr<Gnoll::DynamicObject::String>(new Gnoll::DynamicObject::String(getTargetName())));
 
 			// Camera's movement configuration
 			// -------------------------------

@@ -78,6 +78,19 @@ namespace Gnoll
 
 			shared_ptr<Spline> spline;
 		public:
+
+			/**
+			 * Returns attribute name "length".<br/>
+			 * @return The attribute name "length"
+			 */
+			inline static const char * ATTRIBUTE_LENGTH() {return "length";}
+
+			/**
+			 * Returns attribute name "spline".<br/>
+			 * @return The attribute name "spline"
+			 */
+			inline static const char * ATTRIBUTE_SPLINE() {return "spline";}
+
 			/*
 			 * Default constructor
 			 * @param instanceName This is the instance name of the camera, it will be use for the

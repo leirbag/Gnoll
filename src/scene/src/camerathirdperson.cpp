@@ -49,9 +49,9 @@ namespace Gnoll
 			shared_ptr<Float> default_minOffset = shared_ptr<Float> (new Float(0.0f));
 			shared_ptr<Float> default_maxOffset = shared_ptr<Float> (new Float(200.0f));
 
-			off = this->getAttributeOrDefault<Float>("offset", default_offset);
-			minOff = this->getAttributeOrDefault<Float>("minOffset", default_minOffset);
-			maxOff = this->getAttributeOrDefault<Float>("maxOffset", default_maxOffset);
+			off = this->getAttributeOrDefault<Float>(ATTRIBUTE_OFFSET(), default_offset);
+			minOff = this->getAttributeOrDefault<Float>(ATTRIBUTE_MINOFFSET(), default_minOffset);
+			maxOff = this->getAttributeOrDefault<Float>(ATTRIBUTE_MAXOFFSET(), default_maxOffset);
 
 			offset    = (*off);
 			minOffset = (*minOff);
@@ -64,9 +64,9 @@ namespace Gnoll
 			shared_ptr<Float> limit_z;
 			shared_ptr<Float> default_limit = shared_ptr<Float> (new Float(-1.0f));
 
-			limit_x = this->getAttributeOrDefault<Float>("limitRotationOnAxisX", default_limit);
-			limit_y = this->getAttributeOrDefault<Float>("limitRotationOnAxisY", default_limit);
-			limit_z = this->getAttributeOrDefault<Float>("limitRotationOnAxisZ", default_limit);
+			limit_x = this->getAttributeOrDefault<Float>(ATTRIBUTE_LIMITROTATIONONAXISX(), default_limit);
+			limit_y = this->getAttributeOrDefault<Float>(ATTRIBUTE_LIMITROTATIONONAXISY(), default_limit);
+			limit_z = this->getAttributeOrDefault<Float>(ATTRIBUTE_LIMITROTATIONONAXISZ(), default_limit);
 
 			limitRotationAroundAxisX = (*limit_x);
 			limitRotationAroundAxisY = (*limit_y);
@@ -79,9 +79,9 @@ namespace Gnoll
 			shared_ptr<Float> amount_z;
 			shared_ptr<Float> default_amount = shared_ptr<Float> (new Float(0.0f));
 
-			amount_x = this->getAttributeOrDefault<Float>("amountRotationOnAxisX", default_amount);
-			amount_y = this->getAttributeOrDefault<Float>("amountRotationOnAxisY", default_amount);
-			amount_z = this->getAttributeOrDefault<Float>("amountRotationOnAxisZ", default_amount );
+			amount_x = this->getAttributeOrDefault<Float>(ATTRIBUTE_AMOUNTROTATIONONAXISX(), default_amount);
+			amount_y = this->getAttributeOrDefault<Float>(ATTRIBUTE_AMOUNTROTATIONONAXISY(), default_amount);
+			amount_z = this->getAttributeOrDefault<Float>(ATTRIBUTE_AMOUNTROTATIONONAXISZ(), default_amount );
 
 			amountRotationAroundAxisX = *amount_x;
 			amountRotationAroundAxisY = *amount_y;
@@ -95,27 +95,27 @@ namespace Gnoll
 			shared_ptr<Float> limitX(new Float(getLimitRotationAroundAxisX()));
 			shared_ptr<Float> limitY(new Float(getLimitRotationAroundAxisY()));
 			shared_ptr<Float> limitZ(new Float(getLimitRotationAroundAxisZ()));
-			this->setAttribute("limitRotationOnAxisX", limitX);
-			this->setAttribute("limitRotationOnAxisY", limitY);
-			this->setAttribute("limitRotationOnAxisZ", limitZ);
+			this->setAttribute(ATTRIBUTE_LIMITROTATIONONAXISX(), limitX);
+			this->setAttribute(ATTRIBUTE_LIMITROTATIONONAXISY(), limitY);
+			this->setAttribute(ATTRIBUTE_LIMITROTATIONONAXISZ(), limitZ);
 
 			// amount
 			// ------
 			shared_ptr<Float> amountX(new Float(getAmountRotationAroundAxisX()));
 			shared_ptr<Float> amountY(new Float(getAmountRotationAroundAxisY()));
 			shared_ptr<Float> amountZ(new Float(getAmountRotationAroundAxisZ()));
-			this->setAttribute("amountRotationOnAxisX", amountX);
-			this->setAttribute("amountRotationOnAxisY", amountY);
-			this->setAttribute("amountRotationOnAxisZ", amountZ);
+			this->setAttribute(ATTRIBUTE_AMOUNTROTATIONONAXISX(), amountX);
+			this->setAttribute(ATTRIBUTE_AMOUNTROTATIONONAXISY(), amountY);
+			this->setAttribute(ATTRIBUTE_AMOUNTROTATIONONAXISZ(), amountZ);
 
 			// offset settings
 			// ---------------
 			shared_ptr<Float> offset(new Float(getOffset()));
 			shared_ptr<Float> minOffset(new Float(getMinOffset()));
 			shared_ptr<Float> maxOffset(new Float(getMaxOffset()));
-			this->setAttribute("offset", offset);
-			this->setAttribute("minOffset", minOffset);
-			this->setAttribute("maxOffset", maxOffset);
+			this->setAttribute(ATTRIBUTE_OFFSET(), offset);
+			this->setAttribute(ATTRIBUTE_MINOFFSET(), minOffset);
+			this->setAttribute(ATTRIBUTE_MAXOFFSET(), maxOffset);
 		}
 
 		void CameraThirdPerson::setOffset(float value)

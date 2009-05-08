@@ -53,6 +53,61 @@ namespace Gnoll
 			float limitRotationAroundAxisZ;
 
 		public:
+
+			/**
+			 * Returns attribute name "offset".<br/>
+			 * @return The attribute name "offset"
+			 */
+			inline static const char * ATTRIBUTE_OFFSET() {return "offset";}
+
+			/**
+			 * Returns attribute name "min_offset".<br/>
+			 * @return The attribute name "min_offset"
+			 */
+			inline static const char * ATTRIBUTE_MINOFFSET() {return "min_offset";}
+
+			/**
+			 * Returns attribute name "max_offset".<br/>
+			 * @return The attribute name "max_offset"
+			 */
+			inline static const char * ATTRIBUTE_MAXOFFSET() {return "max_offset";}
+
+			/**
+			 * Returns attribute name "limit_rotation_on_axis_x".<br/>
+			 * @return The attribute name "limit_rotation_on_axis_x"
+			 */
+			inline static const char * ATTRIBUTE_LIMITROTATIONONAXISX() {return "limit_rotation_on_axis_x";}
+
+			/**
+			 * Returns attribute name "limit_rotation_on_axis_y".<br/>
+			 * @return The attribute name "limit_rotation_on_axis_y"
+			 */
+			inline static const char * ATTRIBUTE_LIMITROTATIONONAXISY() {return "limit_rotation_on_axis_y";}
+
+			/**
+			 * Returns attribute name "limit_rotation_on_axis_z".<br/>
+			 * @return The attribute name "limit_rotation_on_axis_z"
+			 */
+			inline static const char * ATTRIBUTE_LIMITROTATIONONAXISZ() {return "limit_rotation_on_axis_z";}
+
+			/**
+			 * Returns attribute name "amount_rotation_on_axis_x".<br/>
+			 * @return The attribute name "amount_rotation_on_axis_x"
+			 */
+			inline static const char * ATTRIBUTE_AMOUNTROTATIONONAXISX() {return "amount_rotation_on_axis_x";}
+
+			/**
+			 * Returns attribute name "amount_rotation_on_axis_y".<br/>
+			 * @return The attribute name "amount_rotation_on_axis_y"
+			 */
+			inline static const char * ATTRIBUTE_AMOUNTROTATIONONAXISY() {return "amount_rotation_on_axis_y";}
+
+			/**
+			 * Returns attribute name "amount_rotation_on_axis_z".<br/>
+			 * @return The attribute name "amount_rotation_on_axis_z"
+			 */
+			inline static const char * ATTRIBUTE_AMOUNTROTATIONONAXISZ() {return "amount_rotation_on_axis_z";}
+
 			/*
 			 * Default constructor, (see camera) + offset set at 100, min offset to 0 and max offset to 200
 			 * this is no limit on rotation

@@ -41,6 +41,12 @@ namespace Gnoll
 			Ogre::Vector3* headPosition;
 
 		public:
+			/**
+			 * Returns attribute name "head_position".<br/>
+			 * @return The attribute name "head_position"
+			 */
+			inline static const char * ATTRIBUTE_HEADPOSITION() {return "head_position";}
+
 			/*
 			 * Default constructor, if no head positon is defined, the head position will be set
 			 *                      to the target position

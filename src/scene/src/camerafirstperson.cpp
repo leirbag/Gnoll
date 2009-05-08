@@ -45,13 +45,13 @@ namespace Gnoll
                 pPosition = new Ogre::Vector3(pTarget->getPosition());
 
             shared_ptr<Gnoll::DynamicObject::Vector3> default_pos = shared_ptr<Gnoll::DynamicObject::Vector3> (new Gnoll::DynamicObject::Vector3(*pPosition));
-            shared_ptr<Gnoll::DynamicObject::Vector3> temp_pos = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>("HeadPosition", default_pos);
+            shared_ptr<Gnoll::DynamicObject::Vector3> temp_pos = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>(ATTRIBUTE_HEADPOSITION(), default_pos);
             headPosition = new Ogre::Vector3(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
 		}
 
 		CameraFirstPerson::~CameraFirstPerson()
 		{
-            setAttribute("HeadPosition", shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(*getHeadPosition())));
+            setAttribute(ATTRIBUTE_HEADPOSITION(), shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(*getHeadPosition())));
 		}
 
 		void CameraFirstPerson::setHeadPosition(const Ogre::Vector3& value)
