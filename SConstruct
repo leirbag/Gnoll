@@ -259,6 +259,7 @@ def main():
 
 			# Step 1 : Copy static files from ./data/
 			# This proceeds only if 'install_data' doesn't exists
+			shutil.rmtree(env['install_data'])
 			if not os.path.exists(env['install_data']):
 				try:
 					print "Copying data [Destination dir: %s]..." % (env['install_data'])
