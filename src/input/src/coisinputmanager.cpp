@@ -219,6 +219,8 @@ bool COISInputManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButto
 			shared_ptr<boost::any> button (new boost::any(MouseButton(static_cast<MouseButton>(i)))  )  ;
 			shared_ptr<CMessage>  mymessage (new CMessage(mousePressed, button ));
 
+			CEGUI::System::getSingleton().injectMouseButtonDown( CEGUI::MouseButton(i) );
+
 			CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 		}
 
@@ -251,6 +253,8 @@ bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButt
 		{
 			shared_ptr<boost::any> button (new boost::any(MouseButton(static_cast<MouseButton>(i)) ) )  ;
 			shared_ptr<CMessage>  mymessage (new CMessage(mouseReleased, button ));
+
+			CEGUI::System::getSingleton().injectMouseButtonUp( CEGUI::MouseButton(i) );
 
 			CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 		}
