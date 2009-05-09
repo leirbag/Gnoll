@@ -1,7 +1,30 @@
- #####################################
-#         MAP SUBDIVIDER            #
+#!BPY
+
+""" Registration info for Blender menus:
+Name: 'Scene for Gnoll engine...'
+Blender: 246
+Group: 'Export'
+Tip: 'Export the scene to Gnoll game engine.'
+"""
+
+__author__ = 'Antonin <Wetneb> Delpeuch'
+__url__ = ['gnoll.org', 'projetviracocha.free.fr']
+__version__ = "1.0"
+
+__bpydoc__ = """\
+This script allows you to subdivide a mesh with a grid, and to export the result as a Gnoll scene.
+
+The size of the resulting squares is the "page size". In Object mode, select the ground object,
+and define the pages size. You can use the shortcuts buttons 1/2, 1/3 and 1/4 to get quickly a good result.
+Enabling the Gnoll export will generate XML files defining the scene for Gnoll. Those files are exported
+in the specified folder.
+
+Some informations are available on Gnoll's Wiki : http://wiki.gnoll.org/
+"""
+
 #####################################
-#
+#          MAP SUBDIVIDER           #
+#####################################
 # by Antonin Delpeuch <Wetneb>
 # antonin@delpeuch.eu
 # http://www.antonin.delpeuch.eu/
@@ -12,126 +35,84 @@
 # Written for the Viracocha project :
 # see http://projetviracocha.free.fr/
 #
-#####################################
-#               USING               #
-#####################################
-#
-# This script cuts a mesh along a grid.
-# Your mesh's propreties must be blank :
-# No translation, rotation or scale.
-# If not, the object's center will be
-# moved at the center of the world,
-# applying all the transformations to the
-# mesh (as if it were done in edit mode).
-#
-# 1. Run the script
-# 2. Select only one object (the one you
-#    want to cut)
-# 3. Press Subdivide !
-# 4. Try again : change the SquareSize
-#    parameter.
-#
-# I'm a newbie in Plug-in developping for
-# Blender. This script can be improved :
-# Optimize it, fix some bugs, add settings
-# to control the cut in a better way...
-# If you have any trouble using this script,
-# just mail me.
-#
-# Enjoy !
-#
-#####################################
-#             ALGORITHM             #
-#####################################
-#
-# Requirements : we need to cut a mesh
-# into equal squares. Each square must
-# be a unique object and each object's
-# center has to be at the center of the
-# cutting square (even if the square
-# isn't fully filled with faces).
-#
-# Steps :
-# 1 - The script generates a list of
-#     "planes" : each plane corresponds
-#     to a cut line. I called it "planes"
-#     because Blender Knife Tool needs
-#     a plane to cut an object.
-#
-# 2 - Then it cuts the mesh into "columns" :
-#     it just cuts the mesh with many
-#     lines along the Y axis (which are
-#     defined by "xPlanes" because the
-#     only coordinate that change is the
-#     X coordinate).
-#     The columns aren't linked to the
-#     scene since we don't want to keep it.
-#
-# 3 - Then it cuts each column into "pages":
-#     A page is a grid's square (same process
-#     as upper).
-#
-# 4 - Then it moves each object's center at
-#     the right position (see requirements).
+
+##### GUI & MAIN PROCESS #####
+
 
 # Modules
 import Blender
 from Blender import *
 from Blender import NMesh
 from Blender import Mesh
+from Blender import Image
 from Blender.BGL import *
 from Blender.Draw import *
 from Blender.Scene import *
-import math
+import math, string
 from math import *
+from xml.dom import *
+import gnollTools
+from gnollTools import *
+import knife
+from knife import *
 
-# Events
+# GUI vars need to be global...
+# Events identifiers(constants)
 EVT_NOEVT = 1
 EVT_QUIT = 2
 EVT_SUBD = 3
+EVT_GNOLL = 4
+EVT_PATH = 5
+EVT_INITIAL = 6
+EVT_OGRE = 7
+EVT_OGRE3 = 8
+EVT_OGRE4 = 9
+EVT_SET2 = 10
+EVT_SET3 = 11
+EVT_SET4 = 12
 
-# Settings
+# Settings (input from the GUI)
 SquareSize = Create(1.0)
+maxSquareSize = Create(20.0)
 Epsilon = 0.00001
+genGnollFiles = False
+addInitialPage = False
+exportOgre = False
+isOgre3 = False
+exportPath = 0
+filesExportPath = "/edit/this/export/path/"
+
+# Image used in the GUI
+# logo = Blender.Image.Load('logo.png')
 
 # Get and check settings
 def getSettings():
 	global SquareSize
+
+	popupError = []
+	popupError.append("Ok")
+
 	if(SquareSize.val == 0):
-		print "Error : The size of the pages can't be null."
-		Exit()
+		retval = Draw.PupBlock("Error", ("The size of the pages","can't be null."))
+		return (-1, -1)
 
 	selectedObj = Object.GetSelected()
 
 	if(len(selectedObj) < 1):
-		print "Error : You must select the object to subdivide."
-		Exit()
+		retval = Draw.PupBlock("Error", ("You must select the","object to subdivide.","Usually, it's the ground object."))
+		return (-1, -1)
 	elif(len(selectedObj) > 1):
-		print "Error : There are too many selected objects."
-		Exit()
+		retval = Draw.PupBlock("Error", ("There are too many selected objects !","Just select one object (the ground)."))
+		return (-1, -1)
 	elif(selectedObj[0].type != 'Mesh'):
-		print "Error : The object must be a mesh."
+		retval = Draw.PupBlock("Error", ("The object must be a mesh.","Try again !"))
+		return (-1, -1)
 	else:
 		return (SquareSize.val, selectedObj[0])
 	Exit()
 
-# Globalize the mesh
-def globalize(obj):
-	if(obj.type == "Mesh"):
-		mesh = obj.getData()
-
-		i = 0
-		for v in mesh.verts:
-			(v.co[0], v.co[1], v.co[2]) = GlobalPosition(v.co, obj)
-			mesh.verts[i] = v
-			i = i + 1
-
-		obj.setLocation(0,0,0)
-		obj.rot = (0,0,0)
-		obj.setSize(1,1,1)
-		mesh.update()
-
 # Read bounding box informations
+# (the way Blender stores bounding boxes informations isn't efficient in this problem)
 def getBoundBox(object):
 	boundBox = object.getBoundBox()
 
@@ -191,25 +172,27 @@ def getPlanes(stepSize, boundBox):
 	yPlanes = []
 	(xmin, xmax, ymin, ymax, zmin, zmax) = boundBox
 
+	Window.DrawProgressBar(0, "Planes")
 	# Generate planes along the Y axis
 	print "   Generate planes along the Y axis..."
 	x = xmax - SquareSize.val
 	while x > xmin:
-		xPlanes.append(((x+1,0,0),(x,0,0)))
-		print "      ", x
+		xPlanes.append(((1,0,0),(x,0,0))) #  if (x>0) else x-1
 		x = x - SquareSize.val
- 	print "  ", len(xPlanes), "planes along Y generated."
+	print "  ", len(xPlanes), "planes along Y generated."
+
+	Window.DrawProgressBar(0.5, "Planes")
 
 	# Generate places along the X axis
 	print "   Generate planes along the X axis..."
 	y = ymax - SquareSize.val
 	while y > ymin:
-		yPlanes.append(((0,y+1,0),(0,y,0)))
-		print "      ", y
+		yPlanes.append(((0,1,0),(0,y,0))) #  if (ymin>0) else y-1
 		y = y - SquareSize.val
 
 	# Debug
 	print "  ", len(yPlanes), "planes along X generated."
+	Window.DrawProgressBar(1, "Planes")
 
 	return (xPlanes, yPlanes)
 
@@ -236,10 +219,51 @@ def moveMesh(object, x, y, z):
 	# Update it !
 	me.update()
 
+# Globalize a mesh (adapted from the Blender Knife Tool)
+def globalPosition(P, Obj):
+	m = Obj.getMatrix()
+
+	PX = P[0]*m[0][0] + P[1]*m[1][0] + P[2]*m[2][0] + m[3][0]
+	PY = P[0]*m[0][1] + P[1]*m[1][1] + P[2]*m[2][1] + m[3][1]
+	PZ = P[0]*m[0][2] + P[1]*m[1][2] + P[2]*m[2][2] + m[3][2]
+	return (PX, PY, PZ)
+
+def globalize(obj):
+	if(obj.type == "Mesh"):
+		mesh = obj.getData()
+
+		i = 0
+		for v in mesh.verts:
+			(v.co[0], v.co[1], v.co[2]) = globalPosition(v.co, obj)
+			mesh.verts[i] = v
+			i = i + 1
+
+		obj.setLocation(0,0,0)
+		obj.rot = (0,0,0)
+		obj.setSize(1,1,1)
+		mesh.update()
+
+# Rename a mesh from the object's name (for a cleaner scene and a easier conversion to Ogre)
+def renameMesh(obj):
+	mesh = obj.getData(mesh=1)
+	mesh.name = getCleanName(obj.name)
+
+# Deletes the suffix added automaticly by Blender (like Plane.002)
+def getCleanName(origName):
+	result = ""
+	if not origName.rfind(".0", 0, len(origName)) == -1:
+		result = origName.rpartition('.0')[0]
+	return result
+
 # Cut the mesh into columns (along the Y axis) or into pages (along the X axis)
 def createColumns(rootObj, xPlanes, arePages, startingIndex, rootName, boundBox, squareSize):
 	columns = []
 	sce = Blender.Scene.GetCurrent()
+
+	progress = "Cutting Y"
+	if arePages:
+		progress = "Cutting X"
+	Window.DrawProgressBar(0, progress)
 
 	# Generate names
 	finalName = '-Col-'
@@ -248,7 +272,7 @@ def createColumns(rootObj, xPlanes, arePages, startingIndex, rootName, boundBox,
 		finalName = '-Page-'
 		tempName = '-TempPg-'
 
-	# Set if the algorithm has tu use UV coordinates
+	# Set if the algorithm has to use UV coordinates
 	useUVCoords = rootObj.getData().hasFaceUV()
 
 	# Init the loop
@@ -256,13 +280,20 @@ def createColumns(rootObj, xPlanes, arePages, startingIndex, rootName, boundBox,
 	i = 0
 
 	while i < len(xPlanes):
+		if arePages:
+			Window.DrawProgressBar((startingIndex+i)/(len(xPlanes)*len(xPlanes)), progress)
+		else:
+			Window.DrawProgressBar(i/len(xPlanes), progress)
+
 		# Create a new object containing the new part
 		newObj = Blender.Object.New('Mesh', rootName + finalName + str(startingIndex+i+1))
 		tempObj = Blender.Object.New('Mesh', rootName + tempName + str(startingIndex+i+1))
 
+
 		# Get the meshes
 		newMe = newObj.getData()
 		tempMe = tempObj.getData()
+		print "Using type : ", type(newMe)
 		newMe.hasFaceUV(useUVCoords)
 		tempMe.hasFaceUV(useUVCoords)
 
@@ -271,26 +302,39 @@ def createColumns(rootObj, xPlanes, arePages, startingIndex, rootName, boundBox,
 		d0 = CC[0]*CN[0]+CC[1]*CN[1]+CC[2]*CN[2]
 		Cut(cuttingObject, CN, d0, newMe, tempMe)
 
+		if arePages:
+			print "[", i, "] : ", CN, CC
+
+		# If the coordinates of the plane are under zero, we have to invert newMe and tempMe.
+		#if(CN[0] < 0 or CN[1]<0):
+		#	if arePages:
+		#		print "\tInversion."
+		#	invertor = tempMe
+		#	tempMe = newMe
+		#	newMe = invertor
+
 		# Update the objects
 		newMe.update()
 		tempMe.update()
 
+		cuttingObject = tempObj
+		columns.append(newObj)
+
 		# If it's the last cut, the temp object is also a final object
-		if (i == len(xPlanes)-1):
+		if(i == len(xPlanes)-1):
+
 			# Add the temp object to the scene
 			columns.append(tempObj)
 			tempObj.setName(rootName + finalName + str(startingIndex+i+2))
+			#newObj.setName(rootName + finalName + str(startingIndex+i+2))
 
 			if(arePages): # Link to the scene if needed (only if we are generating pages)
+				renameMesh(tempObj)
 				sce.objects.link(tempObj)
 
-			i = i + 1
-		if True:#else:
-			cuttingObject = tempObj
-			columns.append(newObj)
-
-			if(arePages): # Link to the scene if needed (only if we are generating pages)
-				sce.objects.link(newObj)
+		if(arePages): # Link to the scene if needed (only if we are generating pages)
+			renameMesh(newObj)
+			sce.objects.link(newObj)
 
 		i = i + 1
 
@@ -298,19 +342,32 @@ def createColumns(rootObj, xPlanes, arePages, startingIndex, rootName, boundBox,
 
 # Map subdividing (main process)
 def subdivide():
+	global filesExportPath
+
 	### Print header ###
-	print "
-Grid Subdivide Tool v0.1 by Antonin <Wetneb> Delpeuch"
+	print "\nGrid Subdivide Tool v0.1 by Antonin <Wetneb> Delpeuch"
 	print "Released under Blender Artistic Licence"
 	print "Based on Blender Knife Tool v0.6 by Stefano <S68> Selleri"
 
 	### Check settings and selected object ###
 	(stepSize, rootObj) = getSettings()
+	if(stepSize == -1):
+		return 0
+
+	## Globalize the object ###
+	globalize(rootObj)
 
 	### Extract mesh and bounding box. ###
-	globalize(rootObj)
 	mesh = rootObj.getData(False, True)
 	boundBox = getBoundBox(rootObj)
+
+	### Ensure that we're not generating too much planes ###
+	(xmin, xmax, ymin, ymax, zmin, zmax) = boundBox
+	if (xmax-xmin)/stepSize > 100 or (ymax-ymin)/stepSize > 100:
+		toggle = Draw.Create(0)
+		retval = Draw.PupBlock("Error", ("You are about to generate",str(int((ymax-ymin)*(xmax-xmin)/stepSize))+" pages.","Do you really want","to continue ?",("Yes, run anyway.",toggle)))
+		if not toggle.val:
+			return 0
 
 	### Generate list of planes for cutting ###
 	(xPlanes, yPlanes) = getPlanes(stepSize, boundBox)
@@ -336,25 +393,188 @@ Grid Subdivide Tool v0.1 by Antonin <Wetneb> Delpeuch"
 			j = j +1
 		i = i + 1
 
+	# Generate Gnoll files (if needed)
+	if genGnollFiles:
+
+		# Create page files
+		nbPages = len(columns)*len(pages[0])
+		if addInitialPage:
+			nbPages = nbPages + 1
+		pageFiles = range(nbPages)
+		for i in range(len(columns)):
+			for j in range(len(pages[i])):
+				index = i*len(pages[i])+j
+				pageFiles[index] = PageFile()
+
+				Window.DrawProgressBar(index/(len(columns)*len(pages[i])), "Gnoll files")
+
+				# Create name
+				pageFiles[index].name = rootObj.getData(True) + "-Page-" + str(i*len(pages[i])+j+1)
+				pageFiles[index].size = stepSize
+
+				# Find neighbours of the current page
+				if i < len(columns)-1:
+					pageFiles[index].east = rootObj.name + "-Page-" + str((i+1)*len(pages[i])+j+1)
+				if j < len(pages[i])-1:
+					pageFiles[index].north = rootObj.name + "-Page-" + str(i*len(pages[i])+j+2)
+				if i:
+					pageFiles[index].west = rootObj.name + "-Page-" + str((i-1)*len(pages[i])+j+1)
+				if j:
+					pageFiles[index].south = rootObj.name + "-Page-" + str(i*len(pages[i])+j)
+
+		# Bound each scene's object to a page (if possible)
+		for obj in Scene.GetCurrent().objects:
+			# If this objet isn't part of the ground
+			if string.find(obj.name, rootObj.name, 0, len(obj.name)) == -1:
+				# Find the corresponding page (if the object is in the grid)
+				if obj.LocX > boundBox[0] and obj.LocX < boundBox[1] and obj.LocY > boundBox[2] and obj.LocY < boundBox[3]:
+					print "Static object found in the grid : ", obj.name
+
+					# Indexes of the corresponding page
+					pageX = floor((boundBox[1] - obj.LocX) / stepSize)
+					pageY = floor((boundBox[3] - obj.LocY) / stepSize)
+
+					# Create XML definition of the object
+					objectDef = ObjectDef(obj.name)
+
+					# Coordinates transformation :
+					# The problem is that Blender and Ogre don't use the same way to apply
+					# transformations to a mesh :
+					# - Blender starts to translate the mesh first, then it rotates it
+					# - Gnoll starts to rotate the object, then it translates it along
+					#   rotated axis.
+
+					localX = obj.LocX - pages[int(pageX)][int(pageY)].LocX
+					localY = obj.LocY - pages[int(pageX)][int(pageY)].LocY
+					localZ = obj.LocZ - pages[int(pageX)][int(pageY)].LocZ
+
+					dist = hypot(localY, localZ)
+					angleX = atan2(localZ, localY)
+					objectDef.locZ = cos(obj.RotX - angleX) * dist
+					objectDef.locY = sin(obj.RotX - angleX) * dist
+
+					dist = hypot(objectDef.locY, localX)
+					angleY = atan2(objectDef.locY, localX)
+					objectDef.locX = cos(obj.RotY - angleY) * dist
+					objectDef.locY = sin(obj.RotY - angleY) * dist
+
+					dist = hypot(objectDef.locZ, objectDef.locX)
+					angleZ = atan2(objectDef.locZ, objectDef.locX)
+					objectDef.locX = cos(obj.RotZ - angleZ) * dist
+					objectDef.locZ = sin(obj.RotZ - angleZ) * dist
+
+					if obj.name == "Fontaine":
+						print "   pos of center X : ", boundBox[1] - (pageX+0.5)*stepSize
+						print "   pos of center Y : ", boundBox[3] - (pageY+0.5)*stepSize
+						print "   pos of obj X : ", obj.LocX
+						print "   pos of obj Y : ", obj.LocY
+						print "   distance : ", dist
+						print "   angle : ", angleZ
+						print "   NewObjLocX : ", objectDef.locX
+						print "   NewObjLocZ : ", objectDef.locZ
+						print "   OldObjLocX : ", obj.LocX - pages[int(pageX)][int(pageY)].LocX
+						print "   OldObjLocZ : ", - obj.LocY + pages[int(pageX)][int(pageY)].LocY
+
+
+					# The others parameters are left untouched
+					objectDef.rotX = obj.RotX
+					objectDef.rotZ = -obj.RotY
+					objectDef.rotY = obj.RotZ
+					objectDef.sizeX = obj.SizeX
+					objectDef.sizeZ = obj.SizeY
+					objectDef.sizeY = obj.SizeZ
+
+					# Add this object to the corresponding page
+					pageFiles[int(pageX*len(pages[0])+pageY)].objects.append(objectDef)
+
+		# Add an initial page if needed (defined by the user)
+		if(addInitialPage):
+			index = len(columns)*len(pages[0])
+			pageFiles[index] = PageFile()
+
+			# Create name
+			pageFiles[index].name = rootObj.getData(True) + "-Page-Initial"
+			pageFiles[index].size = stepSize
+
+			# Find neighbours of the current page
+			pageFiles[index].north = rootObj.name + "-Page-1"
+			pageFiles[0].south = rootObj.name + "-Page-Initial"
+
+		# For each page, write the file
+		for page in pageFiles:
+			# Write XML file
+			page.writeToFile(filesExportPath)
+
+
+	Window.DrawProgressBar(1, "")
 	print "Done. You can delete temporary objects (just save and restart Blender)."
-	print "You should also remove all the double vertices using W -> Remove doubles in edit mode."
 	return 0
 
 # GUI Drawing
 def draw():
 	global SquareSize
-	global EVT_NOEVT, EVT_QUIT, EVT_SUBD
+	global EVT_NOEVT, EVT_QUIT, EVT_SUBD, EVT_PATH, EVT_OGRE, EVT_OGRE3, EVT_OGRE4, EVT_SET2, EVT_SET3, EVT_SET4
+	global logo, genGnollFiles, exportPath, addInitialPage, exportOgre, isOgre4
+
+	maxSquareSize = 10.0
+	selectedObj = Object.GetSelected()
+
+	if(len(selectedObj) == 1):
+		if(selectedObj[0].type == 'Mesh'):
+			mesh = selectedObj[0].getData(False, True)
+			boundBox = getBoundBox(selectedObj[0])
+			maxSquareSize = boundBox[1] - boundBox[0]
+			if boundBox[3] - boundBox[2] > maxSquareSize :
+				maxSquareSize = boundBox[3] - boundBox[2]
+			if SquareSize.val > maxSquareSize:
+				SquareSize.val = maxSquareSize
 
 	# Preparing
+	BGL.glClearColor(0.5, 0.5, 0.5, 1)
+	BGL.glColor3f(1.,1.,1.)
 	glClear(GL_COLOR_BUFFER_BIT)
 
+	# Drawing logo
+	# glEnable(GL_BLEND)
+	# glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+	# Draw.Image(logo, 10, 273)
+
+	# glDisable(GL_BLEND)
+
+	# Drawing text
+	glRasterPos2d(10,253)
+	Draw.Text("Map integrating tools for Gnoll")
+	glRasterPos2d(10,233)
+	Draw.Text("by Antonin <Wetneb> Delpeuch")
+	glRasterPos2d(10,73)
+	Draw.Text("General settings :")
+	glRasterPos2d(10,163)
+	Draw.Text("Gnoll settings :")
+#	glRasterPos2d(10,243)
+#	Draw.Text("Ogre settings :")
+
 	# Drawing input controls
-	SquareSize = Number("Size of pages: ", EVT_NOEVT, 10, 55, 170, 18, SquareSize.val,
-		0.00001, 20, "Size of the squared pages.");
+	SquareSize = Draw.Slider("Size of pages", EVT_NOEVT, 10, 200, 255, 18, SquareSize.val,
+		0.00001, maxSquareSize, 0, "Size of the squared pages.")
+	Button("1/2", EVT_SET2, 10, 180, 83, 18)
+	Button("1/3", EVT_SET3, 95, 180, 83, 18)
+	Button("1/4", EVT_SET4, 180, 180, 83, 18)
+
+	if genGnollFiles:
+		initialPage = Draw.Toggle("Add an initial page", EVT_INITIAL, 10, 100, 255, 25, addInitialPage)
+#	if exportOgre:
+#		ogre3 = Draw.Toggle("Ogre 1.3", EVT_OGRE3, 10, 180, 125, 25, isOgre3)
+#		ogre4 = Draw.Toggle("Ogre 1.4", EVT_OGRE4, 140, 180, 125, 25, not(isOgre3))
+	if genGnollFiles or exportOgre:
+		exportPath = Draw.String("Export path : ", EVT_PATH, 10, 40, 255, 25, filesExportPath, 399)
+
+	useGnoll = Draw.Toggle("Generate Gnoll files", EVT_GNOLL, 10, 130, 255, 25, genGnollFiles)
+#	useOgre = Draw.Toggle("Generate Ogre files", EVT_OGRE, 10, 210, 255, 25, exportOgre)
 
 	# Drawing main buttons
-	Button("Quit", EVT_QUIT, 10, 35, 80, 18)
-	Button("Subdivide", EVT_SUBD, 100, 35, 80, 18)
+	Button("Quit", EVT_QUIT, 10, 10, 125, 25)
+	Button("Subdivide", EVT_SUBD, 140, 10, 125, 25)
 
 
 # Event handling
@@ -362,377 +582,64 @@ def event(evt, val):
 	if(evt == QKEY and not val):
 		Exit()
 
-def bevent(evt):
-	global SquareSize
-	global EVT_NOEVT, EVT_QUIT, EVT_SUBD
+# Updating
+def updateGUI():
+	global maxSquareSize
 
+	# Updating the maximal square size
+
+	selectedObj = Object.GetSelected()
+
+	if(len(selectedObj) == 1):
+		if(selectedObj[0].type == 'Mesh'):
+			mesh = selectedObj[0].getData(False, True)
+			boundBox = getBoundBox(selectedObj[0])
+			maxSquareSize = boundBox[1] - boundBox[0]
+			if boundBox[3] - boundBox[2] > maxSquareSize :
+				maxSquareSize = boundBox[3] - boundBox[2]
+			if SquareSize.val > maxSquareSize:
+				SquareSize.val = maxSquareSize
+		else:
+			maxSquareSize = 10.0
+	else:
+		maxSquareSize = 10.0
+
+def bevent(evt):
+	global SquareSize, genGnollFiles, exportPath, filesExportPath, isOgre3, exportOgre, addInitialPage, maxSquareSize
+	global EVT_NOEVT, EVT_QUIT, EVT_SUBD, EVT_OGRE, EVT_OGRE3, EVT_OGRE4, EVT_SET2, EVT_SET3, EVT_SET4, EVT_INITIAL
+
+	updateGUI()
 	if(evt == EVT_QUIT):
 		Exit()
+	elif(evt == EVT_GNOLL):
+		genGnollFiles = not(genGnollFiles)
+		Blender.Draw.Draw()
+	elif(evt == EVT_OGRE):
+		exportOgre = not(exportOgre)
+		Blender.Redraw()
+	elif(evt == EVT_OGRE3):
+		isOgre3 = True
+		Blender.Redraw()
+	elif(evt == EVT_OGRE4):
+		isOgre3 = False
+		Blender.Redraw()
+	elif(evt == EVT_PATH):
+		filesExportPath = exportPath.val
 	elif(evt == EVT_SUBD):
 		if(subdivide()):
 			Exit()
 		Blender.Redraw()
+	elif(evt == EVT_SET2):
+		SquareSize.val = maxSquareSize / 1.9
+		Blender.Redraw()
+	elif(evt == EVT_SET3):
+		SquareSize.val = maxSquareSize / 2.9
+		Blender.Redraw()
+	elif(evt == EVT_SET4):
+		SquareSize.val = maxSquareSize / 3.9
+		Blender.Redraw()
+	elif(evt == EVT_INITIAL):
+		addInitialPage = not(addInitialPage)
+		Blender.Draw.Redraw()
 
 Register(draw, event, bevent)
-
-#############################################################
-#                                                           #
-# Blender Knife Tool                                        #
-#                                                           #
-# (C) December 2002 Stefano <S68> Selleri                   #
-# Released under the Blender Artistic Licence (BAL)         #
-# See www.blender.org                                       #
-#                                                           #
-#############################################################
-# History                                                   #
-# V: 0.0.0 - 08-12-02 - The script starts to take shape, an #
-#                       history is now deserved :)          #
-#    0.0.1 - 09-12-02 - The faces are correctly selected and#
-#                       assigned to the relevant objects    #
-#                       now the hard (splitting) part...    #
-#    0.0.2 - 14-12-02 - Still hacking on the splitting...   #
-#                       It works, but I have to de-globalize#
-#                       the intersection coordinates        #
-#    0.0.3 - 15-12-02 - First Alpha version                 #
-#    0.0.4 - 17-12-02 - Upgraded accordingly to eeshlo tips #
-#                       Use Matrices for coordinate transf. #
-#                       Add a GUI                           #
-#                       Make it Run on 2.23                 #
-#    0.0.5 - 17-12-02 - Eeshlo solved some problems....     #
-#                       Theeth too adviced me               #
-#    0.0.6 - 18-12-02 - Better error messages               #
-#############################################################
-
-# Note: I (wetneb) added some stuff so the UV coordinates are
-# correctly handled.
-
-import Blender
-from Blender import *
-from math import *
-
-Epsilon = 0.00001
-msg = ''
-
-BL_VERSION = Blender.Get('version')
-if (BL_VERSION<=223):
-	import Blender210
-
-#############################################################
-# SUBS from LOCAL to GLOBAL coordinates                     #
-#############################################################
-
-def GlobalPosition(P, Obj):
-	#
-	# Prende un punto nelle coordinate locali (Vertice di Mesh)
-	# E lo trasporta in coordinate globali
-	#
-	if (BL_VERSION<=223):
-		m = Obj.matrix
-	else:
-		m = Obj.getMatrix()
-
-	PX = P[0]*m[0][0] + P[1]*m[1][0] + P[2]*m[2][0] + m[3][0]
-	PY = P[0]*m[0][1] + P[1]*m[1][1] + P[2]*m[2][1] + m[3][1]
-	PZ = P[0]*m[0][2] + P[1]*m[1][2] + P[2]*m[2][2] + m[3][2]
-	return (PX, PY, PZ)
-
-def LocalPosition(P, Obj):
-	#
-	# Prende un punto nelle coordinate globali
-	# E lo trasporta in coordinate locali a un ggetto  (Vertice di Mesh)
-	#
-	if (BL_VERSION<=223):
-		m = Blender210.getObject(Obj.name).inverseMatrix
-	else:
-		m = Obj.getInverseMatrix()
-
-	PX = P[0]*m[0][0] + P[1]*m[1][0] + P[2]*m[2][0] + m[3][0]
-	PY = P[0]*m[0][1] + P[1]*m[1][1] + P[2]*m[2][1] + m[3][1]
-	PZ = P[0]*m[0][2] + P[1]*m[1][2] + P[2]*m[2][2] + m[3][2]
-	return (PX, PY, PZ)
-
-#############################################################
-# SUBS Extracts Cutting Plane Data                          #
-#############################################################
-
-def CutData(Plane):
-	#
-	# Traduce il secondo oggetto in un punto (Il suo centro)
-	# ed in una direzione (la normale alla faccia 0)
-	#
-	if (BL_VERSION<=223):
-		PlaneCenter = Plane.loc
-	else:
-		PlaneCenter = Plane.getLocation()
-
-	PlaneMesh   = NMesh.GetRawFromObject(Plane.name)
-
-	if (len(PlaneMesh.faces)>1):
-		msg =  "ERROR: Active object must be a single face plane"
-		return ((0,0,0),(0,0,0))
-	else:
-		if (len(PlaneMesh.verts)<3):
-			msg = "ERROR: 3 vertices needed to define a plane"
-			return ((0,0,0),(0,0,0))
-		else:
-			print "# OK:    Active object is a single face plane -> Getting Cut Data"
-			v0 = GlobalPosition(PlaneMesh.faces[0].v[0].co, Plane)
-			v1 = GlobalPosition(PlaneMesh.faces[0].v[1].co, Plane)
-			v2 = GlobalPosition(PlaneMesh.faces[0].v[2].co, Plane)
-
-			NormX   = (v1[1]-v0[1])*(v2[2]-v0[2]) - (v1[2]-v0[2])*(v2[1]-v0[1])
-			NormY   = (v1[2]-v0[2])*(v2[0]-v0[0]) - (v1[0]-v0[0])*(v2[2]-v0[2])
-			NormZ   = (v1[0]-v0[0])*(v2[1]-v0[1]) - (v1[1]-v0[1])*(v2[0]-v0[0])
-			NormLen = sqrt(NormX*NormX+NormY*NormY+NormZ*NormZ)
-			NormX  /= NormLen
-			NormY  /= NormLen
-			NormZ  /= NormLen
-
-			return PlaneCenter, (NormX, NormY, NormZ)
-
-#############################################################
-# SUBS giving position with respect to Cut Plane            #
-#############################################################
-
-def Distance(P, N, d0):
-	#
-	# Ok, quanto dista un punto dal piano?
-	#
-	return P[0]*N[0] + P[1]*N[1] + P[2]*N[2]-d0
-
-def FacePosition(f, Obj, N, d0):
-	#
-	# Valuta se una faccia Ã¨ tutta da una parte, da un'altra, o Ã¨ intersecata
-	#
-	np, nn, nz = 0, 0, 0
-
-	for v in f.v:
-		V = GlobalPosition(v.co, Obj)
-		d = Distance(V, N, d0)
-
-		if (d>0):
-			np += 1
-		elif (d<0):
-			nn += 1
-		else:
-			nz += 1
-
-	if (np==0):
-		return -1
-	if (nn==0):
-		return 1
-	return 0
-
-#############################################################
-# SUBS Appending existing faces or creating new faces for   #
-#      cutted objects                                       #
-#############################################################
-
-def FaceAppend(me, f):
-	#
-	# Aggiunge una faccia senza nessuna elaborazione
-	#
-	idx = len(me.verts)
-	for v in f.v:
-		me.verts.append(NMesh.Vert(v.co[0], v.co[1], v.co[2]))
-
-	nf = NMesh.Face()
-	for i in range(len(f.v)):
-		nf.v.append(me.verts[idx+i])
-	for i in range(len(f.uv)):
-		nf.uv.append(f.uv[i])
-	if(f.image):
-		nf.image = f.image
-	me.faces.append(nf)
-
-def FaceMake(me, vl, vu, image):
-	#
-	# Crea una o due nuove facce da un elenco di vertici
-	#
-	idx = len(me.verts)
-
-	for v in vl:
-		me.verts.append(NMesh.Vert(v[0], v[1], v[2]))
-
- 	if (len(vl)<=4):
-		nf = NMesh.Face()
-		for i in range(len(vl)):
-			nf.v.append(me.verts[idx+i])
-			if(len(vu)):
-				nf.uv.append(vu[i])
-
-		if(image):
-			nf.image = image
-		me.faces.append(nf)
-	else:
-		nf = NMesh.Face()
-		nf.v.append(me.verts[idx])
-		nf.v.append(me.verts[idx+1])
-		nf.v.append(me.verts[idx+2])
-		nf.v.append(me.verts[idx+3])
-		if(image):
-			nf.image = image
-		if(len(vu)):
-			nf.uv.append(vu[0])
-			nf.uv.append(vu[1])
-			nf.uv.append(vu[2])
-			nf.uv.append(vu[3])
-		me.faces.append(nf)
-
-		nf = NMesh.Face()
-		nf.v.append(me.verts[idx+3])
-		nf.v.append(me.verts[idx+4])
-		nf.v.append(me.verts[idx])
-		if(image):
-			nf.image = image
-		if(len(vu)):
-			nf.uv.append(vu[3])
-			nf.uv.append(vu[4])
-			nf.uv.append(vu[0])
-		me.faces.append(nf)
-
-#############################################################
-# SUBS Generating vertex lists for splitting faces          #
-#############################################################
-
-def Split(Obj, f, N, d0):
-	#
-	# Genera una lista di vertici da una parte e dall'altra e relativi punti intermedi
-	#
-
-	i = 0
-	V = []
-	d = []
-	v = f.v
-
-	vp = []
-	vpu = []
-	vn = []
-	vnu = []
-
-	for vl in v:
-		V.append(GlobalPosition(vl.co, Obj))
-		d.append(Distance(V[i], N, d0))
-		i += 1
-
-	for i in range(0,len(d)):
-		if (i==0):
-			dim1 = d[len(d)-1]
-			Vim1 = V[len(V)-1]
-
-			# UV Coords...
-			if(len(f.uv)):
-				Viu1 = f.uv[len(f.uv)-1]
-		else:
-			dim1 = d[i-1]
-			Vim1 = V[i-1]
-
-			# UV Coords...
-			if(len(f.uv)):
-				Viu1 = f.uv[i-1]
-
-		if (abs(d[i])<Epsilon):
-			# Appartiene a entrambi
-			vp.append(tuple(v[i].co))
-			vn.append(tuple(v[i].co))
-
-			# UV Coords...
-			if(len(f.uv)):
-				vpu.append(tuple(f.uv[i]))
-				vnu.append(tuple(f.uv[i]))
-		else:
-			if (abs(dim1)<Epsilon):
-				# Quello di prima era sul contorno
-				if (d[i]>0):
-					vp.append(tuple(v[i].co))
-					if(len(f.uv)):
-						vpu.append(tuple(f.uv[i]))
-				else:
-					vn.append(tuple(v[i].co))
-					if(len(f.uv)):
-						vnu.append(tuple(f.uv[i]))
-			else:
-				if (d[i]*dim1>0):
-					# Nessun cambio netto, nessuna intersezione
-					if (d[i]>0):
-						vp.append(tuple(v[i].co))
-						if(len(f.uv)):
-							vpu.append(tuple(f.uv[i]))
-					else:
-						vn.append(tuple(v[i].co))
-						if(len(f.uv)):
-							vnu.append(tuple(f.uv[i]))
-				else:
-					# INTERSEZIONE!!!
-					Den = (Vim1[1]-V[i][1])*N[1] + (Vim1[0]-V[i][0])*N[0] + (Vim1[2]-V[i][2])*N[2]
-
-					Vi = []
-					Vi.append (- ((Vim1[0]*V[i][1]-Vim1[1]*V[i][0])*N[1]+(Vim1[0]*V[i][2]-Vim1[2]*V[i][0])*N[2]+(V[i][0]-Vim1[0])*d0)/Den)
-					Vi.append (- ((Vim1[1]*V[i][0]-Vim1[0]*V[i][1])*N[0]+(Vim1[1]*V[i][2]-Vim1[2]*V[i][1])*N[2]+(V[i][1]-Vim1[1])*d0)/Den)
-					Vi.append (- ((Vim1[2]*V[i][0]-Vim1[0]*V[i][2])*N[0]+(Vim1[2]*V[i][1]-Vim1[1]*V[i][2])*N[1]+(V[i][2]-Vim1[2])*d0)/Den)
-
-					ViL = LocalPosition(Vi, Obj)
-
-					vp.append(ViL)
-					vn.append(ViL)
-
-					# UV Coords managment
-					if(len(f.uv)):
-						cutRatio = fabs(dim1)/(fabs(dim1)+fabs(d[i]))
-						Viu = (Viu1[0] + (f.uv[i][0] - Viu1[0])*cutRatio),(Viu1[1] + (f.uv[i][1] - Viu1[1])*cutRatio)
-						vpu.append(Viu)
-						vnu.append(Viu)
-
-					# E il punto stesso...
-					if (d[i]>0):
-						vp.append(tuple(v[i].co))
-						if(len(f.uv)):
-							vpu.append(tuple(f.uv[i]))
-					else:
-						vn.append(tuple(v[i].co))
-						if(len(f.uv)):
-							vnu.append(tuple(f.uv[i]))
-
-	return ((vp, vpu),(vn, vnu))
-
-#############################################################
-# SUBS Splitting a face intersected by the Cut Plane        #
-#############################################################
-
-def FaceSplit(Obj, mp, mn, f, N, d0):
-	#
-	# Divide la faccia in due pezi e crea le facce necessarie
-	#
-
-	# Crea le liste dei vertici
-	((vlp,vlpu), (vln, vlnu)) = Split(Obj, f, N, d0)
-
-	# Crea nuove facce coi nuovi vertici
-	FaceMake(mp, vlp, vlpu, f.image)
-	FaceMake(mn, vln, vlnu, f.image)
-
-#############################################################
-# SUBS Appending to two new meshes all the faces of the     #
-# original one, splitting the intersected ones              #
-#############################################################
-
-def Cut(Obj, Normal, d0, MeshPos, MeshNeg):
-	#
-	# VabbuÃ², scandiamoci tutte le faccine...
-	#
-	if BL_VERSION<=223:
-		ObjMesh = Obj.data
-	else:
-		ObjMesh = Obj.getData()
-
-	for oface in ObjMesh.faces:
-		fp = FacePosition(oface, Obj, Normal, d0)
-		if (fp>0):
-			# Tutta nel positivo
-			FaceAppend(MeshPos, oface)
-		if (fp<0):
-			# Tutta nel negativo
-			FaceAppend(MeshNeg, oface)
-		if (fp==0):
-			# Un po' qua un po' lÃ
-			FaceSplit(Obj, MeshPos, MeshNeg, oface, Normal, d0)
