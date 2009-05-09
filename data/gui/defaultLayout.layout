@@ -11,7 +11,7 @@
                 <Property Name="Text" Value="Some pretty statistics here..." />
             </Window>
         </Window>
-	<Window Type="TaharezLook/Button" Name="QuitButton">
+	<Window Type="TaharezLook/Button" Name="buttonQuit">
             <Property Name="UnifiedPosition" Value="{{0.025,0},{0.9,0}}" />
             <Property Name="UnifiedSize" Value="{{0.2,0},{0.05,0}}" />
             <Property Name="Text" Value="Press Q to Quit" />

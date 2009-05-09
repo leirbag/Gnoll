@@ -42,7 +42,7 @@
 	</attribute>
 	<attribute name="16">
 		<list>
-			<string value="ACTION_QUIT"/>
+			<string value="APPLICATION_QUIT"/>
 		</list>
 	</attribute>
 </dynamicobject>
