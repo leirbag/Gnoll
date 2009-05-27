@@ -158,6 +158,8 @@ def main():
 	if ARGUMENTS.get('do_log', '0') == '1':
 		configProject['DO_LOG'] = '1'
 
+	# If no target specify, we use "gnoll" target
+	Default('gnoll')
 
 	for target in BUILD_TARGETS:
 
