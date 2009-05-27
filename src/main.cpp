@@ -102,6 +102,9 @@ namespace Gnoll
 			CStatsModule*           statsModule;
 			CMessageManager*        messageManager;
 
+
+			bool done;
+
 			void analyzeArguments (int argc, char* argv[]);
 
 		public:
@@ -255,6 +258,7 @@ namespace Gnoll
 
 	void Application::init(int argc, char* argv[])
 	{
+		done = 0;
 		analyzeArguments (argc, argv);
 		GNOLL_LOG() << "Arguments analyzed [DONE]\n";
 		init();
@@ -350,14 +354,14 @@ namespace Gnoll
 
 	bool Application::quit_OnClick(const CEGUI::EventArgs &args)
 	{
-		exit();
+		done = 1;
 	}
 
 
 	void Application::process()
 	{
 		CSceneManager* gSceneManager = new CSceneManager("gSceneManager");
-		while (true)
+		while (!done)
 		{
 			statsModule->process();
 			inputmanager.process();
@@ -415,7 +419,7 @@ int main(int argc, char* argv[])
 	Gnoll::Application* app = Gnoll::Application::getInstancePtr();
 	app->init(argc, argv);
 	app->process();
-	app->exit(); // Should not happen
+	app->exit();
 
 	return 0;
 }
