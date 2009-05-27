@@ -389,6 +389,7 @@ namespace Gnoll
 		Gnoll::Stats::CStatsModule::destroy();
 		CSoundModule::destroy();
 		CTimeModule::destroy();
+		CameraManager::destroy();
 		CInputEventsTranslator::destroy();
 		CGraphicModule::destroy();
 		CMessageModule::destroy();

@@ -27,7 +27,7 @@
 
 #include "../include/cameramanager.h"
 #include "../../dynamicobject/include/list.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/clogmacros.h"
 #include "../include/camerafixefactory.h"
 #include "../include/camerafirstpersonfactory.h"
 #include "../include/camerathirdpersonfactory.h"
@@ -50,6 +50,7 @@ namespace Gnoll
 
 		CameraManager::~CameraManager()
 		{
+			GNOLL_LOG() << "Camera manager exiting\n";
 		}
 
 		shared_ptr<Camera> CameraManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
