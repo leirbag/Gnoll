@@ -44,6 +44,7 @@ namespace Gnoll
 	{
 		DefaultCameraFreeFlyListener::DefaultCameraFreeFlyListener()
 		{
+			borderX = borderY = -1;
 		}
 
 		DefaultCameraFreeFlyListener::~DefaultCameraFreeFlyListener()
@@ -68,16 +69,12 @@ namespace Gnoll
 			 */
 			shared_ptr<CameraFreeFly> pCam = static_pointer_cast<CameraFreeFly>(cam);
 
-			// KEYBOARD
-			if(ae.action == "ACTION_ROTATE_LEFT")
-				pCam->rotateAroundAxisY(ae.intensity * lasttime);
-			if(ae.action == "ACTION_ROTATE_RIGHT")
-				pCam->rotateAroundAxisY(ae.intensity * lasttime * -1);
-			if(ae.action == "ACTION_ROTATE_UP")
-				pCam->rotateAroundAxisX(ae.intensity * lasttime);
-			if(ae.action == "ACTION_ROTATE_DOWN")
-				pCam->rotateAroundAxisX(ae.intensity * lasttime * -1);
+			if(ae.action == "BORDER_X")
+				borderX = ae.intensity * 100;
+			if(ae.action == "BORDER_Y")
+				borderY = ae.intensity * 100;
 
+			// KEYBOARD
 			if(ae.action == "ACTION_STRAFE_LEFT")
 				pCam->strafeLR(ae.intensity * lasttime * -1);
 			if(ae.action == "ACTION_STRAFE_RIGHT")
@@ -89,13 +86,13 @@ namespace Gnoll
 
 			// MOUSE
 			float sensibility = -20.0f;  // Negative pour inverser les axes en meme temps
-			if(ae.action == "ACTION_ROTATE_CAMERA_LEFT")
+			if(borderX >= 0 && ae.action == "ACTION_ROTATE_CAMERA_LEFT" && borderX < 10)
 				pCam->rotateAroundAxisY(ae.intensity * lasttime * sensibility);
-			if(ae.action == "ACTION_ROTATE_CAMERA_RIGHT")
+			if(borderX >= 0 && ae.action == "ACTION_ROTATE_CAMERA_RIGHT" && borderX > 90)
 				pCam->rotateAroundAxisY(ae.intensity * lasttime * sensibility);
-			if(ae.action == "ACTION_ROTATE_CAMERA_UP")
+			if(borderY >= 0 && ae.action == "ACTION_ROTATE_CAMERA_UP" && borderY > 90)
 				pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
-			if(ae.action == "ACTION_ROTATE_CAMERA_DOWN")
+			if(borderY >= 0 && ae.action == "ACTION_ROTATE_CAMERA_DOWN" && borderY < 10)
 				pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
 
 			// Update

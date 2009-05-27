@@ -76,7 +76,7 @@ void COISInputManager::initialise(  ) {
 
 
         // Setup basic variables
-        OIS::ParamList paramList;    
+        OIS::ParamList paramList;
         size_t windowHnd = 0;
         std::ostringstream windowHndStr;
 
@@ -155,8 +155,8 @@ OIS::Keyboard* COISInputManager::getKeyboard( void ) {
     return mKeyboard;
 }
 
-bool COISInputManager::keyPressed( const OIS::KeyEvent &e ) 
-{	
+bool COISInputManager::keyPressed( const OIS::KeyEvent &e )
+{
 
 	CMessageType keydown("KEYBOARD_KEYDOWN");
 
@@ -168,7 +168,7 @@ bool COISInputManager::keyPressed( const OIS::KeyEvent &e )
 	return true;
 }
 
-bool COISInputManager::keyReleased( const OIS::KeyEvent &e ) 
+bool COISInputManager::keyReleased( const OIS::KeyEvent &e )
 {
 	CMessageType keyup("KEYBOARD_KEYUP");
 
@@ -191,6 +191,8 @@ bool COISInputManager::mouseMoved( const OIS::MouseEvent &arg )
 
 	shared_ptr<boost::any> data ( new boost::any(mouseE) )  ;
 	shared_ptr<CMessage>  mymessage (new CMessage(mouseMoved, data ));
+
+	CEGUI::System::getSingleton().injectMousePosition( arg.state.X.abs, arg.state.Y.abs );
 
 	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 
@@ -232,7 +234,7 @@ bool COISInputManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButto
 	return true;
 }
 
-	
+
 bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
 	CMessageType mouseReleased("MOUSE_RELEASED");

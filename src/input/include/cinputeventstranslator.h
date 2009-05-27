@@ -84,6 +84,7 @@ namespace Gnoll
 				 * Translator for mouse motion generated messages
 				 */
 				shared_ptr<CMessageListener> mouseMotionEventsTranslator;
+				shared_ptr<CMessageListener> mouseMotionStateTranslator;
 
 
 				/**

@@ -51,6 +51,7 @@ namespace Gnoll
 			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
 			shared_ptr<CMessageListenerCamera> listenerInput(new DefaultCameraFreeFlyListener);
 			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
+			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::CMessageType(Gnoll::Input::ACTION_EVENT_STATE_TYPE) );
 			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFreeFly(instanceName, wrapper));
 			listenerInput->setCamera(pCam);
 

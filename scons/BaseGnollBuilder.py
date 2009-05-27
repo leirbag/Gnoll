@@ -283,6 +283,7 @@ class BaseGnollBuilder:
 			'src/input/src/ckeyboardeventstranslator.cpp',
 			'src/input/src/ckeyboardstatetranslator.cpp',
 			'src/input/src/cmousemotioneventstranslator.cpp',
+			'src/input/src/cmousemotionstatetranslator.cpp',
 			'src/input/src/cmousebuttoneventstranslator.cpp',
 			'src/input/src/cmousebuttonstatetranslator.cpp',
 			'src/input/src/ckeyboardeventstrigger.cpp',
