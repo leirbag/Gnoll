@@ -108,6 +108,11 @@ namespace Gnoll
 			void analyzeArguments (int argc, char* argv[]);
 
 		public:
+
+			bool getDone() {return done;}
+
+			bool setDone(bool _done) {done = _done;}
+
 			void init(int argc, char* argv[]);
 
 			void init();
@@ -156,7 +161,9 @@ namespace Gnoll
 	{
 		Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
 		if(ae.action == "APPLICATION_QUIT")
-			Gnoll::Application::getInstancePtr()->exit();
+		{
+			Gnoll::Application::getInstancePtr()->setDone(1);
+		}
 	}
 
 
@@ -389,7 +396,6 @@ namespace Gnoll
 		Gnoll::Stats::CStatsModule::destroy();
 		CSoundModule::destroy();
 		CTimeModule::destroy();
-		CameraManager::destroy();
 		CInputEventsTranslator::destroy();
 		CGraphicModule::destroy();
 		CMessageModule::destroy();
