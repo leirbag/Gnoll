@@ -18,11 +18,9 @@
 ***************************************************************************/
 
 
-/*----------------------CMouseButtonStateTranslator------------------------*\
-|   This is translate mouse button events to action events                  |
+/*----------------------CMouseMotionStateTranslator------------------------*\
+|   This is translate mouse motion events to stateful events                |
 |                                                                           |
-|   Changelog :                                                             |
-|               01/11/2008 - Paf - Initial release                          |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
@@ -56,6 +54,7 @@ namespace Gnoll
 				 */
 				shared_ptr<Gnoll::DynamicObject::DynamicObject> mouseConfig;
 
+
 				/**
 				 * Maximum X coordinate for the mouse
 				 */
@@ -67,10 +66,11 @@ namespace Gnoll
 				 */
 				float maxY;
 
+
 				/**
 				 * CMessageType for MOUSE_MOVED messages
 				 */
-				CMessageType mouseButtonMovedEvent;
+				CMessageType mouseMovedEvent;
 
 
 			public:

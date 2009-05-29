@@ -21,11 +21,6 @@
 /*----------------------CMouseMotionStateTranslator------------------------*\
 |   This is translate mouse events to action events                         |
 |                                                                           |
-|   Changelog :                                                             |
-|               01/11/2008 - Paf - Initial release                          |
-|                                                                           |
-|		16/05/2008 - WT  - Send a list of action messages instead             |
-|				     of a unique message per input	                            |
 \*-------------------------------------------------------------------------*/
 
 
@@ -57,10 +52,10 @@ namespace Gnoll
 	{
 
 		CMouseMotionStateTranslator::CMouseMotionStateTranslator():
-			mouseButtonMovedEvent("MOUSE_MOVED")
+			mouseMovedEvent("MOUSE_MOVED")
 		{
 			/**
-			 * Keyboard config
+			 * Mouse config
 			 */
 			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 			this->mouseConfig = pom->load("mouseConfig");
@@ -88,9 +83,11 @@ namespace Gnoll
 
 		}
 
+
 		CMouseMotionStateTranslator::~CMouseMotionStateTranslator()
 		{
 		}
+
 
 		void CMouseMotionStateTranslator::sendXBorderState(MouseEvent mouseEvent)
 		{
