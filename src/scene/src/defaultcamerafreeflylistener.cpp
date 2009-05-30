@@ -95,6 +95,7 @@ namespace Gnoll
 			}
 
 			if(borderY >= 0)
+			{
 				if(ae.action == "ACTION_ROTATE_CAMERA_UP" && borderY > 0.9)
 					pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
 
@@ -103,7 +104,7 @@ namespace Gnoll
 			}
 
 			// Update
-			cam->update(lasttime);
+			pCam->update(lasttime);
 		}
 	};
 };
