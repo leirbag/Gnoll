@@ -105,7 +105,6 @@ namespace Gnoll
 			CSoundModule *          soundmanager;
 			CInputEventsTranslator* inputEventsTranslator;
 			CStatsModule*           statsModule;
-			CMessageManager*        messageManager;
 
 
 			bool done;
@@ -116,7 +115,7 @@ namespace Gnoll
 
 			bool getDone() {return done;}
 
-			bool setDone(bool _done) {done = _done;}
+			void setDone(bool _done) {done = _done;}
 
 			void init(int argc, char* argv[]);
 
@@ -310,7 +309,6 @@ namespace Gnoll
 		statsModule           = CStatsModule::getInstancePtr();
 		GNOLL_LOG() << "Instanciating modules...[DONE]\n";
 
-		CMessageManager* messageManager = messageModule->getMessageManager();
 
 		try
 		{
@@ -367,6 +365,7 @@ namespace Gnoll
 	bool Application::quit_OnClick(const CEGUI::EventArgs &args)
 	{
 		done = 1;
+		return done;
 	}
 
 
