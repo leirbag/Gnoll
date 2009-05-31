@@ -189,6 +189,9 @@ class BaseGnollBuilder:
 
 		configProject = {}
 
+		if config.CheckCXXHeader('signal.h'):
+			configProject['HAVE_SIGNAL'] = '1'
+
 		boostConfig    = self.checkBoost(env, config)
 		openALConfig   = self.checkOpenAL(env, config)
 		vorbisConfig   = self.checkVorbis(env, config)

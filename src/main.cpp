@@ -60,6 +60,7 @@
 #include "stats/include/cstatsmodule.h"
 #include "log/include/clogmacros.h"
 #include "input/include/ctranslationevents.h"
+#include "config.h"
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>
@@ -69,6 +70,10 @@
 #include <boost/program_options.hpp>
 
 #include <Ogre.h>
+
+#ifdef HAVE_SIGNAL
+	#include <signal.h>
+#endif
 
 using namespace boost;
 using namespace boost::program_options;
@@ -414,6 +419,22 @@ namespace Gnoll
 	}
 };
 
+
+//
+//===============================================================================
+// Terminate function when we receive a SIGKILL signal to destroy
+// correctly managers (like input)
+//===============================================================================
+//
+#ifdef HAVE_SIGNAL
+	void terminate (int param)
+	{
+		printf ("Terminating program...\n");
+		Gnoll::Application::getInstancePtr()->setDone(true);
+	}
+#endif
+
+
 //
 //===============================================================================
 // Start point of the application
@@ -424,6 +445,14 @@ int main(int argc, char* argv[])
 	srand ( time(NULL) );
 
 	Gnoll::Application* app = Gnoll::Application::getInstancePtr();
+
+	#ifdef HAVE_SIGNAL
+		struct sigaction action;
+		action.sa_handler = terminate;
+	sigaction(SIGKILL, &action, NULL);
+		sigaction(SIGTERM, &action, NULL);
+	#endif
+
 	app->init(argc, argv);
 	app->process();
 	app->exit();
