@@ -31,8 +31,9 @@
 
 #include "../include/filestream.h"
 #include "../../log/include/clogmodule.h"
+#include <boost/filesystem/operations.hpp>
 
-
+using namespace boost::filesystem;
 
 namespace Gnoll {
 
@@ -44,12 +45,18 @@ namespace Gnoll {
 			ios::openmode mode = ios::in | ios::binary;
 			m_isOpen = false;
 
+			if (is_directory(_filename))
+			{
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( _filename + " is a directory" );
+				return;
+			}
+
 			if (_overWrite)
 			{
 				mode = mode | ios::trunc | ios::out;
 			}
 
-			m_stream.open (m_filename.c_str(), mode); 
+			m_stream.open (m_filename.c_str(), mode);
 
 			if (m_stream.good())
 			{
@@ -78,7 +85,7 @@ namespace Gnoll {
 			{
 				m_stream.read(_buff, _size);
 				return m_stream.gcount();
-			} else 
+			} else
 			{
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( m_filename + "was not opened" );
 				return 0;
@@ -92,12 +99,12 @@ namespace Gnoll {
 				unsigned int before = m_stream.tellp();
 				m_stream.write(_buff, _size);
 				return (unsigned int)m_stream.tellp() - before;
-			} else 
+			} else
 			{
 				return 0;
 			}
 		}
-	
+
 		void FileStream::close()
 		{
 			if (m_isOpen)
@@ -112,10 +119,10 @@ namespace Gnoll {
 			if (m_isOpen)
 			{
 				return m_stream.eof();
-			} else 
-			{ 
+			} else
+			{
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Trying to get an EOF on a closed file: " + m_filename );
-				return 1;		  
+				return 1;
 			}
 		}
 	}
