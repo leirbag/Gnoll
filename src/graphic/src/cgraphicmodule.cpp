@@ -306,19 +306,6 @@ namespace Gnoll
 			l->setPosition(699,380,485);
 			l->setType( Light::LT_POINT );
 
-
-			Entity *ent1 = mSceneMgr->createEntity( "Robot", "alexandre.mesh" );
-			SceneNode *node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode( "RobotNode");
-
-
-			node1->scale(0.2, 0.2, 0.2);
-			node1->attachObject( ent1 );
-			ent1->setCastShadows( true );
-
-			AnimationState * anim = ent1->getAnimationState( "Idle" );
-			anim->setLoop( true );
-			anim->setEnabled( true );
-
 			m_timer = new Timer();
 			m_lastframe = m_timer->getMilliseconds ();
 
