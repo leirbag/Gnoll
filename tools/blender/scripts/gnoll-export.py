@@ -414,13 +414,13 @@ def subdivide():
 
 				# Find neighbours of the current page
 				if i < len(columns)-1:
-					pageFiles[index].east = rootObj.name + "-Page-" + str((i+1)*len(pages[i])+j+1)
+					pageFiles[index].west  = rootObj.name + "-Page-" + str((i+1)*len(pages[i])+j+1)
 				if j < len(pages[i])-1:
-					pageFiles[index].north = rootObj.name + "-Page-" + str(i*len(pages[i])+j+2)
+					pageFiles[index].south = rootObj.name + "-Page-" + str(i*len(pages[i])+j+2)
 				if i:
-					pageFiles[index].west = rootObj.name + "-Page-" + str((i-1)*len(pages[i])+j+1)
+					pageFiles[index].east  = rootObj.name + "-Page-" + str((i-1)*len(pages[i])+j+1)
 				if j:
-					pageFiles[index].south = rootObj.name + "-Page-" + str(i*len(pages[i])+j)
+					pageFiles[index].north = rootObj.name + "-Page-" + str(i*len(pages[i])+j)
 
 		# Bound each scene's object to a page (if possible)
 		for obj in Scene.GetCurrent().objects:
