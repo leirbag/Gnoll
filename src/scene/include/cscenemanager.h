@@ -194,6 +194,13 @@ namespace Gnoll
 				 */
 				bool isPageVisible(const CPage& _page);
 
+				/**
+				 * Check if the camera is in a page
+				 * @param _camera The camera to check
+				 * @return True if the camera is in a page else False
+				 */
+				bool isCameraInPage(const shared_ptr<Camera>& _camera);
+
 
 				/**
 				 * Set up a page (position, etc.)

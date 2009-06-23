@@ -157,6 +157,11 @@ namespace Gnoll
 				 * @return Returns whether this page is visible from the camera name passed
 				 */
 				bool isVisibleFromCamera(shared_ptr< Gnoll::DynamicObject::String > _cameraName) const;
+
+				/**
+				 * Initialize the position of the page from neighbor
+				 */
+				void initPosition();
 		};
 	}
 }

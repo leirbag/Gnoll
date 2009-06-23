@@ -34,6 +34,7 @@
 #include <OgreCamera.h>
 
 #include <sstream>
+#include <iostream>
 
 using namespace std;
 using namespace boost;
@@ -362,19 +363,19 @@ namespace Gnoll
 
 					if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( CPage::ATTRIBUTE_NORTH_LINK()))).c_str()) == 0)
 					{
-						neighborOffset = Ogre::Vector3(0.0, 0.0, -*pageSize) / 2.0f;
+						neighborOffset = Ogre::Vector3(0.0, 0.0, -*pageSize);
 
 					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( CPage::ATTRIBUTE_SOUTH_LINK()))).c_str()) == 0)
 					{
-						neighborOffset = Ogre::Vector3(0.0, 0.0, *pageSize) / 2.0f;
+						neighborOffset = Ogre::Vector3(0.0, 0.0, *pageSize);
 
 					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( CPage::ATTRIBUTE_EAST_LINK()))).c_str()) == 0)
 					{
-						neighborOffset = Ogre::Vector3( *pageSize, 0.0, 0.0 ) / 2.0f;
+						neighborOffset = Ogre::Vector3( *pageSize, 0.0, 0.0 );
 
 					} else if (strcmp( neighborStr, string(*(this->getAttribute< Gnoll::DynamicObject::String >( CPage::ATTRIBUTE_WEST_LINK()))).c_str()) == 0)
 					{
-						neighborOffset = Ogre::Vector3( -(*pageSize), 0.0, 0.0 ) / 2.0f;
+						neighborOffset = Ogre::Vector3( -(*pageSize), 0.0, 0.0 );
 					} else {
 						neighborOffset = Ogre::Vector3( 0.0, 0.0, 0.0 );
                     }
@@ -397,6 +398,81 @@ namespace Gnoll
 			tmpString << "             Is " << this->getInstance() << " visible : " << result;
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 			return result;
+		}
+
+
+		void CPage::initPosition()
+		{
+			shared_ptr<Gnoll::DynamicObject::Float> pageSize = this->getAttribute<Float>(CPage::ATTRIBUTE_SIZE());
+			SceneNode* sceneNode                             = this->getPageRootNode();
+			shared_ptr< Gnoll::DynamicObject::String > neighbor;
+			CPage neighborPage("");
+
+			//
+			// Translate the page about the first neighbor page that is
+			// initialized
+			//
+			if (this->hasAttribute( CPage::ATTRIBUTE_NORTH_LINK() ))
+			{
+				neighbor = this->getAttribute< Gnoll::DynamicObject::String >( CPage::ATTRIBUTE_NORTH_LINK() );
+				neighborPage = CPage(*neighbor);
+				if(neighborPage.isInitialized())
+				{
+					shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighborPage.getAttribute<Float>(CPage::ATTRIBUTE_SIZE());
+					float amountTranslation = ((*pageSize) / 2.0f + (*neighborSize) / 2.0f);
+					Ogre::Vector3 translatingVector = Ogre::Vector3(0.0, 0.0, amountTranslation);
+					sceneNode->setPosition(neighborPage.getPageRootNode()->getPosition());
+					sceneNode->translate(translatingVector);
+					return;
+				}
+			}
+
+			if (this->hasAttribute( CPage::ATTRIBUTE_SOUTH_LINK() ))
+			{
+				neighbor = this->getAttribute< Gnoll::DynamicObject::String >( CPage::ATTRIBUTE_SOUTH_LINK() );
+				neighborPage = CPage(*neighbor);
+				if(neighborPage.isInitialized())
+				{
+					shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighborPage.getAttribute<Float>(CPage::ATTRIBUTE_SIZE());
+					float amountTranslation = - ((*pageSize) / 2.0f + (*neighborSize) / 2.0f);
+					Ogre::Vector3 translatingVector = Ogre::Vector3(0.0, 0.0, amountTranslation);
+					sceneNode->setPosition(neighborPage.getPageRootNode()->getPosition());
+					sceneNode->translate(translatingVector);
+					return;
+				}
+			}
+
+			if (this->hasAttribute( CPage::ATTRIBUTE_EAST_LINK() ))
+			{
+				neighbor = this->getAttribute< Gnoll::DynamicObject::String >( CPage::ATTRIBUTE_EAST_LINK() );
+				neighborPage = CPage(*neighbor);
+				if(neighborPage.isInitialized())
+				{
+					shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighborPage.getAttribute<Float>(CPage::ATTRIBUTE_SIZE());
+					float amountTranslation = - ((*pageSize) / 2.0f + (*neighborSize) / 2.0f);
+					Ogre::Vector3 translatingVector = Ogre::Vector3(amountTranslation, 0.0, 0.0);
+					sceneNode->setPosition(neighborPage.getPageRootNode()->getPosition());
+					sceneNode->translate(translatingVector);
+					return;
+				}
+			}
+
+			if (this->hasAttribute( CPage::ATTRIBUTE_WEST_LINK() ))
+			{
+				neighbor = this->getAttribute< Gnoll::DynamicObject::String >( CPage::ATTRIBUTE_WEST_LINK() );
+				neighborPage = CPage(*neighbor);
+				if(neighborPage.isInitialized())
+				{
+					shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighborPage.getAttribute<Float>(CPage::ATTRIBUTE_SIZE());
+					float amountTranslation = ((*pageSize) / 2.0f + (*neighborSize) / 2.0f);
+					Ogre::Vector3 translatingVector = Ogre::Vector3(amountTranslation, 0.0, 0.0);
+					sceneNode->setPosition(neighborPage.getPageRootNode()->getPosition());
+					sceneNode->translate(translatingVector);
+					return;
+				}
+			}
+
+			//unInit();
 		}
 	}
 }
