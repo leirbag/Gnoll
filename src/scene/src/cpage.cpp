@@ -33,8 +33,6 @@
 #include "../include/cstaticgobject.h"
 #include <OgreCamera.h>
 
-#include <sstream>
-#include <iostream>
 
 using namespace std;
 using namespace boost;
