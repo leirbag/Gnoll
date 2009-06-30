@@ -30,7 +30,15 @@
 #include "cpage.h"
 #include "icomponent.h"
 
+#include <boost/shared_ptr.hpp>
+#include "../../core/include/cmessagelistener.h"
+
+
+using namespace boost;
 using namespace Gnoll::Scene;
+using namespace Gnoll::Core;
+
+
 
 namespace Gnoll
 {
@@ -55,7 +63,13 @@ namespace Gnoll
 				/**
 				 * Page where the parent GObject is located
 				 */
-				Gnoll::Scene::CPage*   m_parentPage;
+				std::string   m_parentPageName;
+
+
+				/**
+				 * Listener of the component
+				 */
+				shared_ptr<CMessageListener> componentListener;
 
 
 			public:
@@ -181,13 +195,13 @@ namespace Gnoll
 				/**
 				 * Getter for m_parentPage
 				 */
-				Gnoll::Scene::CPage *getParentPage() const;
+				const std::string& getParentPageName() const;
 
 
 				/**
 				 * Setter for m_parentPage
 				 */
-				void setParentPage(Gnoll::Scene::CPage *m_parentPage);
+				void setParentPage(const std::string& m_parentPageName);
 
 
 				/**

@@ -29,7 +29,10 @@
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../log/include/clogmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
+#include "../../stats/include/cstatsmodule.h"
 
+#include "../../core/include/cmessagetype.h"
+#include "../../core/include/cmessagemodule.h"
 #include "../include/cogreanimatedmeshcomponent.h"
 #include "../include/gobject.h"
 
@@ -40,9 +43,39 @@ namespace Gnoll {
 
 	namespace Scene {
 
+		class OgreAnimatedMeshListener : public CMessageListener
+		{
+			private:
+				COgreAnimatedMeshComponent* component;
+
+			public:
+
+				/**
+				 * This is a constructor
+				 */
+				OgreAnimatedMeshListener(COgreAnimatedMeshComponent* _component) : component(_component) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~OgreAnimatedMeshListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle (shared_ptr<CMessage> message)
+				{
+					float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
+
+					component->update(lasttime/1000.0f);
+				}
+		};
+
+
 		COgreAnimatedMeshComponent::COgreAnimatedMeshComponent()
 		{
-			this->m_parentPage = NULL;
+			this->m_parentPageName = "";
 			this->m_parent = NULL;
 		}
 
@@ -64,15 +97,15 @@ namespace Gnoll {
 		}
 
 
-		Gnoll::Scene::CPage * COgreAnimatedMeshComponent::getParentPage() const
+		const std::string& COgreAnimatedMeshComponent::getParentPageName() const
 		{
-			return m_parentPage;
+			return m_parentPageName;
 		}
 
 
-		void COgreAnimatedMeshComponent::setParentPage(Gnoll::Scene::CPage *m_parentPage)
+		void COgreAnimatedMeshComponent::setParentPage(const std::string& m_parentPageName)
 		{
-			this->m_parentPage = m_parentPage;
+			this->m_parentPageName = m_parentPageName;
 		}
 
 
@@ -97,17 +130,16 @@ namespace Gnoll {
 				return;
 			}
 
-			this->m_parent = parent;
-			this->m_parentPage = page;
-
+			this->m_parent         = parent;
+			this->m_parentPageName = page->getInstance();
 
 			shared_ptr< Gnoll::DynamicObject::String > meshName = this->getAttribute < Gnoll::DynamicObject::String > (COgreAnimatedMeshComponent::ATTRIBUTE_MESH());
 			string meshNameStr(*meshName);
 
-			SceneNode *parentNode = m_parentPage->getPageRootNode();
-			SceneNode *meshNode = parentNode->createChildSceneNode( m_parentPage->getInstance() + "_" + this->getInstance() );
+			SceneNode *parentNode = page->getPageRootNode();
+			SceneNode *meshNode   = parentNode->createChildSceneNode( m_parentPageName + "_" + this->getInstance() );
 
-			std::string entName = m_parentPage->getInstance() + "_" + this->getInstance() + COgreAnimatedMeshComponent::ENTITY_SUFFIX();
+			std::string entName = m_parentPageName + "_" + this->getInstance() + COgreAnimatedMeshComponent::ENTITY_SUFFIX();
 			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
 
 			Ogre::Entity *ent = sm->createEntity( entName, meshNameStr );
@@ -130,6 +162,7 @@ namespace Gnoll {
 			{
 				AnimationStateIterator iter = animationStateSet->getAnimationStateIterator();
 				AnimationState* animationState = iter.getNext();
+				std::cout << animationState->getAnimationName() << std::endl;
 				animationState->setEnabled(true);
 				animationState->setLoop(true);
 			}
@@ -175,16 +208,21 @@ namespace Gnoll {
 			meshNode->translate( posGObject, Ogre::Node::TS_LOCAL);
 
 
+			/**
+			 * Register the listener
+			 */
+			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
 
+			componentListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshListener(this));
+			messageManager->addListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
 		}
 
 
 		 void COgreAnimatedMeshComponent::exit()
 		 {
 			GNOLL_LOG() << "Gobject " << this->m_parent->getInstance() << " is DEinitializing its component named " << this->getInstance() << "\n";
-
-
-			if (this->m_parentPage == NULL)
+			if (this->m_parentPageName == "")
 			{
 
 				GNOLL_LOG() << m_parent->getInstance() << ":" << this->getInstance() << " object cannot be DEinitialized without a parent page" << "\n";
@@ -193,25 +231,32 @@ namespace Gnoll {
 
 			string instanceNameStr(this->getInstance());
 
-			std::string entName = m_parentPage->getInstance() + "_" + instanceNameStr  + COgreAnimatedMeshComponent::ENTITY_SUFFIX();
+			std::string entName = m_parentPageName + "_" + instanceNameStr  + COgreAnimatedMeshComponent::ENTITY_SUFFIX();
 			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
 
-			SceneNode* meshNode = sm->getSceneNode( m_parentPage->getInstance() + "_" + instanceNameStr );
+			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
 			meshNode->detachObject( entName );
 
 			sm->destroyEntity(entName);
-			sm->destroySceneNode( m_parentPage->getInstance() + "_" + instanceNameStr  );
+			sm->destroySceneNode( m_parentPageName + "_" + instanceNameStr  );
 
+			/**
+			 * Unregister the listener
+			 */
+			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+			messageManager->delListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
 		}
 
 		void COgreAnimatedMeshComponent::update(float time)
 		{
 			string instanceNameStr(this->getInstance());
 
-			std::string entName = m_parentPage->getInstance() + "_" + instanceNameStr  + COgreAnimatedMeshComponent::ENTITY_SUFFIX();
+			std::string entName = m_parentPageName + "_" + instanceNameStr  + COgreAnimatedMeshComponent::ENTITY_SUFFIX();
 			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
 
-			SceneNode* meshNode = sm->getSceneNode( m_parentPage->getInstance() + "_" + instanceNameStr );
+			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
 			Entity* ent = (Entity*) meshNode->getAttachedObject(entName);
 
 			/**
@@ -220,7 +265,7 @@ namespace Gnoll {
 			ConstEnabledAnimationStateIterator iter = ent->getAllAnimationStates()->getEnabledAnimationStateIterator();
 			while(iter.hasMoreElements())
 			{
-				AnimationState* animationState = ent->getAllAnimationStates()->getEnabledAnimationStateIterator().getNext();
+				AnimationState* animationState = iter.getNext();
 				animationState->addTime(time);
 			}
 
