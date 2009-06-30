@@ -30,7 +30,13 @@
 #include "cpage.h"
 #include "icomponent.h"
 
+#include <boost/shared_ptr.hpp>
+#include "../../core/include/cmessagelistener.h"
+
+
+using namespace boost;
 using namespace Gnoll::Scene;
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {
@@ -55,8 +61,14 @@ namespace Gnoll
 				/**
 				 * Page where the parent GObject is located
 				 */
-				Gnoll::Scene::CPage*   m_parentPage;
+				std::string   m_parentPageName;
 
+				/**
+				 * Listener of the component
+				 */
+				shared_ptr<CMessageListener> componentPositionListener;
+				shared_ptr<CMessageListener> componentScalingListener;
+				shared_ptr<CMessageListener> componentRotationListener;
 
 			public:
 
@@ -73,78 +85,6 @@ namespace Gnoll
 				 * @return The attribute name "mesh"
 				 */
 				inline static const char * ATTRIBUTE_MESH() {return "mesh";}
-
-
-				/**
-				 * Returns attribute name "scale_x".<br/>
-				 * This attribute contains the X scale of the mesh
-				 * @return The attribute name "scale_x"
-				 */
-				inline static const char * ATTRIBUTE_SCALE_X() {return "scale_x";}
-
-
-				/**
-				 * Returns attribute name "scale_Y".<br/>
-				 * This attribute contains the Y scale of the mesh
-				 * @return The attribute name "scale_y"
-				 */
-				inline static const char * ATTRIBUTE_SCALE_Y() {return "scale_y";}
-
-
-				/**
-				 * Returns attribute name "scale_z".<br/>
-				 * This attribute contains the Z scale of the mesh
-				 * @return The attribute name "scale_z"
-				 */
-				inline static const char * ATTRIBUTE_SCALE_Z() {return "scale_z";}
-
-
-				/**
-				 * Returns attribute name "rot_x".<br/>
-				 * This attribute contains the X orientation of the mesh
-				 * @return The attribute name "rot_x"
-				 */
-				inline static const char * ATTRIBUTE_ROTATE_X() {return "rot_x";}
-
-
-				/**
-				 * Returns attribute name "rot_y".<br/>
-				 * This attribute contains the Y orientation of the mesh
-				 * @return The attribute name "rot_y"
-				 */
-				inline static const char * ATTRIBUTE_ROTATE_Y() {return "rot_y";}
-
-
-				/**
-				 * Returns attribute name "rot_z".<br/>
-				 * This attribute contains the Z orientation of the mesh
-				 * @return The attribute name "rot_z"
-				 */
-				inline static const char * ATTRIBUTE_ROTATE_Z() {return "rot_z";}
-
-
-				/**
-				 * Returns attribute name "pos_x".<br/>
-				 * This attribute contains the X position of the mesh
-				 * @return The attribute name "pos_x"
-				 */
-				inline static const char * ATTRIBUTE_POSITION_X() {return "pos_x";}
-
-
-				/**
-				 * Returns attribute name "pos_y".<br/>
-				 * This attribute contains the Y position of the mesh
-				 * @return The attribute name "pos_y"
-				 */
-				inline static const char * ATTRIBUTE_POSITION_Y() {return "pos_y";}
-
-
-				/**
-				 * Returns attribute name "pos_z".<br/>
-				 * This attribute contains the Z position of the mesh
-				 * @return The attribute name "pos_z"
-				 */
-				inline static const char * ATTRIBUTE_POSITION_Z() {return "pos_z";}
 
 
 				/**
@@ -181,13 +121,37 @@ namespace Gnoll
 				/**
 				 * Getter for m_parentPage
 				 */
-				Gnoll::Scene::CPage *getParentPage() const;
+				const std::string& getParentPageName() const;
 
 
 				/**
 				 * Setter for m_parentPage
 				 */
-				void setParentPage(Gnoll::Scene::CPage *m_parentPage);
+				void setParentPageName(const std::string& m_parentPageName);
+
+
+				/**
+				 * Setter for m_parentPage
+				 */
+				void setParentPage(const std::string& m_parentPageName);
+
+
+				/**
+				 * Settor of the position of the mesh
+				 */
+				void setPosition(const Ogre::Vector3& position);
+
+
+				/**
+				 * Settor of the scale of the mesh
+				 */
+				void setScaling(const Ogre::Vector3& scale);
+
+
+				/**
+				 * Settor of the scale of the mesh
+				 */
+				void setRotation(const Ogre::Vector3& rotation);
 
 
 				/**

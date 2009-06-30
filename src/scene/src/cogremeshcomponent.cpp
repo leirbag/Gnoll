@@ -29,6 +29,8 @@
 #include "../../log/include/clogmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
 
+#include "../../core/include/cmessagetype.h"
+#include "../../core/include/cmessagemodule.h"
 #include "../include/cogremeshcomponent.h"
 #include "../include/gobject.h"
 
@@ -39,9 +41,95 @@ namespace Gnoll {
 
 	namespace Scene {
 
+		class OgreMeshPositionListener : public CMessageListener
+		{
+			private:
+				COgreMeshComponent* component;
+
+			public:
+
+				/**
+				 * This is a constructor
+				 */
+				OgreMeshPositionListener(COgreMeshComponent* _component) : component(_component) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~OgreMeshPositionListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle (shared_ptr<CMessage> message)
+				{
+					Ogre::Vector3 position = message->getData<Ogre::Vector3>();
+					component->setPosition(position);
+				}
+		};
+
+
+		class OgreMeshScalingListener : public CMessageListener
+		{
+			private:
+				COgreMeshComponent* component;
+
+			public:
+
+				/**
+				 * This is a constructor
+				 */
+				OgreMeshScalingListener(COgreMeshComponent* _component) : component(_component) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~OgreMeshScalingListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle (shared_ptr<CMessage> message)
+				{
+					Ogre::Vector3 scale = message->getData<Ogre::Vector3>();
+					component->setScaling(scale);
+				}
+		};
+
+
+		class OgreMeshRotationListener : public CMessageListener
+		{
+			private:
+				COgreMeshComponent* component;
+
+			public:
+
+				/**
+				 * This is a constructor
+				 */
+				OgreMeshRotationListener(COgreMeshComponent* _component) : component(_component) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~OgreMeshRotationListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle (shared_ptr<CMessage> message)
+				{
+					Ogre::Vector3 rotation = message->getData<Ogre::Vector3>();
+					component->setRotation(rotation);
+				}
+		};
+
 		COgreMeshComponent::COgreMeshComponent()
 		{
-			this->m_parentPage = NULL;
+			this->m_parentPageName = "";
 			this->m_parent = NULL;
 		}
 
@@ -63,15 +151,47 @@ namespace Gnoll {
 		}
 
 
-		Gnoll::Scene::CPage * COgreMeshComponent::getParentPage() const
+		const std::string& COgreMeshComponent::getParentPageName() const
 		{
-			return m_parentPage;
+			return m_parentPageName;
 		}
 
 
-		void COgreMeshComponent::setParentPage(Gnoll::Scene::CPage *m_parentPage)
+		void COgreMeshComponent::setParentPageName(const std::string& m_parentPageName)
 		{
-			this->m_parentPage = m_parentPage;
+			this->m_parentPageName = m_parentPageName;
+		}
+
+
+		void COgreMeshComponent::setPosition(const Ogre::Vector3& position)
+		{
+			string instanceNameStr(this->getInstance());
+			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+
+			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
+			meshNode->translate(position, Ogre::Node::TS_LOCAL);
+		}
+
+
+		void COgreMeshComponent::setScaling(const Ogre::Vector3& scale)
+		{
+			string instanceNameStr(this->getInstance());
+			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+
+			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
+			meshNode->setScale(scale.x, scale.y, scale.z);
+		}
+
+
+		void COgreMeshComponent::setRotation(const Ogre::Vector3& rotation)
+		{
+			string instanceNameStr(this->getInstance());
+			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+
+			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
+			meshNode->rotate(Ogre::Vector3(1,0,0), Ogre::Radian(rotation.x));
+			meshNode->rotate(Ogre::Vector3(0,1,0), Ogre::Radian(rotation.x));
+			meshNode->rotate(Ogre::Vector3(0,0,1), Ogre::Radian(rotation.x));
 		}
 
 
@@ -97,63 +217,34 @@ namespace Gnoll {
 			}
 
 			this->m_parent = parent;
-			this->m_parentPage = page;
+			this->m_parentPageName = page->getInstance();
 
 
 			shared_ptr< Gnoll::DynamicObject::String > meshName = this->getAttribute < Gnoll::DynamicObject::String > (COgreMeshComponent::ATTRIBUTE_MESH());
 			string meshNameStr(*meshName);
 
-			SceneNode *parentNode = m_parentPage->getPageRootNode();
-			SceneNode *meshNode = parentNode->createChildSceneNode( m_parentPage->getInstance() + "_" + this->getInstance() );
+			SceneNode *parentNode = page->getPageRootNode();
+			SceneNode *meshNode = parentNode->createChildSceneNode( getParentPageName() + "_" + this->getInstance() );
 
-			std::string entName = m_parentPage->getInstance() + "_" + this->getInstance() + COgreMeshComponent::ENTITY_SUFFIX();
+			std::string entName = getParentPageName() + "_" + this->getInstance() + COgreMeshComponent::ENTITY_SUFFIX();
 			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
 
 			Ogre::Entity *ent = sm->createEntity( entName, meshNameStr );
 			meshNode->attachObject( ent );
 
 
-			shared_ptr< Gnoll::DynamicObject::Float > zero ( new Gnoll::DynamicObject::Float(0.0f));
-			shared_ptr< Gnoll::DynamicObject::Float > one ( new Gnoll::DynamicObject::Float(1.0f));
-
-
-
 			/**
-			 * Scale the object
+			 * Register the listener
 			 */
+			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
 
-			shared_ptr< Gnoll::DynamicObject::Float > scaleX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_SCALE_X(), one);
-			shared_ptr< Gnoll::DynamicObject::Float > scaleY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_SCALE_Y(), one);
-			shared_ptr< Gnoll::DynamicObject::Float > scaleZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_SCALE_Z(), one);
-
-
-			meshNode->setScale(*scaleX, *scaleY, *scaleZ);
-
-
-			/**
-			 * Rotate the object
-			 */
-
-			shared_ptr< Gnoll::DynamicObject::Float > rotX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_ROTATE_X(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > rotY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_ROTATE_Y(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > rotZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_ROTATE_Z(), zero);
-
-			meshNode->rotate(Ogre::Vector3(1,0,0), Ogre::Radian(*rotX));
-			meshNode->rotate(Ogre::Vector3(0,1,0), Ogre::Radian(*rotY));
-			meshNode->rotate(Ogre::Vector3(0,0,1), Ogre::Radian(*rotZ));
-
-
-			/**
-			 * Translate the object
-			 */
-			shared_ptr< Gnoll::DynamicObject::Float > posX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_POSITION_X(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > posY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_POSITION_Y(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > posZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreMeshComponent::ATTRIBUTE_POSITION_Z(), zero);
-
-			Ogre::Vector3 posGObject(*posX, *posY, *posZ);
-			meshNode->translate( posGObject, Ogre::Node::TS_LOCAL);
-
-
+			componentPositionListener = shared_ptr<CMessageListener> (new OgreMeshPositionListener(this));
+			componentScalingListener = shared_ptr<CMessageListener> (new OgreMeshScalingListener(this));
+			componentRotationListener = shared_ptr<CMessageListener> (new OgreMeshRotationListener(this));
+			messageManager->addListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
+			messageManager->addListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
+			messageManager->addListener ( componentRotationListener, "SET_ROTATION_" + m_parent->getInstance() );
 
 		}
 
@@ -163,7 +254,7 @@ namespace Gnoll {
 			GNOLL_LOG() << "Gobject " << this->m_parent->getInstance() << " is DEinitializing its component named " << this->getInstance() << "\n";
 
 
-			if (this->m_parentPage == NULL)
+			if (this->m_parentPageName == "")
 			{
 
 				GNOLL_LOG() << m_parent->getInstance() << ":" << this->getInstance() << " object cannot be DEinitialized without a parent page" << "\n";
@@ -172,15 +263,24 @@ namespace Gnoll {
 
 			string instanceNameStr(this->getInstance());
 
-			std::string entName = m_parentPage->getInstance() + "_" + instanceNameStr  + COgreMeshComponent::ENTITY_SUFFIX();
+			std::string entName = getParentPageName() + "_" + instanceNameStr  + COgreMeshComponent::ENTITY_SUFFIX();
 			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
 
-			SceneNode* meshNode = sm->getSceneNode( m_parentPage->getInstance() + "_" + instanceNameStr );
+			SceneNode* meshNode = sm->getSceneNode( getParentPageName() + "_" + instanceNameStr );
 			meshNode->detachObject( entName );
 
 			sm->destroyEntity(entName);
-			sm->destroySceneNode( m_parentPage->getInstance() + "_" + instanceNameStr  );
+			sm->destroySceneNode( getParentPageName() + "_" + instanceNameStr  );
 
+			/**
+			 * Unregister the listener
+			 */
+			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			CMessageManager* messageManager = messageModule->getMessageManager();
+
+			messageManager->delListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
+			messageManager->delListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
+			messageManager->delListener ( componentRotationListener, "SET_ROTATION_" + m_parent->getInstance() );
 		}
 
 
