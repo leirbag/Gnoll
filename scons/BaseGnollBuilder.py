@@ -325,6 +325,7 @@ class BaseGnollBuilder:
 			'src/scene/src/cogremeshcomponent.cpp',
 			'src/scene/src/cpositioncomponent.cpp',
 			'src/scene/src/cscalingcomponent.cpp',
+			'src/scene/src/crotationcomponent.cpp',
 			'src/scene/src/cogreanimatedmeshcomponent.cpp',
 			'src/scene/src/gobject.cpp',
 			'src/scene/src/ogrecamerawrapper.cpp',

@@ -99,6 +99,7 @@ namespace Gnoll {
 				}
 		};
 
+
 		class OgreAnimatedMeshScalingListener : public CMessageListener
 		{
 			private:
@@ -124,6 +125,35 @@ namespace Gnoll {
 				{
 					Ogre::Vector3 scale = message->getData<Ogre::Vector3>();
 					component->setScaling(scale);
+				}
+		};
+
+
+		class OgreAnimatedMeshRotationListener : public CMessageListener
+		{
+			private:
+				COgreAnimatedMeshComponent* component;
+
+			public:
+
+				/**
+				 * This is a constructor
+				 */
+				OgreAnimatedMeshRotationListener(COgreAnimatedMeshComponent* _component) : component(_component) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~OgreAnimatedMeshRotationListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle (shared_ptr<CMessage> message)
+				{
+					Ogre::Vector3 rotation = message->getData<Ogre::Vector3>();
+					component->setRotation(rotation);
 				}
 		};
 
@@ -181,6 +211,18 @@ namespace Gnoll {
 
 			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
 			meshNode->setScale(scale.x, scale.y, scale.z);
+		}
+
+
+		void COgreAnimatedMeshComponent::setRotation(const Ogre::Vector3& rotation)
+		{
+			string instanceNameStr(this->getInstance());
+			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+
+			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
+			meshNode->rotate(Ogre::Vector3(1,0,0), Ogre::Radian(rotation.x));
+			meshNode->rotate(Ogre::Vector3(0,1,0), Ogre::Radian(rotation.x));
+			meshNode->rotate(Ogre::Vector3(0,0,1), Ogre::Radian(rotation.x));
 		}
 
 
@@ -245,20 +287,6 @@ namespace Gnoll {
 			shared_ptr< Gnoll::DynamicObject::Float > one ( new Gnoll::DynamicObject::Float(1.0f));
 
 
-
-			/**
-			 * Rotate the object
-			 */
-
-			shared_ptr< Gnoll::DynamicObject::Float > rotX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_ROTATE_X(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > rotY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_ROTATE_Y(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > rotZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_ROTATE_Z(), zero);
-
-			meshNode->rotate(Ogre::Vector3(1,0,0), Ogre::Radian(*rotX));
-			meshNode->rotate(Ogre::Vector3(0,1,0), Ogre::Radian(*rotY));
-			meshNode->rotate(Ogre::Vector3(0,0,1), Ogre::Radian(*rotZ));
-
-
 			/**
 			 * Register the listener
 			 */
@@ -268,9 +296,11 @@ namespace Gnoll {
 			componentListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshListener(this));
 			componentPositionListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshPositionListener(this));
 			componentScalingListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshScalingListener(this));
+			componentRotationListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshRotationListener(this));
 			messageManager->addListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
 			messageManager->addListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
 			messageManager->addListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
+			messageManager->addListener ( componentRotationListener, "SET_ROTATION_" + m_parent->getInstance() );
 		}
 
 
@@ -304,6 +334,7 @@ namespace Gnoll {
 			messageManager->delListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
 			messageManager->delListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
 			messageManager->delListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
+			messageManager->delListener ( componentRotationListener, "SET_ROTATION_" + m_parent->getInstance() );
 		}
 
 		void COgreAnimatedMeshComponent::update(float time)

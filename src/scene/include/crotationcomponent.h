@@ -18,27 +18,24 @@
  ***************************************************************************/
 
 
-/*--------------------------COgreAnimatedMeshComponent---------------------*\
-|   This is a component able to display Ogre models that are animated       |
+/*--------------------------CRotationComponent-----------------------------*\
+|   This is a component able to set a rotation                              |
 |                                                                           |
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#ifndef COGREANIMATEDMESHCOMPONENT_H_
-#define COGREANIMATEDMESHCOMPONENT_H_
+#ifndef CROTATIONCOMPONENT_H_
+#define CROTATIONCOMPONENT_H_
 
 #include "cpage.h"
 #include "icomponent.h"
-
-#include <boost/shared_ptr.hpp>
 #include "../../core/include/cmessagelistener.h"
-
+#include "../include/gobject.h"
+#include <boost/shared_ptr.hpp>
 
 using namespace boost;
 using namespace Gnoll::Scene;
 using namespace Gnoll::Core;
-
-
 
 namespace Gnoll
 {
@@ -49,114 +46,49 @@ namespace Gnoll
 		/**
 		 * This is a component able to display Ogre models
 		 */
-		class COgreAnimatedMeshComponent: public Gnoll::Scene::IComponent
+		class CRotationComponent: public Gnoll::Scene::IComponent
 		{
-
 			private:
+				Ogre::Vector3                rotation;
 
-				/**
-				 * GObject this component belongs to
-				 */
-				Gnoll::Scene::GObject* m_parent;
+				Gnoll::Scene::GObject*       parent;
 
-
-				/**
-				 * Page where the parent GObject is located
-				 */
-				std::string   m_parentPageName;
-
-
-				/**
-				 * Listener of the component
-				 */
-				shared_ptr<CMessageListener> componentListener;
-				shared_ptr<CMessageListener> componentPositionListener;
-				shared_ptr<CMessageListener> componentScalingListener;
-				shared_ptr<CMessageListener> componentRotationListener;
-
+				shared_ptr<CMessageListener> rotationListener;
 
 			public:
 
 				/**
-				 * Returns COgreMeshComponent's DynamicObject name
-				 * @return COgreMeshComponent's DynamicObject name
+				 * Returns CRotationComponent's DynamicObject name
+				 * @return CRotationComponent's DynamicObject name
 				 */
-				inline static const char * DYNAMIC_OBJECT_NAME() {return "COgreAnimatedMeshComponent";}
+				inline static const char * DYNAMIC_OBJECT_NAME() {return "CRotationComponent";}
 
 
 				/**
-				 * Returns attribute name "mesh".<br/>
-				 * This attribute contains the name of the mesh to be rendered
-				 * @return The attribute name "mesh"
+				 * Returns attribute name "pos".<br/>
+				 * This attribute contains the rotation of the mesh
+				 * @return The attribute name "pos"
 				 */
-				inline static const char * ATTRIBUTE_MESH() {return "mesh";}
-
-
-				/**
-				 * Returns the suffix of the scene node created from the instance name.<br/>
-				 * @return Scene node suffix
-				 */
-				inline static const char * ENTITY_SUFFIX() {return "_entity";}
+				inline static const char * ATTRIBUTE_ROTATION() {return "rotation";}
 
 
 				/**
 				 * This is a constructor
 				 */
-				COgreAnimatedMeshComponent();
+				CRotationComponent();
 
 
 				/**
 				 * This is a destructor
 				 */
-				virtual ~COgreAnimatedMeshComponent();
+				virtual ~CRotationComponent();
 
 
 				/**
-				 * Getter for m_parent
+				 * Settor of the rotation
+				 * @param pos The new rotation
 				 */
-				Gnoll::Scene::GObject *getParent() const;
-
-
-				/**
-				 * Setter for m_parent
-				 */
-				void setParent(Gnoll::Scene::GObject *m_parent);
-
-
-				/**
-				 * Getter for m_parentPage
-				 */
-				const std::string& getParentPageName() const;
-
-
-				/**
-				 * Setter for m_parentPage
-				 */
-				void setParentPage(const std::string& m_parentPageName);
-
-
-				/**
-				 * Settor of the position of the mesh
-				 */
-				void setPosition(const Ogre::Vector3& position);
-
-
-				/**
-				 * Settor of the scale of the mesh
-				 */
-				void setScaling(const Ogre::Vector3& scale);
-
-
-				/**
-				 * Settor of the rotation of the mesh
-				 */
-				void setRotation(const Ogre::Vector3& rotation);
-
-
-				/**
-				 * Update the animation of the mesh
-				 */
-				void update(float time);
+				void setRotation(const Ogre::Vector3& rot) { rotation = rot; }
 
 
 				/**
@@ -174,9 +106,9 @@ namespace Gnoll
 
 
 				/**
-				 * This method serialize the COgreMeshComponent and all its attributes
+				 * This method serialize the CRotationComponent and all its attributes
 				 *
-				 * @return This return the COgreMeshComponent as a XML tree
+				 * @return This return the CRotationComponent as a XML tree
 				 */
 				virtual shared_ptr<xmlpp::Document> serializeXML();
 
@@ -185,5 +117,4 @@ namespace Gnoll
 	}
 }
 
-#endif /* COGREMESHCOMPONENT_H_ */
-
+#endif /* CROTATIONCOMPONENT_H_ */
