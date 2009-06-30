@@ -26,6 +26,7 @@
 
 
 #include "../../dynamicobject/include/float.h"
+#include "../../dynamicobject/include/string.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../log/include/clogmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
@@ -158,6 +159,35 @@ namespace Gnoll {
 		};
 
 
+		class OgreAnimatedMeshAnimationStateListener : public CMessageListener
+		{
+			private:
+				COgreAnimatedMeshComponent* component;
+
+			public:
+
+				/**
+				 * This is a constructor
+				 */
+				OgreAnimatedMeshAnimationStateListener(COgreAnimatedMeshComponent* _component) : component(_component) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~OgreAnimatedMeshAnimationStateListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle (shared_ptr<CMessage> message)
+				{
+					std::string name = message->getData<std::string>();
+					component->setCurrentAnimationState(name);
+				}
+		};
+
+
 		COgreAnimatedMeshComponent::COgreAnimatedMeshComponent()
 		{
 			this->m_parentPageName = "";
@@ -226,6 +256,33 @@ namespace Gnoll {
 		}
 
 
+		void COgreAnimatedMeshComponent::setCurrentAnimationState(const std::string& name)
+		{
+			/**
+			 * Check if the animation exist
+			 */
+			if(m_mapAnimationStates.find(name) == m_mapAnimationStates.end())
+			{
+				GNOLL_LOG() << name << " animation does not exit !\n";
+				return;
+			}
+
+
+			/**
+			 * Stop the previous animation
+			 */
+			if(m_currentAnimation != "")
+			{
+				m_mapAnimationStates[m_currentAnimation]->setEnabled(false);
+				m_mapAnimationStates[m_currentAnimation]->setLoop(false);
+			}
+			m_currentAnimation = name;
+
+			m_mapAnimationStates[m_currentAnimation]->setEnabled(true);
+			m_mapAnimationStates[m_currentAnimation]->setLoop(true);
+		}
+
+
 		void COgreAnimatedMeshComponent::init(Gnoll::Scene::GObject* parent, CPage* page)
 		{
 
@@ -275,17 +332,24 @@ namespace Gnoll {
 			/**
 		     * Select the first by default
 			 */
-			if(animationStateSet != 0)
+			GNOLL_LOG() << this->getInstance() << " : Load animation states : " << "\n";
+			AnimationStateIterator iter = animationStateSet->getAnimationStateIterator();
+			while(iter.hasMoreElements())
 			{
-				AnimationStateIterator iter = animationStateSet->getAnimationStateIterator();
 				AnimationState* animationState = iter.getNext();
-				animationState->setEnabled(true);
-				animationState->setLoop(true);
+				m_mapAnimationStates[animationState->getAnimationName()] = animationState;
+				GNOLL_LOG() << this->getInstance() << " : - " << animationState->getAnimationName() << "\n";
 			}
 
-			shared_ptr< Gnoll::DynamicObject::Float > zero ( new Gnoll::DynamicObject::Float(0.0f));
-			shared_ptr< Gnoll::DynamicObject::Float > one ( new Gnoll::DynamicObject::Float(1.0f));
 
+			/**
+		     * Restore the default animation state, if none so no animation by default
+			 */
+			shared_ptr< Gnoll::DynamicObject::String > default_animationState ( new Gnoll::DynamicObject::String());
+			m_currentAnimation = *(this->getAttributeOrDefault < Gnoll::DynamicObject::String > (COgreAnimatedMeshComponent::ATTRIBUTE_ANIMATIONSTATE(), default_animationState));
+
+			if(m_mapAnimationStates.find(m_currentAnimation) != m_mapAnimationStates.end())
+				setCurrentAnimationState(m_currentAnimation);
 
 			/**
 			 * Register the listener
@@ -297,10 +361,13 @@ namespace Gnoll {
 			componentPositionListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshPositionListener(this));
 			componentScalingListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshScalingListener(this));
 			componentRotationListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshRotationListener(this));
+			componentAnimationStateListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshAnimationStateListener(this));
+
 			messageManager->addListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
 			messageManager->addListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
 			messageManager->addListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
 			messageManager->addListener ( componentRotationListener, "SET_ROTATION_" + m_parent->getInstance() );
+			messageManager->addListener ( componentAnimationStateListener, "SET_ANIMATIONSTATE_" + m_parent->getInstance() );
 		}
 
 
@@ -325,6 +392,11 @@ namespace Gnoll {
 			sm->destroyEntity(entName);
 			sm->destroySceneNode( m_parentPageName + "_" + instanceNameStr  );
 
+			shared_ptr<Gnoll::DynamicObject::String> attribute_AnimationState = shared_ptr<Gnoll::DynamicObject::String>(
+																				new Gnoll::DynamicObject::String(m_currentAnimation));
+
+			this->setAttribute(COgreAnimatedMeshComponent::ATTRIBUTE_ANIMATIONSTATE(), attribute_AnimationState);
+
 			/**
 			 * Unregister the listener
 			 */
@@ -335,28 +407,16 @@ namespace Gnoll {
 			messageManager->delListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
 			messageManager->delListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
 			messageManager->delListener ( componentRotationListener, "SET_ROTATION_" + m_parent->getInstance() );
+			messageManager->delListener ( componentAnimationStateListener, "SET_ANIMATIONSTATE_" + m_parent->getInstance() );
 		}
 
 		void COgreAnimatedMeshComponent::update(float time)
 		{
-			string instanceNameStr(this->getInstance());
-
-			std::string entName = m_parentPageName + "_" + instanceNameStr  + COgreAnimatedMeshComponent::ENTITY_SUFFIX();
-			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
-
-			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
-			Entity* ent = (Entity*) meshNode->getAttachedObject(entName);
-
 			/**
 			 * Update all animation that are enabled
 			 */
-			ConstEnabledAnimationStateIterator iter = ent->getAllAnimationStates()->getEnabledAnimationStateIterator();
-			while(iter.hasMoreElements())
-			{
-				AnimationState* animationState = iter.getNext();
-				animationState->addTime(time);
-			}
-
+			if(m_currentAnimation != "")
+				m_mapAnimationStates[m_currentAnimation]->addTime(time);
 		}
 
 		shared_ptr<xmlpp::Document> COgreAnimatedMeshComponent::serializeXML()

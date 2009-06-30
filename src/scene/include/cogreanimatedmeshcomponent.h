@@ -30,6 +30,7 @@
 #include "cpage.h"
 #include "icomponent.h"
 
+#include <map>
 #include <boost/shared_ptr.hpp>
 #include "../../core/include/cmessagelistener.h"
 
@@ -66,6 +67,13 @@ namespace Gnoll
 				std::string   m_parentPageName;
 
 
+				/*
+				 * List of all animation state available
+				 */
+				std::map<std::string, Ogre::AnimationState*> m_mapAnimationStates;
+				std::string                                     m_currentAnimation;
+
+
 				/**
 				 * Listener of the component
 				 */
@@ -73,6 +81,7 @@ namespace Gnoll
 				shared_ptr<CMessageListener> componentPositionListener;
 				shared_ptr<CMessageListener> componentScalingListener;
 				shared_ptr<CMessageListener> componentRotationListener;
+				shared_ptr<CMessageListener> componentAnimationStateListener;
 
 
 			public:
@@ -97,6 +106,12 @@ namespace Gnoll
 				 * @return Scene node suffix
 				 */
 				inline static const char * ENTITY_SUFFIX() {return "_entity";}
+
+				/**
+				 * Returns the attribute name "AnimationState".<br/>
+				 * @return Scene node suffix
+				 */
+				inline static const char * ATTRIBUTE_ANIMATIONSTATE() {return "AnimationState";}
 
 
 				/**
@@ -151,6 +166,13 @@ namespace Gnoll
 				 * Settor of the rotation of the mesh
 				 */
 				void setRotation(const Ogre::Vector3& rotation);
+
+
+				/**
+				 * Settor of the current animation, check in the list
+				 * of available animation states
+				 */
+				void setCurrentAnimationState(const std::string& name);
 
 
 				/**
