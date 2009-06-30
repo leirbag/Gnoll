@@ -67,8 +67,36 @@ namespace Gnoll {
 				virtual void handle (shared_ptr<CMessage> message)
 				{
 					float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
-
 					component->update(lasttime/1000.0f);
+				}
+		};
+
+		class OgreAnimatedMeshPositionListener : public CMessageListener
+		{
+			private:
+				COgreAnimatedMeshComponent* component;
+
+			public:
+
+				/**
+				 * This is a constructor
+				 */
+				OgreAnimatedMeshPositionListener(COgreAnimatedMeshComponent* _component) : component(_component) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~OgreAnimatedMeshPositionListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle (shared_ptr<CMessage> message)
+				{
+					Ogre::Vector3 position = message->getData<Ogre::Vector3>();
+					std::cout << "changement de position pour : " << position << std::endl;
+					component->setPosition(position);
 				}
 		};
 
@@ -106,6 +134,16 @@ namespace Gnoll {
 		void COgreAnimatedMeshComponent::setParentPage(const std::string& m_parentPageName)
 		{
 			this->m_parentPageName = m_parentPageName;
+		}
+
+
+		void COgreAnimatedMeshComponent::setPosition(const Ogre::Vector3& position)
+		{
+			string instanceNameStr(this->getInstance());
+			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+
+			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
+			meshNode->translate(position, Ogre::Node::TS_LOCAL);
 		}
 
 
@@ -162,7 +200,6 @@ namespace Gnoll {
 			{
 				AnimationStateIterator iter = animationStateSet->getAnimationStateIterator();
 				AnimationState* animationState = iter.getNext();
-				std::cout << animationState->getAnimationName() << std::endl;
 				animationState->setEnabled(true);
 				animationState->setLoop(true);
 			}
@@ -198,24 +235,15 @@ namespace Gnoll {
 
 
 			/**
-			 * Translate the object
-			 */
-			shared_ptr< Gnoll::DynamicObject::Float > posX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_POSITION_X(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > posY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_POSITION_Y(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > posZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_POSITION_Z(), zero);
-
-			Ogre::Vector3 posGObject(*posX, *posY, *posZ);
-			meshNode->translate( posGObject, Ogre::Node::TS_LOCAL);
-
-
-			/**
 			 * Register the listener
 			 */
 			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
 			CMessageManager* messageManager = messageModule->getMessageManager();
 
 			componentListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshListener(this));
+			componentPositionListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshPositionListener(this));
 			messageManager->addListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageManager->addListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
 		}
 
 
@@ -247,6 +275,7 @@ namespace Gnoll {
 			CMessageManager* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageManager->delListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
 		}
 
 		void COgreAnimatedMeshComponent::update(float time)

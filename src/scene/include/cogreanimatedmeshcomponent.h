@@ -70,6 +70,7 @@ namespace Gnoll
 				 * Listener of the component
 				 */
 				shared_ptr<CMessageListener> componentListener;
+				shared_ptr<CMessageListener> componentPositionListener;
 
 
 			public:
@@ -138,30 +139,6 @@ namespace Gnoll
 
 
 				/**
-				 * Returns attribute name "pos_x".<br/>
-				 * This attribute contains the X position of the mesh
-				 * @return The attribute name "pos_x"
-				 */
-				inline static const char * ATTRIBUTE_POSITION_X() {return "pos_x";}
-
-
-				/**
-				 * Returns attribute name "pos_y".<br/>
-				 * This attribute contains the Y position of the mesh
-				 * @return The attribute name "pos_y"
-				 */
-				inline static const char * ATTRIBUTE_POSITION_Y() {return "pos_y";}
-
-
-				/**
-				 * Returns attribute name "pos_z".<br/>
-				 * This attribute contains the Z position of the mesh
-				 * @return The attribute name "pos_z"
-				 */
-				inline static const char * ATTRIBUTE_POSITION_Z() {return "pos_z";}
-
-
-				/**
 				 * Returns the suffix of the scene node created from the instance name.<br/>
 				 * @return Scene node suffix
 				 */
@@ -202,6 +179,12 @@ namespace Gnoll
 				 * Setter for m_parentPage
 				 */
 				void setParentPage(const std::string& m_parentPageName);
+
+
+				/**
+				 * Settor of the position of the mesh
+				 */
+				void setPosition(const Ogre::Vector3& position);
 
 
 				/**
