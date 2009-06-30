@@ -107,7 +107,7 @@ namespace Gnoll
 				 * This is a list of all static objects included in the page
 				 * @return List of static objects to be rendered
 				 */
-				inline static const char * ATTRIBUTE_STATIC_OBJECTS() {return "staticObjects";}
+				inline static const char * ATTRIBUTE_GAME_OBJECTS() {return "gameObjects";}
 
 
 				/**

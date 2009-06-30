@@ -31,6 +31,7 @@
 #include "../include/cpage.h"
 #include "../include/ipagerenderer.h"
 #include "../include/cstaticgobject.h"
+#include "../include/gobject.h"
 #include <OgreCamera.h>
 
 
@@ -73,19 +74,19 @@ namespace Gnoll
 
 
 			/**
-			 * Load static objects
+			 * Load game objects
 			 */
-			if (this->hasAttribute( CPage::ATTRIBUTE_STATIC_OBJECTS() ))
+			if (this->hasAttribute( CPage::ATTRIBUTE_GAME_OBJECTS() ))
 			{
-				shared_ptr< Gnoll::DynamicObject::List > listStaticObjects = this->getAttribute < Gnoll::DynamicObject::List > ( CPage::ATTRIBUTE_STATIC_OBJECTS() );
+				shared_ptr< Gnoll::DynamicObject::List > listGameObjects = this->getAttribute < Gnoll::DynamicObject::List > ( CPage::ATTRIBUTE_GAME_OBJECTS() );
 
 				typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
 
-				for( ListIterator it = listStaticObjects->begin(); it != listStaticObjects->end(); it++)
+				for( ListIterator it = listGameObjects->begin(); it != listGameObjects->end(); it++)
 				{
-					if (shared_ptr<Gnoll::Scene::CStaticGObject> staticGObject = dynamic_pointer_cast<Gnoll::Scene::CStaticGObject>(*it))
+					if (shared_ptr<Gnoll::Scene::GObject> gObject = dynamic_pointer_cast<Gnoll::Scene::GObject>(*it))
 					{
-						staticGObject->init(this);
+						gObject->init(this);
 					}
 				}
 			}
@@ -102,17 +103,17 @@ namespace Gnoll
 				/**
 				 * Unload static objects
 				 */
-				if (this->hasAttribute( CPage::ATTRIBUTE_STATIC_OBJECTS() ))
+				if (this->hasAttribute( CPage::ATTRIBUTE_GAME_OBJECTS() ))
 				{
-					shared_ptr< Gnoll::DynamicObject::List > listStaticObjects = this->getAttribute < Gnoll::DynamicObject::List > ( CPage::ATTRIBUTE_STATIC_OBJECTS() );
+					shared_ptr< Gnoll::DynamicObject::List > listGameObjects = this->getAttribute < Gnoll::DynamicObject::List > ( CPage::ATTRIBUTE_GAME_OBJECTS() );
 
 					typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
 
-					for( ListIterator it = listStaticObjects->begin(); it != listStaticObjects->end(); it++)
+					for( ListIterator it = listGameObjects->begin(); it != listGameObjects->end(); it++)
 					{
-						if (shared_ptr<Gnoll::Scene::CStaticGObject> staticGObject = dynamic_pointer_cast<Gnoll::Scene::CStaticGObject>(*it))
+						if (shared_ptr<Gnoll::Scene::GObject> gObject = dynamic_pointer_cast<Gnoll::Scene::GObject>(*it))
 						{
-							staticGObject->exit(this);
+							gObject->exit();
 						}
 					}
 				}
