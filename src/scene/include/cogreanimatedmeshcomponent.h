@@ -71,6 +71,7 @@ namespace Gnoll
 				 */
 				shared_ptr<CMessageListener> componentListener;
 				shared_ptr<CMessageListener> componentPositionListener;
+				shared_ptr<CMessageListener> componentScalingListener;
 
 
 			public:
@@ -88,30 +89,6 @@ namespace Gnoll
 				 * @return The attribute name "mesh"
 				 */
 				inline static const char * ATTRIBUTE_MESH() {return "mesh";}
-
-
-				/**
-				 * Returns attribute name "scale_x".<br/>
-				 * This attribute contains the X scale of the mesh
-				 * @return The attribute name "scale_x"
-				 */
-				inline static const char * ATTRIBUTE_SCALE_X() {return "scale_x";}
-
-
-				/**
-				 * Returns attribute name "scale_Y".<br/>
-				 * This attribute contains the Y scale of the mesh
-				 * @return The attribute name "scale_y"
-				 */
-				inline static const char * ATTRIBUTE_SCALE_Y() {return "scale_y";}
-
-
-				/**
-				 * Returns attribute name "scale_z".<br/>
-				 * This attribute contains the Z scale of the mesh
-				 * @return The attribute name "scale_z"
-				 */
-				inline static const char * ATTRIBUTE_SCALE_Z() {return "scale_z";}
 
 
 				/**
@@ -185,6 +162,12 @@ namespace Gnoll
 				 * Settor of the position of the mesh
 				 */
 				void setPosition(const Ogre::Vector3& position);
+
+
+				/**
+				 * Settor of the scale of the mesh
+				 */
+				void setScaling(const Ogre::Vector3& scale);
 
 
 				/**

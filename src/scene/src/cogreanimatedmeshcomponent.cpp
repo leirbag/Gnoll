@@ -95,8 +95,35 @@ namespace Gnoll {
 				virtual void handle (shared_ptr<CMessage> message)
 				{
 					Ogre::Vector3 position = message->getData<Ogre::Vector3>();
-					std::cout << "changement de position pour : " << position << std::endl;
 					component->setPosition(position);
+				}
+		};
+
+		class OgreAnimatedMeshScalingListener : public CMessageListener
+		{
+			private:
+				COgreAnimatedMeshComponent* component;
+
+			public:
+
+				/**
+				 * This is a constructor
+				 */
+				OgreAnimatedMeshScalingListener(COgreAnimatedMeshComponent* _component) : component(_component) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~OgreAnimatedMeshScalingListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle (shared_ptr<CMessage> message)
+				{
+					Ogre::Vector3 scale = message->getData<Ogre::Vector3>();
+					component->setScaling(scale);
 				}
 		};
 
@@ -144,6 +171,16 @@ namespace Gnoll {
 
 			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
 			meshNode->translate(position, Ogre::Node::TS_LOCAL);
+		}
+
+
+		void COgreAnimatedMeshComponent::setScaling(const Ogre::Vector3& scale)
+		{
+			string instanceNameStr(this->getInstance());
+			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+
+			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
+			meshNode->setScale(scale.x, scale.y, scale.z);
 		}
 
 
@@ -210,18 +247,6 @@ namespace Gnoll {
 
 
 			/**
-			 * Scale the object
-			 */
-
-			shared_ptr< Gnoll::DynamicObject::Float > scaleX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_SCALE_X(), one);
-			shared_ptr< Gnoll::DynamicObject::Float > scaleY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_SCALE_Y(), one);
-			shared_ptr< Gnoll::DynamicObject::Float > scaleZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (COgreAnimatedMeshComponent::ATTRIBUTE_SCALE_Z(), one);
-
-
-			meshNode->setScale(*scaleX, *scaleY, *scaleZ);
-
-
-			/**
 			 * Rotate the object
 			 */
 
@@ -242,8 +267,10 @@ namespace Gnoll {
 
 			componentListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshListener(this));
 			componentPositionListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshPositionListener(this));
+			componentScalingListener = shared_ptr<CMessageListener> (new OgreAnimatedMeshScalingListener(this));
 			messageManager->addListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
 			messageManager->addListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
+			messageManager->addListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
 		}
 
 
@@ -276,6 +303,7 @@ namespace Gnoll {
 
 			messageManager->delListener ( componentListener, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
 			messageManager->delListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
+			messageManager->delListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
 		}
 
 		void COgreAnimatedMeshComponent::update(float time)

@@ -56,6 +56,7 @@
 #include "../../scene/include/cogremeshcomponent.h"
 #include "../../scene/include/cogreanimatedmeshcomponent.h"
 #include "../../scene/include/cpositioncomponent.h"
+#include "../../scene/include/cscalingcomponent.h"
 
 
 
@@ -82,6 +83,7 @@ namespace Gnoll
 			this->registerHandler(Gnoll::Scene::COgreMeshComponent::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::COgreMeshComponent>()));
 			this->registerHandler(Gnoll::Scene::COgreAnimatedMeshComponent::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::COgreAnimatedMeshComponent>()));
 			this->registerHandler(Gnoll::Scene::CPositionComponent::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CPositionComponent>()));
+			this->registerHandler(Gnoll::Scene::CScalingComponent::DYNAMIC_OBJECT_NAME(), shared_ptr<IAttributeHandler>(new GenericAttributeHandler<Gnoll::Scene::CScalingComponent>()));
 
 		}
 
