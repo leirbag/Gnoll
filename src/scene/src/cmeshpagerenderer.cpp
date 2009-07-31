@@ -99,7 +99,7 @@ namespace Gnoll
 			shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));
 
 			xmlpp::Element* root = document->create_root_node(CMeshPageRenderer::DYNAMIC_OBJECT_NAME());
-			root->set_attribute(CMeshPageRenderer::DYNAMIC_OBJECT_NAME(), m_meshName);
+			root->set_attribute(CMeshPageRenderer::ATTRIBUTE_MESH_NAME(), m_meshName);
 
 
 			return document;
@@ -114,7 +114,7 @@ namespace Gnoll
 				return;
 			}
 
-			xmlpp::Attribute* attr = _element->get_attribute(CMeshPageRenderer::DYNAMIC_OBJECT_NAME());
+			xmlpp::Attribute* attr = _element->get_attribute(CMeshPageRenderer::ATTRIBUTE_MESH_NAME());
 
 			if (attr == NULL)
 			{
