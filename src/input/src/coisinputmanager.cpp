@@ -35,30 +35,39 @@ COISInputManager::COISInputManager( ) :
 {
 }
 
-COISInputManager::~COISInputManager( void ) {
-	if( mInputSystem ) {
+COISInputManager::~COISInputManager( void )
+{
+	if( mInputSystem )
+	{
 
-		if( mKeyboard ) {
+		if( mKeyboard )
+		{
 			mInputSystem->destroyInputObject( mKeyboard );
 			mKeyboard = 0;
 		}
 
-		if( mMouse ) {
+		if( mMouse )
+		{
 			mInputSystem->destroyInputObject( mMouse );
 			mMouse = 0;
 		}
 
+		if( mJoystick )
+		{
+			mInputSystem->destroyInputObject( mJoystick );
+			mMouse = 0;
+		}
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Destroying OIS" );
+		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Destroying OIS" );
 		OIS::InputManager::destroyInputSystem( mInputSystem );
-		mInputSystem = 0;
-
-	}
+ 		mInputSystem = 0;
+    }
 }
 
-void COISInputManager::initialise(  ) {
-	if( !mInputSystem ) {
-
+void COISInputManager::initialise(  )
+{
+	if( !mInputSystem )
+	{
 
 		// Setup basic variables
 		OIS::ParamList paramList;
@@ -66,7 +75,7 @@ void COISInputManager::initialise(  ) {
 		std::ostringstream windowHndStr;
 
 
-		  windowHnd = CGraphicModule::getInstancePtr()->getWindowHandle();
+		windowHnd = CGraphicModule::getInstancePtr()->getWindowHandle();
 
 		// Fill parameter list
 		windowHndStr << (unsigned int) windowHnd;
@@ -76,24 +85,25 @@ void COISInputManager::initialise(  ) {
 		mInputSystem = OIS::InputManager::createInputSystem( paramList );
 
 
-			/**
-			 * Get number of available keyboard
-			 *
-			 * OIS::InputManager::numKeyBoards has been renamed to
-			 * OIS::InputManager::numKeyboards from OIS 1.0
-			 * But the old one is still used in OIS 1.0rc which is shiped
-			 * with some GNU/Linux distribution
-			 */
+		/**
+		 * Get number of available keyboard
+		 *
+		 * OIS::InputManager::numKeyBoards has been renamed to
+		 * OIS::InputManager::numKeyboards from OIS 1.0
+		 * But the old one is still used in OIS 1.0rc which is shiped
+		 * with some GNU/Linux distribution
+		 */
 #ifdef HAVE_OIS_1RC
-			int numKeyboards = mInputSystem->numKeyBoards();
+		int numKeyboards = mInputSystem->numKeyBoards();
 #elif defined HAVE_OIS_1_2
-			int numKeyboards = mInputSystem->getNumberOfDevices( OIS::OISKeyboard );
+		int numKeyboards = mInputSystem->getNumberOfDevices( OIS::OISKeyboard );
 #else
-			int numKeyboards = mInputSystem->numKeyboards();
+		int numKeyboards = mInputSystem->numKeyboards();
 #endif
 
 		// If possible create a buffered keyboard
-		if( numKeyboards > 0 ) {
+		if( numKeyboards > 0 )
+		{
 			mKeyboard = static_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
 			mKeyboard->setEventCallback( this );
 		}
@@ -101,23 +111,42 @@ void COISInputManager::initialise(  ) {
 
 		// If possible create a buffered mouse
 #ifdef HAVE_OIS_1_2
-	if( mInputSystem->getNumberOfDevices( OIS::OISMouse ) > 0 ) {
+		if( mInputSystem->getNumberOfDevices( OIS::OISMouse ) > 0 )
+		{
 #else
-		if( mInputSystem->numMice() > 0 ) {
+		if( mInputSystem->numMice() > 0 )
+		{
 #endif
 			mMouse = static_cast<OIS::Mouse*>( mInputSystem->createInputObject( OIS::OISMouse, true ) );
 			mMouse->setEventCallback( this );
 
-				Ogre::RenderWindow* renderWindow = CGraphicModule::getInstancePtr()->getRenderWindow();
+			Ogre::RenderWindow* renderWindow = CGraphicModule::getInstancePtr()->getRenderWindow();
 
-				if (renderWindow)
-				{
-					const OIS::MouseState& mstate = mMouse->getMouseState();
-					mstate.width = renderWindow->getWidth();
-					mstate.height = renderWindow->getHeight();
-				}
+			if (renderWindow)
+			{
+				const OIS::MouseState& mstate = mMouse->getMouseState();
+				mstate.width = renderWindow->getWidth();
+				mstate.height = renderWindow->getHeight();
+			}
 		}
 
+
+
+		// If possible create a buffered joystick
+#ifdef HAVE_OIS_1_2
+		if( mInputSystem->getNumberOfDevices( OIS::OISJoyStick ) > 0 )
+		{
+#else
+		if( mInputSystem->numJoySticks() > 0 )
+		{
+#endif
+			mJoystick = static_cast<OIS::JoyStick*>( mInputSystem->createInputObject( OIS::OISJoyStick, true ) );
+			mJoystick->setEventCallback( this );
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: joystick found" );
+		} else {
+
+			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: no joystick found" );
+		}
 
 	}
 }
@@ -133,7 +162,12 @@ void COISInputManager::capture( void ) {
 		mMouse->capture();
 	}
 
+    if( mJoystick ) {
+        mJoystick->capture();
+    }
+
 }
+
 
 
 OIS::Keyboard* COISInputManager::getKeyboard( void ) {
@@ -253,4 +287,19 @@ bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButt
 	return true;
 }
 
+
+bool COISInputManager::buttonPressed( const OIS::JoyStickEvent &arg, int button )
+{
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button pressed" );
+}
+
+bool COISInputManager::buttonReleased( const OIS::JoyStickEvent &arg, int button )
+{
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button pressed" );
+}
+
+bool COISInputManager::axisMoved( const OIS::JoyStickEvent &arg, int axis )
+{
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: axis moved " );
+}
 

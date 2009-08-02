@@ -45,7 +45,7 @@ using boost::any_cast;
 #define __COISINPUTMANAGER_H__
 
 
-class COISInputManager : public OIS::KeyListener, public OIS::MouseListener
+class COISInputManager : public OIS::KeyListener, public OIS::MouseListener, public OIS::JoyStickListener
 {
 	public:
 		COISInputManager( );
@@ -74,9 +74,15 @@ class COISInputManager : public OIS::KeyListener, public OIS::MouseListener
 		bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
 
 
+		bool buttonPressed( const OIS::JoyStickEvent &arg, int button );
+		bool buttonReleased( const OIS::JoyStickEvent &arg, int button );
+		bool axisMoved( const OIS::JoyStickEvent &arg, int axis );
+
+
 		OIS::InputManager	*mInputSystem;
-		OIS::Keyboard		*mKeyboard;
-		OIS::Mouse		*mMouse;
+		OIS::Keyboard     *mKeyboard;
+		OIS::Mouse        *mMouse;
+		OIS::JoyStick     *mJoystick;
 
 		unsigned int mMouseButtonsState;
 };
