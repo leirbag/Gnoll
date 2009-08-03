@@ -47,19 +47,32 @@ namespace Gnoll
 
 		struct JoystickEvent
 		{
+			/**
+			 * Current state of the joystick
+			 */
 			const OIS::JoyStickEvent &event;
+
+
+			/**
+			 * Which button or axis triggered this event
+			 */
 			int which;
 			
+
+			/**
+			 * Type of event
+			 */
 			JoystickEventType type;
 
-
+			/**
+			 * Constructor
+			 */
 			JoystickEvent(const OIS::JoyStickEvent _event, int _which, JoystickEventType _type):
 				event(_event), which(_which), type(_type)
 			{
 			}
 
 		};
-
 
 	};
 };
