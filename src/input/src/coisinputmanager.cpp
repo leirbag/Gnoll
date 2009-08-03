@@ -18,9 +18,10 @@
  ***************************************************************************/
 
 #include "../include/cinputmouseevents.h"
+#include "../include/cinputjoystickevents.h"
 #include "../include/coisinputmanager.h"
 #include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessage.h"
+#include "log/include/clogmacros.h"
 #include "../../log/include/clogmodule.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
@@ -134,15 +135,23 @@ void COISInputManager::initialise(  )
 
 		// If possible create a buffered joystick
 #ifdef HAVE_OIS_1_2
+		GNOLL_LOG() << "JOYSTICK: " << mInputSystem->getNumberOfDevices( OIS::OISJoyStick ) << " detected\n"; 
 		if( mInputSystem->getNumberOfDevices( OIS::OISJoyStick ) > 0 )
 		{
 #else
+		GNOLL_LOG() << "JOYSTICK: " << mInputSystem->numJoySticks() << " detected\n"; 
 		if( mInputSystem->numJoySticks() > 0 )
 		{
 #endif
 			mJoystick = static_cast<OIS::JoyStick*>( mInputSystem->createInputObject( OIS::OISJoyStick, true ) );
 			mJoystick->setEventCallback( this );
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: joystick found" );
+
+
+			GNOLL_LOG() << "JOYSTICK: " << mJoystick->axes() << " axes detected\n"; 
+			GNOLL_LOG() << "JOYSTICK: " << mJoystick->buttons() << " buttons detected\n"; 
+			GNOLL_LOG() << "JOYSTICK: " << mJoystick->hats() << " hats detected\n"; 
+
 		} else {
 
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: no joystick found" );
@@ -291,15 +300,48 @@ bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButt
 bool COISInputManager::buttonPressed( const OIS::JoyStickEvent &arg, int button )
 {
 	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button pressed" );
+
+	CMessageType axisMovedType("JOYSTICK_BUTTON_pressed");
+
+	Gnoll::Input::JoystickEvent joystickEvent(arg, button, Gnoll::Input::Axis);
+
+	shared_ptr<boost::any> data (new boost::any(joystickEvent) ) ;
+	shared_ptr<CMessage>  message (new CMessage(axisMovedType, data ));
+
+	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
+
+	return true;
 }
 
 bool COISInputManager::buttonReleased( const OIS::JoyStickEvent &arg, int button )
 {
-	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button pressed" );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button released" );
+
+	CMessageType axisMovedType("JOYSTICK_BUTTON_RELEASED");
+
+	Gnoll::Input::JoystickEvent joystickEvent(arg, button, Gnoll::Input::Axis);
+
+	shared_ptr<boost::any> data (new boost::any(joystickEvent) ) ;
+	shared_ptr<CMessage>  message (new CMessage(axisMovedType, data ));
+
+	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
+
+	return true;
 }
 
 bool COISInputManager::axisMoved( const OIS::JoyStickEvent &arg, int axis )
 {
 	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: axis moved " );
+
+	CMessageType axisMovedType("JOYSTICK_AXIS_MOVED");
+
+	Gnoll::Input::JoystickEvent joystickEvent(arg, axis, Gnoll::Input::Axis);
+
+	shared_ptr<boost::any> data (new boost::any(joystickEvent) ) ;
+	shared_ptr<CMessage>  message (new CMessage(axisMovedType, data ));
+
+	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
+
+	return true;
 }
 
