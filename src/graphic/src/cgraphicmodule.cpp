@@ -334,7 +334,7 @@ namespace Gnoll
 			//mEditorGuiSheet->getChild("fpsText")->setText(str);
 
 			mRoot->renderOneFrame();
-		//	mWindow->update();
+			mwindow->update();
 
 
 			unsigned long newframe = m_timer->getMilliseconds ();
