@@ -32,7 +32,7 @@ using namespace Gnoll::Graphic;
 using namespace Gnoll::Core;
 
 COISInputManager::COISInputManager( ) :
-	mInputSystem( 0 ) , mKeyboard( 0 ), mMouse( 0 ), mMouseButtonsState( 0 )
+    mInputSystem( 0 ) , mKeyboard( 0 ), mMouse( 0 ), mJoystick( 0 ), mMouseButtonsState( 0 )
 {
 }
 
