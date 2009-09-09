@@ -1,0 +1,347 @@
+#/***************************************************************************
+# *   Copyright (C) 2008 by Gabriel Huau                                      *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU General Public License as published by  *
+# *   the Free Software Foundation; either version 2 of the License, or     *
+# *   (at your option) any later version.                                   *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU General Public License for more details.                          *
+# *                                                                         *
+# *   You should have received a copy of the GNU General Public License     *
+# *   along with this program; if not, write to the                         *
+# *   Free Software Foundation, Inc.,                                       *
+# *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+# ***************************************************************************/
+
+
+import os
+
+
+#
+# Print the current configuration
+#
+def print_config(config):
+
+	print
+	print
+	print "***************************************************************"
+	print "* Generating Configuration files with the following settings: *"
+	print "***************************************************************"
+	print
+
+	keys = config.keys()
+	keys.sort()
+	for key in keys:
+		print "    %-30s %s" % (key, config[key])
+
+	print
+	print
+
+
+#
+# Generate a config.h file that contains all constants about the environnement
+# of the system (from SCons wiki : http://www.scons.org/wiki/GenerateConfig)
+#
+def config_h_build(config, target, source, env):
+	print_config(config)
+	print "Generating [%s] from [%s]" % (target, source)
+
+	for a_target, a_source in zip(target, source):
+		config_h    = file(str(a_target), "w")
+		config_h_in = file(str(a_source), "r")
+		config_h.write(config_h_in.read() % config)
+		config_h_in.close()
+		config_h.close()
+
+#
+# Generate a config.h file that contains all constants about the environnement
+# of the system
+#
+def generateConfigFile(config, srcFile, destFile):
+
+	print_config(config)
+
+	for target, source in zip(destFile, srcFile):
+
+		print "Generating [%s] from [%s]" % (target, source)
+
+		config_h = file(str(target), "w")
+		config_h_in = file(str(source), "r")
+
+		config_h.write(config_h_in.read() % config)
+
+
+		config_h.write("\n")
+		config_h.write("\n")
+		config_h.write("/* Define various constants */")
+		config_h.write("\n")
+		config_h.write("\n")
+
+
+		symbols = config.keys()
+		symbols.sort()
+
+		for symbol in symbols:
+			config_h.write("#define %s   %s\n" %(symbol, config[symbol]))
+			config_h.write("\n")
+
+		config_h_in.close()
+		config_h.close()
+
+		print
+
+
+#
+# Check Boost configuration
+#
+def checkBoost(env, config, configProject):
+	config  = env.Configure()
+
+	# Check the existence of header
+	if not config.CheckCXXHeader('boost/shared_ptr.hpp'):
+		print "Boost::shared_ptr not found."
+		exit(-1)
+
+	if not config.CheckCXXHeader('boost/program_options.hpp'):
+		print "Boost::program_options not found"
+		exit(-1)
+
+	for header in ['boost/filesystem/path.hpp', 'boost/filesystem/convenience.hpp', 'boost/filesystem/operations.hpp']:
+		if not config.CheckCXXHeader(header):
+			print "Boost::filesystem not found"
+			exit(-1)
+
+	for header in ['boost/thread/mutex.hpp', 'boost/thread/thread.hpp', 'boost/thread/condition.hpp', 'boost/thread/xtime.hpp']:
+		if not config.CheckCXXHeader(header):
+			print "Boost::thread not found"
+			exit(-1)
+
+	# Check the existence of libraries
+	if not config.CheckLib('boost_thread', None, None, 'c++'):
+		if not config.CheckLib('boost_thread-mt', None, None, 'c++'):
+			print "Boost::thread not found"
+			exit(-1)
+
+	if not config.CheckLib('boost_program_options', None, None, 'c++'):
+		if not config.CheckLib('boost_program_options-mt', None, None, 'c++'):
+			print "Boost::ProgramOption not found"
+			exit(-1)
+
+	if not config.CheckLib('boost_filesystem', None, None, 'c++'):
+		if not config.CheckLib('boost_filesystem-mt', None, None, 'c++'):
+			print "Boost::Filesystem not found"
+			exit(-1)
+
+	# Update configuration of the project
+	configProject['HAVE_BOOST_SHARED_PTR'] = '1'
+	configProject['HAVE_BOOST_PROGRAM_OPTIONS'] = '1'
+	configProject['HAVE_BOOST_FILESYSTEM'] = '1'
+	configProject['HAVE_BOOST_THREAD'] = '1'
+
+	# Update environnement
+	env     = config.Finish()
+
+
+#
+# Check OpenAL configuration
+#
+def checkOpenAL(env, config, configProject):
+	config  = env.Configure()
+
+	# Check the existence of header
+	for header in ['AL/al.h', 'AL/alc.h']:
+		if not config.CheckCXXHeader(header):
+			print "OpenAL not found"
+			exit(-1)
+
+	# Check the existence of libraries
+	config.CheckLib('openal', None, None, 'c++')
+	config.CheckLib('alut', None, None, 'c++')
+
+	# Update configuration of the project
+	configProject['HAVE_OPENAL'] = '1'
+
+	# Update environnement
+	env     = config.Finish()
+
+
+#
+# Check Vorbis configuration
+#
+def checkVorbis(env, config, configProject):
+	config  = env.Configure()
+
+	# Check the existence of header
+	for header in ['vorbis/vorbisfile.h']:
+		if not config.CheckCXXHeader(header):
+			print "Vorbis library not found"
+			exit(-1)
+
+	# Check the existence of libraries
+	config.CheckLib('vorbis', None, None, 'c++')
+	config.CheckLib('vorbisenc', None, None, 'c++')
+	config.CheckLib('vorbisfile', None, None, 'c++')
+	config.CheckLib('ogg', None, None, 'c++')
+
+	# Update configuration of the project
+	configProject['HAVE_OGG_VORBIS'] = '1'
+
+	# Update environnement
+	env     = config.Finish()
+
+
+#
+# Check Ogre configuration
+#
+def checkOgre(env, config, configProject):
+	if env.Detect('pkg-config'):
+		env.MergeFlags(['!pkg-config OGRE --cflags --libs'])
+	config  = env.Configure()
+
+	# Check the existence of header
+	headers = ['Ogre.h', 'OgreLogManager.h', 'OgrePlatform.h', 'OgreTimer.h']
+	for header in headers:
+		if not config.CheckCXXHeader(header):
+			print "Ogre is not correctly installed"
+			exit(-1)
+
+	# Check the existence of libraries
+	config.CheckLib('OgreMain', None, None, 'c++')
+
+	# Update configuration of the project
+	if not config.CheckCXXHeader('OgreMemoryMacros.h'):
+		configProject['HAVE_OGRE_1_6'] = '1'
+	configProject['HAVE_OGRE'] = '1'
+
+	# Update environnement
+	env     = config.Finish()
+
+
+#
+# Check OIS configuration
+#
+def checkOIS(env, config, configProject):
+	if env.Detect('pkg-config'):
+		env.MergeFlags(['!pkg-config OIS --cflags --libs'])
+	config  = env.Configure()
+
+	# Check the existence of header
+	for header in ['OISMouse.h', 'OISKeyboard.h', 'OISJoyStick.h', 'OISInputManager.h']:
+		if not config.CheckCXXHeader(header):
+			print "OIS library not found"
+			exit(-1)
+
+	# Check the existence of libraries
+	config.CheckLib('OIS', None, None, 'c++')
+
+	# Update configuration of the project
+	if config.CheckLibWithHeader( 'OIS', 'OISInputManager.h', 'c++',
+								  'OIS::InputManager::createInputSystem(0)->numKeyBoards();' ):
+		configProject['HAVE_OIS_1RC'] = '1'
+
+	elif config.CheckLibWithHeader( 'OIS', 'OISInputManager.h', 'c++', 
+									'OIS::InputManager::createInputSystem(0)->getNumberOfDevices( OIS::OISKeyboard );' ):
+		configProject['HAVE_OIS_1_2'] = '1'
+
+	configProject['HAVE_OIS'] = '1'
+
+	# Update environnement
+	env     = config.Finish()
+
+
+#
+# Check LibXMLpp configuration
+#
+def checkLibXmlpp(env, config, configProject):
+	if env.Detect('pkg-config'):
+		env.MergeFlags(['!pkg-config libxml++-2.6 --cflags --libs'])
+	config  = env.Configure()
+
+	# Check the existence of header
+	for header in ['libxml++/libxml++.h', 'glibmm/ustring.h', 'glibmm/unicode.h', 
+				   'glib/gunicode.h', 'glib/gmacros.h']:
+		if not config.CheckCXXHeader(header):
+			print "libxml++2.6 library not found"
+			exit(-1)
+
+	# Check the existence of libraries
+	config.CheckLib('xml++-2.6', None, None, 'c++')
+	config.CheckLib('xml2', None, None, 'c++')
+	config.CheckLib('glibmm-2.4', None, None, 'c++')
+	config.CheckLib('gobject-2.0', None, None, 'c++')
+	config.CheckLib('sigc-2.0', None, None, 'c++')
+	config.CheckLib('glib-2.0', None, None, 'c++')
+
+
+	# Update configuration of the project
+	configProject['HAVE_LIB_XML_PP'] = '1'
+	configProject['HAVE_XML2'] = '1'
+	configProject['HAVE_GLIBMM'] = '1'
+	configProject['HAVE_GOBJECT'] = '1'
+	configProject['HAVE_SIGC'] = '1'
+	configProject['HAVE_GLIB'] = '1'
+
+	# Update environnement
+	env     = config.Finish()
+
+
+#
+# Check CEGUI configuration
+#
+def checkCEGUI(env, config, configProject):
+	if env.Detect('pkg-config'):
+		env.MergeFlags(['!pkg-config CEGUI-OGRE --cflags --libs'])
+	config  = env.Configure()
+
+	# Check the existence of header
+	for header in ['OGRE/OgreCEGUIRenderer.h', 'CEGUI/CEGUISystem.h', 'CEGUI/CEGUIWindow.h']:
+		if not config.CheckCXXHeader(header):
+			print "CEGUI library not found"
+			exit(-1)
+
+	# Check the existence of libraries
+	config.CheckLib('CEGUIBase', None, None, 'c++')
+	config.CheckLib('CEGUIOgreRenderer', None, None, 'c++')
+
+	# Update configuration of the project
+	configProject['HAVE_CEGUI'] = '1'
+	configProject['HAVE_CEGUI_OGRE'] = '1'
+
+	# Update environnement
+	env     = config.Finish()
+
+
+#
+# Check Gnoll configuration
+#
+def checkGnoll(env, configProject):
+	# Check the existence of signal.h to manager signal on POSIX system
+	config  = env.Configure()
+	if config.CheckCXXHeader('signal.h'):
+		configProject['HAVE_SIGNAL'] = '1'
+	env     = config.Finish()
+
+	# Check each library
+	checkBoost(env, config, configProject)
+	checkOgre(env, config, configProject)
+	checkOpenAL(env, config, configProject)
+	checkVorbis(env, config, configProject)
+	checkOIS(env, config, configProject)
+	checkLibXmlpp(env, config, configProject)
+	checkCEGUI(env, config, configProject)
+
+	# Generate config.h, but merge configuration of environnement with
+	# configuration of dependance
+	generateConfigFile(configProject, ['./config.h.in'], ['./config.h'])
+
+
+#
+# Main
+#
+Import('env')
+Import('configProject')
+checkGnoll(env, configProject)

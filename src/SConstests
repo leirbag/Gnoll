@@ -1,0 +1,76 @@
+#/***************************************************************************
+# *   Copyright (C) 2008 by Gabriel Huau                                      *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU General Public License as published by  *
+# *   the Free Software Foundation; either version 2 of the License, or     *
+# *   (at your option) any later version.                                   *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU General Public License for more details.                          *
+# *                                                                         *
+# *   You should have received a copy of the GNU General Public License     *
+# *   along with this program; if not, write to the                         *
+# *   Free Software Foundation, Inc.,                                       *
+# *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+# ***************************************************************************/
+
+
+import os
+import copy
+
+
+#
+# Taken from scons Wiki
+#
+def builder_unit_test(target, source, env):
+	app = str(source[0].abspath)
+	if os.spawnl(os.P_WAIT, app, app) == 0:
+		open(str(target[0]), 'w').write("PASSED\n")
+	else:
+		return 1
+
+
+#
+# Main
+#
+Import('env')
+env.Append(BUILDERS = {'Test' : Builder(action = builder_unit_test) })
+
+config  = env.Configure()
+if not config.CheckLib('boost_unit_test_framework', None, None, 'c++'):
+	if not config.CheckLib('boost_unit_test_framework-mt', None, None, 'c++'):
+		print "Boost::UnitTest not found"
+		exit(-1)
+env     = config.Finish()
+
+env.MergeFlags([' -O3 '])
+
+# Gathering sources files
+sourceFiles = []
+sourceFiles.append(Glob('./sound/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./time/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./graphic/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./dynamicobject/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./stats/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./log/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./scene/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./core/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./input/src/*.cpp', strings=True))
+
+# Gathering tests files for each module
+sourceFilesScene = copy.copy(sourceFiles)
+sourceFilesCore  = copy.copy(sourceFiles)
+
+sourceFilesScene.append(Glob('./scene/unittests/*.cpp', strings=True))
+sourceFilesCore.append(Glob('./core/unittests/*.cpp', strings=True))
+
+# Test each module independly
+core  = env.Program('tests_core', sourceFilesCore)
+scene = env.Program('tests_scene', sourceFilesScene)
+tests_core  = env.Test('../../tests/tests_core.passed', core)
+tests_scene = env.Test('../../tests/tests_scene.passed', scene)
+
+env.Alias('tests', [tests_core, tests_scene])

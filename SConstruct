@@ -1,5 +1,5 @@
 #/***************************************************************************
-# *   Copyright (C) 2008 by Bruno Mahe                                      *
+# *   Copyright (C) 2008 by Huau Gabriel                                    *
 # *                                                                         *
 # *   This program is free software; you can redistribute it and/or modify  *
 # *   it under the terms of the GNU General Public License as published by  *
@@ -18,278 +18,204 @@
 # ***************************************************************************/
 
 
+import SCons
+import SCons.Defaults
 
 import os
 import os.path
-import sys
+import re
+import stat
 import shutil
+import glob
 
-import scons.BaseGnollInstaller
-import SCons.Defaults
 
-# Taken from scons Wiki
-def builder_unit_test(target, source, env):
-	app = str(source[0].abspath)
-	if os.spawnl(os.P_WAIT, app, app) == 0:
-		open(str(target[0]), 'w').write("PASSED\n")
-	else:
-		return 1
+#
+# Write a config file from a template
+#
+def parseConfigFile(env, filename):
+	dest = re.sub(r'\.template$', r'', filename)
+	dest = re.sub(r'config/', r'', dest)
+	destFile   = file(str(dest), "w")
+	sourceFile = file(str(filename), "r")
+	destFile.write(sourceFile.read() % env)
+	sourceFile.close()
+	destFile.close()
+	return dest
 
-test_builder = Builder(action = builder_unit_test)
 
-def checkDoxygen(env, config):
-	return not env.Execute('doxygen --version')
+#
+# Check the configuration
+#
+def check(target, source, env):
+	SConscript('src/SConscheck')
 
-def buildDoxygenDoc(env, config):
+
+#
+# Generate the documentation
+#
+def doc(target, source, env):
+	if not env.Detect('doxygen'):
+		print "Doxygen is not installed"
+		exit(-1)
+
 	env.Execute('doxygen')
 
 
-def print_config(config):
-
-	print
-	print
-	print "***************************************************************"
-	print "* Generating Configuration files with the following settings: *"
-	print "***************************************************************"
-	print
-
-	keys = config.keys()
-	keys.sort()
-	for key in keys:
-		print "    %-30s %s" % (key, config[key])
-	print
-	print
-
-
-def generateConfigFile(config, newSymbols, srcFile, destFile):
-
-	print_config(config)
-
-	for target, source in zip(destFile, srcFile):
-
-		print "Generating [%s] from [%s]" % (target, source)
-
-		config_h = file(str(target), "w")
-		config_h_in = file(str(source), "r")
-
-		config_h.write(config_h_in.read() % config)
-
-
-		config_h.write("\n")
-		config_h.write("\n")
-		config_h.write("/* Define various constants */")
-		config_h.write("\n")
-		config_h.write("\n")
-
-
-		symbols = newSymbols.keys()
-		symbols.sort()
-
-		for symbol in symbols:
-			config_h.write("#define %s   %s\n" %(symbol, newSymbols[symbol]))
-			config_h.write("\n")
-
-		config_h_in.close()
-		config_h.close()
-
-		print
-
-
-def constructGnollEnvironment(env, configProject, config):
-	gnollBuilder = None
-
-	if (env['PLATFORM'] == 'posix'):
-
-		from  scons.LinuxGnollBuilder import LinuxGnollBuilder
-		gnollBuilder = LinuxGnollBuilder()
-
-
-	if (gnollBuilder == None):
-
-		print "Sorry, your platform [%s] is not supported." % (env['PLATFORM'])
-		exit(-1)
-
-	# If debug is activated, add some flags to ad debugging symbols
-	if configProject['DEBUG'] == '1':
-		env.MergeFlags([ ' -g ', ' -pg '])
-	else:
-		env.MergeFlags([ ' -O3 '])
-
-	# Check if all libraries needed by Gnoll are installed and configured
-	gnollConfig = gnollBuilder.checkGnoll(env, config)
-
-	# Generate config.h file
-	generateConfigFile(configProject, gnollConfig, ['./src/config.h.in'], ['./src/config.h'])
-
-	return gnollBuilder
-
-
-def main():
-
-
-	configProject = {
-				"DEBUG"  : "0",
-				"DO_LOG"  : "0",
-				"DEFAULT_LOG_FILENAME"  : '"./gnoll.log"',
-				"PACKAGE_NAME": '"Gnoll"',
-				"PACKAGE_VERSION": '"0.1.7"' ,
-				"PACKAGE_BUGREPORT": '"gnoll-devel@lists.gnoll.org"',
-				"PACKAGE_STRING": '"Gnoll 0.1.7"',
-				"PACKAGE_TARNAME": '"gnoll"'
-			}
-
-
-	opts = Options('gnoll.conf')
-	opts.Add(
-					PathOption(
-							'prefix',
-							'Directory to install under',
-							'/usr/share',
-							SCons.Options.PathOption.PathAccept
-							)
-				)
-
-
-	# Do we want to compile in debug mode ?
-	if ARGUMENTS.get('debug', '0') == '1':
-		configProject['DEBUG'] = '1'
-
-	# Do we want to activate logging ?
-	if ARGUMENTS.get('do_log', '0') == '1':
-		configProject['DO_LOG'] = '1'
-
-	# If no target specify, we use "gnoll" target
-	Default('gnoll')
-
-	for target in BUILD_TARGETS:
-
-		print "Target [%s]" % (target)
-		env = Environment(ENV = os.environ)
-		config = env.Configure()
-		env.BuildDir("./objs/", "src")
-
-		# Change default log path for posix systems
-		if (env['PLATFORM'] == 'posix'):
-
-			linuxLogDir = os.path.expanduser("~") + '/.gnoll/logs'
-			configProject["DEFAULT_LOG_FILENAME"] = '"' + linuxLogDir + '/gnoll.log' + '"'
-
-
-		env['install_prefix'] = ARGUMENTS.get('prefix')
+#
+# Install data/binary/config files
+#
+def install(env):
+	# Configure environnement
+	env['install_prefix'] = ARGUMENTS.get('prefix')
+	if not env['install_prefix']:
+		env['install_prefix'] = env['prefix']
 		if not env['install_prefix']:
 			env['install_prefix'] = "/usr/"
+	if env['install_prefix'][-1] != '/' :
+		env['install_prefix'] = env['install_prefix'] + '/'
 
-		if env['install_prefix'][-1] != '/' :
-			env['install_prefix'] = env['install_prefix'] + '/'
+	env['ogre_lib_path'] = ARGUMENTS.get('ogre_lib_path')
+	if not env['ogre_lib_path']:
+		env['ogre_lib_path'] = "/usr/lib/OGRE/"
 
+	if env['ogre_lib_path'][-1] != '/' :
+		env['ogre_lib_path'] = env['ogre_lib_path'] + '/'
 
-		env['ogre_lib_path'] = ARGUMENTS.get('ogre_lib_path')
-		if not env['ogre_lib_path']:
-			env['ogre_lib_path'] = "/usr/lib/OGRE/"
+	env['install_bin']    = env['install_prefix'] + "bin/"
+	env['install_data']   = env['install_prefix'] + 'share/gnoll-example/data/'
+	env['install_config'] = env['install_data']
 
-		if env['ogre_lib_path'][-1] != '/' :
-			env['ogre_lib_path'] = env['ogre_lib_path'] + '/'
+	# Log directory
+	logDir = os.path.dirname( configProject['DEFAULT_LOG_FILENAME'] )
+	logDir = logDir[1:]
 
-
-
-		env['install_bin'] = env['install_prefix'] + "bin/"
-		env['install_data'] = env['install_prefix'] + 'share/gnoll-example/data/'
-		env['install_config'] = env['install_data']
-
-
-
-		opts.Update(env)
-		opts.Save('gnoll.conf', env)
-
-		print "install_prefix = [%s]" % (env['install_prefix'])
-		print "install_bin    = [%s]" % (env['install_bin'])
-		print "install_data   = [%s]" % (env['install_data'])
-		print "install_config = [%s]" % (env['install_config'])
-
-		Help(opts.GenerateHelpText(env))
+	if not os.path.exists( logDir ):
+		try:
+			print "Creating destination logs directory [%s]" % (logDir)
+			os.makedirs(logDir)
+		except OSError, why:
+			print "Can't create %s: %s" % (logDir, why)
+	else:
+		print "No need to create %s. It already exists" % (logDir)
 
 
+	# If we are building a rpm,
+	# install_bin and install_data are prefixed by the
+	# rpm script build root
+	if os.environ.has_key('RPM_BUILD_ROOT') :
+		env['install_bin']  = env['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
+		env['install_data'] = env['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
+
+	# Add a pre action to parse config files
+	# We generate the list of all config file and delete the
+	# extension .template
+	files = []
+	for i in glob.glob('config/*'):
+		if os.path.isfile(i):
+			files.append(i)
+		elif os.path.isdir(i):
+			files.extend(self.gatherConfigFiles(i))
+
+	files2 = []
+	for f in files:
+		files2.append(parseConfigFile(env, f))
+
+	# Create the launcher for each plateform
+	launcher_sh = ""
+	if(env['PLATFORM'] == 'posix'):
+		launcher_sh = """#!/bin/sh\n%(install_bin)sgnoll --load-source-directory="%(install_data)s" --save-source-directory="%(install_data)s" \n"""
+	else:
+		print "Your platform is not supported to create the launcher, sorry"
+
+	launcher_filename = 'gnoll-example'
+	launcher          = file(launcher_filename, "w")
+	launcher.write(launcher_sh % (env))
+	launcher.close()
+
+	# Installation
+	env.Alias('install', env.Install(env['install_bin'], 'gnoll'))
+	env.Alias('install', env.Install(env['install_bin'], launcher_filename))
+	env.Alias('install', env.Install(env['install_data'], Glob('data/*')))
+	env.Alias('install', env.Install(env['install_data'], files2))
 
 
-		if target == 'gnoll':
-			gnollBuilder = constructGnollEnvironment(env, configProject, config)
-
-			# Build Gnoll
-			gnollBuilder.buildGnoll(env, config)
-
-		# testcore will be replaced by a list of test targets
-		if target == 'tests':
-			env.Append(BUILDERS = {'Test' : test_builder })
-			gnollBuilder = constructGnollEnvironment(env, configProject, config)
-
-			# Build Gnoll
-			gnollBuilder.buildTests(env, config)
+	# CHMOD the launcher
+	os.chmod(launcher_filename, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
 
 
-		if target == 'doc':
+#
+# Construct the project configuration (version, debug/release, if we want to use
+# log, etc.)
+#
+def constructGnollConfigProject(env):
+	configProject = {
+				"DEBUG"                 : "0",
+				"DO_LOG"                : "0",
+				"DEFAULT_LOG_FILENAME"  : '"./gnoll.log"',
+				"PACKAGE_NAME"          : '"Gnoll"',
+				"PACKAGE_VERSION"       : '"0.1.7"' ,
+				"PACKAGE_BUGREPORT"     : '"gnoll-devel@lists.gnoll.org"',
+				"PACKAGE_STRING"        : '"Gnoll 0.1.7"',
+				"PACKAGE_TARNAME"       : '"gnoll"'
+			}
 
-			if not checkDoxygen(env, config):
-				print "Doxygen utility not found."
-				exit(-1)
-			buildDoxygenDoc(env, config)
+	# Change default log path for posix systems
+	if (env['PLATFORM'] == 'posix'):
+		linuxLogDir = os.path.expanduser("~") + '/.gnoll/logs'
+		configProject["DEFAULT_LOG_FILENAME"] = '"' + linuxLogDir + '/gnoll.log' + '"'
 
-
-		if target == 'install':
-
-			gnollInstaller = None
-
-			# DEFAULT_LOG_FILENAME has the path enclosed by "
-			# dirname will remove the ending " but not the very first one
-			logDir = os.path.dirname( configProject['DEFAULT_LOG_FILENAME'] )
-			logDir = logDir[1:]
-
-			if not os.path.exists( logDir ):
-				try:
-					print "Creating destination logs directory [%s]" % (logDir)
-					os.makedirs(logDir)
-				except OSError, why:
-					print "Can't create %s: %s" % (logDir, why)
-			else:
-				print "No need to create %s. It already exists" % (logDir)
+	return configProject
 
 
-			if (env['PLATFORM'] == 'posix'):
+#
+# Main
+#
+# Configuration of the environnement
+Default()
+env                            = Environment(ENV = os.environ)
+configProject                  = constructGnollConfigProject(env)
+build_dir                      = "Release"
+opts = Variables('gnoll.conf')
+opts.Add(PathVariable(
+						'prefix', 'Directory to install under', '/usr/share', SCons.Variables.PathVariable.PathAccept
+				     )
+		)
 
-				from  scons.LinuxGnollInstaller import LinuxGnollInstaller
-				gnollInstaller = LinuxGnollInstaller()
+opts.Add(
+						'debug', 'Set up to 1 if you want debug version', '0'
+		)
 
+opts.Add(
+						'do_log', 'Set up to 1 if you want to generate log in binary', '0'
+		)
 
-			# Step 1 : Copy static files from ./data/
-			# This proceeds only if 'install_data' doesn't exists
-			shutil.rmtree(env['install_data'])
-			if not os.path.exists(env['install_data']):
-				try:
-					print "Copying data [Destination dir: %s]..." % (env['install_data'])
-					shutil.copytree('./data/', env['install_data'], True)
+opts.Update(env)
+opts.Save('gnoll.conf', env)
+Help(opts.GenerateHelpText(env))
+env['CPPPATH'] = os.getenv ('CPPPATH')
+env['LIBPATH'] = os.getenv ('LIBPATH')
+env['LIBS']    = os.getenv ('LIBS')
 
-				except (IOError, os.error), why:
-					print "Can't copy %s to %s: %s" % ('./data/', `env['install_data']`, str(why))
-			else:
-				print "%s already exists. No need to install files from ./data/" % (`env['install_data']`)
+# Do we want to compile in debug mode ?
+if ARGUMENTS.get('debug', '0') == '1' or env['debug'] == '1':
+	configProject['DEBUG'] = '1'
+	build_dir              = "Debug"
 
+# Do we want to activate logging ?
+if ARGUMENTS.get('do_log', '0') == '1' or env['do_log'] == '1':
+	configProject['DO_LOG'] = '1'
+	build_dir              += "_log"
 
-			# If no specific installer has been found, use the base one
-			if gnollInstaller == None:
-				gnollInstaller = scons.BaseGnollInstaller.BaseGnollInstaller()
+##### BUILD #####
+Export('env')
+Export('configProject')
 
+env.Alias('build',   Alias('check'))
+env.Alias('tests',   Alias('check'))
+env.Alias('install',   Alias('build'))
 
-			# Define binaries	installation target
-			env.Alias('install_bin_gnoll', env.Install(env['install_bin'], 'gnoll'))
-			env.Alias('install_bin', ['install_bin_gnoll'])
-			env.Alias('install', ['gnoll', 'install_bin'], )
-
-
-			# Launche install process
-			if (gnollInstaller != None):
-				gnollInstaller.install(env, config)
-
-
-		config.Finish()
-
-
-main()
+AlwaysBuild(env.Alias('doc',   action = doc))
+AlwaysBuild(env.Alias('check', action = check))
+AlwaysBuild(env.Alias('build', SConscript('src/SConsbuild', variant_dir="build/" + build_dir)))
+AlwaysBuild(env.Alias('tests', SConscript('src/SConstests', variant_dir="build/" + build_dir)))
+env.Alias('install', install(env))

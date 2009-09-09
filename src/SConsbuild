@@ -1,5 +1,5 @@
 #/***************************************************************************
-# *   Copyright (C) 2008 by Bruno Mahe                                      *
+# *   Copyright (C) 2008 by Gabriel Huau                                      *
 # *                                                                         *
 # *   This program is free software; you can redistribute it and/or modify  *
 # *   it under the terms of the GNU General Public License as published by  *
@@ -18,4 +18,36 @@
 # ***************************************************************************/
 
 
+import os
+import os.path
 
+
+#
+# Main
+#
+# Set up the environment and config
+Import('env')
+Import('configProject')
+
+# Construct environnement
+# If debug is activated, add some flags to ad debugging symbols
+env.MergeFlags([ '-Wall', '-I ./src/'])
+if configProject['DEBUG'] == '1':
+	env.MergeFlags([ ' -g ', ' -pg '])
+else:
+	env.MergeFlags([ ' -O3 '])
+
+# Build the project
+sourceFiles = []
+sourceFiles.append(Glob('./*.cpp', strings=True))
+sourceFiles.append(Glob('./sound/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./time/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./graphic/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./dynamicobject/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./stats/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./log/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./scene/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./core/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./input/src/*.cpp', strings=True))
+
+env.Alias('build', env.Program('../../gnoll', sourceFiles))
