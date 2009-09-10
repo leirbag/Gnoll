@@ -1,0 +1,11 @@
+env = Environment()
+config = env.Configure()
+
+if env.Detect('pkg-config'):
+    env.MergeFlags(['!pkg-config OGRE --cflags --libs'])
+config.CheckLib('OgreMain', None, None, 'c++')
+
+env = config.Finish()
+
+Default()
+env.Alias('build', env.Program('ogre_show_animationstate', ['ogre_show_animationstate.cpp']))
