@@ -1,3 +1,5 @@
+If you wish to help and participate to the development of Gnoll, you should also read the file PARTICIPATING
+
 README
 -----
 
@@ -11,33 +13,30 @@ Gnoll Devel <gnoll-devel@lists.gnoll.org>
 Building Gnoll
 ======================================
 
-In order to build Gnoll you will need these packages :
-- Scons
-- g++
-- libxml++2.6
-- glibmm
-- Ogre 3d 1.4.x or 1.6.x
-- CEGUI 0.5.0
-- OIS 1.0rc1 or 1.2
-- boost_filesystem
-- boost_thread
-- boost_program_options
-- OpenAL
-- alut
-- vorbis
-- vorbisfile
-- ogg
-- sndfile
-
-
 To build it, just launch these commands :
-scons gnoll 
+scons build
+
 You can compile Gnoll with debug options by passing 'debug=1' to the build command line.
 Gnoll can also log everything to a file if the parameter do_log=1 is passed to the build command line.
 
+======================================
+Installing Gnoll
+======================================
 
 To install it to a specific directory :
 scons install prefix=/where/to/install/gnoll/
 
+======================================
+Testing Gnoll
+======================================
 
-If you wish to help and participate to the development of Gnoll, you should also read the file PARTICIPATING
+To test gnoll :
+scons tests
+
+======================================
+Checking Gnoll
+======================================
+
+To check the environnement of gnoll (it will be automatically done with
+building) :
+scons check
