@@ -86,6 +86,7 @@
 
 #include "../include/cgraphicmodule.h"
 #include "../../config.h"
+#include "../../log/include/clogmacros.h"
 
 #include "../../core/include/cmessage.h"
 #include "../../core/include/cmessagetype.h"
@@ -103,6 +104,7 @@
 #include "../include/cceguilogger.h"
 
 #include <string>
+#include <OgreException.h>
 
 using namespace Ogre;
 
@@ -228,7 +230,17 @@ namespace Gnoll
 				if (*attrName != gRenderSystemAttrName)
 				{
 					shared_ptr<Gnoll::DynamicObject::String> param_value = config->getAttribute< Gnoll::DynamicObject::String >(*attrName);
-					rs->setConfigOption(*attrName, *param_value);
+
+                    // Catch option unknow against to kill the application
+                    // We don't output anything cause the method do it for
+                    // us ...
+                    try
+                    {
+					    rs->setConfigOption(*attrName, *param_value);
+                    }
+                    catch(const Ogre::Exception& e)
+                    {
+                    }
 				}
 
 			}
