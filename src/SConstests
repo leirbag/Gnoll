@@ -1,5 +1,5 @@
 #/***************************************************************************
-# *   Copyright (C) 2008 by Gabriel Huau                                      *
+# *   Copyright (C) 2008 by Gabriel Huau                                    *
 # *                                                                         *
 # *   This program is free software; you can redistribute it and/or modify  *
 # *   it under the terms of the GNU General Public License as published by  *
@@ -58,6 +58,7 @@ sourceFiles.append(Glob('./stats/src/*.cpp', strings=True))
 sourceFiles.append(Glob('./log/src/*.cpp', strings=True))
 sourceFiles.append(Glob('./scene/src/*.cpp', strings=True))
 sourceFiles.append(Glob('./core/src/*.cpp', strings=True))
+sourceFiles.append(Glob('./core/messages/src/*.cpp', strings=True))
 sourceFiles.append(Glob('./input/src/*.cpp', strings=True))
 
 # Gathering tests files for each module
@@ -66,6 +67,7 @@ sourceFilesCore  = copy.copy(sourceFiles)
 
 sourceFilesScene.append(Glob('./scene/unittests/*.cpp', strings=True))
 sourceFilesCore.append(Glob('./core/unittests/*.cpp', strings=True))
+sourceFilesCore.append(Glob('./core/unittests/messages/*.cpp', strings=True))
 
 # Test each module independly
 core  = env.Program('tests_core', sourceFilesCore)
