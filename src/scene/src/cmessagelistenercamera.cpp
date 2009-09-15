@@ -5,7 +5,7 @@ namespace Gnoll
 	namespace Scene
 	{
 		CMessageListenerCamera::CMessageListenerCamera() :
-			Gnoll::Core::CMessageListener()
+			Gnoll::Core::Messages::Listener()
 		{
 		}
 

@@ -17,26 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------ctimemodule.h----------------------------------*\
-|   The time module handle all time related functionnalities                |
-|                                                                           |
-|   Changelog :                                                             |
-|               05/12/2007 - Vince - Initial release                        |
-|               09/20/2007 - Paf   - Complete the module                    |
-|               09/23/2007 - Paf   - Add createTimer method()               |
-|                                  - s/TIMER/TIMEOUT/g to make a separation |
-|                                  - Rename timeout to delayed event        |
-|                                  - Rename periodic timeout to periodic    |
-|                                      event                                |
-|               09/30/2007 - Paf   - Fix namespace (replace Core by Time)   |
-|               10/06/2007 - Gabriel - Fix error on windows because of      |
-|                                       missing header "OgrePlatform.h"     |
-|               11/16/2007 - Paf   - Remove all references to               |
-|                                     CGenericMessageManager                |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #include <OgrePlatform.h>
 #include "../include/ctimemodule.h"
 #include <iostream>
@@ -47,10 +27,8 @@
 	#include "../include/cogretimer.h"
 #endif
 
-
 using namespace std;
 using namespace Gnoll::Core;
-
 
 namespace Gnoll
 {
@@ -76,46 +54,49 @@ namespace Gnoll
 			m_timer->reset();
 
 
-			shared_ptr<CMessageListener> createDelayedEventListener ( new CCreateDelayedEventListener() );
-			CMessageType createDelayedEventType("CREATE_DELAYED_EVENT");
+			shared_ptr<Messages::Listener> createDelayedEventListener ( new CCreateDelayedEventListener() );
+			Messages::MessageType createDelayedEventType("CREATE_DELAYED_EVENT");
 
 			this->addListener ( createDelayedEventListener, createDelayedEventType );
 
 
-			shared_ptr<CMessageListener> destroyDelayedEventListener ( new CDestroyDelayedEventListener() );
-			CMessageType destroyDelayedEventType("DESTROY_DELAYED_EVENT");
+			shared_ptr<Messages::Listener> destroyDelayedEventListener ( new CDestroyDelayedEventListener() );
+			Messages::MessageType destroyDelayedEventType("DESTROY_DELAYED_EVENT");
 
 			this->addListener ( destroyDelayedEventListener, destroyDelayedEventType );
 
 
-			shared_ptr<CMessageListener> createPeriodicEventListener ( new CCreatePeriodicEventListener() );
-			CMessageType createPeriodicEventType("CREATE_PERIODIC_EVENT");
+			shared_ptr<Messages::Listener> createPeriodicEventListener ( new CCreatePeriodicEventListener() );
+			Messages::MessageType createPeriodicEventType("CREATE_PERIODIC_EVENT");
 
 			this->addListener ( createPeriodicEventListener, createPeriodicEventType );
 
 
-			shared_ptr<CMessageListener> destroyPeriodicEventListener ( new CDestroyPeriodicEventListener() );
-			CMessageType destroyPeriodicEventType("DESTROY_PERIODIC_EVENT");
+			shared_ptr<Messages::Listener> destroyPeriodicEventListener ( new CDestroyPeriodicEventListener() );
+			Messages::MessageType destroyPeriodicEventType("DESTROY_PERIODIC_EVENT");
 
 			this->addListener ( destroyPeriodicEventListener, destroyPeriodicEventType );
 		}
 
-		bool CTimeModule::addListener(shared_ptr<CMessageListener> _listener, CMessageType _type)
+		bool CTimeModule::addListener(shared_ptr<Messages::Listener> _listener, Messages::MessageType _type)
 		{	
 			boost::recursive_mutex::scoped_lock lock(m_listListenersMutex);
 
 			bool result = true;
 
-			CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+			Messages::Messenger* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
 			
-			if (messageManager->addListener ( _listener, _type ) != true)
+			try
 			{
-				result = false;
+                messageManager->addListener( _listener, _type);
+                pair< shared_ptr<Messages::Listener>, Messages::MessageType> listener( _listener, _type);
+                m_listListeners.push_back(listener);
+            }
+            catch(...)
+            {
+                result = false;
 	//			LogManager::getSingleton().logMessage("Couldn't add listener for timer module");
 			}
-
-			pair< shared_ptr<CMessageListener>, CMessageType> listener( _listener, _type);
-			m_listListeners.push_back(listener);
 
 			return result;
 		}
@@ -130,7 +111,7 @@ namespace Gnoll
 			{
 				if(it->first < m_timer->getMsecs())
 				{
-					CMessageModule::getInstancePtr()->getMessageManager()->trigger(it->second);
+					CMessageModule::getInstancePtr()->getMessageManager()->triggerMessage(it->second);
 
 					// Delete this timer
 					msgMapIter tmp = it;
@@ -168,20 +149,14 @@ namespace Gnoll
 					itPeriodic++;
 					m_timersPeriodic.erase(tmp);
 
-					CMessageModule::getInstancePtr()->getMessageManager()->trigger(msg);
-
+					CMessageModule::getInstancePtr()->getMessageManager()->triggerMessage(msg);
 				}
 				else
 				{
-
 					itPeriodic++;
-
 				}
-
 			}
-
 		}
-
 
 		void CTimeModule::process()
 		{
@@ -202,15 +177,18 @@ namespace Gnoll
 			 * Removing all registered listeners
 			 */
 
-			CMessageManager* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+			Messages::Messenger * messageManager = CMessageModule::getInstancePtr()->getMessageManager();
 
-			for(list< pair< shared_ptr<CMessageListener>, CMessageType> >::iterator it = m_listListeners.begin(); it != m_listListeners.end(); it++)
+			for(list< pair< shared_ptr<Messages::Listener>, Messages::MessageType> >::iterator it = m_listListeners.begin(); it != m_listListeners.end(); it++)
 			{
-				if (messageManager->delListener ( (*it).first, (*it).second ) != true)
+				try
 				{
+                    messageManager->delListener((*it).first, (*it).second);
+                }
+                catch(...)
+                {
 		//			LogManager::getSingleton().logMessage("Couldn't add listener for timer module");
 				}
-
 			}
 
 			m_listListeners.clear();

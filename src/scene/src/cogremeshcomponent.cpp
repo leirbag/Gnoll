@@ -17,19 +17,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------COgreMeshComponent----------------------------*\
-|   This is a component able to display Ogre models                         |
-|                                                                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #include "../../dynamicobject/include/float.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../log/include/clogmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
 
-#include "../../core/include/cmessagetype.h"
+#include "../../core/messages/include/messagetype.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../include/cogremeshcomponent.h"
 #include "../include/gobject.h"
@@ -41,7 +34,7 @@ namespace Gnoll {
 
 	namespace Scene {
 
-		class OgreMeshPositionListener : public CMessageListener
+		class OgreMeshPositionListener : public Messages::Listener
 		{
 			private:
 				COgreMeshComponent* component;
@@ -70,7 +63,7 @@ namespace Gnoll {
 		};
 
 
-		class OgreMeshScalingListener : public CMessageListener
+		class OgreMeshScalingListener : public Messages::Listener
 		{
 			private:
 				COgreMeshComponent* component;
@@ -99,7 +92,7 @@ namespace Gnoll {
 		};
 
 
-		class OgreMeshRotationListener : public CMessageListener
+		class OgreMeshRotationListener : public Messages::Listener
 		{
 			private:
 				COgreMeshComponent* component;
@@ -237,11 +230,11 @@ namespace Gnoll {
 			 * Register the listener
 			 */
 			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
-			componentPositionListener = shared_ptr<CMessageListener> (new OgreMeshPositionListener(this));
-			componentScalingListener = shared_ptr<CMessageListener> (new OgreMeshScalingListener(this));
-			componentRotationListener = shared_ptr<CMessageListener> (new OgreMeshRotationListener(this));
+			componentPositionListener = shared_ptr<Messages::Listener> (new OgreMeshPositionListener(this));
+			componentScalingListener = shared_ptr<Messages::Listener> (new OgreMeshScalingListener(this));
+			componentRotationListener = shared_ptr<Messages::Listener> (new OgreMeshRotationListener(this));
 			messageManager->addListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
 			messageManager->addListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );
 			messageManager->addListener ( componentRotationListener, "SET_ROTATION_" + m_parent->getInstance() );
@@ -276,7 +269,7 @@ namespace Gnoll {
 			 * Unregister the listener
 			 */
 			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );
 			messageManager->delListener ( componentScalingListener, "SET_SCALING_" + m_parent->getInstance() );

@@ -17,37 +17,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------ctimemodule.h----------------------------------*\
-|   The time module handle all time related functionnalities                |
-|                                                                           |
-|   Changelog :                                                             |
-|               05/12/2007 - Vince - Initial release                        |
-|               09/20/2007 - Paf   - Complete the work                      |
-|               09/23/2007 - Paf   - Add createTimer() method               |
-|                                  - CTimerModule renamed to CTimeModule    |
-|                                  - Rename timeout to delayed event        |
-|                                  - Rename periodic timeout to periodic    |
-|                                     event                                 |
-|               09/30/2007 - Paf   - Fix namespace (replace Core by Time)   |
-|               10/06/2007 - Gabriel   - Fix conflict between map and       |
-|                                         multimap that generated an error  |
-|                                         on VS2005                         |
-|               11/16/2007 - Paf   - Remove all references to               |
-|                                     CGenericMessageManager                |
-|               11/30/2007 - Paf   - Add some mutexes to make it thread     |
-|                                     friendly                              |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __CTIMEMODULE_H__
 #define __CTIMEMODULE_H__ 
 
-
-
 #include <map>
+#include <list>
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 
@@ -55,15 +29,14 @@
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
 #include "../../core/include/cmessagemodule.h"
-//#include <OgreLogManager.h>
-
+#include "../../core/messages/include/listener.h"
+#include "../../core/messages/include/messagetype.h"
 
 #include "ccreatedelayedeventlistener.h"
 #include "cdestroydelayedeventlistener.h"
 
 #include "ccreateperiodiceventlistener.h"
 #include "cdestroyperiodiceventlistener.h"
-
 
 using namespace Gnoll::Core;
 using namespace std;
@@ -200,7 +173,7 @@ namespace Gnoll
 				/**
 				 * A list of listeners and the type of messages they are listening to
 				 */
-				list< pair< shared_ptr<CMessageListener>, CMessageType > > m_listListeners;
+				list< pair< shared_ptr<Messages::Listener>, Messages::MessageType> > m_listListeners;
 
 
 				/**
@@ -213,7 +186,7 @@ namespace Gnoll
 				 * Add a listener and activates it.</br>
 				 * This list of listeners is managed by the module
 				 */
-				bool addListener(shared_ptr<CMessageListener> _listener, CMessageType _type);
+				bool addListener(shared_ptr<Messages::Listener> _listener, Messages::MessageType _type);
 
 				
 				/**

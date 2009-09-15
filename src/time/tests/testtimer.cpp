@@ -32,10 +32,10 @@
 
 
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messagetype.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../include/ctimemodule.h"
 #include "../include/itimer.h"
 #include "../include/clinuxtimer.h"
@@ -96,7 +96,7 @@ int main()
 	CTimeModule* myTimeModule = CTimeModule::getInstancePtr();
 
 	// A message type called "string" 
-	CMessageType mytype("string");
+	Messages::MessageType mytype("string");
 
 
 	// A simple listener
@@ -141,7 +141,7 @@ int main()
 	 */
 
 	// Message type to create a periodic timer
-	CMessageType creation("CREATE_PERIODIC_EVENT");
+	Messages::MessageType creation("CREATE_PERIODIC_EVENT");
 
 	// Description of the timer
 	TimerPeriodicEvent ev;
@@ -169,7 +169,7 @@ int main()
 
 
 	// Message type
-	CMessageType destroyation("DESTROY_PERIODIC_EVENT");
+	Messages::MessageType destroyation("DESTROY_PERIODIC_EVENT");
 
 	// Mesage that will destroy the previous timer :
 	// destroyation means we want to destroy one periodic timer
@@ -178,7 +178,7 @@ int main()
 
 	// We want to create a one-shot timer in 35 seconds.
 	// This timer will shout the message desztroyPeriodicMsg
-	CMessageType simpleTimer("CREATE_DELAYED_EVENT");
+	Messages::MessageType simpleTimer("CREATE_DELAYED_EVENT");
 	TimerEvent sTimer;
 	sTimer.delay = 35000;
 	sTimer.message = destroyPeriodicMsg;

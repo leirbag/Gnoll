@@ -17,16 +17,6 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*------------------------CMouseEventsTranslator---------------------------*\
-|   This is translate mouse events to action events                         |
-|                                                                           |
-|   Changelog :                                                             |
-|               16/05/2008 - WT - Initial release                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -104,12 +94,12 @@ namespace Gnoll
 			 */
 			if ( mouseButtonEventTranslationMap->hasAttribute(buttonValue) )
 			{
-				CMessageType actionEventType(ACTION_EVENT_TYPE);
+				Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
 
 
 				CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
-				CMessageType messageType = message->getType();
+				Messages::MessageType messageType = message->getType();
 
 				if (messageType == mouseButtonPressedEvent)
 				{
@@ -133,8 +123,7 @@ namespace Gnoll
 
 		void CMouseButtonEventsTranslator::trigger ( shared_ptr<CMessage> _msg )
 		{
-
-			CMessageType actionEventType(ACTION_EVENT_TYPE);
+			Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
 			unsigned long int now = timeModule->getMsecs();
@@ -178,11 +167,12 @@ namespace Gnoll
 
 
 							std::ostringstream tmpString;
-							if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-							{
+                            try
+                            {
+							    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 								tmpString << "Message ajoute ["<< *actionName << "]" << endl;
-							}
-							else
+                            }
+                            catch(...)
 							{
 								tmpString << "Message NON ajoute ["<< *actionName << "]" << " of intensity ";
 								tmpString <<  intensity << " => " << timePressed << " / " << period;

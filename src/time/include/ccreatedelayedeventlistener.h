@@ -17,50 +17,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------CCreateDelayedEventListener-----------------------*\
-|   This is a message listener for the timer module                         |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/12/2007 - Paf - Initial release                          |
-|               09/23/2007 - Paf - Renamed to CCreateDelayedEventListener   |
-|               09/30/2007 - Paf - Fix namespace (replace Core by Time)     |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __CCREATEDELAYEDEVENTLISTENER_H__
 #define __CCREATEDELAYEDEVENTLISTENER_H__ 
-
-
 
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "ctimermessages.h"
-
 #include "ctimemodule.h"
-
 
 using namespace Gnoll::Core;
 using namespace boost;
-
 
 namespace Gnoll
 {
 	namespace Time
 	{
-
 		/**
 		*	A message listener for the timer module.
 		*/ 
-		class CCreateDelayedEventListener : public CMessageListener
+		class CCreateDelayedEventListener : public Messages::Listener
 		{
-
 			public:
-				
 				/**
 				* This is a constructor
 				*/
@@ -75,7 +54,7 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle(MessagePtr message);
 			};
 	}
 }

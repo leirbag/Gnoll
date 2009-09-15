@@ -17,16 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------CSceneManager-------------------------------*\
-|   This is the scene manager                                               |
-|                                                                           |
-|   Changelog :                                                             |
-|               12/05/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include <set>
 #include <sstream>
 #include <OgreRoot.h>
@@ -39,10 +29,9 @@
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../core/include/sourcefile.h"
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../../log/include/clogmacros.h"
 #include "../include/cameramanager.h"
 #include "../include/cscenemanager.h"
@@ -63,7 +52,7 @@ namespace Gnoll
 		/**
 		 * Listener which will update scene content
 		 */
-		class SceneUpdateListener : public CMessageListener
+		class SceneUpdateListener : public Messages::Listener
 		{
 			private:
 
@@ -184,12 +173,12 @@ namespace Gnoll
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			/**
 			 * Message type indicating scene manager has to update scene
 			 */
-			CMessageType updateMsgType( UPDATE_MSG_TYPE() );
+			Messages::MessageType updateMsgType( UPDATE_MSG_TYPE() );
 
 
 			/**
@@ -211,7 +200,7 @@ namespace Gnoll
 			 * Create the listener which will update the scene whenever
 			 * an UPDATE_SCENE_CONTENT message is received
 			 */
-			sceneUpdateListener = shared_ptr<CMessageListener> (new SceneUpdateListener(this));
+			sceneUpdateListener = shared_ptr<Messages::Listener> (new SceneUpdateListener(this));
 			messageManager->addListener ( sceneUpdateListener, updateMsgType );
 
 		}
@@ -270,7 +259,7 @@ namespace Gnoll
 		CSceneManager::~CSceneManager()
 		{
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( sceneUpdateListener, UPDATE_MSG_TYPE() );
 

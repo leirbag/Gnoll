@@ -35,19 +35,25 @@
 #include <map>
 #include "camerawrapper.h"
 #include "../../dynamicobject/include/cdynamicobjectproxy.h"
-#include "../../core/include/cmessagetype.h"
 
 namespace Gnoll
 {
+    namespace Core
+    {
+        namespace Messages
+        {
+            class MessageType;
+        }
+    }
+
 	namespace Scene
 	{
 		class CMessageListenerCamera;
-		//class CMessageType;
 
 		class Camera : public Gnoll::DynamicObject::CDynamicObjectProxy
 		{
 			private:
-				typedef std::pair<shared_ptr<CMessageListenerCamera>, shared_ptr<CMessageType> > PairsListener;
+				typedef std::pair<shared_ptr<CMessageListenerCamera>, shared_ptr<Messages::MessageType> > PairsListener;
 				typedef std::queue<shared_ptr<PairsListener> > QueueListener;
 
 				/*
@@ -177,7 +183,7 @@ namespace Gnoll
 				 * @param listener This is the listener to put on the queue
 				 * @param type This is the type of message associate to the listener
 				 */
-				void enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<Gnoll::Core::CMessageType> type);
+				void enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<Gnoll::Core::Messages::MessageType> type);
 
 				/*
 				 * This method provide the configuration of each speed movement

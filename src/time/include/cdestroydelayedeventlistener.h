@@ -17,36 +17,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*----------------------CDestroyDelayedEventListener-----------------------*\
-|   This is a message listener for the timer module                         |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/20/2007 - Paf - Initial release                          |
-|               09/23/2007 - Paf - Renamed to CDestroyDelayedEventListener  |
-|               09/30/2007 - Paf - Fix namespace (replace Core by Time)     |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __CDESTROYDELAYEDEVENTLISTENER_H__
 #define __CDESTROYDELAYEDEVENTLISTENER_H__ 
-
-
 
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "ctimermessages.h"
 
 #include "ctimemodule.h"
 
-
 using namespace Gnoll::Core;
 using namespace boost;
-
 
 namespace Gnoll
 {
@@ -57,9 +40,8 @@ namespace Gnoll
 		*	A message listener for the timer module.
 		*	This listener destroy registered delayed events
 		*/ 
-		class CDestroyDelayedEventListener : public CMessageListener
+		class CDestroyDelayedEventListener : public Messages::Listener
 		{
-
 			public:
 				
 				/**
@@ -76,7 +58,7 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle(MessagePtr message);
 			};
 	}
 }

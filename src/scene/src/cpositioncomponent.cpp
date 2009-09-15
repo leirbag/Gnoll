@@ -30,10 +30,10 @@
 
 #include "../include/cpositioncomponent.h"
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messagetype.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 
 using namespace Gnoll::DynamicObject;
 using namespace Gnoll::Log;
@@ -42,7 +42,7 @@ namespace Gnoll {
 
 	namespace Scene {
 
-		class PositionListener : public CMessageListener
+		class PositionListener : public Messages::Listener
 		{
 			private:
 				CPositionComponent* positionComponent;
@@ -108,9 +108,9 @@ namespace Gnoll {
 			 * Register the listener
 			 */
 			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
-			positionListener = shared_ptr<CMessageListener> (new PositionListener(this));
+			positionListener = shared_ptr<Messages::Listener> (new PositionListener(this));
 			messageManager->addListener ( positionListener, "SET_POSITION_" + parent->getInstance() );
 
 
@@ -121,7 +121,7 @@ namespace Gnoll {
 			/**
 			 * Queue the message of the init position
 			 */
-			CMessageType messageType("SET_POSITION_" + parent->getInstance());
+			Messages::MessageType messageType("SET_POSITION_" + parent->getInstance());
 			shared_ptr<boost::any> data(new boost::any(position)) ;
 			shared_ptr<CMessage> message = shared_ptr<CMessage>(new CMessage(messageType, data));
 			messageManager->queueMessage(message);
@@ -134,7 +134,7 @@ namespace Gnoll {
 			 * Unregister the listener
 			 */
 			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( positionListener, "SET_POSITION_" + parent->getInstance() );
 

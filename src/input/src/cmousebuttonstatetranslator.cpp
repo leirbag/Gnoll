@@ -17,18 +17,6 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*----------------------CMouseButtonStateTranslator------------------------*\
-|   This is translate mouse events to action events                         |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/11/2008 - Paf - Initial release                          |
-|                                                                           |
-|		16/05/2008 - WT  - Send a list of action messages instead             |
-|				     of a unique message per input	                            |
-\*-------------------------------------------------------------------------*/
-
-
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -46,7 +34,6 @@
 using namespace boost;
 using namespace Gnoll::Core;
 using namespace Gnoll::DynamicObject;
-
 
 namespace Gnoll
 {
@@ -98,7 +85,7 @@ namespace Gnoll
 			 */
 			if ( mouseButtonEventTranslationMap->hasAttribute(buttonValue) )
 			{
-				CMessageType actionEventType(ACTION_EVENT_STATE_TYPE);
+				Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
 
 
 				shared_ptr<List> actionList = mouseButtonEventTranslationMap->getAttribute<List>( buttonValue );
@@ -109,7 +96,7 @@ namespace Gnoll
 				shared_ptr< Gnoll::DynamicObject::Float > mouseSensibility = mouseConfig->getAttributeOrDefault<Float>("sensibility", defaultMouseSensibility);
 
 
-				CMessageType messageType = message->getType();
+				Messages::MessageType messageType = message->getType();
 				float intensity = *mouseSensibility;
 
 				if (messageType == mouseButtonPressedEvent)
@@ -130,11 +117,12 @@ namespace Gnoll
 						shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 						std::ostringstream tmpString;
-						if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-						{
+                        try
+                        {
+						    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
-						else
+						catch(...)
 						{
 							tmpString << "Message NON ajoute ["<< *actionName << "]";
 						}

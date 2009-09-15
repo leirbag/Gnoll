@@ -17,39 +17,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __LISTENER_H__
+#define __LISTENER_H__
 
-/*---------------------------cmessagetype.cpp------------------------------*\
-|   This is a type of a message                                             |
-|                                                                           |
-|   Changelog :                                                             |
-|               05/15/2006 - Paf - Initial release                          |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#include "../include/cmessagetype.h"
+#include <string>
+#include <boost/shared_ptr.hpp>
+#include "../../include/cmessage.h"
 
 namespace Gnoll
 {
-	namespace Core
-	{
-		bool CMessageType::operator== (CMessageType const & op)
-		{
-			return (this->m_msgtype == op.m_msgtype);
+    namespace Core
+    {
+        namespace Messages
+        {
+            /// Listener to messages interface.
+            class Listener
+            {
+                public:
+                    typedef boost::shared_ptr<CMessage> MessagePtr;
 
-		}
+                    // Listener();
+                    virtual ~Listener() {}
 
+                    // TODO : I don't like "handle". Change to process later
+                    virtual void handle(MessagePtr receivedMessage) = 0;
+            };
+        }
+    }
+}
 
-		bool CMessageType::operator!= (CMessageType const & op)
-		{
-			return !(*this == op);
-		}
+#endif
 
-
-		bool CMessageType::operator< (CMessageType const & op) const
-		{
-			return ( this->m_msgtype < op.m_msgtype );
-		}
-	};
-};

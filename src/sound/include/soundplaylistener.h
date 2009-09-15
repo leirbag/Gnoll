@@ -17,23 +17,8 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-------------------------------SoundManager.h----------------------------*\
-|   This is basic sound manager with cache ability.                         |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/06/2007 - Soax - Initial release                         |
-|               02/04/2008 - Bruno Mahe - Add some doxygen comments         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
-
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include <vector>
-
 
 #ifndef __SOUNDPLAYLISTENER_H__
 #define __SOUNDPLAYLISTENER_H__
@@ -48,7 +33,7 @@ namespace Gnoll
 		/**
 		 * Listener that will load and play a sound when it receives a message
 		 */
-		class SoundPlayListener : public CMessageListener
+		class SoundPlayListener : public Messages::Listener
 		{
 			private:
 
@@ -74,7 +59,7 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle(MessagePtr message);
 		};
 	}
 }

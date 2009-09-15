@@ -18,17 +18,6 @@
 ***************************************************************************/
 
 
-/*-----------------------CKeyboardEventsTranslator-------------------------*\
-|   This is translate keyboard events to action events                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/08/2008 - Paf - Initial release                          |
-|                                                                           |
-|		16/05/2008 - WT  - Send a list of action messages instead   |
-|				     of a unique message per input	    |
-\*-------------------------------------------------------------------------*/
-
-
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -103,7 +92,7 @@ namespace Gnoll
 			{
 				CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
-				CMessageType messageType = message->getType();
+				Messages::MessageType messageType = message->getType();
 
 				if (messageType == keyDown)
 				{
@@ -128,7 +117,7 @@ namespace Gnoll
 		void CKeyboardEventsTranslator::trigger ( shared_ptr<CMessage> _msg )
 		{
 
-			CMessageType actionEventType(ACTION_EVENT_TYPE);
+			Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 
 			shared_ptr<Float> defaultKeyboardSensibility = shared_ptr<Float> (new Float(1.0f));
@@ -171,11 +160,13 @@ namespace Gnoll
 							shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 							std::ostringstream tmpString;
-							if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-							{
+
+                            try
+                            {
+							    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 								tmpString << "Message ajoute ["<< *actionName << "]" << endl;
 							}
-							else
+                            catch(...)
 							{
 								tmpString << "Message NON ajoute ["<< *actionName << "]" << " of intensity ";
 								tmpString <<  intensity << " => " << timePressed << " / " << period << endl;

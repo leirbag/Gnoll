@@ -27,8 +27,8 @@
 
 #include "../include/cstatsmodule.h"
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messagetype.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../input/include/coisinputmodule.h"
 #include "../../input/include/ctranslationevents.h"
 #include "../../input/include/cinputmouseevents.h"
@@ -52,7 +52,7 @@ namespace Gnoll
 		{
 			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
 			listenerModule = boost::shared_ptr<StatsModuleListener>(new StatsModuleListener);
-			messageModule->getMessageManager()->addListener ( listenerModule, CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->addListener(listenerModule, Messages::MessageType("GRAPHIC_FRAME_RENDERED"));
 			m_pStats->render_time = 0.0f;
 			m_pStats->fps = 0.0f;
 		}

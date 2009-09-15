@@ -34,7 +34,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
 
-#include "cmessagetype.h"
+#include "../messages/include/messagetype.h"
 
 #ifndef __CMESSAGE_H__
 #define __CMESSAGE_H__
@@ -47,7 +47,7 @@ namespace Gnoll
 {
 	namespace Core
 	{
-		const CMessageType MSG_ANYTYPE("*");
+		const Messages::MessageType MSG_ANYTYPE("*");
 
 		/**
 		 *	A message.
@@ -56,7 +56,7 @@ namespace Gnoll
 		{
 			private:
 
-				CMessageType m_type;
+				Messages::MessageType m_type;
 				shared_ptr<boost::any> m_userdata;
 
 			public:
@@ -64,7 +64,7 @@ namespace Gnoll
 				/**
 				 * This is a constructor
 				 */
-				CMessage(CMessageType _msgtype = MSG_ANYTYPE, shared_ptr<boost::any> _data = shared_ptr<boost::any>() ): m_type(_msgtype), m_userdata(_data) {}
+				CMessage(Messages::MessageType _msgtype = MSG_ANYTYPE, shared_ptr<boost::any> _data = shared_ptr<boost::any>() ): m_type(_msgtype), m_userdata(_data) {}
 
 				/**
 				 * This is a destructor
@@ -73,9 +73,9 @@ namespace Gnoll
 
 				/**
 				 * This returns the type of this message
-				 *	@return CMessageType	:	Its type
+				 *	@return Messages::MessageType	:	Its type
 				 */
-				CMessageType getType() {return m_type;}
+				Messages::MessageType getType() {return m_type;}
 
 				/**
 				 * This returns the data contained in this message

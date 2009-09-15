@@ -87,7 +87,7 @@ int main()
 	CMessageManager* mymanager = messageModule->getMessageManager();
 
 	// A message type called "string" 
-	CMessageType mytype("string");
+	Messages::MessageType mytype("string");
 
 	// A listener
 	shared_ptr<CMessageListener> mylistener(new MyMessageListener);
@@ -100,23 +100,29 @@ int main()
 	 * Each of them are handle by the listener thanks to the message manager
 	 */
 
-	if (mymanager->addListener ( mylistener, mytype ) == true)
+	    mymanager->addListener ( mylistener, mytype );
 		cout << "Listener ajoute" << endl;
 
 	shared_ptr<boost::any> texte (new boost::any(string("blablabla..."))) ;
 
 	shared_ptr<CMessage>  mymessage (new CMessage(mytype, texte ));
 
-	if (mymanager->queueMessage(mymessage) == true)
+    try
+    {
+	    mymanager->queueMessage(mymessage);
 		cout << "Message ajoute" << endl;
 
-	if (mymanager->queueMessage(mymessage) == true)
+	    mymanager->queueMessage(mymessage);
 		cout << "Message ajoute" << endl;
 
-	if (mymanager->queueMessage(mymessage) == true)
+	    mymanager->queueMessage(mymessage);
 		cout << "Message ajoute" << endl;
+    }
+    catch(...)
+    {
+    }
 
-	messageModule->process();
+	messageModule->processQueue();
 
 
 
@@ -127,33 +133,42 @@ int main()
 	 *  which care about this message type
 	 */
 
-	if (mymanager->delListener ( mylistener, mytype ) == true)
+    try
+    {
+	    mymanager->delListener ( mylistener, mytype );
 		cout << "Listener supprime" << endl;
 
-	if (mymanager->queueMessage(mymessage) == true)
+	    mymanager->queueMessage(mymessage);
 		cout << "Message ajoute" << endl;
+    }
+    catch(...)
+    {
+    }
 
-	messageModule->process();
-
-
-
+	messageModule->processQueue();
 
 	/*
 	 * We re-add the listener, send some messages and abort all of them.
 	 */
 
-	if (mymanager->addListener ( mylistener, mytype ) == true)
-		cout << "Listener ajoute" << endl;
-	if (mymanager->queueMessage(mymessage) == true)
-		cout << "Message ajoute" << endl;
+    try
+    {
+        mymanager->addListener ( mylistener, mytype );
+        cout << "Listener ajoute" << endl;
+        mymanager->queueMessage(mymessage);
+        cout << "Message ajoute" << endl;
 
-	if (mymanager->queueMessage(mymessage) == true)
-		cout << "Message ajoute" << endl;
+        mymanager->queueMessage(mymessage);
+        cout << "Message ajoute" << endl;
 
-	if	(mymanager->abortMessage(mytype, true) == true) 
-		cout << "Message annule" << endl;
+        mymanager->abortMessage(mytype, true); 
+        cout << "Message annule" << endl;
+    }
+    catch(...)
+    {
+    }
 
-	messageModule->process();
+	messageModule->processQueue();
 
 
 
@@ -163,16 +178,19 @@ int main()
     * -> No one cares about this message
 	 */
 
-	if (mymanager->delListener ( mylistener, mytype ) == true)
+    try
+    {
+	    mymanager->delListener ( mylistener, mytype );
 		cout << "Listener supprime" << endl;
 
-	if (mymanager->queueMessage(mymessage) == true)
+	    mymanager->queueMessage(mymessage);
 		cout << "Message ajoute" << endl;
+    }
+    catch(...)
+    {
+    }
 
-	messageModule->process();
-
-
-
+	messageModule->processQueue();
 
 	// Bye bye 
 	cout << "Au revoir !" << endl;

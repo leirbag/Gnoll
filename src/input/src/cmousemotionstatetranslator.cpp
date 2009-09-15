@@ -17,13 +17,6 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*----------------------CMouseMotionStateTranslator------------------------*\
-|   This is translate mouse events to action events                         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -70,7 +63,8 @@ namespace Gnoll
 				maxX = renderWindow->getWidth();
 				maxY = renderWindow->getHeight();
 
-			} else
+			}
+            else
 			{
 
 				/**
@@ -91,16 +85,17 @@ namespace Gnoll
 
 		void CMouseMotionStateTranslator::sendXBorderState(MouseEvent mouseEvent)
 		{
-			CMessageType actionEventType(ACTION_EVENT_STATE_TYPE);
+			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
 			ActionEvent actionEvent ("BORDER_X", mouseEvent.abX / maxX);
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
-			if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-			{
+            try
+            {
+			    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				GNOLL_LOG() << "Message ajoute [BORDER_X]\n";
 			}
-			else
+			catch(...)
 			{
 				GNOLL_LOG() << "Message NON ajoute [BORDER_X]\n";
 			}
@@ -108,16 +103,17 @@ namespace Gnoll
 
 		void CMouseMotionStateTranslator::sendYBorderState(MouseEvent mouseEvent)
 		{
-			CMessageType actionEventType(ACTION_EVENT_STATE_TYPE);
+			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
 			ActionEvent actionEvent ("BORDER_Y", mouseEvent.abY / maxY);
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
-			if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-			{
+            try
+            {
+			    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				GNOLL_LOG() << "Message ajoute [BORDER_Y]\n";
 			}
-			else
+			catch(...)
 			{
 				GNOLL_LOG() << "Message NON ajoute [BORDER_Y]\n";
 			}

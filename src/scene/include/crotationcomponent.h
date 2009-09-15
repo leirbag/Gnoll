@@ -17,19 +17,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------CRotationComponent-----------------------------*\
-|   This is a component able to set a rotation                              |
-|                                                                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef CROTATIONCOMPONENT_H_
 #define CROTATIONCOMPONENT_H_
 
 #include "cpage.h"
 #include "icomponent.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../include/gobject.h"
 #include <boost/shared_ptr.hpp>
 
@@ -42,9 +35,8 @@ namespace Gnoll
 
 	namespace Scene
 	{
-
 		/**
-		 * This is a component able to display Ogre models
+     * This is a component able to set a rotation
 		 */
 		class CRotationComponent: public Gnoll::Scene::IComponent
 		{
@@ -53,7 +45,7 @@ namespace Gnoll
 
 				Gnoll::Scene::GObject*       parent;
 
-				shared_ptr<CMessageListener> rotationListener;
+				shared_ptr<Messages::Listener> rotationListener;
 
 			public:
 

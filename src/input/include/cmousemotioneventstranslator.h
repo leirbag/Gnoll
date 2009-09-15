@@ -18,23 +18,13 @@
 ***************************************************************************/
 
 
-/*----------------------CMouseMotionEventsTranslator-----------------------*\
-|   This is translate mouse motion events to action events                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/11/2008 - Paf - Initial release                          |
-|               01/13/2008 - Paf - Add sendZMotionEvents() to take Z axis   |
-|                                    in account                             |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef __CMOUSEMOTIONEVENTSTRANSLATOR_H__
 #define __CMOUSEMOTIONEVENTSTRANSLATOR_H__
 
 #include <boost/shared_ptr.hpp>
 
 #include "../../dynamicobject/include/dynamicobject.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../../core/include/cmessage.h"
 
 #include "cinputmouseevents.h"
@@ -47,10 +37,9 @@ namespace Gnoll
 {
 	namespace Input 
 	{
-
-		class CMouseMotionEventsTranslator : public CMessageListener
+        /// This is translate mouse motion events to action events
+		class CMouseMotionEventsTranslator : public Messages::Listener
 		{
-
 			private:
 
 				/**
@@ -66,9 +55,9 @@ namespace Gnoll
 
 
 				/**
-				 * CMessageType for MOUSE_MOVED messages
+				 * Messages::MessageType for MOUSE_MOVED messages
 				 */
-				CMessageType mouseMoved;
+				Messages::MessageType mouseMoved;
 
 
 				/**
@@ -104,13 +93,11 @@ namespace Gnoll
 				 */
 				void sendYMotionEvents(MouseEvent _mouseEvent);
 
-
 				/**
 				 * Extract Z mouse motion and convert it to an INPUT_ACTION_EVENT
 				 * @param _mouseEvent Contains mouse motion information
 				 */
 				void sendZMotionEvents(MouseEvent _mouseEvent);
-
 
 			public:
 
@@ -119,23 +106,19 @@ namespace Gnoll
 				*/
 				CMouseMotionEventsTranslator();
 
-
 				/**
 				* This is a destructor
 				*/
 				virtual ~CMouseMotionEventsTranslator(); 
 
-
-
 				/**
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle(MessagePtr message);
 		};
 	};
 };
 
-#endif // __CMOUSEMOTIONEVENTSTRANSLATOR_H__
-
+#endif
 

@@ -17,23 +17,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------CRotationComponent-----------------------------*\
-|   This is a component able to set a rotation                              |
-|                                                                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #include "../../dynamicobject/include/vector3.h"
 #include "../../log/include/clogmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
 
 #include "../include/crotationcomponent.h"
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messagetype.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 
 using namespace Gnoll::DynamicObject;
 using namespace Gnoll::Log;
@@ -42,7 +35,7 @@ namespace Gnoll {
 
 	namespace Scene {
 
-		class RotationListener : public CMessageListener
+		class RotationListener : public Messages::Listener
 		{
 			private:
 				CRotationComponent* rotationComponent;
@@ -108,9 +101,9 @@ namespace Gnoll {
 			 * Register the listener
 			 */
 			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
-			rotationListener = shared_ptr<CMessageListener> (new RotationListener(this));
+			rotationListener = shared_ptr<Messages::Listener> (new RotationListener(this));
 			messageManager->addListener ( rotationListener, "SET_ROTATION_" + parent->getInstance() );
 
 
@@ -121,7 +114,7 @@ namespace Gnoll {
 			/**
 			 * Queue the message of the init rotation
 			 */
-			CMessageType messageType("SET_ROTATION_" + parent->getInstance());
+			Messages::MessageType messageType("SET_ROTATION_" + parent->getInstance());
 			shared_ptr<boost::any> data(new boost::any(rotation)) ;
 			shared_ptr<CMessage> message = shared_ptr<CMessage>(new CMessage(messageType, data));
 			messageManager->queueMessage(message);
@@ -134,7 +127,7 @@ namespace Gnoll {
 			 * Unregister the listener
 			 */
 			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( rotationListener, "SET_ROTATION_" + parent->getInstance() );
 

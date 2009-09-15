@@ -17,20 +17,6 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*---------------------CMouseMotionEventsTranslator------------------------*\
-|   This is translate mouse motion events to action events                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/11/2008 - Paf - Initial release                          |
-|               01/13/2008 - Paf - Add sendZMotionEvents() to take Z axis   |
-|                                    in account                             |
-|		16/05/2008 - WT  - Send a list of action messages instead   |
-|				     of a unique message per input	    |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -104,7 +90,7 @@ namespace Gnoll
 
 		void CMouseMotionEventsTranslator::sendActionEventForEventAndIntensity(string _event, float _intensity)
 		{
-			CMessageType actionEventType(ACTION_EVENT_TYPE);
+			Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
 
 			shared_ptr<Float> defaultMouseSensibility = shared_ptr<Float> (new Float(1.0f));
 			shared_ptr< Gnoll::DynamicObject::Float > mouseSensibility = mouseConfig->getAttributeOrDefault<Float>("sensibility", defaultMouseSensibility);
@@ -133,11 +119,12 @@ namespace Gnoll
 
 
 						std::ostringstream tmpString;
-						if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-						{
+                        try
+                        {
+						    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
-						else
+						catch(...)
 						{
 							tmpString << "Message NON ajoute ["<< *actionName << "]" << endl;
 						}

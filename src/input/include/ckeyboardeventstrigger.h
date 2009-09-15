@@ -17,33 +17,23 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-----------------------CKeyboardEventsTrigger----------------------------*\
-|   This is translate keyboard events to action events                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/06/2008 - Bruno Mahe - Initial release                   |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef __CKEYBOARDEVENTSTRIGGER_H__
 #define __CKEYBOARDEVENTSTRIGGER_H__
 
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../../core/include/cmessage.h"
 
-
 using namespace boost;
-
 
 namespace Gnoll
 {
 	namespace Input
 	{
 
-		class CKeyboardEventsTrigger : public CMessageListener
+        /// This is translate keyboard events to action events
+		class CKeyboardEventsTrigger : public Messages::Listener
 		{
 			private:
 
@@ -65,11 +55,10 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle(MessagePtr message);
 		};
 	}
 }
 
-#endif // __CKEYBOARDEVENTSTRIGGER_H__
-
+#endif
 

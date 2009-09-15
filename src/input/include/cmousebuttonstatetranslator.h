@@ -17,24 +17,14 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*----------------------CMouseButtonStateTranslator------------------------*\
-|   This is translate mouse button events to action events                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/11/2008 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef __CMOUSEBUTTONSTATETRANSLATOR_H__
 #define __CMOUSEBUTTONSTATETRANSLATOR_H__
 
 #include <boost/shared_ptr.hpp>
 
 #include "../../dynamicobject/include/dynamicobject.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../../core/include/cmessage.h"
-
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -44,12 +34,10 @@ namespace Gnoll
 {
 	namespace Input
 	{
-
-		class CMouseButtonStateTranslator : public CMessageListener
+        /// This is translate mouse button events to action events
+		class CMouseButtonStateTranslator : public Messages::Listener
 		{
-
 			private:
-
 				/**
 				 * DynamicObject which contains a translation map for events from mouse
 				 */
@@ -63,15 +51,15 @@ namespace Gnoll
 
 
 				/**
-				 * CMessageType for MOUSE_PRESSED messages
+				 * Messages::MessageType for MOUSE_PRESSED messages
 				 */
-				CMessageType mouseButtonPressedEvent;
+				Messages::MessageType mouseButtonPressedEvent;
 
 
 				/**
-				 * CMessageType for MOUSE_RELEASED messages
+				 * Messages::MessageType for MOUSE_RELEASED messages
 				 */
-				CMessageType mouseButtonReleasedEvent;
+				Messages::MessageType mouseButtonReleasedEvent;
 
 
 			public:
@@ -90,9 +78,10 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle(MessagePtr message);
 		};
 	};
 };
 
-#endif // __CMOUSESTATETRANSLATOR_H__
+#endif
+

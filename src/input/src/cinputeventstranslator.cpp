@@ -17,21 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*------------------------CInputEventsTranslator.cpp-----------------------*\
-|   The translates input events to action events used by game logic         |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/08/2008 - Bruno Mahe - Initial release                   |
-|               04/13/2008 - Bruno Mahe - Read refreshing period from a     |
-|                                           config file                     |
-|		16/05/2008 - WT		- Add state based listeners for	    |
-|					    keyboard and mouse button	    |
-|		09/09/2008 - WT         - Add support for rule manager      |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include "../include/cinputeventstranslator.h"
 #include "../include/ckeyboardeventstranslator.h"
 #include "../include/ckeyboardeventstrigger.h"
@@ -42,7 +27,7 @@
 #include "../include/cmousebuttoneventstrigger.h"
 #include "../include/cmousebuttonstatetranslator.h"
 #include "../include/crulemanager.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
@@ -58,31 +43,23 @@ using namespace boost;
 
 namespace Gnoll
 {
-
 	namespace Input
 	{
-
 		CInputEventsTranslator::CInputEventsTranslator()
 		{
-
 		}
-
 
 		void CInputEventsTranslator::init()
 		{
-
 			activateKeyboardTranslation();
 			activateMouseMotionTranslation();
 			activateMouseButtonTranslation();
 			activateRuleManager();
-
 		}
-
 
 		void CInputEventsTranslator::process()
 		{
 		}
-
 
 		void CInputEventsTranslator::exit()
 		{
@@ -94,16 +71,14 @@ namespace Gnoll
 
 		CInputEventsTranslator::~CInputEventsTranslator()
 		{
-
 		}
 
 
 		void CInputEventsTranslator::activateKeyboardTranslation()
 		{
-
-			CMessageType keyDown("KEYBOARD_KEYDOWN");
-			CMessageType keyUp("KEYBOARD_KEYUP");
-			CMessageType updateKeyboard("UPDATE_KEYBOARD");
+			Messages::MessageType keyDown("KEYBOARD_KEYDOWN");
+			Messages::MessageType keyUp("KEYBOARD_KEYUP");
+			Messages::MessageType updateKeyboard("UPDATE_KEYBOARD");
 
 
 			DynamicObjectManager *dom = DynamicObjectManager::getInstancePtr();
@@ -117,78 +92,85 @@ namespace Gnoll
 			period = *periodFromConfig;
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 
-			keyboardEventsTranslator = shared_ptr<CMessageListener> ( new CKeyboardEventsTranslator() );
-			keyboardEventsTrigger = shared_ptr<CMessageListener> ( new CKeyboardEventsTrigger(static_pointer_cast<CKeyboardEventsTranslator>(keyboardEventsTranslator) ));
-			keyboardStateTranslator = shared_ptr<CMessageListener> ( new CKeyboardStateTranslator() );
+			keyboardEventsTranslator = shared_ptr<Messages::Listener> ( new CKeyboardEventsTranslator() );
+			keyboardEventsTrigger = shared_ptr<Messages::Listener> ( new CKeyboardEventsTrigger(static_pointer_cast<CKeyboardEventsTranslator>(keyboardEventsTranslator) ));
+			keyboardStateTranslator = shared_ptr<Messages::Listener> ( new CKeyboardStateTranslator() );
 
-			/**
-			 * Continuous keybord messages
-			 */
-			if (messageManager->addListener ( keyboardEventsTranslator, keyDown ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener installed" );
+            try
+            {
+                /**
+                 * Continuous keyboard messages
+                 */
+                messageManager->addListener ( keyboardEventsTranslator, keyDown );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener installed" );
 
-			if (messageManager->addListener ( keyboardEventsTranslator, keyUp ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener installed" );
+                messageManager->addListener ( keyboardEventsTranslator, keyUp );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener installed" );
 
-			if (messageManager->addListener ( keyboardEventsTrigger, updateKeyboard ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTrigger listener installed" );
+                messageManager->addListener ( keyboardEventsTrigger, updateKeyboard );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTrigger listener installed" );
 
-			/**
-			 * State based keyboard messages
-			 */
-			if (messageManager->addListener ( keyboardStateTranslator, keyDown ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener installed" );
+                /**
+                 * State based keyboard messages
+                 */
+                messageManager->addListener ( keyboardStateTranslator, keyDown );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener installed" );
 
-			if (messageManager->addListener ( keyboardStateTranslator, keyUp ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener installed" );
-
-
+                messageManager->addListener ( keyboardStateTranslator, keyUp );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener installed" );
+            }
+            catch(...)
+            {
+                throw;
+            }
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 			m_periodData = shared_ptr<boost::any> (new boost::any(period)) ;
 			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, m_periodData ));
 
 			timeModule->addPeriodicEvent(0, message, period);
-
-
 		}
-
 
 		void CInputEventsTranslator::deactivateKeyboardTranslation()
 		{
-
-			CMessageType keyDown("KEYBOARD_KEYDOWN");
-			CMessageType keyUp("KEYBOARD_KEYUP");
-			CMessageType updateKeyboard("UPDATE_KEYBOARD");
+			Messages::MessageType keyDown("KEYBOARD_KEYDOWN");
+			Messages::MessageType keyUp("KEYBOARD_KEYUP");
+			Messages::MessageType updateKeyboard("UPDATE_KEYBOARD");
 
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
+            try
+            {
+                /**
+                 * Continuous keybord messages
+                 */
+                messageManager->delListener ( keyboardEventsTranslator, keyDown );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener removed" );
 
-			/**
-			 * Continuous keybord messages
-			 */
-			if (messageManager->delListener ( keyboardEventsTranslator, keyDown ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener removed" );
+                messageManager->delListener ( keyboardEventsTranslator, keyUp );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener removed" );
 
-			if (messageManager->delListener ( keyboardEventsTranslator, keyUp ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener removed" );
+                messageManager->delListener ( keyboardEventsTrigger, updateKeyboard );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTrigger listener removed" );
 
-			if (messageManager->delListener ( keyboardEventsTrigger, updateKeyboard ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTrigger listener removed" );
+                /**
+                 * State based keyboard messages
+                 */
+                messageManager->delListener ( keyboardStateTranslator, keyDown );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener removed" );
 
-			/**
-			 * State based keyboard messages
-			 */
-			if (messageManager->delListener ( keyboardStateTranslator, keyDown ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener removed" );
-
-			if (messageManager->delListener ( keyboardStateTranslator, keyUp ) == true)
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener removed" );
+                messageManager->delListener ( keyboardStateTranslator, keyUp );
+                Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener removed" );
+            }
+            catch(...)
+            {
+                throw;
+            }
 
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
@@ -200,20 +182,26 @@ namespace Gnoll
 		void CInputEventsTranslator::activateMouseMotionTranslation()
 		{
 
-			CMessageType mouseMoved("MOUSE_MOVED");
+			Messages::MessageType mouseMoved("MOUSE_MOVED");
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
+			mouseMotionEventsTranslator = shared_ptr<Messages::Listener> ( new CMouseMotionEventsTranslator() );
+			mouseMotionStateTranslator  = shared_ptr<Messages::Listener> ( new CMouseMotionStateTranslator() );
 
-			mouseMotionEventsTranslator = shared_ptr<CMessageListener> ( new CMouseMotionEventsTranslator() );
-			mouseMotionStateTranslator  = shared_ptr<CMessageListener> ( new CMouseMotionStateTranslator() );
-
-			if (messageManager->addListener ( mouseMotionEventsTranslator, mouseMoved ) == true)
+            try
+            {
+			    messageManager->addListener ( mouseMotionEventsTranslator, mouseMoved );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseMotionEventsTranslator listener installed" );
 
-			if (messageManager->addListener ( mouseMotionStateTranslator, mouseMoved ) == true)
+			    messageManager->addListener ( mouseMotionStateTranslator, mouseMoved );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseMotionStateTranslator listener installed" );
+            }
+            catch(...)
+            {
+                throw;
+            }
 
 		}
 
@@ -221,25 +209,30 @@ namespace Gnoll
 		void CInputEventsTranslator::deactivateMouseMotionTranslation()
 		{
 
-			CMessageType mouseMoved("MOUSE_MOVED");
+			Messages::MessageType mouseMoved("MOUSE_MOVED");
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
-			if (messageManager->delListener ( mouseMotionEventsTranslator, mouseMoved ) == true)
+            try
+            {
+			    messageManager->delListener ( mouseMotionEventsTranslator, mouseMoved );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseMotionEventsTranslator listener removed" );
 
-			if (messageManager->delListener ( mouseMotionStateTranslator, mouseMoved ) == true)
+			    messageManager->delListener ( mouseMotionStateTranslator, mouseMoved );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseMotionStateTranslator listener removed" );
+            }
+            catch(...)
+            {
+                throw;
+            }
 		}
-
 
 		void CInputEventsTranslator::activateMouseButtonTranslation()
 		{
-
-			CMessageType mousePressed("MOUSE_PRESSED");
-			CMessageType mouseReleased("MOUSE_RELEASED");
-			CMessageType updateMouse("UPDATE_MOUSE");
+			Messages::MessageType mousePressed("MOUSE_PRESSED");
+			Messages::MessageType mouseReleased("MOUSE_RELEASED");
+			Messages::MessageType updateMouse("UPDATE_MOUSE");
 
 			DynamicObjectManager *dom = DynamicObjectManager::getInstancePtr();
 			shared_ptr< Gnoll::DynamicObject::DynamicObject > mouseConfig = dom->load("mouseConfig");
@@ -253,35 +246,41 @@ namespace Gnoll
 
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 
-			mouseButtonEventsTranslator = shared_ptr<CMessageListener> ( new CMouseButtonEventsTranslator() );
-			mouseButtonEventsTrigger = shared_ptr<CMessageListener> ( new CMouseButtonEventsTrigger(static_pointer_cast<CMouseButtonEventsTranslator>(mouseButtonEventsTranslator) ) );
+			mouseButtonEventsTranslator = shared_ptr<Messages::Listener> ( new CMouseButtonEventsTranslator() );
+			mouseButtonEventsTrigger = shared_ptr<Messages::Listener> ( new CMouseButtonEventsTrigger(static_pointer_cast<CMouseButtonEventsTranslator>(mouseButtonEventsTranslator) ) );
 
-			mouseButtonStateTranslator = shared_ptr<CMessageListener> ( new CMouseButtonStateTranslator() );
+			mouseButtonStateTranslator = shared_ptr<Messages::Listener> ( new CMouseButtonStateTranslator() );
 
-
-			/**
-			 * Continuous mouse messages
-			 */
-			if (messageManager->addListener ( mouseButtonEventsTranslator, mousePressed ) == true)
+            try
+            {
+                /**
+                 * Continuous mouse messages
+                 */
+			    messageManager->addListener ( mouseButtonEventsTranslator, mousePressed );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseButtonEventsTranslator listener installed for MOUSE_PRESSED" );
 
-			if (messageManager->addListener ( mouseButtonEventsTranslator, mouseReleased ) == true)
+			    messageManager->addListener ( mouseButtonEventsTranslator, mouseReleased );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseButtonEventsTranslator listener installed for MOUSE_RELEASED" );
 
-			if (messageManager->addListener ( mouseButtonEventsTrigger, updateMouse ) == true)
+			    messageManager->addListener ( mouseButtonEventsTrigger, updateMouse );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTrigger listener installed" );
 
-			/**
-			 * State based mouse messages
-			 */
-			if (messageManager->addListener ( mouseButtonStateTranslator, mousePressed ) == true)
+                /**
+                 * State based mouse messages
+                 */
+			    messageManager->addListener ( mouseButtonStateTranslator, mousePressed );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener installed for MOUSE_PRESSED" );
 
-			if (messageManager->addListener ( mouseButtonStateTranslator, mouseReleased ) == true)
+			    messageManager->addListener ( mouseButtonStateTranslator, mouseReleased );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener installed for MOUSE_RELEASED" );
+            }
+            catch(...)
+            {
+                throw;
+            }
 
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
@@ -295,35 +294,40 @@ namespace Gnoll
 		void CInputEventsTranslator::deactivateMouseButtonTranslation()
 		{
 
-			CMessageType mousePressed("MOUSE_PRESSED");
-			CMessageType mouseReleased("MOUSE_RELEASED");
-			CMessageType updateMouse("UPDATE_MOUSE");
+			Messages::MessageType mousePressed("MOUSE_PRESSED");
+			Messages::MessageType mouseReleased("MOUSE_RELEASED");
+			Messages::MessageType updateMouse("UPDATE_MOUSE");
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
-
-			/**
-			 * Continuous mouse messages
-			 */
-			if (messageManager->delListener ( mouseButtonEventsTranslator, mousePressed ) == true)
+            try
+            {
+                /**
+                 * Continuous mouse messages
+                 */
+			    messageManager->delListener ( mouseButtonEventsTranslator, mousePressed );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTranslator listener removed for MOUSE_PRESSED" );
 
-			if (messageManager->delListener ( mouseButtonEventsTranslator, mouseReleased ) == true)
+			    messageManager->delListener ( mouseButtonEventsTranslator, mouseReleased );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTranslator listener removed for MOUSE_RELEASED" );
 
-			if (messageManager->delListener ( mouseButtonEventsTrigger, updateMouse ) == true)
+			    messageManager->delListener ( mouseButtonEventsTrigger, updateMouse );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTrigger listener removed" );
 
-			/**
-			 * State based mouse messages
-			 */
-			if (messageManager->delListener ( mouseButtonStateTranslator, mousePressed ) == true)
+                /**
+                 * State based mouse messages
+                 */
+			    messageManager->delListener ( mouseButtonStateTranslator, mousePressed );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener removed for MOUSE_PRESSED" );
 
-			if (messageManager->delListener ( mouseButtonStateTranslator, mouseReleased ) == true)
+			    messageManager->delListener ( mouseButtonStateTranslator, mouseReleased );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener removed for MOUSE_RELEASED" );
-
+            }
+            catch(...)
+            {
+                throw;
+            }
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 			shared_ptr<CMessage>  message (new CMessage(updateMouse, m_periodData ));
@@ -334,17 +338,24 @@ namespace Gnoll
 
 		void CInputEventsTranslator::activateRuleManager()
 		{
-			ruleManager = shared_ptr<CMessageListener>( new CRuleManager("ruleManager") );
+			ruleManager = shared_ptr<Messages::Listener>( new CRuleManager("ruleManager") );
 
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
-			if (messageManager->addListener ( ruleManager, ACTION_EVENT_TYPE ) == true)
+            try
+            {
+			    messageManager->addListener ( ruleManager, ACTION_EVENT_TYPE );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager installed for ACTION_EVENT_TYPE" );
 
-			if (messageManager->addListener ( ruleManager, ACTION_EVENT_STATE_TYPE ) == true)
+			    messageManager->addListener ( ruleManager, ACTION_EVENT_STATE_TYPE );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager installed for ACTION_EVENT_STATE_TYPE" );
+            }
+            catch(...)
+            {
+                throw;
+            }
 		}
 
 
@@ -352,16 +363,21 @@ namespace Gnoll
 		{
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			CMessageManager* messageManager = messageModule->getMessageManager();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
-			if (messageManager->delListener ( ruleManager, ACTION_EVENT_TYPE ) == true)
+            try
+            {
+			    messageManager->delListener ( ruleManager, ACTION_EVENT_TYPE );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager removed for ACTION_EVENT_TYPE" );
 
-			if (messageManager->delListener ( ruleManager, ACTION_EVENT_STATE_TYPE ) == true)
+			    messageManager->delListener ( ruleManager, ACTION_EVENT_STATE_TYPE );
 				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager removed for ACTION_EVENT_STATE_TYPE" );
+            }
+            catch(...)
+            {
+                throw;
+            }
 		}
-
-
 	}
 }
 

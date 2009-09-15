@@ -17,13 +17,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
 /*---------------------------------CameraFreeFlyFactory-----------------------*\
 |   This is an implementation of the abstract factory                       |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
 \*-------------------------------------------------------------------------*/
 
 #ifndef INCLUDED_CAMERAFREEFLYFACTORY

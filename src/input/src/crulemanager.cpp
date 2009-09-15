@@ -34,8 +34,8 @@
 #include "../include/ctranslationevents.h"
 
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messagetype.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../core/include/cmessagemodule.h"
 
 #include "../../dynamicobject/include/dynamicobject.h"
@@ -82,7 +82,7 @@ namespace Gnoll
 		void CRuleManager::handle( shared_ptr<CMessage> message )
 		{
 			ActionEvent actionEvent = message->getData<ActionEvent>();
-			CMessageType msgType = message->getType();
+			Messages::MessageType msgType = message->getType();
 
 			for(vector<CRule>::iterator it = m_rules.begin(); it != m_rules.end(); ++it)
 			{

@@ -29,7 +29,6 @@
 
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/cgenericmessagemanager.h"
 #include "../../core/include/cmessagemodule.h"
 #include "soundplaylistener.h"
 #include "soundmanager.h"
@@ -80,7 +79,7 @@ namespace Gnoll {
 				/**
 				 * Listener used to play sound
 				 */
-				shared_ptr<CMessageListener> play_listener;
+				shared_ptr<Messages::Listener> play_listener;
 				
 			public:
 		

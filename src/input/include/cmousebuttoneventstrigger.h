@@ -17,23 +17,12 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-----------------------CKeyboardEventsTrigger----------------------------*\
-|   This is translate keyboard events to action events                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/06/2008 - WT - Initial release         	            |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef __CMOUSEBUTTONEVENTSTRIGGER_H__
 #define __CMOUSEBUTTONEVENTSTRIGGER_H__
 
 #include <boost/shared_ptr.hpp>
-
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../../core/include/cmessage.h"
-
 
 using namespace boost;
 
@@ -43,14 +32,13 @@ namespace Gnoll
 	namespace Input
 	{
 
-		class CMouseButtonEventsTrigger : public CMessageListener
+        /// This is translate keyboard events to action events
+		class CMouseButtonEventsTrigger : public Messages::Listener
 		{
 			private:
-
 				shared_ptr<CMouseButtonEventsTranslator> m_cMouseButtonEventsTranslator;
 
 			public:
-
 				/**
 				* This is a constructor
 				*/
@@ -70,4 +58,5 @@ namespace Gnoll
 	}
 }
 
-#endif // __CMOUSEBUTTONEVENTSTRIGGER_H__
+#endif
+

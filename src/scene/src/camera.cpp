@@ -32,7 +32,7 @@
 #include "../include/cmessagelistenercamera.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessagetype.h"
+#include "../../core/messages/include/messagetype.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../dynamicobject/include/string.h"
 #include "../../log/include/clogmodule.h"
@@ -262,7 +262,7 @@ namespace Gnoll
 		{
 		}
 
-		void Camera::enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<CMessageType> type)
+		void Camera::enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<Messages::MessageType> type)
 		{
 			// Add the listener to the queue
 			// -----------------------------

@@ -17,24 +17,14 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-----------------------CKeyboardStateTranslator-------------------------*\
-|   This is translate keyboard events to action events                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/08/2008 - WT - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef __CKEYBOARDSTATETRANSLATOR_H__
 #define __CKEYBOARDSTATETRANSLATOR_H__
 
 #include <boost/shared_ptr.hpp>
 
 #include "../../dynamicobject/include/dynamicobject.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../../core/include/cmessage.h"
-
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -44,8 +34,8 @@ namespace Gnoll
 {
 	namespace Input
 	{
-
-		class CKeyboardStateTranslator : public CMessageListener
+        /// This is translate keyboard events to action events
+		class CKeyboardStateTranslator : public Messages::Listener
 		{
 
 			private:
@@ -63,15 +53,15 @@ namespace Gnoll
 
 
 				/**
-				 * CMessageType for KeyUp messages
+				 * Messages::MessageType for KeyUp messages
 				 */
-				CMessageType keyUp;
+				Messages::MessageType keyUp;
 
 
 				/**
-				 * CMessageType for KeyDown messages
+				 * Messages::MessageType for KeyDown messages
 				 */
-				CMessageType keyDown;
+				Messages::MessageType keyDown;
 
 
 			public:
@@ -90,9 +80,10 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle(MessagePtr message);
 		};
 	};
 };
 
-#endif // __CKEYBOARDSTATETRANSLATOR_H__
+#endif
+

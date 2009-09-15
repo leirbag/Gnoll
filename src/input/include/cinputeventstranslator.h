@@ -17,62 +17,40 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------CInputEventsTranslator.h-------------------------*\
-|   This translate input events to action events used by game logic          |
-|                                                                            |
-|   Changelog :                                                              |
-|               01/08/2008 - Paf - Initial release                           |
-|		16/05/2008 - WT	 - Add state based listeners for	     |
-|					keyboard and mouse button	     |
-|		09/09/2008 - WT  - Add support for rule manager              |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-
-
-
 #ifndef __CINPUTEVENTSTRANSLATOR_H__
 #define __CUNPUTEVENTSTRANSLATOR_H__
-
-
 
 #include <boost/shared_ptr.hpp>
 
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/cmessagelistener.h"
-
-
+#include "../../core/messages/include/listener.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
 
-
 namespace Gnoll
 {
-
 	namespace Input
 	{
-
 		/**
 		 *	Interface of all game modules.
 		 */
 		class CInputEventsTranslator: public CModule, public Gnoll::Core::Singleton<CInputEventsTranslator>
 		{
-
 			private:
 
 				/**
 				 * Translators for keyboard generated messages
 				 */
-				shared_ptr<CMessageListener> keyboardEventsTranslator;
-				shared_ptr<CMessageListener> keyboardStateTranslator;
+				shared_ptr<Messages::Listener> keyboardEventsTranslator;
+				shared_ptr<Messages::Listener> keyboardStateTranslator;
 
 
 				/**
 				 * Translator for keyboard generated messages
 				 */
-				shared_ptr<CMessageListener> keyboardEventsTrigger;
+				shared_ptr<Messages::Listener> keyboardEventsTrigger;
 
 
 				/**
@@ -83,31 +61,27 @@ namespace Gnoll
 				/**
 				 * Translator for mouse motion generated messages
 				 */
-				shared_ptr<CMessageListener> mouseMotionEventsTranslator;
-				shared_ptr<CMessageListener> mouseMotionStateTranslator;
+				shared_ptr<Messages::Listener> mouseMotionEventsTranslator;
+				shared_ptr<Messages::Listener> mouseMotionStateTranslator;
 
 
 				/**
 				 * Translators for mouse button generated messages
 				 */
-				shared_ptr<CMessageListener> mouseButtonEventsTranslator;
-				shared_ptr<CMessageListener> mouseButtonStateTranslator;
+				shared_ptr<Messages::Listener> mouseButtonEventsTranslator;
+				shared_ptr<Messages::Listener> mouseButtonStateTranslator;
 
 				/**
 				 * Translator for mouse generated messages
 				 */
-				shared_ptr<CMessageListener> mouseButtonEventsTrigger;
-
+				shared_ptr<Messages::Listener> mouseButtonEventsTrigger;
 
 				/**
 				 * Rule manager
 				 */
-				shared_ptr<CMessageListener> ruleManager;
-
-
+				shared_ptr<Messages::Listener> ruleManager;
 
 			public:
-
 				/**
 				 * @copydoc CModule::init
 				 */

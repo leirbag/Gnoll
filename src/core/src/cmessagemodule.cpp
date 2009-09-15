@@ -17,22 +17,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------CMessageModule------------------------------*\
-|   This is the message module                                              |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/13/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include "../include/cmessagemodule.h"
-
+#include "../messages/include/genericmessenger.h"
 
 using namespace std;
 using namespace boost;
-
 
 namespace Gnoll
 {
@@ -40,16 +29,16 @@ namespace Gnoll
 	namespace Core
 	{
 	
-		CMessageManager* CMessageModule::getMessageManager()
+		Messages::Messenger* CMessageModule::getMessageManager()
 		{
 			/**
-			 * The default Message Manager is CGenericMessageManager
+			 * The default Message Manager is GenericMessenger
 			 */
 			return m_messageManager.get();
 		}
 
 
-		CMessageModule::CMessageModule() : m_messageManager( new CGenericMessageManager() )
+		CMessageModule::CMessageModule() : m_messageManager( new Messages::GenericMessenger() )
 		{
 		}
 
@@ -59,7 +48,7 @@ namespace Gnoll
 
 		void CMessageModule::process() 
 		{
-			m_messageManager->process();
+			m_messageManager->processQueue();
 		}
 
 		void CMessageModule::exit() 

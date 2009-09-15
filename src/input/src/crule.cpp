@@ -33,8 +33,8 @@
 #include "../include/ctranslationevents.h"
 
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messagetype.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../core/include/cmessagemodule.h"
 
 #include "../../dynamicobject/include/dynamicobject.h"
@@ -119,7 +119,7 @@ namespace Gnoll
 
 		bool CRule::fireAction() const
 		{
-			CMessageType actionEventType(ACTION_EVENT_TYPE);
+			Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
 
 			ActionEvent actionEvent(m_action, 1.0f);
 
@@ -127,11 +127,12 @@ namespace Gnoll
 			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 			std::ostringstream tmpString;
-			if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-			{
+            try
+            {
+			    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				tmpString << "Message ajoute ["<< m_action << "]";
 			}
-			else
+			catch(...)
 			{
 				tmpString << "Message NON ajoute ["<< m_action << "]";
 			}

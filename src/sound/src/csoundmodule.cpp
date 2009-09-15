@@ -73,9 +73,9 @@ namespace Gnoll {
 			/**
 			 * SoudPlayListener is in charge of handling messages asking to play a sound
 			 */
-			play_listener = shared_ptr<CMessageListener>(new SoundPlayListener(sound_queue));
+			play_listener = shared_ptr<Messages::Listener>(new SoundPlayListener(sound_queue));
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			messageModule->getMessageManager()->addListener(play_listener, CMessageType("PLAY_SOUND"));
+			messageModule->getMessageManager()->addListener(play_listener, Messages::MessageType("PLAY_SOUND"));
 
 			
 			/**
@@ -152,7 +152,7 @@ namespace Gnoll {
 			 * Delete listeners
 			 */
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			messageModule->getMessageManager()->delListener(play_listener, CMessageType("PLAY_SOUND"));
+			messageModule->getMessageManager()->delListener(play_listener, Messages::MessageType("PLAY_SOUND"));
 
 			/**
 			 * Uninitialize OpenAL

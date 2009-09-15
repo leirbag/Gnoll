@@ -17,15 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------CameraFixeFactory-------------------------*\
-|   This is a camera fixe factory                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #include "../include/ogrecamerawrapper.h"
 #include "../include/camerafixefactory.h"
 #include "../include/camerafixe.h"

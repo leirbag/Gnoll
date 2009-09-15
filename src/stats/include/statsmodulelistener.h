@@ -17,19 +17,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------StatsModuleListener.h-------------------------*\
-|   This is a message's listener for stats module                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef INCLUDED_STATSMODULELISTENER_H
 #define INCLUDED_STATSMODULELISTENER_H
 
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 
 using namespace Gnoll::Core;
 
@@ -37,7 +28,7 @@ namespace Gnoll
 {
 	namespace Stats
 	{
-		class StatsModuleListener : public CMessageListener
+		class StatsModuleListener : public Messages::Listener
 		{
 		public:
 			/**
@@ -54,7 +45,7 @@ namespace Gnoll
 			 * This method is called in order to process a message
 			 * @param message The message this method will have to process
 			 */
-			void handle ( shared_ptr<CMessage> message );
+			void handle(MessagePtr receivedMessage);
 		};
 	};
 };

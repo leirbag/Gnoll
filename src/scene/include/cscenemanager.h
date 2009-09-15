@@ -17,29 +17,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------CSceneManager-------------------------------*\
-|   This is the scene manager                                               |
-|                                                                           |
-|   Changelog :                                                             |
-|               12/05/2007 - Paf - Initial release                          |
-|               31/10/2008 - Gabriel - Add cameramanager           GHOST    |
-\*-------------------------------------------------------------------------*/
-
-
 #ifndef __CSCENEMANAGER_H__
 #define __CSCENEMANAGER_H__
-
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 #include <glibmm/ustring.h>
 
-
 #include "../../dynamicobject/include/cdynamicobjectproxy.h"
 #include "../../core/include/cpoolthreads.h"
+#include "../../core/messages/include/messagetype.h"
 #include "../include/cpage.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 
 #include "../../dynamicobject/include/string.h"
 #include "../../dynamicobject/include/float.h"
@@ -74,7 +63,7 @@ namespace Gnoll
 				/**
 				 * Listener which will update the scene manager
 				 */
-				shared_ptr<CMessageListener> sceneUpdateListener;
+				shared_ptr<Messages::Listener> sceneUpdateListener;
 
 
 				/**
@@ -159,7 +148,7 @@ namespace Gnoll
 				/**
 				 * Message type signaling the scene should be updated
 				 */
-				static const CMessageType UPDATE_MSG_TYPE() {return CMessageType( UPDATE_MSG_TYPE_STR() );};
+				static const Messages::MessageType UPDATE_MSG_TYPE() {return Core::Messages::MessageType( UPDATE_MSG_TYPE_STR() );};
 
 				/**
 				 * This is a constructor

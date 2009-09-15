@@ -17,59 +17,43 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------cmessagelistener------------------------------*\
-|   This is a message's listener                                            |
-|                                                                           |
-|   Changelog :                                                             |
-|               05/15/2006 - Paf - Initial release                          |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#include <string>
-#include <boost/shared_ptr.hpp>
-
-#include "../include/cmessage.h"
-
-#ifndef __CMESSAGELISTENER_H__
-#define __CMESSAGELISTENER_H__
-
-using namespace std;
-using namespace boost;
+#include "../include/messagetype.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		/**
-		 *	A message listener.
-		 *	This is a base implementation for all of the message's handler
-		 */
-		class CMessageListener
-		{
+        namespace Messages
+        {
+            MessageType::MessageType(const std::string & messageName) :
+                m_messageName(messageName)
+            {
+            }
+            
+            MessageType::~MessageType()
+            {
+            }
 
-			public:
+            bool MessageType::operator == (const MessageType & other) const
+            {
+                return (this->m_messageName == other.m_messageName);
+            }
 
-				/**
-				 * This is a constructor
-				 */
-				CMessageListener() {}
+            bool MessageType::operator != (const MessageType & other) const
+            {
+                return !(*this == other);
+            }
 
-				/**
-				 * This is a destructor
-				 */
-				virtual ~CMessageListener() {}
+            bool MessageType::operator < (const MessageType & other) const
+            {
+                return ( this->m_messageName < other.m_messageName );
+            }
 
-				/**
-				 * This method is called in order to process a message
-				 * @param message The message this method will have to process
-				 */
-				virtual void handle ( shared_ptr<CMessage> message ) = 0;
+            const std::string & MessageType::getTypeStr() const
+            {
+                return m_messageName;
+            }
+        }
+	}
+}
 
-
-		};
-	};
-};
-#endif // __CMESSAGELISTENER_H__

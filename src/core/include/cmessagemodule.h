@@ -17,28 +17,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------CMessageModule------------------------------*\
-|   This is the message module                                              |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/13/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #ifndef __CMESSAGEMODULE_H__
 #define __CMESSAGEMODULE_H__
 
 #include "../include/cmodule.h"
-#include "../include/cmessagemanager.h"
-#include "../include/cgenericmessagemanager.h"
+#include "../messages/include/messenger.h"
 #include "../include/singleton.h"
-
 
 using namespace std;
 using namespace boost;
-
 
 namespace Gnoll
 {
@@ -56,7 +43,7 @@ namespace Gnoll
 				/**
 				 * Pointer to the Message Manager
 				 */
-				shared_ptr<CMessageManager> m_messageManager;
+				shared_ptr<Messages::Messenger> m_messageManager;
 
 
 			public:
@@ -69,11 +56,11 @@ namespace Gnoll
 
 				/**
 				 * Return the default message manager</br>
-				 *   So if one write a new implementation of a CMessageManager, there would be
+				 *   So if one write a new implementation of a Messages::Messenger, there would be
 				 *   only one line to replace
 				 * @Return Default message manager
 				 */
-				CMessageManager* getMessageManager();
+        Messages::Messenger * getMessageManager();
 
 
 				/**

@@ -17,82 +17,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------cgraphicmodule.cpp-----------------------------*\
-|   The game graphic module                                                 |
-|                                                                           |
-|   Changelog :                                                             |
-|          06/24/2006 - Paf - Initial release                               |
-|                                                                           |
-|          03/25/2007 - Paf - Rename CGraphicModule::getGLXWindow() to      |
-|                              CGraphicModule::getWindowHandle()            |
-|                           - CGraphicModule::getWindowHandle() handles     |
-|                              now both Windows and GNU/Linux               |
-|                                  plateforms                               |
-|                                                                           |
-|          04/01/2007 - WT  - Add a new SceneNode for the camera            |
-|                                                                           |
-|          04/01/2007 - Paf - Change the window creation code to display    |
-|                              the PACKAGE_STRING constant defined in       |
-|                              config.h                                     |
-|                                                                           |
-|          04/05/2007 - Paf - Lower the camera's height                     |
-|                                                                           |
-|          04/25/2007 - Paf - Added CEGUI objects                           |
-|                                                                           |
-|          04/29/2007 - WT  - Add to the gui the current FPS and the        |
-|                               number of triangles curently displayed      |
-|                                                                           |
-|          05/09/2007 - Paf - Everything related to CMessage has been       |
-|                               updated                                     |
-|                                                                           |
-|          05/27/2007 - Paf - r40 - Replace SHADOWTYPE_STENCIL_MODULATIVE   |
-|                               by SHADOWTYPE_TEXTURE_MODULATIVE            |
-|                             r41 - Improvement of the shadows by tweaking  |
-|                               some parameters                             |
-|                                                                           |
-|          06/10/2007 - Gabriel - Fix namespace (Viracocha to Gnoll) for    |
-|                                 the camera                                |
-|                                                                           |
-|          06/10/2007 - Gabriel - Add thirdperson camera to test            |
-|                                                                           |
-|          12/17/2007 - Paf - Put resource path loading in a private method |
-|                               and use PersistentObject instead of         |
-|                               Ogre resource.cfg to load these resources   |
-|                               paths                                       |
-|                                                                           |
-|          12/21/2007 - Paf - Moved SkyDome and Terrain loading to scene    |
-|                               parser                                      |
-|                                                                           |
-|          12/24/2007 - Gabriel - change spline camera to third person      |
-|                                 camera                                    |
-|                                                                           |
-|          02/15/2008 - Bruno Mahe - Need to keep track of camera's         |
-|                                  address, so it can be freed when exiting |
-|                                                                           |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Graphic      |
-|                                                                           |
-|          02/05/2008 - WT - Put plugins path loading in a private method   |
-|                               and use DynamicObject instead of            |
-|                               Ogre plugins.cfg to load these plugins      |
-|                                                                           |
-|          10/05/2008 - WT - Put Ogre config loading in a private method    |
-|                               and use DynamicObject instead of Ogre       |
-|                               display.cfg to load the Renderer config     |
-|                                                                           |
-|          07/05/2009 - Wetneb - Added .layout support and so on            |
-|									    |
-\*-------------------------------------------------------------------------*/
-
 #include "../include/cgraphicmodule.h"
 #include "../../config.h"
 #include "../../log/include/clogmacros.h"
 
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
 #include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/messenger.h"
+#include "../../core/messages/include/listener.h"
+#include "../../core/messages/include/messagetype.h"
 
 #include "../../scene/include/camerafreefly.h"
 #include "../../scene/include/camerafirstperson.h"
@@ -153,23 +86,19 @@ namespace Gnoll
 
 					for (ListIterator itRes = listResources->begin(); itRes != listResources->end(); itRes++)
 					{
-
 						/**
 						 * Add each resource path
 						 */
 						if (shared_ptr<Gnoll::DynamicObject::String> res = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*itRes))
 						{
-						ResourceGroupManager::getSingleton().addResourceLocation(
-						 string(*res), (*attrName));
+						    ResourceGroupManager::getSingleton().addResourceLocation(string(*res), (*attrName));
 						}
 					}
 				}
 			}
 
-
 			// Initialise, parse scripts etc
 			ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-
 		}
 
 
@@ -254,7 +183,7 @@ namespace Gnoll
 			/**
 			 * Set up a logger for cegui which will redirect CEGUI's logs to Ogre's one
 			 */
-			CCEGUILogger* ceguiLogger = new CCEGUILogger();
+			// CCEGUILogger* ceguiLogger = new CCEGUILogger();
 			mGUIRenderer = new CEGUI::OgreCEGUIRenderer(mwindow, Ogre::RENDER_QUEUE_OVERLAY, false, 3000, mSceneMgr);
 			mGUISystem = new CEGUI::System(mGUIRenderer);
 			CEGUI::Logger::getSingleton().setLoggingLevel(CEGUI::Informative);

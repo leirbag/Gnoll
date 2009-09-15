@@ -17,22 +17,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------CameraSplineFactory-----------------------*\
-|   This is a first person camera factory                                   |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-\*-------------------------------------------------------------------------*/
-
 #include "../include/ogrecamerasplinewrapper.h"
 #include "../include/camerasplinefactory.h"
 #include "../include/cameraspline.h"
 #include "../include/defaultcamerasplinelistener.h"
 #include "../include/cmessagelistenercamera.h"
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messagetype.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../input/include/coisinputmodule.h"
 #include "../../input/include/ctranslationevents.h"
 #include "../../input/include/cinputmouseevents.h"
@@ -49,7 +41,7 @@ namespace Gnoll
 
 			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
 			shared_ptr<CMessageListenerCamera> listenerInput(new DefaultCameraSplineListener);
-			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::CMessageType("GRAPHIC_FRAME_RENDERED") );
+			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::Messages::MessageType("GRAPHIC_FRAME_RENDERED") );
 			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraSpline(instanceName, wrapper));
 			listenerInput->setCamera(pCam);
 

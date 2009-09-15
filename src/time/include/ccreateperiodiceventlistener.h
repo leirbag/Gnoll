@@ -17,32 +17,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*----------------------CCreatePeriodicEventListener-----------------------*\
-|   This is a message listener for the timer module                         |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/20/2007 - Paf - Initial release                          |
-|               09/23/2007 - Paf - Renamed to CCreatePeriodicEventListener  |
-|               09/30/2007 - Paf - Fix namespace (replace Core by Time)     |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __CCREATEPERIODICEVENTLISTENER_H__
 #define __CCREATEPERIODICEVENTLISTENER_H__ 
-
-
 
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "ctimermessages.h"
-
 #include "ctimemodule.h"
-
 
 using namespace std;
 using namespace boost;
@@ -52,13 +35,11 @@ namespace Gnoll
 {
 	namespace Time
 	{
-
 		/**
 		*	A message listener for the timer module.
 		*/ 
-		class CCreatePeriodicEventListener : public CMessageListener
+		class CCreatePeriodicEventListener : public Messages::Listener
 		{
-
 			public:
 				
 				/**
@@ -75,7 +56,7 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle(MessagePtr message);
 			};
 	}
 }

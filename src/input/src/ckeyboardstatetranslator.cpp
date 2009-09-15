@@ -17,16 +17,6 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-----------------------CKeyboardStateTranslator-------------------------*\
-|   This is translate keyboard events to action events                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/08/2008 - WT - Initial release                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -79,7 +69,7 @@ namespace Gnoll
 
 		void CKeyboardStateTranslator::handle ( shared_ptr<CMessage> message )
 		{
-			CMessageType actionEventType(ACTION_EVENT_STATE_TYPE);
+			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
 
 			/**
 			 * Get the key code
@@ -124,19 +114,22 @@ namespace Gnoll
 
 
 						std::ostringstream tmpString;
-						if (CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage) == true)
-						{
-							tmpString << "Message ajoute ["<< *actionName << "]";
+                        try
+                        {
+						    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage); 
+                            tmpString << "Message ajoute ["<< *actionName << "]";
 						}
-						else
+                        catch(...)
 						{
-							tmpString << "Message NON ajoute ["<< *actionName << "]";
+                            tmpString << "Message NON ajoute ["<< *actionName << "]";
 						}
+
 						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
 			}
 
 		}
-	};
-};
+	}
+}
+

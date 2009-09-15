@@ -18,19 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------cmessagelistener------------------------------*\
-|   This is a message's listener for camera                                 |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef __CMESSAGELISTENERCAMERA_H__
 #define __CMESSAGELISTENERCAMERA_H__
 
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "camera.h"
 #include <boost/weak_ptr.hpp>
 
@@ -40,7 +31,8 @@ namespace Gnoll
 	{
 		class Camera;
 
-		class CMessageListenerCamera : public Gnoll::Core::CMessageListener
+        /// This is a message's listener for camera
+		class CMessageListenerCamera : public Gnoll::Core::Messages::Listener
 		{
 		protected:
 			weak_ptr<Camera> m_pCamera;

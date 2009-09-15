@@ -17,13 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------COgreAnimatedMeshComponent---------------------*\
-|   This is a component able to display Ogre models that are animated       |
-|                                                                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef COGREANIMATEDMESHCOMPONENT_H_
 #define COGREANIMATEDMESHCOMPONENT_H_
 
@@ -32,14 +25,11 @@
 
 #include <map>
 #include <boost/shared_ptr.hpp>
-#include "../../core/include/cmessagelistener.h"
-
+#include "../../core/messages/include/listener.h"
 
 using namespace boost;
 using namespace Gnoll::Scene;
 using namespace Gnoll::Core;
-
-
 
 namespace Gnoll
 {
@@ -73,16 +63,14 @@ namespace Gnoll
 				std::map<std::string, Ogre::AnimationState*> m_mapAnimationStates;
 				std::string                                     m_currentAnimation;
 
-
 				/**
 				 * Listener of the component
 				 */
-				shared_ptr<CMessageListener> componentListener;
-				shared_ptr<CMessageListener> componentPositionListener;
-				shared_ptr<CMessageListener> componentScalingListener;
-				shared_ptr<CMessageListener> componentRotationListener;
-				shared_ptr<CMessageListener> componentAnimationStateListener;
-
+				shared_ptr<Messages::Listener> componentListener;
+				shared_ptr<Messages::Listener> componentPositionListener;
+				shared_ptr<Messages::Listener> componentScalingListener;
+				shared_ptr<Messages::Listener> componentRotationListener;
+				shared_ptr<Messages::Listener> componentAnimationStateListener;
 
 			public:
 

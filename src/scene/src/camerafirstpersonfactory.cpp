@@ -17,22 +17,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------CameraFirstPersonfactory------------------*\
-|   This is a first person camera factory                                   |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-\*-------------------------------------------------------------------------*/
-
 #include "../include/ogrecamerawrapper.h"
 #include "../include/camerafirstpersonfactory.h"
 #include "../include/camerafirstperson.h"
 #include "../include/defaultcamerafirstpersonlistener.h"
 #include "../include/cmessagelistenercamera.h"
 #include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagetype.h"
-#include "../../core/include/cmessagemanager.h"
+#include "../../core/messages/include/messagetype.h"
+#include "../../core/messages/include/messenger.h"
 #include "../../input/include/coisinputmodule.h"
 #include "../../input/include/ctranslationevents.h"
 #include "../../input/include/cinputmouseevents.h"
@@ -50,7 +42,7 @@ namespace Gnoll
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(
 															   new Gnoll::Scene::DefaultCameraFirstPersonListener);
-			messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
+			messageModule->getMessageManager()->addListener(listenerInput, Messages::MessageType(Gnoll::Input::ACTION_EVENT_TYPE));
 			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFirstPerson(instanceName, wrapper));
 			listenerInput->setCamera(pCam);
 
@@ -58,3 +50,4 @@ namespace Gnoll
 		}
 	};
 };
+

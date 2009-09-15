@@ -17,37 +17,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------------main.cpp---------------------------------*\
-|   This program show how to use messages and a message manager             |
-|                                                                           |
-|   Changelog :                                                             |
-|               05/26/2006 - Paf - Initial release                          |
-|               04/01/2007 - WT  - New Message listener to handle the camera|
-|                                   added                                   |
-|               04/02/2007 - Paf - Fix the camera message listener. The hero|
-|                                   movements no longer depend on the mouse |
-|                                - Add vertical movements to the camera     |
-|               04/05/2007 - Paf - Add a new constant about the speed of    |
-|                                   rotation                                |
-|                                  Add smooth turns to the robot            |
-|               04/07/2007 - Paf - When a user press OIS::KC_A, it creates  |
-|                                   a new robot at a random position        |
-|               04/08/2007 - Paf - When a user press OIS::KC_R, it removes  |
-|                                   one of the robots                       |
-|               05/09/2007 - Paf - Adapt everything to the new interface of |
-|                                   CMessage                                |
-|               09/30/2007 - Paf - Add Time Module                          |
-|               11/16/2007 - Paf - Remove all references to                 |
-|                                   CGenericMessageManager                  |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #include "core/include/isource.h"
 #include "dynamicobject/include/dynamicobjectmanager.h"
 #include "core/include/sourcefile.h"
+#include "core/messages/include/listener.h"
 
 #include "input/include/coisinputmodule.h"
 #include "input/include/cinputmouseevents.h"
@@ -134,7 +107,7 @@ namespace Gnoll
 	/*
 	 * Listener of the application
 	 */
-	class ApplicationListener : public Gnoll::Core::CMessageListener
+	class ApplicationListener : public Gnoll::Core::Messages::Listener
 	{
 		public:
 			/**
@@ -151,7 +124,7 @@ namespace Gnoll
 			 * This method is called in order to process a message
 			 * @param message The message this method will have to process
 			 */
-			void handle ( shared_ptr<Gnoll::Core::CMessage> message );
+			void handle(MessagePtr receivedMessage);
 	};
 
 
@@ -161,9 +134,9 @@ namespace Gnoll
 	//===============================================================================
 	//
 
-	void ApplicationListener::handle ( shared_ptr<CMessage> message )
+	void ApplicationListener::handle(MessagePtr receivedMessage)
 	{
-		Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
+		Gnoll::Input::ActionEvent ae = receivedMessage->getData<Gnoll::Input::ActionEvent>();
 		if(ae.action == "APPLICATION_QUIT")
 		{
 			Gnoll::Application::getInstancePtr()->setDone(1);
@@ -351,7 +324,7 @@ namespace Gnoll
 		 */
 		shared_ptr<Gnoll::ApplicationListener> listenerInput = shared_ptr<Gnoll::ApplicationListener>(
 															   new Gnoll::ApplicationListener());
-		messageModule->getMessageManager()->addListener ( listenerInput, CMessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
+		messageModule->getMessageManager()->addListener ( listenerInput, Messages::MessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
 
 		/**
 		 * Define the listener for the button

@@ -17,14 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------statsmodulelistener.cpp------------------------*\
-|   The game graphic module                                                  |
-|                                                                            |
-|   Changelog :                                                              |
-|               04/09/2008 - Gabriel - Initial release                       |
-\*--------------------------------------------------------------------------*/
-
 #include "../include/statsmodulelistener.h"
 #include "../include/cstatsmodule.h"
 #include <iostream>
@@ -37,9 +29,9 @@ namespace Gnoll
 		{
 		}
 
-		void StatsModuleListener::handle ( shared_ptr<CMessage> message )
+		void StatsModuleListener::handle(MessagePtr receivedMessage)
 		{
-			unsigned long temp = message->getData<unsigned long>();
+			unsigned long temp = receivedMessage->getData<unsigned long>();
 			CStatsModule::getInstancePtr()->setRenderTime(temp);
 		}
 

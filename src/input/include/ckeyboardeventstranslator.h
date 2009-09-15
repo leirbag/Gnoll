@@ -17,24 +17,14 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-----------------------CKeyboardEventsTranslator-------------------------*\
-|   This is translate keyboard events to action events                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               01/08/2008 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #ifndef __CKEYBOARDEVENTSTRANSLATOR_H__
 #define __CKEYBOARDEVENTSTRANSLATOR_H__
 
 #include <boost/shared_ptr.hpp>
 
 #include "../../dynamicobject/include/dynamicobject.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../../core/include/cmessage.h"
-
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -44,10 +34,9 @@ namespace Gnoll
 {
 	namespace Input 
 	{
-
-		class CKeyboardEventsTranslator : public CMessageListener
+        /// This is translate keyboard events to action events
+		class CKeyboardEventsTranslator : public Messages::Listener
 		{
-
 			private:
 
 				/**
@@ -61,14 +50,14 @@ namespace Gnoll
 				shared_ptr<Gnoll::DynamicObject::DynamicObject> keyboardConfig;
 
 				/**
-				 * CMessageType for KeyUp messages
+				 * Messages::MessageType for KeyUp messages
 				 */
-				CMessageType keyUp;
+				Messages::MessageType keyUp;
 
 				/**
-				 * CMessageType for KeyDown messages
+				 * Messages::MessageType for KeyDown messages
 				 */
-				CMessageType keyDown;
+				Messages::MessageType keyDown;
 
 				/**
 				 * How long a key has been pressed
@@ -111,6 +100,5 @@ namespace Gnoll
 	};
 };
 
-#endif // __CKEYBOARDEVENTSTRANSLATOR_H__
-
+#endif
 

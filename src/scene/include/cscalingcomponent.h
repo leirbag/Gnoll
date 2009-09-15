@@ -29,7 +29,7 @@
 
 #include "cpage.h"
 #include "icomponent.h"
-#include "../../core/include/cmessagelistener.h"
+#include "../../core/messages/include/listener.h"
 #include "../include/gobject.h"
 #include <boost/shared_ptr.hpp>
 
@@ -44,7 +44,7 @@ namespace Gnoll
 	{
 
 		/**
-		 * This is a component able to display Ogre models
+		 * This is a component able to set a scale.
 		 */
 		class CScalingComponent: public Gnoll::Scene::IComponent
 		{
@@ -53,7 +53,7 @@ namespace Gnoll
 
 				Gnoll::Scene::GObject*       parent;
 
-				shared_ptr<CMessageListener> scalingListener;
+				shared_ptr<Messages::Listener> scalingListener;
 
 			public:
 

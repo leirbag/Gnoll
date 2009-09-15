@@ -47,7 +47,7 @@
 
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/cmessagetype.h"
+#include "../../core/messages/include/messagetype.h"
 
 #include "../../scene/include/camera.h"
 #include "../../scene/include/abstractcamerafactory.h"
@@ -115,7 +115,7 @@ namespace Gnoll
 				CEGUI::System* mGUISystem;
 				CEGUI::Window* mRootWindow;
 
-				CMessageType framerendered;
+				Messages::MessageType framerendered;
 				shared_ptr<boost::any> data;
 
 
