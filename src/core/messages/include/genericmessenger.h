@@ -17,7 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
 #include "../include/messenger.h"
 #include <boost/thread/recursive_mutex.hpp>
 #include <set>
@@ -53,9 +52,14 @@ namespace Gnoll
                     virtual void processQueue();
 
                 private :
+                    typedef std::multimap<MessageType, ListenerPtr > ListenerContainer;
+                    ListenerContainer m_listeners;
+
                     virtual bool isMessageTypeValid(const MessageType & messagetype) const;
 
                     bool isMessageTypeRegistered(const MessageType & messageType) const;
+                    bool isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
+                    ListenerContainer::iterator getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType);
 
                     void registerMessageType(const MessageType & messageType);
                     void eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType);
@@ -75,8 +79,6 @@ namespace Gnoll
                     std::set<MessageType> m_messageTypes;
                     boost::recursive_mutex m_messageTypesMutex;
 
-                    typedef std::multimap<MessageType, ListenerPtr > ListenerContainer;
-                    ListenerContainer m_listeners;
                     boost::recursive_mutex m_listenersMutex;
 
                     /**

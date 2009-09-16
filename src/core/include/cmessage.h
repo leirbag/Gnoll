@@ -29,15 +29,14 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
+#ifndef __CMESSAGE_H__
+#define __CMESSAGE_H__
 
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
 
 #include "../messages/include/messagetype.h"
-
-#ifndef __CMESSAGE_H__
-#define __CMESSAGE_H__
 
 using namespace std;
 using namespace boost;

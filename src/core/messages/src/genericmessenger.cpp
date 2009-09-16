@@ -17,17 +17,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
 #include "../include/genericmessenger.h"
 
 #include <iostream>
 #include <string>
-#include <exception>
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include "../include/messagetype.h"
 #include "../include/listener.h"
 #include "../../include/cmessage.h"
+#include "../include/exceptions.h"
 
 // TODO : name queue a list is inconsistent
 // TODO : implementation is too big. Usage of the set is redundant with multimap key. To do after unittesting
@@ -38,25 +37,6 @@ namespace Gnoll
     {
         namespace Messages
         {
-            namespace Exceptions
-            {
-                class InvalidMessage : std::exception
-                {
-                };
-
-                class HandlerAlreadyRegistered : std::exception
-                {
-                };
-
-                class CannotDeleteListener : std::exception
-                {
-                };
-                
-                class NoOneIsListening : std::exception
-                {
-                };
-            }
-
             GenericMessenger::GenericMessenger() :
                 m_activeQueue(0)
             {
@@ -79,10 +59,48 @@ namespace Gnoll
                 }
             }
 
-
             bool GenericMessenger::isMessageTypeRegistered(const MessageType & messageType) const
             {
                 return m_messageTypes.find(messageType) != m_messageTypes.end();
+            }
+
+            GenericMessenger::ListenerContainer::iterator GenericMessenger::getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType)
+            {
+                ListenerContainer::iterator it = m_listeners.lower_bound(messageType);
+                ListenerContainer::iterator itEnd = m_listeners.upper_bound(messageType);
+
+                while (it != itEnd)
+                {
+                    if ( (*it).second == listener )
+                    {
+                        return it;
+                    }
+                    
+                    ++it;
+                }
+                return ListenerContainer::iterator();
+            }
+
+            bool GenericMessenger::isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType)
+            {
+                ListenerContainer::iterator it(getListenerIteratorForType(listener, messageType));
+                if (it == ListenerContainer::iterator())
+                {
+                    return false;
+                }
+                return true;
+            }
+
+            bool GenericMessenger::hasListenerForMessageType(const MessageType & messageType) const
+            {
+                ListenerContainer::const_iterator result = m_listeners.find(messageType);
+
+                return result != m_listeners.end();
+            }
+
+            bool GenericMessenger::isMessageTypeValid(const MessageType & messageType) const
+            {
+                return !messageType.getTypeStr().empty();
             }
 
             void GenericMessenger::registerMessageType(const MessageType & messageType)
@@ -104,7 +122,7 @@ namespace Gnoll
                     registerMessageType(messageType);
                 }
 
-                if (hasListenerForMessageType(messageType))
+                if (isAlreadyListeningToType(listener, messageType))
                 {
                     throw Exceptions::HandlerAlreadyRegistered();
                 }
@@ -114,36 +132,21 @@ namespace Gnoll
 
             void GenericMessenger::eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType)
             {
-                ListenerContainer::iterator it = m_listeners.lower_bound(messageType);
-                ListenerContainer::iterator itEnd = m_listeners.upper_bound(messageType);
+                ListenerContainer::iterator it(getListenerIteratorForType(listener, messageType));
 
-                while (it != itEnd)
-                {
-                    if ( (*it).second == listener )
-                    {
-                        m_listeners.erase(it);
-                        break;
-                    }
-                    
-                    ++it;
-                }
-
-                if (it == itEnd)
+                if (it == ListenerContainer::iterator())
                 {
                     throw Exceptions::CannotDeleteListener();
                 }
-            }
-
-            bool GenericMessenger::hasListenerForMessageType(const MessageType & messageType) const
-            {
-                ListenerContainer::const_iterator result = m_listeners.find(messageType);
-
-                return result != m_listeners.end();
+                else
+                {
+                    m_listeners.erase(it);
+                }
             }
 
             void GenericMessenger::eraseMessageTypeOrphan(const MessageType & messageType)
             {
-                assert (!isMessageTypeRegistered(messageType));
+                assert (isMessageTypeRegistered(messageType));
 
                 if (!hasListenerForMessageType(messageType))
                 {
@@ -169,8 +172,8 @@ namespace Gnoll
             void GenericMessenger::sendToListenersOfType(MessagePtr message, const MessageType & type)
             {
                 ListenerContainer::iterator itEnd = m_listeners.upper_bound(type);
-                for (ListenerContainer::iterator it = m_listeners.lower_bound(type);
-                it != m_listeners.upper_bound(message->getType())  ; ++it)
+
+                for (ListenerContainer::iterator it = m_listeners.lower_bound(type); it != itEnd; ++it)
                 {
                     ((*it).second)->handle(message);
                 }
@@ -179,10 +182,14 @@ namespace Gnoll
             void GenericMessenger::triggerMessage(MessagePtr message)
             {
                 checkMessageValidity(message);
+                if (!hasListenerForMessageType(message->getType()))
+                {
+                    throw Exceptions::NoOneIsListening();
+                }
 
                 boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 
-                sendToListenersOfType(message, MessageType(MSG_ANYTYPE)); // TODO : MSG_ANYTYPE ? Mmm
+                sendToListenersOfType(message, MessageType(MSG_ANYTYPE));
                 sendToListenersOfType(message, message->getType());
             }
 
@@ -241,11 +248,6 @@ namespace Gnoll
                 list<MessagePtr> & messages = m_messages[m_activeQueue];
 
                 messages.remove_if(boost::bind(Details::isMessageOfType, _1, messageType));
-            }
-
-            bool GenericMessenger::isMessageTypeValid(const MessageType & messageType) const
-            {
-                return !messageType.getTypeStr().empty();
             }
 
             void GenericMessenger::processQueue()
