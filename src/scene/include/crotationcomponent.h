@@ -36,7 +36,7 @@ namespace Gnoll
 	namespace Scene
 	{
 		/**
-     * This is a component able to set a rotation
+		 * This is a component able to set a rotation
 		 */
 		class CRotationComponent: public Gnoll::Scene::IComponent
 		{

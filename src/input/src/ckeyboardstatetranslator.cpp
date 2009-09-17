@@ -114,14 +114,14 @@ namespace Gnoll
 
 
 						std::ostringstream tmpString;
-                        try
-                        {
-						    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage); 
-                            tmpString << "Message ajoute ["<< *actionName << "]";
-						}
-                        catch(...)
+						try
 						{
-                            tmpString << "Message NON ajoute ["<< *actionName << "]";
+							CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage); 
+							tmpString << "Message ajoute ["<< *actionName << "]";
+						}
+						catch(...)
+						{
+							tmpString << "Message NON ajoute ["<< *actionName << "]";
 						}
 
 						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );

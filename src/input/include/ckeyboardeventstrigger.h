@@ -32,7 +32,7 @@ namespace Gnoll
 	namespace Input
 	{
 
-        /// This is translate keyboard events to action events
+		/// This is translate keyboard events to action events
 		class CKeyboardEventsTrigger : public Messages::Listener
 		{
 			private:

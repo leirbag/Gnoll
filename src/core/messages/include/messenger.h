@@ -22,48 +22,48 @@
 
 namespace boost
 {
-    template<class T>
-    class shared_ptr;
+	template<class T>
+	class shared_ptr;
 }
 
 namespace Gnoll
 {
-    namespace Core
-    {
-        class CMessage;
+	namespace Core
+	{
+		class CMessage;
 
-        namespace Messages
-        {
-            class MessageType;
-            class Listener;
+		namespace Messages
+		{
+			class MessageType;
+			class Listener;
 
-            /** Interface for message managers
-            *
-            * A message manager is in charge distributing messages to corresponding listeners.
-            */
-            class Messenger
-            {
-                public:
-                    typedef boost::shared_ptr<Listener> ListenerPtr;
-                    typedef boost::shared_ptr<CMessage> MessagePtr;
+			/** Interface for message managers
+			*
+			* A message manager is in charge distributing messages to corresponding listeners.
+			*/
+			class Messenger
+			{
+				public:
+					typedef boost::shared_ptr<Listener> ListenerPtr;
+					typedef boost::shared_ptr<CMessage> MessagePtr;
 
-                    // Messenger();
-                    virtual ~Messenger() {};
+					// Messenger();
+					virtual ~Messenger() {};
 
-                    virtual void addListener(ListenerPtr listener, const MessageType & messagetype) = 0;
-                    virtual void delListener(ListenerPtr listener, const MessageType & messagetype) = 0;
+					virtual void addListener(ListenerPtr listener, const MessageType & messagetype) = 0;
+					virtual void delListener(ListenerPtr listener, const MessageType & messagetype) = 0;
 
-                    virtual void triggerMessage(MessagePtr message) = 0;
-                    virtual void queueMessage(MessagePtr message ) = 0;
-                    virtual void abortFirstMessage(const MessageType & messagetype) = 0;
-                    virtual void abortAllMessages(const MessageType & messagetype) = 0;
+					virtual void triggerMessage(MessagePtr message) = 0;
+					virtual void queueMessage(MessagePtr message ) = 0;
+					virtual void abortFirstMessage(const MessageType & messagetype) = 0;
+					virtual void abortAllMessages(const MessageType & messagetype) = 0;
 
-                    virtual bool isMessageTypeValid(const MessageType & messagetype) const = 0;
+					virtual bool isMessageTypeValid(const MessageType & messagetype) const = 0;
 
-                    virtual void processQueue() = 0;
-            };
-        }
-    }
+					virtual void processQueue() = 0;
+			};
+		}
+	}
 }
 
 #endif

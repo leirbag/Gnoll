@@ -117,9 +117,9 @@ namespace Gnoll
 						shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 						std::ostringstream tmpString;
-                        try
-                        {
-						    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+						try
+						{
+							CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
 						catch(...)
@@ -133,5 +133,6 @@ namespace Gnoll
 			}
 
 		}
-	};
-};
+	}
+}
+

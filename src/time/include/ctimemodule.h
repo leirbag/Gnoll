@@ -81,8 +81,8 @@ namespace Gnoll
 
 				/**
 				 *   Add an unique event @ delay msecs after timer start/reset, sending
-         	 *   msg when triggered
-         	 */
+		 	 	 *   msg when triggered
+		 	 	 */
 				void addDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg);
 
 

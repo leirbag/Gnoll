@@ -17,16 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------CInputEventsTranslator.h-------------------------*\
-|   An input rule based on a dynamicobject			             |
-|                                                                            |
-|   Changelog :                                                              |
-|               15/08/2008 - WT  - Initial release                           |
-\*--------------------------------------------------------------------------*/
-
-
-
 #include <boost/shared_ptr.hpp>
 
 #include "../include/crule.h"
@@ -40,16 +30,13 @@
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 
-
 using namespace std;
 using namespace boost;
 using namespace Gnoll::Core;
 using namespace Gnoll::DynamicObject;
 
-
 namespace Gnoll
 {
-
 	namespace Input
 	{
 
@@ -127,9 +114,9 @@ namespace Gnoll
 			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 			std::ostringstream tmpString;
-            try
-            {
-			    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+			try
+			{
+				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				tmpString << "Message ajoute ["<< m_action << "]";
 			}
 			catch(...)

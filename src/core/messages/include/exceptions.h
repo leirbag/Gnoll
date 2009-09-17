@@ -24,32 +24,32 @@
 
 namespace Gnoll
 {
-    namespace Core
-    {
-        namespace Messages
-        {
-            namespace Exceptions
-            {
-                class InvalidMessage : std::exception
-                {
-                    virtual const char* what() const throw();
-                };
+	namespace Core
+	{
+		namespace Messages
+		{
+			namespace Exceptions
+			{
+				class InvalidMessage : std::exception
+				{
+					virtual const char* what() const throw();
+				};
 
-                class HandlerAlreadyRegistered : std::exception
-                {
-                };
+				class HandlerAlreadyRegistered : std::exception
+				{
+				};
 
-                class CannotDeleteListener : std::exception
-                {
-                };
-                
-                class NoOneIsListening : std::exception
-                {
-                };
-                
-            }
-        }
-    }
+				class CannotDeleteListener : std::exception
+				{
+				};
+				
+				class NoOneIsListening : std::exception
+				{
+				};
+				
+			}
+		}
+	}
 }
 
 #endif

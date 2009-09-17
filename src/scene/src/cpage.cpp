@@ -377,7 +377,7 @@ namespace Gnoll
 						neighborOffset = Ogre::Vector3( -(*pageSize), 0.0, 0.0 );
 					} else {
 						neighborOffset = Ogre::Vector3( 0.0, 0.0, 0.0 );
-                    }
+					}
 
 					Ogre::AxisAlignedBox aabb(
 														min.x + neighborOffset.x,

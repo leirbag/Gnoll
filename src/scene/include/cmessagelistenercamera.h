@@ -31,7 +31,7 @@ namespace Gnoll
 	{
 		class Camera;
 
-        /// This is a message's listener for camera
+		/// This is a message's listener for camera
 		class CMessageListenerCamera : public Gnoll::Core::Messages::Listener
 		{
 		protected:

@@ -38,7 +38,7 @@ namespace Gnoll
 	namespace Input
 	{
 
-        /// This is translate mouse motion events to stateful events
+		/// This is translate mouse motion events to stateful events
 		class CMouseMotionStateTranslator : public Messages::Listener
 		{
 			private:

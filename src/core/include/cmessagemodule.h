@@ -60,7 +60,7 @@ namespace Gnoll
 				 *   only one line to replace
 				 * @Return Default message manager
 				 */
-        Messages::Messenger * getMessageManager();
+				Messages::Messenger * getMessageManager();
 
 
 				/**

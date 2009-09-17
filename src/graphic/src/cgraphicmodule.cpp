@@ -91,7 +91,7 @@ namespace Gnoll
 						 */
 						if (shared_ptr<Gnoll::DynamicObject::String> res = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*itRes))
 						{
-						    ResourceGroupManager::getSingleton().addResourceLocation(string(*res), (*attrName));
+							ResourceGroupManager::getSingleton().addResourceLocation(string(*res), (*attrName));
 						}
 					}
 				}

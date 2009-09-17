@@ -88,13 +88,13 @@ namespace Gnoll
 			
 			try
 			{
-                messageManager->addListener( _listener, _type);
-                pair< shared_ptr<Messages::Listener>, Messages::MessageType> listener( _listener, _type);
-                m_listListeners.push_back(listener);
-            }
-            catch(...)
-            {
-                result = false;
+				messageManager->addListener( _listener, _type);
+				pair< shared_ptr<Messages::Listener>, Messages::MessageType> listener( _listener, _type);
+				m_listListeners.push_back(listener);
+			}
+			catch(...)
+			{
+				result = false;
 	//			LogManager::getSingleton().logMessage("Couldn't add listener for timer module");
 			}
 
@@ -183,10 +183,10 @@ namespace Gnoll
 			{
 				try
 				{
-                    messageManager->delListener((*it).first, (*it).second);
-                }
-                catch(...)
-                {
+					messageManager->delListener((*it).first, (*it).second);
+				}
+				catch(...)
+				{
 		//			LogManager::getSingleton().logMessage("Couldn't add listener for timer module");
 				}
 			}

@@ -36,7 +36,7 @@ namespace Gnoll
 {
 	namespace Input
 	{
-        /// An input rule manager
+		/// An input rule manager
 		class CRuleManager : public Messages::Listener
 		{
 				public:

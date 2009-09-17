@@ -34,7 +34,7 @@ namespace Gnoll
 {
 	namespace Input 
 	{
-        /// This is translate keyboard events to action events
+		/// This is translate keyboard events to action events
 		class CKeyboardEventsTranslator : public Messages::Listener
 		{
 			private:

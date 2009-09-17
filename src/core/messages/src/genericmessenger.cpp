@@ -33,239 +33,239 @@
 
 namespace Gnoll
 {
-    namespace Core
-    {
-        namespace Messages
-        {
-            GenericMessenger::GenericMessenger() :
-                m_activeQueue(0)
-            {
-            }
+	namespace Core
+	{
+		namespace Messages
+		{
+			GenericMessenger::GenericMessenger() :
+				m_activeQueue(0)
+			{
+			}
 
-            GenericMessenger::~GenericMessenger()
-            {
-            }
+			GenericMessenger::~GenericMessenger()
+			{
+			}
 
-            void GenericMessenger::checkMessageValidity(MessagePtr message)
-            {
-                checkMessageTypeValidity(message->getType());
-            }
+			void GenericMessenger::checkMessageValidity(MessagePtr message)
+			{
+				checkMessageTypeValidity(message->getType());
+			}
 
-            void GenericMessenger::checkMessageTypeValidity(const MessageType & type)
-            {
-                if (!isMessageTypeValid(type))
-                {
-                    throw Exceptions::InvalidMessage();
-                }
-            }
+			void GenericMessenger::checkMessageTypeValidity(const MessageType & type)
+			{
+				if (!isMessageTypeValid(type))
+				{
+					throw Exceptions::InvalidMessage();
+				}
+			}
 
-            bool GenericMessenger::isMessageTypeRegistered(const MessageType & messageType) const
-            {
-                return m_messageTypes.find(messageType) != m_messageTypes.end();
-            }
+			bool GenericMessenger::isMessageTypeRegistered(const MessageType & messageType) const
+			{
+				return m_messageTypes.find(messageType) != m_messageTypes.end();
+			}
 
-            GenericMessenger::ListenerContainer::iterator GenericMessenger::getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType)
-            {
-                ListenerContainer::iterator it = m_listeners.lower_bound(messageType);
-                ListenerContainer::iterator itEnd = m_listeners.upper_bound(messageType);
+			GenericMessenger::ListenerContainer::iterator GenericMessenger::getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType)
+			{
+				ListenerContainer::iterator it = m_listeners.lower_bound(messageType);
+				ListenerContainer::iterator itEnd = m_listeners.upper_bound(messageType);
 
-                while (it != itEnd)
-                {
-                    if ( (*it).second == listener )
-                    {
-                        return it;
-                    }
-                    
-                    ++it;
-                }
-                return ListenerContainer::iterator();
-            }
+				while (it != itEnd)
+				{
+					if ( (*it).second == listener )
+					{
+					    return it;
+					}
+					
+					++it;
+				}
+				return ListenerContainer::iterator();
+			}
 
-            bool GenericMessenger::isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType)
-            {
-                ListenerContainer::iterator it(getListenerIteratorForType(listener, messageType));
-                if (it == ListenerContainer::iterator())
-                {
-                    return false;
-                }
-                return true;
-            }
+			bool GenericMessenger::isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType)
+			{
+				ListenerContainer::iterator it(getListenerIteratorForType(listener, messageType));
+				if (it == ListenerContainer::iterator())
+				{
+					return false;
+				}
+				return true;
+			}
 
-            bool GenericMessenger::hasListenerForMessageType(const MessageType & messageType) const
-            {
-                ListenerContainer::const_iterator result = m_listeners.find(messageType);
+			bool GenericMessenger::hasListenerForMessageType(const MessageType & messageType) const
+			{
+				ListenerContainer::const_iterator result = m_listeners.find(messageType);
 
-                return result != m_listeners.end();
-            }
+				return result != m_listeners.end();
+			}
 
-            bool GenericMessenger::isMessageTypeValid(const MessageType & messageType) const
-            {
-                return !messageType.getTypeStr().empty();
-            }
+			bool GenericMessenger::isMessageTypeValid(const MessageType & messageType) const
+			{
+				return !messageType.getTypeStr().empty();
+			}
 
-            void GenericMessenger::registerMessageType(const MessageType & messageType)
-            {
-                std::pair<std::set<MessageType>::const_iterator, bool> insertResult = m_messageTypes.insert(messageType);
+			void GenericMessenger::registerMessageType(const MessageType & messageType)
+			{
+				std::pair<std::set<MessageType>::const_iterator, bool> insertResult = m_messageTypes.insert(messageType);
 
-                assert(insertResult.second == true);
-                assert(insertResult.first != m_messageTypes.end());
-            }
+				assert(insertResult.second == true);
+				assert(insertResult.first != m_messageTypes.end());
+			}
 
-            void GenericMessenger::addListener(ListenerPtr listener, const MessageType & messageType)
-            {
-                checkMessageTypeValidity(messageType);
+			void GenericMessenger::addListener(ListenerPtr listener, const MessageType & messageType)
+			{
+				checkMessageTypeValidity(messageType);
 
-                boost::recursive_mutex::scoped_lock lock(m_messageTypesMutex);
+				boost::recursive_mutex::scoped_lock lock(m_messageTypesMutex);
 
-                if (!isMessageTypeRegistered(messageType))
-                {
-                    registerMessageType(messageType);
-                }
+				if (!isMessageTypeRegistered(messageType))
+				{
+					registerMessageType(messageType);
+				}
 
-                if (isAlreadyListeningToType(listener, messageType))
-                {
-                    throw Exceptions::HandlerAlreadyRegistered();
-                }
+				if (isAlreadyListeningToType(listener, messageType))
+				{
+					throw Exceptions::HandlerAlreadyRegistered();
+				}
 
-                m_listeners.insert(std::pair<MessageType, ListenerPtr >(messageType, listener));
-            }
+				m_listeners.insert(std::pair<MessageType, ListenerPtr >(messageType, listener));
+			}
 
-            void GenericMessenger::eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType)
-            {
-                ListenerContainer::iterator it(getListenerIteratorForType(listener, messageType));
+			void GenericMessenger::eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType)
+			{
+				ListenerContainer::iterator it(getListenerIteratorForType(listener, messageType));
 
-                if (it == ListenerContainer::iterator())
-                {
-                    throw Exceptions::CannotDeleteListener();
-                }
-                else
-                {
-                    m_listeners.erase(it);
-                }
-            }
+				if (it == ListenerContainer::iterator())
+				{
+					throw Exceptions::CannotDeleteListener();
+				}
+				else
+				{
+					m_listeners.erase(it);
+				}
+			}
 
-            void GenericMessenger::eraseMessageTypeOrphan(const MessageType & messageType)
-            {
-                assert (isMessageTypeRegistered(messageType));
+			void GenericMessenger::eraseMessageTypeOrphan(const MessageType & messageType)
+			{
+				assert (isMessageTypeRegistered(messageType));
 
-                if (!hasListenerForMessageType(messageType))
-                {
-                    m_messageTypes.erase(messageType);
-                }
-            }
+				if (!hasListenerForMessageType(messageType))
+				{
+					m_messageTypes.erase(messageType);
+				}
+			}
 
-            void GenericMessenger::delListener(ListenerPtr listener, const MessageType & messageType)
-            {
-                checkMessageTypeValidity(messageType);
+			void GenericMessenger::delListener(ListenerPtr listener, const MessageType & messageType)
+			{
+				checkMessageTypeValidity(messageType);
 
-                boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
+				boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 
-                if (!isMessageTypeRegistered(messageType))
-                {
-                    throw Exceptions::CannotDeleteListener();
-                }
+				if (!isMessageTypeRegistered(messageType))
+				{
+					throw Exceptions::CannotDeleteListener();
+				}
 
-                eraseListenerFromContainer(listener, messageType);
-                eraseMessageTypeOrphan(messageType);
-            }
+				eraseListenerFromContainer(listener, messageType);
+				eraseMessageTypeOrphan(messageType);
+			}
 
-            void GenericMessenger::sendToListenersOfType(MessagePtr message, const MessageType & type)
-            {
-                ListenerContainer::iterator itEnd = m_listeners.upper_bound(type);
+			void GenericMessenger::sendToListenersOfType(MessagePtr message, const MessageType & type)
+			{
+				ListenerContainer::iterator itEnd = m_listeners.upper_bound(type);
 
-                for (ListenerContainer::iterator it = m_listeners.lower_bound(type); it != itEnd; ++it)
-                {
-                    ((*it).second)->handle(message);
-                }
-            }
+				for (ListenerContainer::iterator it = m_listeners.lower_bound(type); it != itEnd; ++it)
+				{
+					((*it).second)->handle(message);
+				}
+			}
 
-            void GenericMessenger::triggerMessage(MessagePtr message)
-            {
-                checkMessageValidity(message);
-                if (!hasListenerForMessageType(message->getType()))
-                {
-                    throw Exceptions::NoOneIsListening();
-                }
+			void GenericMessenger::triggerMessage(MessagePtr message)
+			{
+				checkMessageValidity(message);
+				if (!hasListenerForMessageType(message->getType()))
+				{
+					throw Exceptions::NoOneIsListening();
+				}
 
-                boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
+				boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 
-                sendToListenersOfType(message, MessageType(MSG_ANYTYPE));
-                sendToListenersOfType(message, message->getType());
-            }
+				sendToListenersOfType(message, MessageType(MSG_ANYTYPE));
+				sendToListenersOfType(message, message->getType());
+			}
 
-            void GenericMessenger::addMessageToCurrentQueue(MessagePtr message)
-            {
-                boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
-                boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
+			void GenericMessenger::addMessageToCurrentQueue(MessagePtr message)
+			{
+				boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
+				boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
-                m_messages[m_activeQueue].push_back(message);
-            }
+				m_messages[m_activeQueue].push_back(message);
+			}
 
-            void GenericMessenger::queueMessage(MessagePtr message)
-            {
-                checkMessageValidity(message);
+			void GenericMessenger::queueMessage(MessagePtr message)
+			{
+				checkMessageValidity(message);
 
-                boost::recursive_mutex::scoped_lock lock(m_messageTypesMutex);
+				boost::recursive_mutex::scoped_lock lock(m_messageTypesMutex);
 
-                if (!hasListenerForMessageType(message->getType()))
-                {
-                    throw Exceptions::NoOneIsListening();
-                }
+				if (!hasListenerForMessageType(message->getType()))
+				{
+					throw Exceptions::NoOneIsListening();
+				}
 
-                addMessageToCurrentQueue(message);
-            }
+				addMessageToCurrentQueue(message);
+			}
 
-            namespace Details
-            {
-                static bool isMessageOfType(Messenger::MessagePtr message, const MessageType & type)
-                {
-                    return message->getType() == type;
-                }
-            }
+			namespace Details
+			{
+				static bool isMessageOfType(Messenger::MessagePtr message, const MessageType & type)
+				{
+					return message->getType() == type;
+				}
+			}
 
-            void GenericMessenger::abortFirstMessage(const MessageType & messageType)
-            {
-                checkMessageTypeValidity(messageType);
-                boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
-                boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
+			void GenericMessenger::abortFirstMessage(const MessageType & messageType)
+			{
+				checkMessageTypeValidity(messageType);
+				boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
+				boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
-                list<MessagePtr> & messages = m_messages[m_activeQueue];
+				list<MessagePtr> & messages = m_messages[m_activeQueue];
 
-                list<MessagePtr>::iterator foundMessage = std::find_if(messages.begin(), messages.end(), boost::bind(Details::isMessageOfType, _1, messageType));
+				list<MessagePtr>::iterator foundMessage = std::find_if(messages.begin(), messages.end(), boost::bind(Details::isMessageOfType, _1, messageType));
 
-                if (foundMessage != messages.end())
-                {
-                    messages.erase(foundMessage);
-                }
-            }
+				if (foundMessage != messages.end())
+				{
+					messages.erase(foundMessage);
+				}
+			}
 
-            void GenericMessenger::abortAllMessages(const MessageType & messageType)
-            {
-                checkMessageTypeValidity(messageType);
-                boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
-                boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
+			void GenericMessenger::abortAllMessages(const MessageType & messageType)
+			{
+				checkMessageTypeValidity(messageType);
+				boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
+				boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
-                list<MessagePtr> & messages = m_messages[m_activeQueue];
+				list<MessagePtr> & messages = m_messages[m_activeQueue];
 
-                messages.remove_if(boost::bind(Details::isMessageOfType, _1, messageType));
-            }
+				messages.remove_if(boost::bind(Details::isMessageOfType, _1, messageType));
+			}
 
-            void GenericMessenger::processQueue()
-            {
-                boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
-                boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
+			void GenericMessenger::processQueue()
+			{
+				boost::recursive_mutex::scoped_lock lockAQ(m_activeQueueMutex);
+				boost::recursive_mutex::scoped_lock lockMsg(m_messagesMutex[m_activeQueue]);
 
-                unsigned int queuetoprocess = m_activeQueue;
-                m_activeQueue = (m_activeQueue + 1) % MAX_NUMBER_OF_QUEUES;
+				unsigned int queuetoprocess = m_activeQueue;
+				m_activeQueue = (m_activeQueue + 1) % MAX_NUMBER_OF_QUEUES;
 
-                for ( list<MessagePtr>::iterator itmsg = m_messages[queuetoprocess].begin(); itmsg != m_messages[queuetoprocess].end(); itmsg++ )
-                {
-                    triggerMessage(*itmsg);
-                }
+				for ( list<MessagePtr>::iterator itmsg = m_messages[queuetoprocess].begin(); itmsg != m_messages[queuetoprocess].end(); itmsg++ )
+				{
+					triggerMessage(*itmsg);
+				}
 
-                m_messages[queuetoprocess].clear();
-            }
-        }
-    }
+				m_messages[queuetoprocess].clear();
+			}
+		}
+	}
 }
 

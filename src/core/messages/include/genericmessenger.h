@@ -28,70 +28,70 @@
 
 namespace Gnoll
 {
-    namespace Core
-    {
-        namespace Messages
-        {
-            class GenericMessenger: public Messenger
-            {
-                public :
-                    GenericMessenger();
-                    virtual ~GenericMessenger();
+	namespace Core
+	{
+		namespace Messages
+		{
+			class GenericMessenger: public Messenger
+			{
+				public :
+					GenericMessenger();
+					virtual ~GenericMessenger();
 
-                    virtual void addListener(ListenerPtr listener, const MessageType & messagetype);
-                    virtual void delListener(ListenerPtr listener, const MessageType & messagetype);
+					virtual void addListener(ListenerPtr listener, const MessageType & messagetype);
+					virtual void delListener(ListenerPtr listener, const MessageType & messagetype);
 
-                    virtual void triggerMessage(MessagePtr message);
-                    virtual void queueMessage(MessagePtr message );
+					virtual void triggerMessage(MessagePtr message);
+					virtual void queueMessage(MessagePtr message );
 
-                    virtual void abortFirstMessage(const MessageType & messageType);
-                    virtual void abortAllMessages(const MessageType & messageType);
+					virtual void abortFirstMessage(const MessageType & messageType);
+					virtual void abortAllMessages(const MessageType & messageType);
 
-                    // TODO : why is it public virtual ? Should be private.
+					// TODO : why is it public virtual ? Should be private.
 
-                    virtual void processQueue();
+					virtual void processQueue();
 
-                private :
-                    typedef std::multimap<MessageType, ListenerPtr > ListenerContainer;
-                    ListenerContainer m_listeners;
+				private :
+					typedef std::multimap<MessageType, ListenerPtr > ListenerContainer;
+					ListenerContainer m_listeners;
 
-                    virtual bool isMessageTypeValid(const MessageType & messagetype) const;
+					virtual bool isMessageTypeValid(const MessageType & messagetype) const;
 
-                    bool isMessageTypeRegistered(const MessageType & messageType) const;
-                    bool isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
-                    ListenerContainer::iterator getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType);
+					bool isMessageTypeRegistered(const MessageType & messageType) const;
+					bool isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
+					ListenerContainer::iterator getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType);
 
-                    void registerMessageType(const MessageType & messageType);
-                    void eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType);
-                    void eraseMessageTypeOrphan(const MessageType & messageType);
+					void registerMessageType(const MessageType & messageType);
+					void eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType);
+					void eraseMessageTypeOrphan(const MessageType & messageType);
 
-                    bool hasListenerForMessageType(const MessageType & messageType) const;
+					bool hasListenerForMessageType(const MessageType & messageType) const;
 
-                    void sendToListenersOfType(MessagePtr message, const MessageType & type);
-                    void addMessageToCurrentQueue(MessagePtr message);
+					void sendToListenersOfType(MessagePtr message, const MessageType & type);
+					void addMessageToCurrentQueue(MessagePtr message);
 
-                    void checkMessageValidity(MessagePtr message);
-                    void checkMessageTypeValidity(const MessageType & type);
+					void checkMessageValidity(MessagePtr message);
+					void checkMessageTypeValidity(const MessageType & type);
 
-                    static const unsigned int MAX_NUMBER_OF_QUEUES = 2;
+					static const unsigned int MAX_NUMBER_OF_QUEUES = 2;
 
-                    // TODO : check necessity for this
-                    std::set<MessageType> m_messageTypes;
-                    boost::recursive_mutex m_messageTypesMutex;
+					// TODO : check necessity for this
+					std::set<MessageType> m_messageTypes;
+					boost::recursive_mutex m_messageTypesMutex;
 
-                    boost::recursive_mutex m_listenersMutex;
+					boost::recursive_mutex m_listenersMutex;
 
-                    /**
-                    * Message queues are double buffered to avoid messaging loops.
-                    */
-                    std::list< MessagePtr > m_messages[MAX_NUMBER_OF_QUEUES];
-                    boost::recursive_mutex m_messagesMutex[MAX_NUMBER_OF_QUEUES];
+					/**
+					* Message queues are double buffered to avoid messaging loops.
+					*/
+					std::list< MessagePtr > m_messages[MAX_NUMBER_OF_QUEUES];
+					boost::recursive_mutex m_messagesMutex[MAX_NUMBER_OF_QUEUES];
 
-                    unsigned int m_activeQueue;
-                    boost::recursive_mutex m_activeQueueMutex;
-            };
-        }
-    }
+					unsigned int m_activeQueue;
+					boost::recursive_mutex m_activeQueueMutex;
+			};
+		}
+	}
 }
 
 #endif

@@ -38,13 +38,13 @@
 
 namespace Gnoll
 {
-    namespace Core
-    {
-        namespace Messages
-        {
-            class MessageType;
-        }
-    }
+	namespace Core
+	{
+		namespace Messages
+		{
+			class MessageType;
+		}
+	}
 
 	namespace Scene
 	{

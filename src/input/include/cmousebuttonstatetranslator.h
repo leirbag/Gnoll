@@ -34,7 +34,7 @@ namespace Gnoll
 {
 	namespace Input
 	{
-        /// This is translate mouse button events to action events
+		/// This is translate mouse button events to action events
 		class CMouseButtonStateTranslator : public Messages::Listener
 		{
 			private:

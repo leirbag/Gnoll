@@ -26,24 +26,24 @@
 
 namespace Gnoll
 {
-    namespace Core
-    {
-        namespace Messages
-        {
-            /// Listener to messages interface.
-            class Listener
-            {
-                public:
-                    typedef boost::shared_ptr<CMessage> MessagePtr;
+	namespace Core
+	{
+		namespace Messages
+		{
+			/// Listener to messages interface.
+			class Listener
+			{
+				public:
+					typedef boost::shared_ptr<CMessage> MessagePtr;
 
-                    // Listener();
-                    virtual ~Listener() {}
+					// Listener();
+					virtual ~Listener() {}
 
-                    // TODO : I don't like "handle". Change to process later
-                    virtual void handle(MessagePtr receivedMessage) = 0;
-            };
-        }
-    }
+					// TODO : I don't like "handle". Change to process later
+					virtual void handle(MessagePtr receivedMessage) = 0;
+			};
+		}
+	}
 }
 
 #endif

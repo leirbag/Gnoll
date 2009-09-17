@@ -23,37 +23,37 @@ namespace Gnoll
 {
 	namespace Core
 	{
-        namespace Messages
-        {
-            MessageType::MessageType(const std::string & messageName) :
-                m_messageName(messageName)
-            {
-            }
-            
-            MessageType::~MessageType()
-            {
-            }
+		namespace Messages
+		{
+			MessageType::MessageType(const std::string & messageName) :
+				m_messageName(messageName)
+			{
+			}
+			
+			MessageType::~MessageType()
+			{
+			}
 
-            bool MessageType::operator == (const MessageType & other) const
-            {
-                return (this->m_messageName == other.m_messageName);
-            }
+			bool MessageType::operator == (const MessageType & other) const
+			{
+				return (this->m_messageName == other.m_messageName);
+			}
 
-            bool MessageType::operator != (const MessageType & other) const
-            {
-                return !(*this == other);
-            }
+			bool MessageType::operator != (const MessageType & other) const
+			{
+				return !(*this == other);
+			}
 
-            bool MessageType::operator < (const MessageType & other) const
-            {
-                return ( this->m_messageName < other.m_messageName );
-            }
+			bool MessageType::operator < (const MessageType & other) const
+			{
+				return ( this->m_messageName < other.m_messageName );
+			}
 
-            const std::string & MessageType::getTypeStr() const
-            {
-                return m_messageName;
-            }
-        }
+			const std::string & MessageType::getTypeStr() const
+			{
+				return m_messageName;
+			}
+		}
 	}
 }
 

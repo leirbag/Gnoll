@@ -31,49 +31,49 @@ using namespace Gnoll::Graphic;
 using namespace Gnoll::Core;
 
 COISInputManager::COISInputManager( ) :
-    mInputSystem( 0 ) , mKeyboard( 0 ), mMouse( 0 ), mMouseButtonsState( 0 )
+	mInputSystem( 0 ) , mKeyboard( 0 ), mMouse( 0 ), mMouseButtonsState( 0 )
 {
 }
 
 COISInputManager::~COISInputManager( void ) {
-    if( mInputSystem ) {
+	if( mInputSystem ) {
 
-        if( mKeyboard ) {
-            mInputSystem->destroyInputObject( mKeyboard );
-            mKeyboard = 0;
-        }
+		if( mKeyboard ) {
+			mInputSystem->destroyInputObject( mKeyboard );
+			mKeyboard = 0;
+		}
 
-        if( mMouse ) {
-            mInputSystem->destroyInputObject( mMouse );
-            mMouse = 0;
-        }
+		if( mMouse ) {
+			mInputSystem->destroyInputObject( mMouse );
+			mMouse = 0;
+		}
 
 
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Destroying OIS" );
-        OIS::InputManager::destroyInputSystem( mInputSystem );
-        mInputSystem = 0;
+		OIS::InputManager::destroyInputSystem( mInputSystem );
+		mInputSystem = 0;
 
-    }
+	}
 }
 
 void COISInputManager::initialise(  ) {
-    if( !mInputSystem ) {
+	if( !mInputSystem ) {
 
 
-        // Setup basic variables
-        OIS::ParamList paramList;
-        size_t windowHnd = 0;
-        std::ostringstream windowHndStr;
+		// Setup basic variables
+		OIS::ParamList paramList;
+		size_t windowHnd = 0;
+		std::ostringstream windowHndStr;
 
 
 		  windowHnd = CGraphicModule::getInstancePtr()->getWindowHandle();
 
-        // Fill parameter list
-        windowHndStr << (unsigned int) windowHnd;
-        paramList.insert( std::make_pair( std::string( "WINDOW" ), windowHndStr.str() ) );
+		// Fill parameter list
+		windowHndStr << (unsigned int) windowHnd;
+		paramList.insert( std::make_pair( std::string( "WINDOW" ), windowHndStr.str() ) );
 
-        // Create inputsystem
-        mInputSystem = OIS::InputManager::createInputSystem( paramList );
+		// Create inputsystem
+		mInputSystem = OIS::InputManager::createInputSystem( paramList );
 
 
 			/**
@@ -92,21 +92,21 @@ void COISInputManager::initialise(  ) {
 			int numKeyboards = mInputSystem->numKeyboards();
 #endif
 
-        // If possible create a buffered keyboard
-        if( numKeyboards > 0 ) {
-            mKeyboard = static_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
-            mKeyboard->setEventCallback( this );
-        }
+		// If possible create a buffered keyboard
+		if( numKeyboards > 0 ) {
+			mKeyboard = static_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
+			mKeyboard->setEventCallback( this );
+		}
 
 
-        // If possible create a buffered mouse
+		// If possible create a buffered mouse
 #ifdef HAVE_OIS_1_2
 	if( mInputSystem->getNumberOfDevices( OIS::OISMouse ) > 0 ) {
 #else
-        if( mInputSystem->numMice() > 0 ) {
+		if( mInputSystem->numMice() > 0 ) {
 #endif
-            mMouse = static_cast<OIS::Mouse*>( mInputSystem->createInputObject( OIS::OISMouse, true ) );
-            mMouse->setEventCallback( this );
+			mMouse = static_cast<OIS::Mouse*>( mInputSystem->createInputObject( OIS::OISMouse, true ) );
+			mMouse->setEventCallback( this );
 
 				Ogre::RenderWindow* renderWindow = CGraphicModule::getInstancePtr()->getRenderWindow();
 
@@ -116,28 +116,28 @@ void COISInputManager::initialise(  ) {
 					mstate.width = renderWindow->getWidth();
 					mstate.height = renderWindow->getHeight();
 				}
-        }
+		}
 
 
-    }
+	}
 }
 
 void COISInputManager::capture( void ) {
-    // Need to capture / update each device every frame
+	// Need to capture / update each device every frame
 
-    if( mKeyboard ) {
-        mKeyboard->capture();
-    }
+	if( mKeyboard ) {
+		mKeyboard->capture();
+	}
 
-    if( mMouse ) {
-        mMouse->capture();
-    }
+	if( mMouse ) {
+		mMouse->capture();
+	}
 
 }
 
 
 OIS::Keyboard* COISInputManager::getKeyboard( void ) {
-    return mKeyboard;
+	return mKeyboard;
 }
 
 bool COISInputManager::keyPressed( const OIS::KeyEvent &e )

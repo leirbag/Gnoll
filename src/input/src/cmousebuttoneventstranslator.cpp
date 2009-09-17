@@ -167,12 +167,12 @@ namespace Gnoll
 
 
 							std::ostringstream tmpString;
-                            try
-                            {
-							    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+							try
+							{
+								CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 								tmpString << "Message ajoute ["<< *actionName << "]" << endl;
-                            }
-                            catch(...)
+							}
+							catch(...)
 							{
 								tmpString << "Message NON ajoute ["<< *actionName << "]" << " of intensity ";
 								tmpString <<  intensity << " => " << timePressed << " / " << period;

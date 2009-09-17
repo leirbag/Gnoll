@@ -24,32 +24,32 @@
 
 namespace Gnoll
 {
-    namespace Core
-    {
-        namespace Messages
-        {
-            /**
-            *	Differenciates message types for the messaging system (see messagemanager)
-            */
-            class MessageType
-            {
-                public:
-                    MessageType(const std::string & messageName);
-                    ~MessageType();
+	namespace Core
+	{
+		namespace Messages
+		{
+			/**
+			*	Differenciates message types for the messaging system (see messagemanager)
+			*/
+			class MessageType
+			{
+				public:
+					MessageType(const std::string & messageName);
+					~MessageType();
 
-                    bool operator == (const MessageType & other) const;
-                    bool operator != (const MessageType & other) const;
+					bool operator == (const MessageType & other) const;
+					bool operator != (const MessageType & other) const;
 
-                    bool operator < (const MessageType & other) const;
+					bool operator < (const MessageType & other) const;
 
-                    // TODO : check usage
-                    const std::string & getTypeStr() const;
+					// TODO : check usage
+					const std::string & getTypeStr() const;
 
-                private:
-                    std::string m_messageName;
-            };
-        }
-    }
+				private:
+					std::string m_messageName;
+			};
+		}
+	}
 }
 
 #endif

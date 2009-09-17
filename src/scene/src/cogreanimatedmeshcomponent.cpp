@@ -328,7 +328,7 @@ namespace Gnoll {
 			}
 
 			/**
-		     * Select the first by default
+			 * Select the first by default
 			 */
 			GNOLL_LOG() << this->getInstance() << " : Load animation states : " << "\n";
 			AnimationStateIterator iter = animationStateSet->getAnimationStateIterator();
@@ -341,7 +341,7 @@ namespace Gnoll {
 
 
 			/**
-		     * Restore the default animation state, if none so no animation by default
+			 * Restore the default animation state, if none so no animation by default
 			 */
 			shared_ptr< Gnoll::DynamicObject::String > default_animationState ( new Gnoll::DynamicObject::String());
 			m_currentAnimation = *(this->getAttributeOrDefault < Gnoll::DynamicObject::String > (COgreAnimatedMeshComponent::ATTRIBUTE_ANIMATIONSTATE(), default_animationState));

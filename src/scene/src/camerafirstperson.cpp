@@ -37,31 +37,31 @@ namespace Gnoll
 		CameraFirstPerson::CameraFirstPerson(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper) :
 			Camera(instanceName, wrapper)
 		{
-            Ogre::Vector3* pPosition = NULL;
-            Ogre::SceneNode* pTarget = getTarget();
-            if(pTarget == NULL)
-                pPosition = new Ogre::Vector3();
-            else
-                pPosition = new Ogre::Vector3(pTarget->getPosition());
+			Ogre::Vector3* pPosition = NULL;
+			Ogre::SceneNode* pTarget = getTarget();
+			if(pTarget == NULL)
+				pPosition = new Ogre::Vector3();
+			else
+				pPosition = new Ogre::Vector3(pTarget->getPosition());
 
-            shared_ptr<Gnoll::DynamicObject::Vector3> default_pos = shared_ptr<Gnoll::DynamicObject::Vector3> (new Gnoll::DynamicObject::Vector3(*pPosition));
-            shared_ptr<Gnoll::DynamicObject::Vector3> temp_pos = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>(ATTRIBUTE_HEADPOSITION(), default_pos);
-            headPosition = new Ogre::Vector3(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
+			shared_ptr<Gnoll::DynamicObject::Vector3> default_pos = shared_ptr<Gnoll::DynamicObject::Vector3> (new Gnoll::DynamicObject::Vector3(*pPosition));
+			shared_ptr<Gnoll::DynamicObject::Vector3> temp_pos = this->getAttributeOrDefault<Gnoll::DynamicObject::Vector3>(ATTRIBUTE_HEADPOSITION(), default_pos);
+			headPosition = new Ogre::Vector3(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
 		}
 
 		CameraFirstPerson::~CameraFirstPerson()
 		{
-            setAttribute(ATTRIBUTE_HEADPOSITION(), shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(*getHeadPosition())));
+			setAttribute(ATTRIBUTE_HEADPOSITION(), shared_ptr<Gnoll::DynamicObject::Vector3>(new Gnoll::DynamicObject::Vector3(*getHeadPosition())));
 		}
 
 		void CameraFirstPerson::setHeadPosition(const Ogre::Vector3& value)
 		{
-            *headPosition = value;
+			*headPosition = value;
 		}
 
-        const Ogre::Vector3* CameraFirstPerson::getHeadPosition()
+		const Ogre::Vector3* CameraFirstPerson::getHeadPosition()
 		{
-            return headPosition;
+			return headPosition;
 		}
 
 		void CameraFirstPerson::update(float time)
@@ -74,12 +74,12 @@ namespace Gnoll
 				return;
 			}
 
-            // Check the validity of the head position
-            // ---------------------------------------
-            if(getHeadPosition() == NULL) {
-                GNOLL_LOG() << "No head position defined\n";
+			// Check the validity of the head position
+			// ---------------------------------------
+			if(getHeadPosition() == NULL) {
+				GNOLL_LOG() << "No head position defined\n";
 				return;
-            }
+			}
 
 			// Process to the position of the camera
 			// -------------------------------------

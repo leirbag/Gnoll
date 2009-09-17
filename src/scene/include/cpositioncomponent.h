@@ -36,7 +36,7 @@ namespace Gnoll
 	namespace Scene
 	{
 		/**
-     * This is a component able to set a position.	
+		 * This is a component able to set a position.	
 		 */
 		class CPositionComponent: public Gnoll::Scene::IComponent
 		{

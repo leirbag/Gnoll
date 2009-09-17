@@ -21,19 +21,19 @@
 
 namespace Gnoll
 {
-    namespace Core
-    {
-        namespace Messages
-        {
-            namespace Exceptions
-            {
-                const char* InvalidMessage::what() const throw()
-                {
-                    return "Message type is invalid";
-                }
-            }
-        }
-    }
+	namespace Core
+	{
+		namespace Messages
+		{
+			namespace Exceptions
+			{
+				const char* InvalidMessage::what() const throw()
+				{
+					return "Message type is invalid";
+				}
+			}
+		}
+	}
 }
 
 

@@ -297,8 +297,8 @@ namespace Gnoll
 			if(getTargetName() == "")
 				return;
 
-			cameraWrapper->setPosition(getTarget()->getPosition() +
-                                          (cameraWrapper->getDirection() * getOffset() * -1.0f));
+			cameraWrapper->setPosition(getTarget()->getPosition() + (cameraWrapper->getDirection() * getOffset() * -1.0f));
 		}
-	};
-};
+	}
+}
+
