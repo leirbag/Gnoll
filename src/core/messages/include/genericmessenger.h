@@ -55,7 +55,7 @@ namespace Gnoll
 					typedef std::multimap<MessageType, ListenerPtr > ListenerContainer;
 					ListenerContainer m_listeners;
 
-					virtual bool isMessageTypeValid(const MessageType & messagetype) const;
+					bool isMessageTypeValid(const MessageType & messagetype) const;
 
 					bool isMessageTypeRegistered(const MessageType & messageType) const;
 					bool isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);

@@ -205,7 +205,7 @@ struct ThreeMessagesType121 : public ThreeListenersFixture
 	Messenger::MessagePtr message3;
 };
 
-BOOST_FIXTURE_TEST_CASE(abord_first_of_type_1, ThreeMessagesType121)
+BOOST_FIXTURE_TEST_CASE(abort_first_of_type_1, ThreeMessagesType121)
 {
 	messenger.abortFirstMessage(MESSAGE_TYPENAME_1);
 
@@ -217,7 +217,7 @@ BOOST_FIXTURE_TEST_CASE(abord_first_of_type_1, ThreeMessagesType121)
 	BOOST_CHECK_EQUAL(message2.get(), listener2->lastestMessage);
 }
 
-BOOST_FIXTURE_TEST_CASE(abord_all_of_type_1, ThreeMessagesType121)
+BOOST_FIXTURE_TEST_CASE(abort_all_of_type_1, ThreeMessagesType121)
 {
 	messenger.abortAllMessages(MESSAGE_TYPENAME_1);
 
@@ -228,7 +228,7 @@ BOOST_FIXTURE_TEST_CASE(abord_all_of_type_1, ThreeMessagesType121)
 	BOOST_CHECK_EQUAL(message2.get(), listener2->lastestMessage);
 }
 
-BOOST_FIXTURE_TEST_CASE(abord_first_of_type_2, ThreeMessagesType121)
+BOOST_FIXTURE_TEST_CASE(abort_first_of_type_2, ThreeMessagesType121)
 {
 	messenger.abortFirstMessage(MESSAGE_TYPENAME_2);
 
@@ -239,7 +239,7 @@ BOOST_FIXTURE_TEST_CASE(abord_first_of_type_2, ThreeMessagesType121)
 	BOOST_CHECK_EQUAL(0, listener2->countCalls);
 }
 
-BOOST_FIXTURE_TEST_CASE(abord_all_of_type_2, ThreeMessagesType121)
+BOOST_FIXTURE_TEST_CASE(abort_all_of_type_2, ThreeMessagesType121)
 {
 	messenger.abortAllMessages(MESSAGE_TYPENAME_2);
 
@@ -249,6 +249,51 @@ BOOST_FIXTURE_TEST_CASE(abord_all_of_type_2, ThreeMessagesType121)
 	BOOST_CHECK_EQUAL(message3.get(), listener1->lastestMessage);
 	BOOST_CHECK_EQUAL(0, listener2->countCalls);
 }
+
+struct MockLoopListener : public MockListener
+{
+	MockLoopListener(Messenger & messengerToCall) :
+		messenger(messengerToCall),
+		loopMessage(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)))
+	{
+	}
+
+	~MockLoopListener()
+	{
+	}
+
+	void handle(MessagePtr receivedMessage)
+	{
+		if (countCalls == 0)
+		{
+				messenger.queueMessage(loopMessage);
+		}
+
+		MockListener::handle(receivedMessage);
+	}
+
+	Messenger & messenger;
+	Messenger::MessagePtr loopMessage;
+};
+
+BOOST_AUTO_TEST_CASE(listener_adding_a_message_does_not_cause_a_loop)
+{
+	GenericMessenger messenger;
+
+	boost::shared_ptr<MockListener> listener1(new MockLoopListener(messenger));
+	messenger.addListener(listener1, MessageType(MESSAGE_TYPENAME_1));
+
+	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+	messenger.queueMessage(message);
+
+	messenger.processQueue();
+	BOOST_CHECK_EQUAL(1, listener1->countCalls);
+
+	messenger.processQueue();
+	BOOST_CHECK_EQUAL(2, listener1->countCalls);
+}
+
+// But if the listener triggers a message ? No protection...
 
 // Is it really what we want ?
 BOOST_AUTO_TEST_CASE(cannot_listen_to_anytype_messages)
