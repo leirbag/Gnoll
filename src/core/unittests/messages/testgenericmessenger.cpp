@@ -186,6 +186,12 @@ BOOST_FIXTURE_TEST_CASE(process_after_queue_calls_listeners_for_correct_type, Th
 	BOOST_CHECK_EQUAL(2, listener1->countCalls);
 	BOOST_CHECK_EQUAL(1, listener2->countCalls);
 	BOOST_CHECK_EQUAL(2, listener3->countCalls);
+
+	messenger.processQueue();
+
+	BOOST_CHECK_EQUAL(2, listener1->countCalls);
+	BOOST_CHECK_EQUAL(1, listener2->countCalls);
+	BOOST_CHECK_EQUAL(2, listener3->countCalls);
 }
 
 struct ThreeMessagesType121 : public ThreeListenersFixture
@@ -288,6 +294,9 @@ BOOST_AUTO_TEST_CASE(listener_adding_a_message_does_not_cause_a_loop)
 
 	messenger.processQueue();
 	BOOST_CHECK_EQUAL(1, listener1->countCalls);
+
+	messenger.processQueue();
+	BOOST_CHECK_EQUAL(2, listener1->countCalls);
 
 	messenger.processQueue();
 	BOOST_CHECK_EQUAL(2, listener1->countCalls);
