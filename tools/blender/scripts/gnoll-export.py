@@ -56,31 +56,34 @@ from gnollTools import *
 import knife
 from knife import *
 
+# Even if I hate globals,
 # GUI vars need to be global...
 # Events identifiers(constants)
 EVT_NOEVT = 1
 EVT_QUIT = 2
 EVT_SUBD = 3
 EVT_GNOLL = 4
-EVT_PATH = 5
-EVT_INITIAL = 6
-EVT_OGRE = 7
-EVT_OGRE3 = 8
-EVT_OGRE4 = 9
-EVT_SET2 = 10
-EVT_SET3 = 11
-EVT_SET4 = 12
+EVT_GNOLL_VERSION = 5
+EVT_PATH = 6
+EVT_INITIAL = 7
+EVT_OGRE = 8
+EVT_OGRE3 = 9
+EVT_OGRE4 = 10
+EVT_SET2 = 11
+EVT_SET3 = 12
+EVT_SET4 = 13
 
 # Settings (input from the GUI)
 SquareSize = Create(1.0)
 maxSquareSize = Create(20.0)
 Epsilon = 0.00001
 genGnollFiles = False
+gnollFilesVersion = Create(2)
 addInitialPage = False
 exportOgre = False
 isOgre3 = False
 exportPath = 0
-filesExportPath = "/edit/this/export/path/"
+filesExportPath = "/home/antonin/ViracochaCo/projetviracocha/trunk/src"
 
 # Image used in the GUI
 # logo = Blender.Image.Load('logo.png')
@@ -404,7 +407,7 @@ def subdivide():
 		for i in range(len(columns)):
 			for j in range(len(pages[i])):
 				index = i*len(pages[i])+j
-				pageFiles[index] = PageFile()
+				pageFiles[index] = PageFile("", gnollFilesVersion.val)
 
 				Window.DrawProgressBar(index/(len(columns)*len(pages[i])), "Gnoll files")
 
@@ -425,17 +428,17 @@ def subdivide():
 		# Bound each scene's object to a page (if possible)
 		for obj in Scene.GetCurrent().objects:
 			# If this objet isn't part of the ground
-			if string.find(obj.name, rootObj.name, 0, len(obj.name)) == -1:
+			if string.find(obj.name, rootObj.name, 0, len(obj.name)) == -1 and string.find(obj.name, "DONTEXPORT_", 0, len(obj.name)) == -1:
 				# Find the corresponding page (if the object is in the grid)
 				if obj.LocX > boundBox[0] and obj.LocX < boundBox[1] and obj.LocY > boundBox[2] and obj.LocY < boundBox[3]:
-					print "Static object found in the grid : ", obj.name
+					print "Handling object : ", obj.name
 
 					# Indexes of the corresponding page
 					pageX = floor((boundBox[1] - obj.LocX) / stepSize)
 					pageY = floor((boundBox[3] - obj.LocY) / stepSize)
 
 					# Create XML definition of the object
-					objectDef = ObjectDef(obj.name)
+					objectDef = ObjectDef(obj.name, gnollFilesVersion.val)
 
 					# Coordinates transformation :
 					# The problem is that Blender and Ogre don't use the same way to apply
@@ -462,19 +465,6 @@ def subdivide():
 					angleZ = atan2(objectDef.locZ, objectDef.locX)
 					objectDef.locX = cos(obj.RotZ - angleZ) * dist
 					objectDef.locZ = sin(obj.RotZ - angleZ) * dist
-
-					if obj.name == "Fontaine":
-						print "   pos of center X : ", boundBox[1] - (pageX+0.5)*stepSize
-						print "   pos of center Y : ", boundBox[3] - (pageY+0.5)*stepSize
-						print "   pos of obj X : ", obj.LocX
-						print "   pos of obj Y : ", obj.LocY
-						print "   distance : ", dist
-						print "   angle : ", angleZ
-						print "   NewObjLocX : ", objectDef.locX
-						print "   NewObjLocZ : ", objectDef.locZ
-						print "   OldObjLocX : ", obj.LocX - pages[int(pageX)][int(pageY)].LocX
-						print "   OldObjLocZ : ", - obj.LocY + pages[int(pageX)][int(pageY)].LocY
-
 
 					# The others parameters are left untouched
 					objectDef.rotX = obj.RotX
@@ -514,7 +504,7 @@ def subdivide():
 def draw():
 	global SquareSize
 	global EVT_NOEVT, EVT_QUIT, EVT_SUBD, EVT_PATH, EVT_OGRE, EVT_OGRE3, EVT_OGRE4, EVT_SET2, EVT_SET3, EVT_SET4
-	global logo, genGnollFiles, exportPath, addInitialPage, exportOgre, isOgre4
+	global logo, genGnollFiles, exportPath, addInitialPage, exportOgre, isOgre4, gnollFilesVersion
 
 	maxSquareSize = 10.0
 	selectedObj = Object.GetSelected()
@@ -543,23 +533,23 @@ def draw():
 	# glDisable(GL_BLEND)
 
 	# Drawing text
-	glRasterPos2d(10,253)
+	glRasterPos2d(10,283)
 	Draw.Text("Map integrating tools for Gnoll")
-	glRasterPos2d(10,233)
+	glRasterPos2d(10,263)
 	Draw.Text("by Antonin <Wetneb> Delpeuch")
+	glRasterPos2d(10,193)
+	Draw.Text("Gnoll settings :")
 	glRasterPos2d(10,73)
 	Draw.Text("General settings :")
-	glRasterPos2d(10,163)
-	Draw.Text("Gnoll settings :")
 #	glRasterPos2d(10,243)
 #	Draw.Text("Ogre settings :")
 
 	# Drawing input controls
-	SquareSize = Draw.Slider("Size of pages", EVT_NOEVT, 10, 200, 255, 18, SquareSize.val,
+	SquareSize = Draw.Slider("Size of pages", EVT_NOEVT, 10, 230, 255, 18, SquareSize.val,
 		0.00001, maxSquareSize, 0, "Size of the squared pages.")
-	Button("1/2", EVT_SET2, 10, 180, 83, 18)
-	Button("1/3", EVT_SET3, 95, 180, 83, 18)
-	Button("1/4", EVT_SET4, 180, 180, 83, 18)
+	Button("1/2", EVT_SET2, 10, 210, 83, 18)
+	Button("1/3", EVT_SET3, 95, 210, 83, 18)
+	Button("1/4", EVT_SET4, 180, 210, 83, 18)
 
 	if genGnollFiles:
 		initialPage = Draw.Toggle("Add an initial page", EVT_INITIAL, 10, 100, 255, 25, addInitialPage)
@@ -569,8 +559,9 @@ def draw():
 	if genGnollFiles or exportOgre:
 		exportPath = Draw.String("Export path : ", EVT_PATH, 10, 40, 255, 25, filesExportPath, 399)
 
-	useGnoll = Draw.Toggle("Generate Gnoll files", EVT_GNOLL, 10, 130, 255, 25, genGnollFiles)
-#	useOgre = Draw.Toggle("Generate Ogre files", EVT_OGRE, 10, 210, 255, 25, exportOgre)
+	useGnoll = Draw.Toggle("Generate Gnoll files", EVT_GNOLL, 10, 160, 255, 25, genGnollFiles)
+	if genGnollFiles:
+		gnollFilesVersion = Draw.Number("Gnoll files version", EVT_GNOLL_VERSION, 10, 130, 255, 25, gnollFilesVersion.val, 1, 2)
 
 	# Drawing main buttons
 	Button("Quit", EVT_QUIT, 10, 10, 125, 25)
