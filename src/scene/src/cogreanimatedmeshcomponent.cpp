@@ -190,7 +190,7 @@ namespace Gnoll {
 
 		COgreAnimatedMeshComponent::COgreAnimatedMeshComponent()
 		{
-            this->m_currentAnimation = "";
+			this->m_currentAnimation = "";
 			this->m_parentPageName = "";
 			this->m_parent = NULL;
 		}
@@ -350,9 +350,13 @@ namespace Gnoll {
 			m_currentAnimation = *(this->getAttributeOrDefault < Gnoll::DynamicObject::String > (COgreAnimatedMeshComponent::ATTRIBUTE_ANIMATIONSTATE(), default_animationState));
 
 			if(animationStateSet->hasAnimationState(m_currentAnimation))
+			{
 				setCurrentAnimationState(m_currentAnimation);
-            else 
-                m_currentAnimation = "";
+			}
+			else
+			{
+				m_currentAnimation = "";
+			}
 
 			/**
 			 * Register the listener

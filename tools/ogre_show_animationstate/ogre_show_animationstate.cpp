@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 			std::cout << "Invalid argument, it sould be : ./ogre_show_animationstate /path/name.mesh !\n";
 			return -1;
 		}
-		
+
 		std::string nameMesh(argv[1]);
 		std::string pathMesh;
 
@@ -25,7 +25,9 @@ int main(int argc, char **argv)
 		}
 
 		if(index != 0)
+		{
 			pathMesh = nameMesh.substr(0, index);
+		}
 
 		// Init
 		Ogre::Root* mRoot = new Ogre::Root();
@@ -52,8 +54,8 @@ int main(int argc, char **argv)
 		Ogre::AnimationStateIterator iter = animStateSet->getAnimationStateIterator();
 		while(iter.hasMoreElements())
 		{
-				Ogre::AnimationState* animationState = iter.getNext();
-				std::cout << "\t- " << animationState->getAnimationName() << "\n";
+			Ogre::AnimationState* animationState = iter.getNext();
+			std::cout << "\t- " << animationState->getAnimationName() << "\n";
 		}
 
 		return 0;

@@ -178,7 +178,7 @@ build_dir                      = "Release"
 opts = Variables('gnoll.conf')
 opts.Add(PathVariable(
 						'prefix', 'Directory to install under', '/usr/share', SCons.Variables.PathVariable.PathAccept
-				     )
+				)
 		)
 
 opts.Add(
