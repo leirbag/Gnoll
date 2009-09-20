@@ -58,8 +58,6 @@ namespace Gnoll
 					virtual void abortFirstMessage(const MessageType & messagetype) = 0;
 					virtual void abortAllMessages(const MessageType & messagetype) = 0;
 
-					virtual bool isMessageTypeValid(const MessageType & messagetype) const = 0;
-
 					virtual void processQueue() = 0;
 			};
 		}

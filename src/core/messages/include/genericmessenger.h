@@ -47,38 +47,30 @@ namespace Gnoll
 					virtual void abortFirstMessage(const MessageType & messageType);
 					virtual void abortAllMessages(const MessageType & messageType);
 
-					// TODO : why is it public virtual ? Should be private.
-
 					virtual void processQueue();
 
 				private :
 					typedef std::multimap<MessageType, ListenerPtr > ListenerContainer;
-					ListenerContainer m_listeners;
 
-					bool isMessageTypeValid(const MessageType & messagetype) const;
+					void throwIfMessageNotValid(MessagePtr message);
+					void throwIfTypeNotValid(const MessageType & type);
+					void throwIfNoListenerForMessage(MessagePtr message);
 
-					bool isMessageTypeRegistered(const MessageType & messageType) const;
 					bool isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
+					void throwIfAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
+
 					ListenerContainer::iterator getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType);
 
-					void registerMessageType(const MessageType & messageType);
 					void eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType);
-					void eraseMessageTypeOrphan(const MessageType & messageType);
 
 					bool hasListenerForMessageType(const MessageType & messageType) const;
 
 					void sendToListenersOfType(MessagePtr message, const MessageType & type);
 					void addMessageToCurrentQueue(MessagePtr message);
 
-					void checkMessageValidity(MessagePtr message);
-					void checkMessageTypeValidity(const MessageType & type);
-
 					static const unsigned int MAX_NUMBER_OF_QUEUES = 2;
 
-					// TODO : check necessity for this
-					std::set<MessageType> m_messageTypes;
-					boost::recursive_mutex m_messageTypesMutex;
-
+					ListenerContainer m_listeners;
 					boost::recursive_mutex m_listenersMutex;
 
 					/**
