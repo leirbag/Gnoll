@@ -28,6 +28,7 @@ import os.path
 # Set up the environment and config
 Import('env')
 Import('configProject')
+Import('binDir')
 
 # Construct environnement
 # If debug is activated, add some flags to ad debugging symbols
@@ -50,4 +51,5 @@ sourceFiles.append(Glob('./scene/src/*.cpp', strings=True))
 sourceFiles.append(Glob('./core/src/*.cpp', strings=True))
 sourceFiles.append(Glob('./input/src/*.cpp', strings=True))
 
-env.Alias('build', env.Program('../../gnoll', sourceFiles))
+print binDir
+env.Alias('build', env.Program(binDir + 'gnoll', sourceFiles))
