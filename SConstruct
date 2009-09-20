@@ -1,5 +1,5 @@
 #/***************************************************************************
-# *   Copyright (C) 2008 by Huau Gabriel                                    *
+# *   Copyright (C) 2009 by Huau Gabriel                                    *
 # *                                                                         *
 # *   This program is free software; you can redistribute it and/or modify  *
 # *   it under the terms of the GNU General Public License as published by  *
