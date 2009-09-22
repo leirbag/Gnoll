@@ -37,6 +37,7 @@ namespace Gnoll
 			{
 				public:
 					typedef boost::shared_ptr<Listener> ListenerPtr;
+					typedef boost::function<void (ListenerContainer::ListenerPtr &) > ForEachFunction;
 
 					ListenerContainer();
 					virtual ~ListenerContainer();
@@ -44,9 +45,11 @@ namespace Gnoll
 					void add(ListenerPtr listener, const MessageType & messageType);
 					void del(ListenerPtr listener, const MessageType & messageType);
 
+                                        // TODO : not sure if next method should be public
 					bool isListenerAssociatedToType(ListenerPtr listener, const MessageType & messageType);
+					bool hasListenerForType(const MessageType & messageType);
 
-					void forEach(const MessageType & messageType, boost::function<void (ListenerPtr &)> function);
+					void forEach(const MessageType & messageType, ForEachFunction function);
 
 				private:
 					typedef std::multimap<MessageType, ListenerPtr > ContainerType;
@@ -58,7 +61,7 @@ namespace Gnoll
 					ContainerType::iterator getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType);
 			};
 		}
-  }
+	}
 }
 
 #endif

@@ -317,5 +317,35 @@ BOOST_AUTO_TEST_CASE(cannot_listen_to_anytype_messages)
 	BOOST_CHECK_THROW(messenger.triggerMessage(message), Exceptions::NoOneIsListening);
 }
 
+BOOST_AUTO_TEST_CASE(can_listen_to_anytype_messages_if_listener_for_message_type)
+{
+	GenericMessenger messenger;
+
+	boost::shared_ptr<MockListener> listener1(new MockListener);
+	messenger.addListener(listener1, MessageType(Gnoll::Core::MSG_ANYTYPE));
+	messenger.addListener(listener1, MessageType(MESSAGE_TYPENAME_1));
+
+	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+
+	messenger.triggerMessage(message);
+	BOOST_CHECK_EQUAL(2, listener1->countCalls);
+}
+
+BOOST_AUTO_TEST_CASE(can_listen_to_anytype_messages_if_other_listener_for_message_type)
+{
+	GenericMessenger messenger;
+
+	boost::shared_ptr<MockListener> listener1(new MockListener);
+	boost::shared_ptr<MockListener> listener2(new MockListener);
+	messenger.addListener(listener1, MessageType(Gnoll::Core::MSG_ANYTYPE));
+	messenger.addListener(listener2, MessageType(MESSAGE_TYPENAME_1));
+
+	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+
+	messenger.triggerMessage(message);
+	BOOST_CHECK_EQUAL(1, listener1->countCalls);
+	BOOST_CHECK_EQUAL(1, listener2->countCalls);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 

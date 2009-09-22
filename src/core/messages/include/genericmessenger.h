@@ -17,14 +17,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __GENERICMESSENGER_H__
+#define __GENERICMESSENGER_H__
+
 #include "../include/messenger.h"
 #include <boost/thread/recursive_mutex.hpp>
 #include <set>
 #include <map>
 #include <list>
-
-#ifndef __GENERICMESSENGER_H__
-#define __GENERICMESSENGER_H__
 
 namespace Gnoll
 {
@@ -32,6 +32,8 @@ namespace Gnoll
 	{
 		namespace Messages
 		{
+			class ListenerContainer;
+
 			class GenericMessenger: public Messenger
 			{
 				public :
@@ -50,28 +52,16 @@ namespace Gnoll
 					virtual void processQueue();
 
 				private :
-					typedef std::multimap<MessageType, ListenerPtr > ListenerContainer;
-
 					void throwIfMessageNotValid(MessagePtr message);
 					void throwIfTypeNotValid(const MessageType & type);
 					void throwIfNoListenerForMessage(MessagePtr message);
 
-					bool isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
-					void throwIfAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
-
-					ListenerContainer::iterator getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType);
-
-					void eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType);
-
-					bool hasListenerForMessageType(const MessageType & messageType) const;
-
-					void sendToListenersOfType(MessagePtr message, const MessageType & type);
 					void addMessageToCurrentQueue(MessagePtr message);
 
 					static const unsigned int MAX_NUMBER_OF_QUEUES = 2;
 
-					ListenerContainer m_listeners;
 					boost::recursive_mutex m_listenersMutex;
+                                        ListenerContainer * m_listeners;
 
 					/**
 					* Message queues are double buffered to avoid messaging loops.

@@ -27,9 +27,7 @@
 #include "../include/listener.h"
 #include "../../include/cmessage.h"
 #include "../include/exceptions.h"
-
-// TODO : name queue a list is inconsistent
-// TODO : implementation is too big. Usage of the set is redundant with multimap key. To do after unittesting
+#include "../include/listenercontainer.h"
 
 namespace Gnoll
 {
@@ -44,21 +42,34 @@ namespace Gnoll
 					return message->getType() == type;
 				}
 
-				static bool isListenerTypePair(const std::pair<MessageType, Messenger::ListenerPtr > & pair,
-								Messenger::ListenerPtr listener,
-								const MessageType & messageType)
+				class Sender
 				{
-					return pair.first == messageType && pair.second == listener;
-				}
+					public:
+						Sender(GenericMessenger::MessagePtr & message) :
+							m_message(message)
+						{
+							assert(message);
+						}
+
+						void operator()(ListenerContainer::ListenerPtr & listener)
+						{
+							listener->handle(m_message);
+						}
+
+					private:
+						GenericMessenger::MessagePtr & m_message;
+				};
 			}
 
 			GenericMessenger::GenericMessenger() :
 				m_activeQueue(0)
 			{
+				m_listeners = new ListenerContainer();
 			}
 
 			GenericMessenger::~GenericMessenger()
 			{
+                            delete m_listeners;
 			}
 
 			void GenericMessenger::throwIfTypeNotValid(const MessageType & type)
@@ -76,88 +87,22 @@ namespace Gnoll
 
 			void GenericMessenger::throwIfNoListenerForMessage(MessagePtr message)
 			{
-				if (!hasListenerForMessageType(message->getType()))
+				if (!m_listeners->hasListenerForType(message->getType()))
 				{
 					throw Exceptions::NoOneIsListening();
-				}
-			}
-
-			GenericMessenger::ListenerContainer::iterator GenericMessenger::getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType)
-			{
-				ListenerContainer::iterator it = m_listeners.lower_bound(messageType);
-				ListenerContainer::iterator itEnd = m_listeners.upper_bound(messageType);
-
-				ListenerContainer::iterator foundListener = std::find_if(it, itEnd,
-								boost::bind(Details::isListenerTypePair, _1, listener, messageType));
-
-				if (foundListener == itEnd)
-				{
-					return ListenerContainer::iterator();
-				}
-
-				return foundListener;
-			}
-
-			bool GenericMessenger::hasListenerForMessageType(const MessageType & messageType) const
-			{
-				ListenerContainer::const_iterator result = m_listeners.find(messageType);
-
-				return result != m_listeners.end();
-			}
-
-			bool GenericMessenger::isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType)
-			{
-				ListenerContainer::iterator it(getListenerIteratorForType(listener, messageType));
-
-				return it != ListenerContainer::iterator();
-			}
-
-			void GenericMessenger::throwIfAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType)
-			{
-				if (isAlreadyListeningToType(listener, messageType))
-				{
-					throw Exceptions::HandlerAlreadyRegistered();
 				}
 			}
 
 			void GenericMessenger::addListener(ListenerPtr listener, const MessageType & messageType)
 			{
 				throwIfTypeNotValid(messageType);
-				throwIfAlreadyListeningToType(listener, messageType);
-
-				m_listeners.insert(std::pair<MessageType, ListenerPtr >(messageType, listener));
-			}
-
-			void GenericMessenger::eraseListenerFromContainer(ListenerPtr listener, const MessageType & messageType)
-			{
-				boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
-
-				ListenerContainer::iterator it(getListenerIteratorForType(listener, messageType));
-
-				if (it == ListenerContainer::iterator())
-				{
-					throw Exceptions::CannotDeleteListener();
-				}
-				else
-				{
-					m_listeners.erase(it);
-				}
+				m_listeners->add(listener, messageType);
 			}
 
 			void GenericMessenger::delListener(ListenerPtr listener, const MessageType & messageType)
 			{
 				throwIfTypeNotValid(messageType);
-				eraseListenerFromContainer(listener, messageType);
-			}
-
-			void GenericMessenger::sendToListenersOfType(MessagePtr message, const MessageType & type)
-			{
-				ListenerContainer::iterator itEnd = m_listeners.upper_bound(type);
-
-				for (ListenerContainer::iterator it = m_listeners.lower_bound(type); it != itEnd; ++it)
-				{
-					((*it).second)->handle(message);
-				}
+				m_listeners->del(listener, messageType);
 			}
 
 			void GenericMessenger::triggerMessage(MessagePtr message)
@@ -167,8 +112,10 @@ namespace Gnoll
 
 				boost::recursive_mutex::scoped_lock lock(m_listenersMutex);
 
-				sendToListenersOfType(message, MessageType(MSG_ANYTYPE));
-				sendToListenersOfType(message, message->getType());
+				// TODO : MSG_ANYTYPE could be kept somewhere
+				Details::Sender sendToListener(message);
+				m_listeners->forEach(MessageType(MSG_ANYTYPE), sendToListener);
+				m_listeners->forEach(message->getType(), sendToListener);
 			}
 
 			void GenericMessenger::addMessageToCurrentQueue(MessagePtr message)

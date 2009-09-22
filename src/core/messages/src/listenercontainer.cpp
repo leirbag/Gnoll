@@ -40,6 +40,7 @@ namespace Gnoll
 				}
 			}
 
+                        // TODO : put concurrency back to container
 			ListenerContainer::ListenerContainer()
 			{
 			}
@@ -107,7 +108,14 @@ namespace Gnoll
 				return it != ContainerType::iterator();
 			}
 
-			void ListenerContainer::forEach(const MessageType & messageType, boost::function<void (ListenerPtr &)> function)
+			bool ListenerContainer::hasListenerForType(const MessageType & messageType)
+			{
+				ContainerType::iterator it = m_listeners.lower_bound(messageType);
+
+				return it != m_listeners.end();
+			}
+
+			void ListenerContainer::forEach(const MessageType & messageType, ForEachFunction function)
 			{
 				ContainerType::iterator itEnd = m_listeners.upper_bound(messageType);
 
@@ -118,6 +126,6 @@ namespace Gnoll
 			}
 
 		}
-  }
+	}
 }
 
