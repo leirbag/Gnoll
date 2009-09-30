@@ -69,7 +69,7 @@ namespace Gnoll
 
 			GenericMessenger::~GenericMessenger()
 			{
-                            delete m_listeners;
+				delete m_listeners;
 			}
 
 			void GenericMessenger::throwIfTypeNotValid(const MessageType & type)

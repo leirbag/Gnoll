@@ -40,7 +40,7 @@ namespace Gnoll
 				}
 			}
 
-                        // TODO : put concurrency back to container
+			// TODO : put concurrency back to container
 			ListenerContainer::ListenerContainer()
 			{
 			}
