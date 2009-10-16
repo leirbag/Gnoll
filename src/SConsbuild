@@ -52,5 +52,5 @@ sourceFiles.append(Glob('./core/src/*.cpp', strings=True))
 sourceFiles.append(Glob('./core/messages/src/*.cpp', strings=True))
 sourceFiles.append(Glob('./input/src/*.cpp', strings=True))
 
-print binDir
-env.Alias('build', env.Program(binDir + 'gnoll', sourceFiles))
+env.Alias('gnollTarget', env.Program(binDir + 'gnoll', sourceFiles))
+

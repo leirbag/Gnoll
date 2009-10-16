@@ -44,13 +44,6 @@ def parseConfigFile(env, filename):
 
 
 #
-# Check the configuration
-#
-def check(target, source, env):
-	SConscript('src/SConscheck')
-
-
-#
 # Generate the documentation
 #
 def doc(target, source, env):
@@ -210,22 +203,25 @@ if ARGUMENTS.get('do_log', '0') == '1' or env['do_log'] == '1':
 Export('env')
 Export('configProject')
 
+env.Alias('check',   SConscript('src/SConscheck', exports=['env']))
 env.Alias('build',   Alias('check'))
+env.Alias('build',   Alias('gnollTarget'))
 env.Alias('tests',   Alias('check'))
-env.Alias('install',   Alias('build'))
+env.Alias('install', Alias('build'))
 
-AlwaysBuild(env.Alias('doc',   action = doc))
-AlwaysBuild(env.Alias('check', action = check))
+env.AlwaysBuild('check')
+
+env.Alias('doc',   action = doc)
 
 binDir = "./"
 if SCons.__version__ < "1.2.0":
 	Export('binDir')
-	AlwaysBuild(env.Alias('build', SConscript('src/SConsbuild')))
-	AlwaysBuild(env.Alias('tests', SConscript('src/SConstests')))
+	env.Alias('build', SConscript('src/SConsbuild'))
+	env.Alias('tests', SConscript('src/SConstests'))
 else:
 	binDir = "../../"
 	Export('binDir')
-	AlwaysBuild(env.Alias('build', SConscript('src/SConsbuild', variant_dir="build/" + build_dir)))
-	AlwaysBuild(env.Alias('tests', SConscript('src/SConstests', variant_dir="build/" + build_dir)))
+	env.Alias('build', SConscript('src/SConsbuild', variant_dir="build/" + build_dir, exports=['env']))
+	env.Alias('tests', SConscript('src/SConstests', variant_dir="build/" + build_dir, exports=['env']))
 
 env.Alias('install', install(env))

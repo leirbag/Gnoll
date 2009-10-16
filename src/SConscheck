@@ -20,6 +20,8 @@
 
 import os
 
+Import('env')
+Import('configProject')
 
 #
 # Print the current configuration
@@ -342,6 +344,4 @@ def checkGnoll(env, configProject):
 #
 # Main
 #
-Import('env')
-Import('configProject')
 checkGnoll(env, configProject)
