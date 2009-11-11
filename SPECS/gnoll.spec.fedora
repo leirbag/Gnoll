@@ -42,7 +42,7 @@ scons %{?_smp_mflags} gnoll
 
 %install
 mkdir -p $RPM_BUILD_ROOT/usr/
-scons install prefix=$RPM_BUILD_ROOT/usr/
+scons install prefix=$RPM_BUILD_ROOT/usr/ ogre_lib_path=%{_libdir}/OGRE/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -51,20 +51,25 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc README COPYING AUTHORS
-/usr/bin/gnoll
+%{_bindir}/gnoll
 
 
 %files example
 %defattr(-,root,root,-)
 %doc README COPYING AUTHORS
-/usr/share/gnoll-example/data/*
-/usr/bin/gnoll-example
+%dir %{_datadir}/gnoll-example
+%dir %{_datadir}/gnoll-example/data
+%{_datadir}/gnoll-example/data/*
+%{_bindir}/gnoll-example
 
 
 
 
 
 %changelog
+
+* Tue Nov 10 2009 Bruno Mahe <bruno[AT]gnoll.org>
+- Use macros to specify paths
 
 * Wed Oct 8 2008 Bruno Mahe <bruno[AT]gnoll.org>
 - Add sub-package gnoll-example containing all the example data
