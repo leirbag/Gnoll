@@ -3,15 +3,21 @@
 # First we make sure we got the revision
 if [ $# -lt 1 ]
 then
-	echo "You need to pass the revision you wish to extract"
+	echo "You need to pass the revision you wish to extract at least"
 	exit -1
 fi
 
 
-VERSION=$1
 NAME=gnoll
+VERSION=$1
+FILENAME=VERSION
 
-COMMAND="git archive --format=tar --prefix=${NAME}-${VERSION}/ ${VERSION} | gzip > ${NAME}-${VERSION}.tar.gz"
+if [ -n $2 ]
+then
+	FILENAME=$2
+fi
+
+COMMAND="git archive --format=tar --prefix=${NAME}-${FILENAME}/ ${VERSION} | gzip > ${NAME}-${FILENAME}.tar.gz"
 
 
 echo "$COMMAND"
