@@ -92,12 +92,13 @@ def install(env):
 		print "No need to create %s. It already exists" % (logDir)
 
 
+	launcherEnv = env.Clone()
 	# If we are building a rpm,
 	# install_bin and install_data are prefixed by the
 	# rpm script build root
 	if os.environ.has_key('RPM_BUILD_ROOT') :
-		env['install_bin']  = env['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
-		env['install_data'] = env['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
+		launcherEnv['install_bin']  = env['install_bin'].replace(os.environ['RPM_BUILD_ROOT'], '')
+		launcherEnv['install_data'] = env['install_data'].replace(os.environ['RPM_BUILD_ROOT'], '')
 
 	# Add a pre action to parse config files
 	# We generate the list of all config file and delete the
@@ -111,7 +112,7 @@ def install(env):
 
 	files2 = []
 	for f in files:
-		files2.append(parseConfigFile(env, f))
+		files2.append(parseConfigFile(launcherEnv, f))
 
 	# Create the launcher for each plateform
 	launcher_sh = ""
@@ -122,7 +123,7 @@ def install(env):
 
 	launcher_filename = 'gnoll-example'
 	launcher          = file(launcher_filename, "w")
-	launcher.write(launcher_sh % (env))
+	launcher.write(launcher_sh % (launcherEnv))
 	launcher.close()
 
 	# Installation
