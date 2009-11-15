@@ -20,7 +20,7 @@ build-stamp:
 	dh_testdir
 
 	# Add here commands to compile the package.
-	scons gnoll debug=1 do_log=1
+	scons build debug=1 do_log=1
 	# --- end custom part for compiling
 
 	touch build-stamp

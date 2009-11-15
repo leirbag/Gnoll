@@ -2,7 +2,7 @@ Source: gnoll
 Section: games
 Priority: extra
 Maintainer: Bruno Mahé <bruno@gnoll.org>
-Build-Depends: debhelper (>= 7), libogre-dev, libceguiogre14, libceguiogre-dev, libxml++2.6-2, libboost-dev, libboost-thread-dev, libboost-program-options-dev, scons, g++, libois-dev, libopenal-dev, libalut-dev, debian-builder, libboost-filesystem-dev, libboost-filesystem1.34.1, libvorbis-dev, libvorbis0a, libvorbisfile3, libcegui-mk2-1, libcegui-mk2-dev
+Build-Depends: debhelper (>= 7), libogre-dev, libceguiogre-dev, libxml++2.6-2, libboost-dev, libboost-thread-dev, libboost-program-options-dev, scons, g++, libois-dev, libopenal-dev, libalut-dev, debian-builder, libboost-filesystem-dev, libvorbis-dev, libvorbis0a, libvorbisfile3, libcegui-mk2-1, libcegui-mk2-dev
 Standards-Version: 3.7.3
 Homepage: http://www.gnoll.org
 
