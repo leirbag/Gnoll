@@ -1,5 +1,5 @@
 Name: gnoll
-Version: 0.1.7
+Version: master
 Release: 0%{?dist}
 Summary: A 3D action/rpg game engine
 
