@@ -2,13 +2,13 @@ Source: gnoll
 Section: games
 Priority: extra
 Maintainer: Bruno Mahé <bruno@gnoll.org>
-Build-Depends: debhelper (>= 7), libogre-dev, libceguiogre-dev, libxml++2.6-2, libboost-dev, libboost-thread1.40-dev, libboost-program-options1.40-dev, scons, g++, libois-dev, libopenal-dev, libalut-dev, debian-builder, libboost-filesystem1.40-dev, libvorbis-dev, libvorbis0a, libvorbisfile3, libcegui-mk2-1, libcegui-mk2-dev
+Build-Depends: debhelper (>= 7), libogre-dev, libceguiogre-dev, libxml++2.6-2, libboost-dev, libboost-thread1.38-dev, libboost-program-options1.38-dev, scons, g++, libois-dev, libopenal-dev, libalut-dev, debian-builder, libboost-filesystem1.38-dev, libvorbis-dev, libvorbis0a, libvorbisfile3, libcegui-mk2-1, libcegui-mk2-dev
 Standards-Version: 3.7.3
 Homepage: http://www.gnoll.org
 
 Package: gnoll
 Architecture: any
-Depends: libogremain-1.6.1, libceguiogrerenderer-1.6.1, libxml++2.6-2, libboost-thread1.40.0, libboost-program-options1.40.0, libois-1.2.0, libopenal1, libalut0, libboost-filesystem1.40.0, libvorbis0a, libvorbisfile3, libcegui-mk2-1
+Depends: libogremain-1.6.1, libceguiogrerenderer-1.6.1, libxml++2.6-2, libboost-thread1.38.0, libboost-program-options1.38.0, libois-1.2.0, libopenal1, libalut0, libboost-filesystem1.38.0, libvorbis0a, libvorbisfile3, libcegui-mk2-1
 Description: 3D Action/RPG Game Engine
 
 Package: gnoll-doc
