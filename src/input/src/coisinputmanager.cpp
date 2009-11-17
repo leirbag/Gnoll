@@ -61,8 +61,8 @@ COISInputManager::~COISInputManager( void )
 
 		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Destroying OIS" );
 		OIS::InputManager::destroyInputSystem( mInputSystem );
- 		mInputSystem = 0;
-    }
+		mInputSystem = 0;
+	}
 }
 
 void COISInputManager::initialise(  )
@@ -135,11 +135,11 @@ void COISInputManager::initialise(  )
 
 		// If possible create a buffered joystick
 #ifdef HAVE_OIS_1_2
-		GNOLL_LOG() << "JOYSTICK: " << mInputSystem->getNumberOfDevices( OIS::OISJoyStick ) << " detected\n"; 
+		GNOLL_LOG() << "JOYSTICK: " << mInputSystem->getNumberOfDevices( OIS::OISJoyStick ) << " detected\n";
 		if( mInputSystem->getNumberOfDevices( OIS::OISJoyStick ) > 0 )
 		{
 #else
-		GNOLL_LOG() << "JOYSTICK: " << mInputSystem->numJoySticks() << " detected\n"; 
+		GNOLL_LOG() << "JOYSTICK: " << mInputSystem->numJoySticks() << " detected\n";
 		if( mInputSystem->numJoySticks() > 0 )
 		{
 #endif
@@ -148,9 +148,9 @@ void COISInputManager::initialise(  )
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: joystick found" );
 
 
-			GNOLL_LOG() << "JOYSTICK: " << mJoystick->axes() << " axes detected\n"; 
-			GNOLL_LOG() << "JOYSTICK: " << mJoystick->buttons() << " buttons detected\n"; 
-			GNOLL_LOG() << "JOYSTICK: " << mJoystick->hats() << " hats detected\n"; 
+			GNOLL_LOG() << "JOYSTICK: " << mJoystick->axes() << " axes detected\n";
+			GNOLL_LOG() << "JOYSTICK: " << mJoystick->buttons() << " buttons detected\n";
+			GNOLL_LOG() << "JOYSTICK: " << mJoystick->hats() << " hats detected\n";
 
 		} else {
 
@@ -171,9 +171,9 @@ void COISInputManager::capture( void ) {
 		mMouse->capture();
 	}
 
-    if( mJoystick ) {
-        mJoystick->capture();
-    }
+	if( mJoystick ) {
+		mJoystick->capture();
+	}
 
 }
 

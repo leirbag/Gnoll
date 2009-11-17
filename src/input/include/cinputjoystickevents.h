@@ -34,13 +34,13 @@
 
 
 
-namespace Gnoll 
+namespace Gnoll
 {
-	namespace Input 
+	namespace Input
 	{
 		enum JoystickEventType
 		{
-			Axis = 0, 
+			Axis = 0,
 			Button
 		};
 
@@ -57,7 +57,7 @@ namespace Gnoll
 			 * Which button or axis triggered this event
 			 */
 			int which;
-			
+
 
 			/**
 			 * Type of event
