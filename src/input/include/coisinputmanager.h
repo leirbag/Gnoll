@@ -48,6 +48,26 @@ using boost::any_cast;
 class COISInputManager : public OIS::KeyListener, public OIS::MouseListener, public OIS::JoyStickListener
 {
 	public:
+
+		/**
+		 * Returns Message type when a joystick's button is pressed
+		 * @return Message type constant for joystick's button event
+		 */
+		inline static const char * MESSAGE_TYPE_JOYSTICK_BUTTON_PRESSED() {return "JOYSTICK_BUTTON_PRESSED";}
+
+		/**
+		 * Returns Message type when a joystick's button is pressed
+		 * @return Message type constant for joystick's button event
+		 */
+		inline static const char * MESSAGE_TYPE_JOYSTICK_BUTTON_RELEASED() {return "JOYSTICK_BUTTON_RELEASED";}
+
+		/**
+		 * Returns Message type when a joystick's axis is moved
+		 * @return Message type constant for joystick's axis event
+		 */
+		inline static const char * MESSAGE_TYPE_JOYSTICK_AXIS_MOVED() {return "JOYSTICK_AXIS_MOVED";}
+
+
 		COISInputManager( );
 		virtual ~COISInputManager( void );
 

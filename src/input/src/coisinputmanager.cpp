@@ -21,8 +21,8 @@
 #include "../include/cinputjoystickevents.h"
 #include "../include/coisinputmanager.h"
 #include "../../core/include/cmessagemodule.h"
-#include "log/include/clogmacros.h"
-#include "../../log/include/clogmodule.h"
+#include "../../core/include/cmessage.h"
+#include "../../log/include/clogmacros.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
 
@@ -301,12 +301,12 @@ bool COISInputManager::buttonPressed( const OIS::JoyStickEvent &arg, int button 
 {
 	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button pressed" );
 
-	CMessageType axisMovedType("JOYSTICK_BUTTON_PRESSED");
+	Messages::MessageType buttonPressedType(COISInputManager::MESSAGE_TYPE_JOYSTICK_BUTTON_PRESSED());
 
 	Gnoll::Input::JoystickEvent joystickEvent(arg, button, Gnoll::Input::Axis);
 
 	shared_ptr<boost::any> data (new boost::any(joystickEvent) ) ;
-	shared_ptr<CMessage>  message (new CMessage(axisMovedType, data ));
+	shared_ptr<CMessage>  message (new CMessage(buttonPressedType, data ));
 
 	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
 
@@ -317,12 +317,12 @@ bool COISInputManager::buttonReleased( const OIS::JoyStickEvent &arg, int button
 {
 	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button released" );
 
-	CMessageType axisMovedType("JOYSTICK_BUTTON_RELEASED");
+	Messages::MessageType buttonReleasedType(COISInputManager::MESSAGE_TYPE_JOYSTICK_BUTTON_RELEASED());
 
 	Gnoll::Input::JoystickEvent joystickEvent(arg, button, Gnoll::Input::Axis);
 
 	shared_ptr<boost::any> data (new boost::any(joystickEvent) ) ;
-	shared_ptr<CMessage>  message (new CMessage(axisMovedType, data ));
+	shared_ptr<CMessage>  message (new CMessage(buttonReleasedType, data ));
 
 	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
 
@@ -333,7 +333,7 @@ bool COISInputManager::axisMoved( const OIS::JoyStickEvent &arg, int axis )
 {
 	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: axis moved " );
 
-	CMessageType axisMovedType("JOYSTICK_AXIS_MOVED");
+	Messages::MessageType axisMovedType(COISInputManager::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
 
 	Gnoll::Input::JoystickEvent joystickEvent(arg, axis, Gnoll::Input::Axis);
 
