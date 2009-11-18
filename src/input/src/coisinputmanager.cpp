@@ -301,7 +301,7 @@ bool COISInputManager::buttonPressed( const OIS::JoyStickEvent &arg, int button 
 {
 	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button pressed" );
 
-	CMessageType axisMovedType("JOYSTICK_BUTTON_pressed");
+	CMessageType axisMovedType("JOYSTICK_BUTTON_PRESSED");
 
 	Gnoll::Input::JoystickEvent joystickEvent(arg, button, Gnoll::Input::Axis);
 
