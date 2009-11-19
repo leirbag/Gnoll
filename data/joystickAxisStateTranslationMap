@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<dynamicobject instance="joystickAxisEventTranslationMap">
+	<attribute name="+1">
+		<list>
+			<string value="ACTION_STEP_FORWARD"/>
+		</list>
+	</attribute>
+	<attribute name="-1">
+		<list>
+			<string value="ACTION_STEP_FORWARD"/>
+		</list>
+	</attribute>
+	<attribute name="-3">
+		<list>
+			<string value="ACTION_ROTATE_CAMERA_LEFT"/>
+		</list>
+	</attribute>
+	<attribute name="+3">
+		<list>
+			<string value="ACTION_ROTATE_CAMERA_RIGHT"/>
+		</list>
+	</attribute>
+	<attribute name="-2">
+		<list>
+			<string value="ACTION_ROTATE_CAMERA_DOWN"/>
+		</list>
+	</attribute>
+	<attribute name="+2">
+		<list>
+			<string value="ACTION_ROTATE_CAMERA_UP"/>
+		</list>
+	</attribute>
+</dynamicobject>
+

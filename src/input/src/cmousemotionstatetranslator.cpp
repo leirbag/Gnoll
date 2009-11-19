@@ -90,9 +90,9 @@ namespace Gnoll
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
-            try
-            {
-			    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+			try
+			{
+				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				GNOLL_LOG() << "Message ajoute [BORDER_X]\n";
 			}
 			catch(...)
@@ -108,9 +108,9 @@ namespace Gnoll
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
-            try
-            {
-			    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+			try
+			{
+				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				GNOLL_LOG() << "Message ajoute [BORDER_Y]\n";
 			}
 			catch(...)

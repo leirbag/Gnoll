@@ -299,7 +299,7 @@ bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButt
 
 bool COISInputManager::buttonPressed( const OIS::JoyStickEvent &arg, int button )
 {
-	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button pressed" );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("JOYSTICK: Button pressed");
 
 	Messages::MessageType buttonPressedType(COISInputManager::MESSAGE_TYPE_JOYSTICK_BUTTON_PRESSED());
 
@@ -315,7 +315,7 @@ bool COISInputManager::buttonPressed( const OIS::JoyStickEvent &arg, int button 
 
 bool COISInputManager::buttonReleased( const OIS::JoyStickEvent &arg, int button )
 {
-	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: Button released" );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("JOYSTICK: Button released");
 
 	Messages::MessageType buttonReleasedType(COISInputManager::MESSAGE_TYPE_JOYSTICK_BUTTON_RELEASED());
 
@@ -331,7 +331,7 @@ bool COISInputManager::buttonReleased( const OIS::JoyStickEvent &arg, int button
 
 bool COISInputManager::axisMoved( const OIS::JoyStickEvent &arg, int axis )
 {
-	Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: axis moved " );
+	Gnoll::Log::CLogModule::getInstancePtr()->logMessage("JOYSTICK: axis moved");
 
 	Messages::MessageType axisMovedType(COISInputManager::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
 

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<dynamicobject instance="joystickConfig">
+  <attribute name="sensibility">
+    <float value="0.1"/>
+  </attribute>
+</dynamicobject>

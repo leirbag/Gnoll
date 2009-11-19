@@ -26,7 +26,10 @@
 #include "../include/cmousebuttoneventstranslator.h"
 #include "../include/cmousebuttoneventstrigger.h"
 #include "../include/cmousebuttonstatetranslator.h"
+#include "../include/joystickaxiseventstranslator.h"
+#include "../include/joystickaxisstatetranslator.h"
 #include "../include/crulemanager.h"
+#include "../include/coisinputmanager.h"
 #include "../../core/messages/include/listener.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../../dynamicobject/include/dynamicobject.h"
@@ -54,6 +57,7 @@ namespace Gnoll
 			activateKeyboardTranslation();
 			activateMouseMotionTranslation();
 			activateMouseButtonTranslation();
+			activateJoystickAxisTranslation();
 			activateRuleManager();
 		}
 
@@ -66,6 +70,7 @@ namespace Gnoll
 			deactivateKeyboardTranslation();
 			deactivateMouseMotionTranslation();
 			deactivateMouseButtonTranslation();
+			deactivateJoystickAxisTranslation();
 		}
 
 
@@ -333,6 +338,57 @@ namespace Gnoll
 			shared_ptr<CMessage>  message (new CMessage(updateMouse, m_periodData ));
 			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (*m_periodData) );
 
+		}
+
+
+
+		void CInputEventsTranslator::activateJoystickAxisTranslation()
+		{
+
+			Messages::MessageType axisEventType(COISInputManager::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
+
+			joystickAxisEventsTranslator = shared_ptr<Messages::Listener> ( new JoystickAxisEventsTranslator() );
+			joystickAxisStateTranslator  = shared_ptr<Messages::Listener> ( new JoystickAxisStateTranslator() );
+
+			try
+			{
+				messageManager->addListener ( joystickAxisEventsTranslator, axisEventType );
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "joystickAxisEventsTranslator listener installed" );
+
+				messageManager->addListener ( joystickAxisStateTranslator, axisEventType );
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "joystickAxisStateTranslator listener installed" );
+			}
+			catch(...)
+			{
+				throw;
+			}
+
+		}
+
+
+		void CInputEventsTranslator::deactivateJoystickAxisTranslation()
+		{
+
+			Messages::MessageType axisEventType(COISInputManager::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
+
+			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			Messages::Messenger* messageManager = messageModule->getMessageManager();
+
+			try
+			{
+				messageManager->delListener ( joystickAxisEventsTranslator, axisEventType );
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "joystickAxisEventsTranslator listener removed" );
+
+				messageManager->delListener ( joystickAxisStateTranslator, axisEventType );
+				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "joystickAxisStateTranslator listener removed" );
+			}
+			catch(...)
+			{
+				throw;
+			}
 		}
 
 

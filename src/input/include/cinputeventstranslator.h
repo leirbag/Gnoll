@@ -77,6 +77,13 @@ namespace Gnoll
 				shared_ptr<Messages::Listener> mouseButtonEventsTrigger;
 
 				/**
+				 * Translators for joystick axis generated messages
+				 */
+				shared_ptr<Messages::Listener> joystickAxisEventsTranslator;
+				shared_ptr<Messages::Listener> joystickAxisStateTranslator;
+
+
+				/**
 				 * Rule manager
 				 */
 				shared_ptr<Messages::Listener> ruleManager;
@@ -136,6 +143,17 @@ namespace Gnoll
 				 * Deactivate mouse button events translation
 				 */
 				void deactivateMouseButtonTranslation();
+
+				/**
+				 * Activate mouse button events translation
+				 */
+				void activateJoystickAxisTranslation();
+
+				/**
+				 * Deactivate mouse button events translation
+				 */
+				void deactivateJoystickAxisTranslation();
+
 
 				/**
 				 * Activate rule manager
