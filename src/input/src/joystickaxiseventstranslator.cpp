@@ -34,6 +34,8 @@
 
 
 #include "../../config.h"
+#include "../include/oisjoysticklistener.h"
+using namespace Gnoll::Input;
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -45,7 +47,7 @@ namespace Gnoll
 	namespace Input
 	{
 
-		JoystickAxisEventsTranslator::JoystickAxisEventsTranslator(): axisMoved(COISInputManager::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED())
+		JoystickAxisEventsTranslator::JoystickAxisEventsTranslator(): axisMoved(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED())
 		{
 
 			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();

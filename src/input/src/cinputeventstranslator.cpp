@@ -37,6 +37,8 @@
 #include "../../dynamicobject/include/integer.h"
 #include "../../time/include/ctimemodule.h"
 #include "../../log/include/clogmodule.h"
+#include "../include/oisjoysticklistener.h"
+using namespace Gnoll::Input;
 
 
 using namespace Gnoll::Core;
@@ -345,7 +347,7 @@ namespace Gnoll
 		void CInputEventsTranslator::activateJoystickAxisTranslation()
 		{
 
-			Messages::MessageType axisEventType(COISInputManager::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
+			Messages::MessageType axisEventType(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
@@ -372,7 +374,7 @@ namespace Gnoll
 		void CInputEventsTranslator::deactivateJoystickAxisTranslation()
 		{
 
-			Messages::MessageType axisEventType(COISInputManager::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
+			Messages::MessageType axisEventType(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
 
 			CMessageModule* messageModule = CMessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();

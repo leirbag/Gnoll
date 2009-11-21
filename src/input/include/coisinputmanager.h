@@ -45,27 +45,9 @@ using boost::any_cast;
 #define __COISINPUTMANAGER_H__
 
 
-class COISInputManager : public OIS::KeyListener, public OIS::MouseListener, public OIS::JoyStickListener
+class COISInputManager : public OIS::KeyListener, public OIS::MouseListener
 {
 	public:
-
-		/**
-		 * Returns Message type when a joystick's button is pressed
-		 * @return Message type constant for joystick's button event
-		 */
-		inline static const char * MESSAGE_TYPE_JOYSTICK_BUTTON_PRESSED() {return "JOYSTICK_BUTTON_PRESSED";}
-
-		/**
-		 * Returns Message type when a joystick's button is pressed
-		 * @return Message type constant for joystick's button event
-		 */
-		inline static const char * MESSAGE_TYPE_JOYSTICK_BUTTON_RELEASED() {return "JOYSTICK_BUTTON_RELEASED";}
-
-		/**
-		 * Returns Message type when a joystick's axis is moved
-		 * @return Message type constant for joystick's axis event
-		 */
-		inline static const char * MESSAGE_TYPE_JOYSTICK_AXIS_MOVED() {return "JOYSTICK_AXIS_MOVED";}
 
 
 		COISInputManager( );
@@ -94,15 +76,12 @@ class COISInputManager : public OIS::KeyListener, public OIS::MouseListener, pub
 		bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
 
 
-		bool buttonPressed( const OIS::JoyStickEvent &arg, int button );
-		bool buttonReleased( const OIS::JoyStickEvent &arg, int button );
-		bool axisMoved( const OIS::JoyStickEvent &arg, int axis );
-
-
 		OIS::InputManager	*mInputSystem;
 		OIS::Keyboard     *mKeyboard;
 		OIS::Mouse        *mMouse;
 		OIS::JoyStick     *mJoystick;
+
+		OIS::JoyStickListener* joystickListener;
 
 		unsigned int mMouseButtonsState;
 };
