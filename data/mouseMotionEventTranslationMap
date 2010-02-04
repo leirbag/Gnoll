@@ -2,22 +2,22 @@
 <dynamicobject instance="mouseMotionEventTranslationMap">
   <attribute name="-X">
 	<list>
-		<string value="ACTION_ROTATE_CAMERA_LEFT"/>
+		<string value="ROTATE_CAMERA_LEFT"/>
 	</list>
   </attribute>
   <attribute name="+X">
 	<list>
-		<string value="ACTION_ROTATE_CAMERA_RIGHT"/>
+		<string value="ROTATE_CAMERA_RIGHT"/>
 	</list>
   </attribute>
   <attribute name="-Y">
 	<list>
-		<string value="ACTION_ROTATE_CAMERA_DOWN"/>
+		<string value="ROTATE_CAMERA_DOWN"/>
 	</list>
   </attribute>
   <attribute name="+Y">
 	<list>
-		<string value="ACTION_ROTATE_CAMERA_UP"/>
+		<string value="ROTATE_CAMERA_UP"/>
 	</list>
   </attribute>
   <attribute name="-Z">

@@ -44,7 +44,6 @@ namespace Gnoll
 	{
 		DefaultCameraFreeFlyListener::DefaultCameraFreeFlyListener()
 		{
-			borderX = borderY = -1;
 		}
 
 		DefaultCameraFreeFlyListener::~DefaultCameraFreeFlyListener()
@@ -57,54 +56,41 @@ namespace Gnoll
 			float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
 
 			/**
-			 * Converts weak ptr m_pCamera to a shared_ptr<>
-			 * This is not an issue since cam has a very short live.
-			 *
-			 * We can't directly convert a weak_ptr<Camera> to a shared_ptr<CameraThirdPerson>
-			 */
-			shared_ptr<Camera> cam(m_pCamera);
+             * Converts weak ptr m_pCamera to a shared_ptr<>
+             * This is not an issue since cam has a very short live.
+             *
+             * We can't directly convert a weak_ptr<Camera> to a shared_ptr<CameraThirdPerson>
+             */
+            shared_ptr<Camera> cam(m_pCamera);
 
-			/**
-			 * Static conversion to a shared_ptr<CameraThirdPerson>
-			 */
-			shared_ptr<CameraFreeFly> pCam = static_pointer_cast<CameraFreeFly>(cam);
+            /**
+             * Static conversion to a shared_ptr<CameraThirdPerson>
+             */
+            shared_ptr<CameraFreeFly> pCam = static_pointer_cast<CameraFreeFly>(cam);
 
-			if(ae.action == "BORDER_X")
-				borderX = ae.intensity;
-			if(ae.action == "BORDER_Y")
-				borderY = ae.intensity;
+            if(ae.action == "ACTION_STRAFE_LEFT")
+                pCam->strafeLR(ae.intensity * lasttime * -1);
+            if(ae.action == "ACTION_STRAFE_RIGHT")
+                pCam->strafeLR(ae.intensity * lasttime);
+            if(ae.action == "ACTION_STEP_FORWARD")
+                pCam->move(ae.intensity * lasttime);
+            if(ae.action == "ACTION_STEP_BACKWARD")
+                pCam->move(ae.intensity * lasttime * -1);
 
-			if(ae.action == "ACTION_STRAFE_LEFT")
-				pCam->strafeLR(ae.intensity * lasttime * -1);
-			if(ae.action == "ACTION_STRAFE_RIGHT")
-				pCam->strafeLR(ae.intensity * lasttime);
-			if(ae.action == "ACTION_STEP_FORWARD")
-				pCam->move(ae.intensity * lasttime);
-			if(ae.action == "ACTION_STEP_BACKWARD")
-				pCam->move(ae.intensity * lasttime * -1);
+            if(ae.action == "ACTION_ROTATE_CAMERA_LEFT")
+                pCam->rotateAroundAxisY(ae.intensity * lasttime);
 
-			float sensibility = -20.0f;  // Negative pour inverser les axes en meme temps
+            if(ae.action == "ACTION_ROTATE_CAMERA_RIGHT")
+                pCam->rotateAroundAxisY(ae.intensity * lasttime * -1);
 
-			if(borderX >= 0)
-			{
-				if(ae.action == "ACTION_ROTATE_CAMERA_LEFT" && borderX < 0.1)
-					pCam->rotateAroundAxisY(ae.intensity * lasttime * sensibility);
+            if(ae.action == "ACTION_ROTATE_CAMERA_UP")
+                pCam->rotateAroundAxisX(ae.intensity * lasttime * -1);
 
-				if(ae.action == "ACTION_ROTATE_CAMERA_RIGHT" && borderX > 0.9)
-					pCam->rotateAroundAxisY(ae.intensity * lasttime * sensibility);
-			}
+            if(ae.action == "ACTION_ROTATE_CAMERA_DOWN")
+                pCam->rotateAroundAxisX(ae.intensity * lasttime);
 
-			if(borderY >= 0)
-			{
-				if(ae.action == "ACTION_ROTATE_CAMERA_UP" && borderY > 0.9)
-					pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
-
-				if(ae.action == "ACTION_ROTATE_CAMERA_DOWN" && borderY < 0.1)
-					pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
-			}
-
-			// Update
-			pCam->update(lasttime);
-		}
-	};
+            // Update
+            pCam->update(lasttime);
+        }
+    };
 };

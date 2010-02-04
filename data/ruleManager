@@ -3,6 +3,11 @@
 	<attribute name="ruleList">
 		<list>
 			<string value="test_rule"/>
+
+            <string value="rule_border_bottom"/>
+            <string value="rule_border_top"/>
+            <string value="rule_border_left"/>
+            <string value="rule_border_right"/>
 		</list>
 	</attribute>
 </dynamicobject>

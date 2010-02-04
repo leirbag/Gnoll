@@ -38,10 +38,6 @@ namespace Gnoll
 	{
 		class DefaultCameraFreeFlyListener : public CMessageListenerCamera
 		{
-		private:
-			// HACK
-			float borderX, borderY;
-
 		public:
 			/**
 			 * This is a constructor

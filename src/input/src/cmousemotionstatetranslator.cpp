@@ -53,7 +53,13 @@ namespace Gnoll
 			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 			this->mouseConfig = pom->load("mouseConfig");
 
-			/**
+            /**
+             * Border data
+             */
+            shared_ptr<Float> defaultBorder = shared_ptr<Float> (new Float(0.0f));
+			border = *(mouseConfig->getAttributeOrDefault<Float>("border", defaultBorder));
+
+            /**
 			 * Get window size
 			 */
 			Ogre::RenderWindow* renderWindow = CGraphicModule::getInstancePtr()->getRenderWindow();
@@ -83,39 +89,113 @@ namespace Gnoll
 		}
 
 
-		void CMouseMotionStateTranslator::sendXBorderState(MouseEvent mouseEvent)
+		void CMouseMotionStateTranslator::sendLeftBorderState(MouseEvent mouseEvent)
 		{
 			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
-			ActionEvent actionEvent ("BORDER_X", mouseEvent.abX / maxX);
+
+            /*
+             * We send a BORDER message with intensity of (-)1 if the cursor is in the
+             * border, else intensity is set up to 0
+             */
+            float value = 0.0f;
+            if(mouseEvent.abX <= border)
+                value = 1.0f;
+
+			ActionEvent actionEvent ("BORDER_LEFT", value);
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 			try
 			{
 				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
-				GNOLL_LOG() << "Message ajoute [BORDER_X]\n";
+				GNOLL_LOG() << "Message ajoute [BORDER_LEFT]\n";
 			}
 			catch(...)
 			{
-				GNOLL_LOG() << "Message NON ajoute [BORDER_X]\n";
+				GNOLL_LOG() << "Message NON ajoute [BORDER_LEFT]\n";
 			}
 		}
 
-		void CMouseMotionStateTranslator::sendYBorderState(MouseEvent mouseEvent)
+
+		void CMouseMotionStateTranslator::sendRightBorderState(MouseEvent mouseEvent)
 		{
 			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
-			ActionEvent actionEvent ("BORDER_Y", mouseEvent.abY / maxY);
+
+            /*
+             * We send a BORDER message with intensity of 1 if the cursor is in the
+             * border, else intensity is set up to 0
+             */
+            float value = 0.0f;
+            if(mouseEvent.abX >= maxX - border)
+                value = 1.0f;
+
+			ActionEvent actionEvent ("BORDER_RIGHT", value);
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
 
 			try
 			{
 				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
-				GNOLL_LOG() << "Message ajoute [BORDER_Y]\n";
+				GNOLL_LOG() << "Message ajoute [BORDER_RIGHT]\n";
 			}
 			catch(...)
 			{
-				GNOLL_LOG() << "Message NON ajoute [BORDER_Y]\n";
+				GNOLL_LOG() << "Message NON ajoute [BORDER_RIGHT]\n";
+			}
+		}
+
+        void CMouseMotionStateTranslator::sendBottomBorderState(MouseEvent mouseEvent)
+		{
+			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
+
+            /*
+             * We send a BORDER message with intensity of 1 if the cursor is in the
+             * border, else intensity is set up to 0
+             */
+            float value = 0.0f;
+            if(mouseEvent.abY <= border)
+                value = 1.0f;
+
+			ActionEvent actionEvent ("BORDER_BOTTOM", value);
+			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
+			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+
+			try
+			{
+				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+				GNOLL_LOG() << "Message ajoute [BORDER_BOTTOM]\n";
+			}
+			catch(...)
+			{
+				GNOLL_LOG() << "Message NON ajoute [BORDER_BOTTOM]\n";
+			}
+		}
+
+
+        void CMouseMotionStateTranslator::sendTopBorderState(MouseEvent mouseEvent)
+		{
+			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
+
+            /*
+             * We send a BORDER message with intensity of 1 if the cursor is in the
+             * border, else intensity is set up to 0
+             */
+            float value = 0.0f;
+            if(mouseEvent.abY >= maxY - border)
+                value = 1.0f;
+
+			ActionEvent actionEvent ("BORDER_TOP", value);
+			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
+			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+
+			try
+			{
+				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+				GNOLL_LOG() << "Message ajoute [BORDER_TOP]\n";
+			}
+			catch(...)
+			{
+				GNOLL_LOG() << "Message NON ajoute [BORDER_TOP]\n";
 			}
 		}
 
@@ -126,8 +206,10 @@ namespace Gnoll
 			 */
 			MouseEvent mouseMotionEvent = message->getData<MouseEvent>();
 
-			sendXBorderState(mouseMotionEvent);
-			sendYBorderState(mouseMotionEvent);
+			sendLeftBorderState(mouseMotionEvent);
+			sendRightBorderState(mouseMotionEvent);
+            sendTopBorderState(mouseMotionEvent);
+			sendBottomBorderState(mouseMotionEvent);
 		}
 	};
 };

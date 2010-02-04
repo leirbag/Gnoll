@@ -71,8 +71,6 @@ namespace Gnoll
 			 */
 			shared_ptr<CameraThirdPerson> pCam = static_pointer_cast<CameraThirdPerson>(cam);
 
-			ae.intensity = ae.intensity * -1.0f;
-
 			// ZOOM
 			if(ae.action == "ACTION_ZOOM_CAMERA_IN")
 				pCam->setOffset(pCam->getOffset() + (ae.intensity * (lasttime / 1000.0f)));
@@ -90,15 +88,14 @@ namespace Gnoll
 				pCam->rotateAroundAxisX(-ae.intensity * lasttime);
 
 			// MOUSE
-			float sensibility = -5.0f;  // Negative pour inverser les axes en meme temps
 			if(ae.action == "ACTION_ROTATE_CAMERA_LEFT")
-				pCam->rotateAroundAxisY(ae.intensity * lasttime * sensibility);
+				pCam->rotateAroundAxisY(ae.intensity * lasttime);
 			if(ae.action == "ACTION_ROTATE_CAMERA_RIGHT")
-				pCam->rotateAroundAxisY(ae.intensity * lasttime * sensibility);
+				pCam->rotateAroundAxisY(ae.intensity * lasttime);
 			if(ae.action == "ACTION_ROTATE_CAMERA_UP")
-				pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
+				pCam->rotateAroundAxisX(ae.intensity * lasttime);
 			if(ae.action == "ACTION_ROTATE_CAMERA_DOWN")
-				pCam->rotateAroundAxisX(ae.intensity * lasttime * sensibility);
+				pCam->rotateAroundAxisX(ae.intensity * lasttime);
 
 			// Update
 			pCam->update(lasttime);

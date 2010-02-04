@@ -58,6 +58,19 @@ namespace Gnoll
 				 */
 				float maxY;
 
+
+                /**
+				 * Distance from the border when we send BORDER message
+				 */
+				float border;
+
+
+                /**
+				 * Sensibility of the mouse
+				 */
+				float sensibility;
+
+
 				/**
 				 * Messages::MessageType for MOUSE_MOVED messages
 				 */
@@ -71,16 +84,28 @@ namespace Gnoll
 				CMouseMotionStateTranslator();
 
 				/**
-				 * Send Y Border message
+				 * Send Left Border message
 				 * @param _mouseEvent Contains mouse motion information
 				 */
-				void sendYBorderState(MouseEvent mouseEvent);
+				void sendLeftBorderState(MouseEvent mouseEvent);
 
 				/**
-				 * Send X Border message
+				 * Send Right Border message
 				 * @param _mouseEvent Contains mouse motion information
 				 */
-				void sendXBorderState(MouseEvent mouseEvent);
+				void sendRightBorderState(MouseEvent mouseEvent);
+
+                /**
+				 * Send Up Border message
+				 * @param _mouseEvent Contains mouse motion information
+				 */
+				void sendTopBorderState(MouseEvent mouseEvent);
+
+				/**
+				 * Send Down Border message
+				 * @param _mouseEvent Contains mouse motion information
+				 */
+				void sendBottomBorderState(MouseEvent mouseEvent);
 
 				/**
 				* This is a destructor

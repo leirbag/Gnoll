@@ -6,4 +6,7 @@
   <attribute name="sensibility">
     <float value="1.0"/>
   </attribute>
+  <attribute name="border">
+    <float value="15"/>
+  </attribute>
 </dynamicobject>
