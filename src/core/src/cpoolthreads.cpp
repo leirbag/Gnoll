@@ -34,6 +34,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition.hpp>
+#include <boost/function/function0.hpp>
 #include <boost/thread/xtime.hpp>
 #include <utility>
 
