@@ -83,7 +83,7 @@ addInitialPage = False
 exportOgre = False
 isOgre3 = False
 exportPath = 0
-filesExportPath = "/home/antonin/ViracochaCo/projetviracocha/trunk/src"
+filesExportPath = "/home/leirbag/projects/"
 
 # Image used in the GUI
 # logo = Blender.Image.Load('logo.png')
@@ -419,11 +419,11 @@ def subdivide():
 				if i < len(columns)-1:
 					pageFiles[index].west  = rootObj.name + "-Page-" + str((i+1)*len(pages[i])+j+1)
 				if j < len(pages[i])-1:
-					pageFiles[index].south = rootObj.name + "-Page-" + str(i*len(pages[i])+j+2)
+					pageFiles[index].north = rootObj.name + "-Page-" + str(i*len(pages[i])+j+2)
 				if i:
 					pageFiles[index].east  = rootObj.name + "-Page-" + str((i-1)*len(pages[i])+j+1)
 				if j:
-					pageFiles[index].north = rootObj.name + "-Page-" + str(i*len(pages[i])+j)
+					pageFiles[index].south = rootObj.name + "-Page-" + str(i*len(pages[i])+j)
 
 		# Bound each scene's object to a page (if possible)
 		for obj in Scene.GetCurrent().objects:
@@ -447,32 +447,20 @@ def subdivide():
 					# - Gnoll starts to rotate the object, then it translates it along
 					#   rotated axis.
 
-					localX = obj.LocX - pages[int(pageX)][int(pageY)].LocX
-					localY = obj.LocY - pages[int(pageX)][int(pageY)].LocY
-					localZ = obj.LocZ - pages[int(pageX)][int(pageY)].LocZ
-
-					dist = hypot(localY, localZ)
-					angleX = atan2(localZ, localY)
-					objectDef.locZ = cos(obj.RotX - angleX) * dist
-					objectDef.locY = sin(obj.RotX - angleX) * dist
-
-					dist = hypot(objectDef.locY, localX)
-					angleY = atan2(objectDef.locY, localX)
-					objectDef.locX = cos(obj.RotY - angleY) * dist
-					objectDef.locY = sin(obj.RotY - angleY) * dist
-
-					dist = hypot(objectDef.locZ, objectDef.locX)
-					angleZ = atan2(objectDef.locZ, objectDef.locX)
-					objectDef.locX = cos(obj.RotZ - angleZ) * dist
-					objectDef.locZ = sin(obj.RotZ - angleZ) * dist
+					objectDef.locX = -(obj.LocX - pages[int(pageX)][int(pageY)].LocX)
+					objectDef.locZ = -(obj.LocY - pages[int(pageX)][int(pageY)].LocY)
+					objectDef.locY = obj.LocZ - pages[int(pageX)][int(pageY)].LocZ
+					print "Position : ", objectDef.locX, objectDef.locY, objectDef.locZ
 
 					# The others parameters are left untouched
-					objectDef.rotX = obj.RotX
-					objectDef.rotZ = -obj.RotY
-					objectDef.rotY = obj.RotZ
+
 					objectDef.sizeX = obj.SizeX
 					objectDef.sizeZ = obj.SizeY
 					objectDef.sizeY = obj.SizeZ
+
+					objectDef.rotX = -obj.RotX
+					objectDef.rotZ = -obj.RotY
+					objectDef.rotY = obj.RotZ
 
 					# Add this object to the corresponding page
 					pageFiles[int(pageX*len(pages[0])+pageY)].objects.append(objectDef)
