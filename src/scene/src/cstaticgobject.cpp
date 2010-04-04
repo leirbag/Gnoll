@@ -122,7 +122,7 @@ namespace Gnoll
 			shared_ptr< Gnoll::DynamicObject::Float > posZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_POSITION_Z(), zero);
 
 			Ogre::Vector3 posGObject(*posX, *posY, *posZ);
-			staticGObjectNode->translate( posGObject, Ogre::Node::TS_LOCAL);
+			staticGObjectNode->setPosition(posGObject);
 
 		}
 

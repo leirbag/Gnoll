@@ -47,14 +47,10 @@ namespace Gnoll
 
 		CPage::CPage(string _instanceName): CDynamicObjectProxy(_instanceName)
 		{
-
 		}
 
 		void CPage::init()
 		{
-
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "!!!!!!!!!!!!!!!! INIT OF PAGE " + this->getInstance() );
-
 			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
 			SceneNode* root = sm->getRootSceneNode();
 
@@ -418,7 +414,7 @@ namespace Gnoll
 				if(neighborPage.isInitialized())
 				{
 					shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighborPage.getAttribute<Float>(CPage::ATTRIBUTE_SIZE());
-					float amountTranslation = ((*pageSize) / 2.0f + (*neighborSize) / 2.0f);
+					float amountTranslation = - ((*pageSize) / 2.0f + (*neighborSize) / 2.0f);
 					Ogre::Vector3 translatingVector = Ogre::Vector3(0.0, 0.0, amountTranslation);
 					sceneNode->setPosition(neighborPage.getPageRootNode()->getPosition());
 					sceneNode->translate(translatingVector);
@@ -433,7 +429,7 @@ namespace Gnoll
 				if(neighborPage.isInitialized())
 				{
 					shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighborPage.getAttribute<Float>(CPage::ATTRIBUTE_SIZE());
-					float amountTranslation = - ((*pageSize) / 2.0f + (*neighborSize) / 2.0f);
+					float amountTranslation = ((*pageSize) / 2.0f + (*neighborSize) / 2.0f);
 					Ogre::Vector3 translatingVector = Ogre::Vector3(0.0, 0.0, amountTranslation);
 					sceneNode->setPosition(neighborPage.getPageRootNode()->getPosition());
 					sceneNode->translate(translatingVector);

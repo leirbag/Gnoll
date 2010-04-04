@@ -54,6 +54,8 @@ namespace Gnoll
 				 */
 				std::string   m_parentPageName;
 
+                SceneNode *parentNode;
+
 				/**
 				 * Listener of the component
 				 */

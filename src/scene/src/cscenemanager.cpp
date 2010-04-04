@@ -270,244 +270,6 @@ namespace Gnoll
 
 		void CSceneManager::update()
 		{
-			/**
-			 * Used to keep track of visited pages
-			 */
-			set<string> visitedPages;
-
-			/**
-			 * List of currently visible pages
-			 */
-			shared_ptr< Gnoll::DynamicObject::List > visiblePages = shared_ptr< Gnoll::DynamicObject::List > ( new Gnoll::DynamicObject::List() );
-
-			/**
-			 * Pages loaded
-			 */
-			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ( CSceneManager::ATTRIBUTE_LOADED_PAGES() );
-
-			GNOLL_LOG() << "Address of loadedPages : " << loadedPages << "\n";
-			GNOLL_LOG() << "Size of loadedPages : " << loadedPages->size() << "\n";
-
-			/**
-			 * Loop through all loaded pages and check if they are still visible
-			 */
-			for( Gnoll::DynamicObject::List::const_iterator it = loadedPages->begin(); it != loadedPages->end(); it++)
-			{
-				if (shared_ptr<Gnoll::DynamicObject::String> pageName = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*it))
-				{
-					GNOLL_LOG() << "1 - Loaded page : " << *pageName << "\n";
-
-					if (visitedPages.find(*pageName) == visitedPages.end())
-					{
-						CPage page(*pageName);
-						visitedPages.insert(*pageName);
-
-						GNOLL_LOG() << "  1 - checking visibility for " <<  *pageName << "\n";
-
-						if ( this->isPageVisible(page) )
-						{
-							GNOLL_LOG() << "    a - " <<  *pageName << " is visible "<< "\n";
-							if ( page.isInitialized() == false )
-							{
-								GNOLL_LOG() << "      b - " <<  *pageName << " is not initialized yet. It's going to be initialized\n";
-								page.init();
-								page.initPosition();
-							} else
-							{
-								GNOLL_LOG() << "      c - " <<  *pageName << " has already been initialized\n";
-							}
-						}
-
-						//
-						// Add the page if it's initialized
-						//
-						if(page.isInitialized())
-							visiblePages->push_back( pageName );
-
-						const char* neighbors[] =  {
-														CPage::ATTRIBUTE_NORTH_LINK(),
-														CPage::ATTRIBUTE_SOUTH_LINK(),
-														CPage::ATTRIBUTE_EAST_LINK(),
-														CPage::ATTRIBUTE_WEST_LINK()
-													};
-
-						for (unsigned int i = 0; i < 4; i++)
-						{
-							GNOLL_LOG() << "  Checking neighbor : " << string( neighbors[i] ) << "\n";
-							if (page.hasAttribute(neighbors[i]))
-							{
-								shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
-
-								GNOLL_LOG() << "    neighbor found : " << string(*neighborInstanceName) << "\n";
-								if (visitedPages.find(*neighborInstanceName) == visitedPages.end())
-								{
-									GNOLL_LOG() << "      appending : " << string(*neighborInstanceName) << "\n";
-									loadedPages->push_back( neighborInstanceName );
-								}
-							}
-						}
-					}
-				}
-			}
-
-			this->setAttribute( CSceneManager::ATTRIBUTE_LOADED_PAGES(), visiblePages);
-
-
-
-			// Update camera
-
-			// Check if camera is still in its focused page
-			// If yes -> do nothing
-			// If no -> Update focused page
-			/**
-			 * Allocate a camera manager
-			 */
-			CameraManager* cameraManager = CameraManager::getInstancePtr();
-
-			/*
-			 * Load current camera
-			 */
-			if(this->hasAttribute( CSceneManager::ATTRIBUTE_CURRENT_CAMERA() ) == true)
-			{
-				// Get back the name of the instance
-				shared_ptr< Gnoll::DynamicObject::String > instanceCamera = this->getAttribute< Gnoll::DynamicObject::String > ( CSceneManager::ATTRIBUTE_CURRENT_CAMERA() );
-
-				// Load the camera
-				shared_ptr<Camera> currentCamera = cameraManager->load(*instanceCamera);
-
-				Ogre::Vector3 cameraPos = currentCamera->getCameraWrapper()->getPosition();
-
-				shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>( CSceneManager::ATTRIBUTE_FOCUSED_PAGE() );
-				shared_ptr<CPage> page = shared_ptr<CPage>( new CPage(*focusedPageName));
-
-				shared_ptr<Gnoll::DynamicObject::Float> pageSize = page->getAttribute<Float>( CPage::ATTRIBUTE_SIZE() );
-
-				bool cameraInDifferentPageX = false;
-				bool cameraInDifferentPageZ = false;
-
-				if (fabs(cameraPos.x) > *pageSize / 2.0f )
-				{
-					cameraInDifferentPageX = true;
-				}
-
-				if (fabs(cameraPos.z) > *pageSize / 2.0f )
-				{
-					cameraInDifferentPageZ = true;
-				}
-
-				if(cameraInDifferentPageX || cameraInDifferentPageZ)
-				{
-					GNOLL_LOG() << " - Camera is not in focused page\n";
-
-					if (cameraInDifferentPageX == true)
-					{
-						if ((cameraPos.x > 0)  && (page->hasAttribute( CPage::ATTRIBUTE_EAST_LINK() )) )// East link
-						{
-							GNOLL_LOG() << "    Camera is in an eastern link\n";
-							shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page->getAttribute<Gnoll::DynamicObject::String>( CPage::ATTRIBUTE_EAST_LINK() );
-							CPage neighbor(*neighborInstanceName);
-
-							shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighbor.getAttribute<Gnoll::DynamicObject::Float>( CPage::ATTRIBUTE_SIZE() );
-							float amountTranslation = - (((*pageSize) / 2.0) + ((*neighborSize) / 2.0));
-
-							Ogre::Vector3 translatingVector = Ogre::Vector3(amountTranslation, 0.0, 0.0);
-							GNOLL_LOG() << "    Translating vector : " << translatingVector;
-
-							// Translate all visible pages and camera
-							this->translateVisiblePages( translatingVector );
-							currentCamera->getCameraWrapper()->setPosition( currentCamera->getCameraWrapper()->getPosition() + translatingVector );
-
-							// Set focused page
-							this->setAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE(), neighborInstanceName);
-
-
-						} else if( (cameraPos.x < 0)   && (page->hasAttribute( CPage::ATTRIBUTE_WEST_LINK() )) )// West link
-						{
-							shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page->getAttribute<Gnoll::DynamicObject::String>( CPage::ATTRIBUTE_WEST_LINK());
-							CPage neighbor(*neighborInstanceName);
-							GNOLL_LOG() << "    Camera is in an western link\n";
-
-							shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighbor.getAttribute<Gnoll::DynamicObject::Float>( CPage::ATTRIBUTE_SIZE() );
-							float amountTranslation = (((*pageSize) / 2.0) + ((*neighborSize) / 2.0));
-
-							Ogre::Vector3 translatingVector = Ogre::Vector3(amountTranslation, 0.0, 0.0);
-							GNOLL_LOG() << "    Translating vector : " << translatingVector;
-							// Translate all visible pages and camera
-							this->translateVisiblePages( translatingVector );
-							currentCamera->getCameraWrapper()->setPosition( currentCamera->getCameraWrapper()->getPosition() + translatingVector );
-
-							// Set focused page
-							this->setAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE(), neighborInstanceName);
-						}
-
-					} else if (cameraInDifferentPageZ == true)
-					{
-						if ((cameraPos.z > 0)   && (page->hasAttribute( CPage::ATTRIBUTE_SOUTH_LINK() )) )// South link
-						{
-
-							shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page->getAttribute<Gnoll::DynamicObject::String>( CPage::ATTRIBUTE_SOUTH_LINK() );
-							CPage neighbor(*neighborInstanceName);
-							GNOLL_LOG() << "    Camera is in an southern link\n";
-							shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighbor.getAttribute<Gnoll::DynamicObject::Float>( CPage::ATTRIBUTE_SIZE() );
-							float amountTranslation = - (((*pageSize) / 2.0) + ((*neighborSize) / 2.0));
-
-							Ogre::Vector3 translatingVector = Ogre::Vector3(0.0, 0.0, amountTranslation);
-							GNOLL_LOG() << "    Translating vector : " << translatingVector;
-							// Translate all visible pages and camera
-							this->translateVisiblePages( translatingVector );
-							currentCamera->getCameraWrapper()->setPosition( currentCamera->getCameraWrapper()->getPosition() + translatingVector );
-
-							// Set focused page
-							this->setAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE(), neighborInstanceName);
-
-						} else if ((cameraPos.z < 0)   && (page->hasAttribute( CPage::ATTRIBUTE_NORTH_LINK() )) )// North link
-						{
-							shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page->getAttribute<Gnoll::DynamicObject::String>( CPage::ATTRIBUTE_NORTH_LINK() );
-							CPage neighbor(*neighborInstanceName);
-							GNOLL_LOG() << "    Camera is in an northern link\n";
-							shared_ptr<Gnoll::DynamicObject::Float> neighborSize = neighbor.getAttribute<Gnoll::DynamicObject::Float>( CPage::ATTRIBUTE_SIZE() );
-							float amountTranslation = (((*pageSize) / 2.0) + ((*neighborSize) / 2.0));
-
-							Ogre::Vector3 translatingVector = Ogre::Vector3(0.0, 0.0, amountTranslation);
-							GNOLL_LOG() << "    Translating vector : " << translatingVector;
-							// Translate all visible pages and camera
-							this->translateVisiblePages( translatingVector );
-							currentCamera->getCameraWrapper()->setPosition( currentCamera->getCameraWrapper()->getPosition() + translatingVector );
-
-							// Set focused page
-							this->setAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE(), neighborInstanceName);
-						}
-
-					}
-
-
-					// Update data
-					focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>(CSceneManager::ATTRIBUTE_FOCUSED_PAGE());
-					page = shared_ptr<CPage>( new CPage(*focusedPageName));
-					pageSize = page->getAttribute<Float>( CPage::ATTRIBUTE_SIZE() );
-					cameraInDifferentPageX = false;
-					cameraInDifferentPageZ = false;
-
-
-					// Check conditions
-					cameraPos = currentCamera->getCameraWrapper()->getPosition();
-					if (abs(cameraPos.x) > *pageSize / 2.0f )
-					{
-						cameraInDifferentPageX = true;
-					}
-
-					if (abs(cameraPos.z) > *pageSize / 2.0f )
-					{
-						cameraInDifferentPageZ = true;
-					}
-
-				}
-
-			} else
-			{
-				GNOLL_LOG() << "No currentCamera attribute found for scene manager " << this->getInstance() << "\n";
-			}
-
 
 		}
 
@@ -547,7 +309,6 @@ namespace Gnoll
 			shared_ptr< Gnoll::DynamicObject::String > currentCameraName = this->getAttribute< Gnoll::DynamicObject::String > ( CSceneManager::ATTRIBUTE_CURRENT_CAMERA() );
 
 			return _page.isVisibleFromCamera( currentCameraName );
-			//return true;
 		}
 
 
@@ -563,7 +324,7 @@ namespace Gnoll
 
 			CPage page(_pageInstance);
 
-			if ( ((string)(*focusedPageName) != _pageInstance) && (this->isPageVisible(page) == false) )
+			if (page.isInitialized())
 			{
 				return;
 			}
@@ -589,83 +350,60 @@ namespace Gnoll
 					shared_ptr<Gnoll::DynamicObject::String> neighborInstanceName = page.getAttribute<Gnoll::DynamicObject::String>(neighbors[i]);
 					GNOLL_LOG() << "Loading neighbor " << string(*neighborInstanceName) << "\n";
 					CPage neighbor(*neighborInstanceName);
-					GNOLL_LOG() << "Neighbor " << string(*neighborInstanceName) << " loaded\n";
+                    GNOLL_LOG() << "Neighbor " << string(*neighborInstanceName) << " loaded\n";
 
-					if (this->isPageVisible(neighbor))
-					{
-						Ogre::Vector3 neighborOffset(0.0, 0.0, 0.0);
+                    if (strcmp(neighbors[i], CPage::ATTRIBUTE_NORTH_LINK()) == 0)
+                    {
+                        this->setupPage(*neighborInstanceName, _loadedPages, _offset);
 
-						if (strcmp(neighbors[i], CPage::ATTRIBUTE_NORTH_LINK()) == 0)
-						{
-							neighborOffset = Ogre::Vector3(0.0, 0.0, *pageSize);
-							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
+                    } else if (strcmp(neighbors[i], CPage::ATTRIBUTE_SOUTH_LINK()) == 0)
+                    {
+                        this->setupPage(*neighborInstanceName, _loadedPages, _offset);
 
-						} else if (strcmp(neighbors[i], CPage::ATTRIBUTE_SOUTH_LINK()) == 0)
-						{
-							neighborOffset = Ogre::Vector3(0.0, 0.0, -(*pageSize));
-							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
+                    } else if (strcmp(neighbors[i], CPage::ATTRIBUTE_EAST_LINK()) == 0)
+                    {
+                        this->setupPage(*neighborInstanceName, _loadedPages, _offset);
 
-						} else if (strcmp(neighbors[i], CPage::ATTRIBUTE_EAST_LINK()) == 0)
-						{
-							neighborOffset = Ogre::Vector3( -(*pageSize), 0.0, 0.0 );
-							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
+                    } else if (strcmp(neighbors[i], CPage::ATTRIBUTE_WEST_LINK()) == 0)
+                    {
+                        this->setupPage(*neighborInstanceName, _loadedPages, _offset);
+                    }
+                }
+            }
+        }
 
-						} else if (strcmp(neighbors[i], CPage::ATTRIBUTE_WEST_LINK()) == 0)
-						{
-							neighborOffset = Ogre::Vector3( *pageSize, 0.0, 0.0 );
-							this->setupPage(*neighborInstanceName, _loadedPages, _offset + neighborOffset );
-						}
+        bool CSceneManager::isCameraInPage(const shared_ptr<Camera>& _camera)
+        {
+            //
+            // Check all loaded page
+            //
+            /*shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List >
+              ( CSceneManager::ATTRIBUTE_LOADED_PAGES() );
 
-						GNOLL_LOG() << "asking for neighbor page root node\n";
-						Ogre::SceneNode* neighborRootNode = neighbor.getPageRootNode();
+              for( Gnoll::DynamicObject::List::const_iterator it = loadedPages->begin(); it != loadedPages->end(); it++)
+              {
+              shared_ptr<Gnoll::DynamicObject::String> pageName = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*it);
+              CPage page(*pageName);
+              shared_ptr<Gnoll::DynamicObject::Float> pageSize = page->getAttribute<Gnoll::DynamicObject::Float>(CPage::ATTRIBUTE_SIZE());
 
-						std::ostringstream tmpString;
-						tmpString << "neighbor page root node " << neighborRootNode;
-						GNOLL_LOG() << tmpString.str() << "\n";
-						neighborRootNode->translate( _offset + neighborOffset, Ogre::Node::TS_LOCAL);
+              if (page.isInitialized())
+              {
+              Ogre::SceneNode* sceneNode = page.getPageRootNode();
+              if(sceneNode->getPosition().x + pageSize < cameraPosition.x &&
+              sceneNode->getPosition().x > cameraPosition.x)
+              {
+              if(sceneNode->getPosition().z + pageSize > cameraPosition.z &&
+              sceneNode->getPosition().z < cameraPosition.z)
+              {
+              return true;
+              }
+              }
+              }
+              }*/
 
-					} else {
-
-						GNOLL_LOG() << "Neighbor " << string(*neighborInstanceName);
-						GNOLL_LOG()	<< " not visible from " << _pageInstance ;
-						GNOLL_LOG() << "\n";
-					}
-				}
-			}
-		}
-
-		bool CSceneManager::isCameraInPage(const shared_ptr<Camera>& _camera)
-		{
-			//
-			// Check all loaded page
-			//
-			/*shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List >
-																   ( CSceneManager::ATTRIBUTE_LOADED_PAGES() );
-
-			for( Gnoll::DynamicObject::List::const_iterator it = loadedPages->begin(); it != loadedPages->end(); it++)
-			{
-				shared_ptr<Gnoll::DynamicObject::String> pageName = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*it);
-				CPage page(*pageName);
-				shared_ptr<Gnoll::DynamicObject::Float> pageSize = page->getAttribute<Gnoll::DynamicObject::Float>(CPage::ATTRIBUTE_SIZE());
-
-				if (page.isInitialized())
-				{
-					Ogre::SceneNode* sceneNode = page.getPageRootNode();
-					if(sceneNode->getPosition().x + pageSize < cameraPosition.x &&
-					   sceneNode->getPosition().x > cameraPosition.x)
-					{
-						if(sceneNode->getPosition().z + pageSize > cameraPosition.z &&
-						   sceneNode->getPosition().z < cameraPosition.z)
-						{
-							return true;
-						}
-					}
-				}
-			}*/
-
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 }
 
 
