@@ -18,8 +18,10 @@
  ***************************************************************************/
 
 #include "../include/statsmodulelistener.h"
-#include "../include/cstatsmodule.h"
+
 #include <iostream>
+
+#include "../include/statsmodule.h"
 
 namespace Gnoll
 {
@@ -32,7 +34,7 @@ namespace Gnoll
 		void StatsModuleListener::handle(MessagePtr receivedMessage)
 		{
 			unsigned long temp = receivedMessage->getData<unsigned long>();
-			CStatsModule::getInstancePtr()->setRenderTime(temp);
+			StatsModule::getInstancePtr()->setRenderTime(temp);
 		}
 
 		StatsModuleListener::~StatsModuleListener()

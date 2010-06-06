@@ -28,7 +28,7 @@
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../log/include/clogmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../stats/include/cstatsmodule.h"
+#include "../../stats/include/statsmodule.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/include/cmessagemodule.h"
 #include "../include/cogreanimatedmeshcomponent.h"
@@ -64,7 +64,7 @@ namespace Gnoll {
 				 */
 				virtual void handle (shared_ptr<CMessage> message)
 				{
-					float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
+					float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
 					component->update(lasttime/1000.0f);
 				}
 		};

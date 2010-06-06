@@ -30,7 +30,7 @@
 #include "sound/include/csoundmodule.h"
 #include "scene/include/cscenemanager.h"
 #include "scene/include/cameramanager.h"
-#include "stats/include/cstatsmodule.h"
+#include "stats/include/statsmodule.h"
 #include "log/include/clogmacros.h"
 #include "input/include/ctranslationevents.h"
 #include "config.h"
@@ -77,7 +77,7 @@ namespace Gnoll
 			CMessageModule*         messageModule;
 			CSoundModule *          soundmanager;
 			CInputEventsTranslator* inputEventsTranslator;
-			CStatsModule*           statsModule;
+			StatsModule*           statsModule;
 
 
 			bool done;
@@ -279,7 +279,7 @@ namespace Gnoll
 		messageModule         = CMessageModule::getInstancePtr();
 		soundmanager          = CSoundModule::getInstancePtr();
 		inputEventsTranslator = CInputEventsTranslator::getInstancePtr();
-		statsModule           = CStatsModule::getInstancePtr();
+		statsModule           = StatsModule::getInstancePtr();
 		GNOLL_LOG() << "Instanciating modules...[DONE]\n";
 
 
@@ -370,14 +370,14 @@ namespace Gnoll
 		logModule->exit();
 		statsModule->exit();
 
-		Gnoll::Stats::CStatsModule::destroy();
+		Gnoll::Stats::StatsModule::destroy();
 		CSoundModule::destroy();
 		CTimeModule::destroy();
 		CInputEventsTranslator::destroy();
 		CGraphicModule::destroy();
 		CMessageModule::destroy();
 		CLogModule::destroy();
-		CStatsModule::destroy();
+		StatsModule::destroy();
 		Gnoll::DynamicObject::AttributeHandlerRegistry::destroy();
 
 		std::ostringstream tmpString;

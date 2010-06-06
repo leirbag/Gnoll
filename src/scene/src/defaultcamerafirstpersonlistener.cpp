@@ -28,7 +28,7 @@
 
 #include "../include/defaultcamerafirstpersonlistener.h"
 #include "../include/camerafirstperson.h"
-#include "../../stats/include/cstatsmodule.h"
+#include "../../stats/include/statsmodule.h"
 #include "../../input/include/ctranslationevents.h"
 #include "../../input/include/cinputmouseevents.h"
 #include "../../dynamicobject/include/float.h"
@@ -48,7 +48,7 @@ namespace Gnoll
 		void DefaultCameraFirstPersonListener::handle ( shared_ptr<CMessage> message )
 		{
 			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
-			float lasttime = Gnoll::Stats::CStatsModule::getInstancePtr()->getRenderTime();
+			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
 			lasttime = lasttime * 1000.0f;
 
 			// Update

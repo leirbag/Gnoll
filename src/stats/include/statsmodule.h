@@ -17,22 +17,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef INCLUDED_STATSMODULE_H
+#define INCLUDED_STATSMODULE_H
 
-/*---------------------------cstatsmodule.h---------------------------------*\
-|   The game stats module                                                    |
-|                                                                            |
-|   Changelog :                                                              |
-|               04/09/2008 - Gabriel - Initial release                       |
-\*--------------------------------------------------------------------------*/
-
-
-#ifndef INCLUDED_CSTATSMODULE_H
-#define INCLUDED_CSTATSMODULE_H
+#include <boost/shared_ptr.hpp>
 
 #include "../include/statsmodulelistener.h"
 #include "../../core/include/cmodule.h"
 #include "../../core/include/singleton.h"
-#include <boost/shared_ptr.hpp>
 
 using namespace Gnoll::Core;
 
@@ -41,20 +33,22 @@ namespace Gnoll
 	namespace Stats
 	{
 		struct stats_i;
+
 		/**
 		 *	The game stats module.
 		 */
-		class CStatsModule : public Gnoll::Core::CModule, public Gnoll::Core::Singleton<CStatsModule>
+		class StatsModule : public CModule, public Gnoll::Core::Singleton<StatsModule>
 		{
-			private:
-				stats_i* m_pStats;
-				boost::shared_ptr<StatsModuleListener> listenerModule;
-
 			public:
 				/**
 				 * A constructor
 				 */
-				CStatsModule();
+				StatsModule();
+
+				/**
+				 * @copydoc CModule::~CModule
+				 */
+				~StatsModule();
 
 				/**
 				 * @copydoc CModule::init
@@ -72,11 +66,6 @@ namespace Gnoll
 				void exit();
 
 				/**
-				 * @copydoc CModule::~CModule
-				 */
-				~CStatsModule();
-
-				/**
 				 * You dont have to call this method, it only reserved for the listener
 				 * @param time This is the time between 2 frames
 				 */
@@ -87,9 +76,12 @@ namespace Gnoll
 				 * @return the time between 2 frames
 				 */
 				float getRenderTime();
+
+			private:
+				stats_i* m_pStats;
+				boost::shared_ptr<StatsModuleListener> m_listenerModule;
 		};
 	};
 };
 
 #endif
-
