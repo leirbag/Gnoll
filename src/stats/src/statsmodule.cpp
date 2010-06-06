@@ -17,15 +17,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/statsmodule.h"
 
-/*---------------------------cstatsmodule.cpp-------------------------------*\
-|   The game stats module                                                    |
-|                                                                            |
-|   Changelog :                                                              |
-|               04/09/2008 - Gabriel - Initial release                       |
-\*--------------------------------------------------------------------------*/
-
-#include "../include/cstatsmodule.h"
 #include "../../core/include/cmessage.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
@@ -43,40 +36,40 @@ namespace Gnoll
 			float fps;
 		};
 
-		CStatsModule::CStatsModule() :
+		StatsModule::StatsModule() :
 			m_pStats(new stats_i)
 		{
 		}
 
-		void CStatsModule::init()
+		void StatsModule::init()
 		{
 			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
-			listenerModule = boost::shared_ptr<StatsModuleListener>(new StatsModuleListener);
-			messageModule->getMessageManager()->addListener(listenerModule, Messages::MessageType("GRAPHIC_FRAME_RENDERED"));
+			m_listenerModule = boost::shared_ptr<StatsModuleListener>(new StatsModuleListener);
+			messageModule->getMessageManager()->addListener(m_listenerModule, Messages::MessageType("GRAPHIC_FRAME_RENDERED"));
 			m_pStats->render_time = 0.0f;
 			m_pStats->fps = 0.0f;
 		}
 
-		void CStatsModule::process()
+		void StatsModule::process()
 		{
 		}
 
-		void CStatsModule::exit()
+		void StatsModule::exit()
 		{
 		}
 
-		CStatsModule::~CStatsModule()
+		StatsModule::~StatsModule()
 		{
 			delete m_pStats;
 		}
 
-		void CStatsModule::setRenderTime(float time)
+		void StatsModule::setRenderTime(float time)
 		{
 			if(time > 0.0f)
 				m_pStats->render_time = time;
 		}
 
-		float CStatsModule::getRenderTime()
+		float StatsModule::getRenderTime()
 		{
 			return m_pStats->render_time;
 		}

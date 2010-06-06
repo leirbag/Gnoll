@@ -30,25 +30,24 @@ namespace Gnoll
 	{
 		class StatsModuleListener : public Messages::Listener
 		{
-		public:
-			/**
-			 * This is a constructor
-			 */
-			StatsModuleListener();
+			public:
+				/**
+				 * This is a constructor
+				 */
+				StatsModuleListener();
 
-			/**
-			 * This is a destructor
-			 */
-			~StatsModuleListener();
+				/**
+				 * This is a destructor
+				 */
+				~StatsModuleListener();
 
-			/**
-			 * This method is called in order to process a message
-			 * @param message The message this method will have to process
-			 */
-			void handle(MessagePtr receivedMessage);
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				void handle(MessagePtr receivedMessage);
 		};
 	};
 };
 
 #endif
-
