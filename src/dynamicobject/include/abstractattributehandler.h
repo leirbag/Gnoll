@@ -17,38 +17,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*----------------------------iattributehandler----------------------------*\
-|   This is the interface of all the attributes handlers.                   |
-|                                                                           |
-|   Changelog :                                                             |
-|               08/03/2007 - Paf - Initial release                          |
-|               08/14/2007 - Paf - Update comments                          |
-|               08/25/2007 - Paf - Replace namespace Viraoccha by Gnoll     |
-|               10/12/2007 - Paf - Add a new parameter to handle()          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
-#ifndef __IATTRIBUTEHANDLER_H__
-#define __IATTRIBUTEHANDLER_H__
+#ifndef __ABSTRACTATTRIBUTEHANDLER_H__
+#define __ABSTRACTATTRIBUTEHANDLER_H__
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 
-#include "iattribute.h"
-
+#include "abstractattribute.h"
 
 using namespace boost;
 
-
 namespace Gnoll 
 {
-
 	namespace DynamicObject
 	{
-
 		/**
 		 * Forward declaration
 		 */
@@ -59,33 +41,29 @@ namespace Gnoll
 		*	This is the interface of an attribute handler.
 		*	This make sure each Attribute will be deserializable
 		*/ 
-		class IAttributeHandler
+		class AbstractAttributeHandler
 		{
-
 			public:
-
 				/**
 				* This is a constructor.
 				*/
-				IAttributeHandler() {}
+				AbstractAttributeHandler() {}
 
 
 				/**
 				* This is a destructor.
 				*/
-				virtual ~IAttributeHandler() {}
-
+				virtual ~AbstractAttributeHandler() {}
 
 				/**
 				 * This is the handler
 				 * @param _node The attribute passed as a xml tree
-				 * @return Smart pointer to the deserialized IAttribute
+				 * @return Smart pointer to the deserialized AbstractAttribute
 				 */
-				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, DynamicObject* _po = NULL) = 0;
-
+				virtual shared_ptr<AbstractAttribute> handle (xmlpp::Element* node, 
+													   DynamicObject* po = NULL) = 0;
 		};
-
 	}
 }
 
-#endif // __IATTRIBUTEHANDLER_H__
+#endif

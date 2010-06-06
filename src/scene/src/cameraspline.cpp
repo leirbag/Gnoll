@@ -45,7 +45,7 @@ namespace Gnoll
 		 * PRIVATE STRUCTURE
 		 */
 		CameraSpline::Spline::Spline(const Glib::ustring& instanceName, Ogre::NodeAnimationTrack* nodeAT, unsigned long len) :
-			Gnoll::DynamicObject::CDynamicObjectProxy(instanceName)
+			Gnoll::DynamicObject::DynamicObjectProxy(instanceName)
 		{
 			// Set the max length
 			// ------------------

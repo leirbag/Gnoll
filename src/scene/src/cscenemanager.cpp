@@ -206,7 +206,7 @@ namespace Gnoll
 		}
 
 
-		CSceneManager::CSceneManager(string _instanceName) : CDynamicObjectProxy(_instanceName)
+		CSceneManager::CSceneManager(string _instanceName) : DynamicObjectProxy(_instanceName)
 		{
 
 			/**

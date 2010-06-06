@@ -17,67 +17,45 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------InheritsAttributeHandler-----------------------*\
-|   This is an attribute handler for Inherits attribute.                    |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               10/15/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include "../include/inheritsattributehandler.h"
 
 #include "../include/dynamicobjectmanager.h"
 #include "../include/inherits.h"
 
-
 using namespace boost;
 using namespace Gnoll::Core;
 
-
 namespace Gnoll
 {
-
 	namespace DynamicObject
 	{
-
-
 		InheritsAttributeHandler::InheritsAttributeHandler()
 		{
 		}
-
 
 		InheritsAttributeHandler::~InheritsAttributeHandler()
 		{
 		}
 
-
-		shared_ptr<IAttribute> InheritsAttributeHandler::handle (xmlpp::Element* _node, DynamicObject* _po)
+		shared_ptr<AbstractAttribute> InheritsAttributeHandler::handle(xmlpp::Element* node, 
+																DynamicObject* po)
 		{
 			/**
 			 * Deserialization
 			 */
-			shared_ptr<Inherits> attribute( new Inherits() );
-			attribute->deSerializeXML(_node);
+			shared_ptr<Inherits> attribute(new Inherits());
+			attribute->deSerializeXML(node);
 
 			/**
 			 * We only apply inheritance if the target DynamicObject is provided
 			 */
-			if (_po != NULL)
+			if(po != NULL)
 			{
-
 				/**
 				 * The first step is to load the parent object
 				 */
-
 				String parentName = attribute->getParent();
-
-
 				DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
-
 
 				/**
 				 * We release the parent if it's in the cache. So the child and the parent will not share any attribute.
@@ -91,37 +69,29 @@ namespace Gnoll
 					pom->release(parentName);
 				}
 
-
 				shared_ptr<DynamicObject> parent = pom->load(parentName);
-
 
 				/**
 				 * The second step is to copy all the parent's attributes if they don't exists in the child object
 				 */
 
-				for (DynamicObject::mapAttributes::const_iterator it = parent->begin(); it != parent->end(); it++)
+				for(DynamicObject::mapAttributes::const_iterator it = parent->begin(); 
+					it != parent->end(); it++)
 				{
 					string attrName = (*it).first;
+					shared_ptr<AbstractAttribute> attr = (*it).second;
 
-					shared_ptr<IAttribute> attr = (*it).second;
-
-					if ( _po->hasAttribute(attrName) == false)
-					{
-						_po->setAttribute(attrName, attr);
-					}
+					if(po->hasAttribute(attrName) == false)
+						po->setAttribute(attrName, attr);
 				}
 
 				/**
 				 * Release of the parent, so no one will share the same attributes
 				 */
 				pom->release(parentName);
-
 			}
 
-
-			return dynamic_pointer_cast<IAttribute>(attribute);
+			return dynamic_pointer_cast<AbstractAttribute>(attribute);
 		}
-
 	}
 }
-

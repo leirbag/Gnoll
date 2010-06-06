@@ -17,21 +17,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------string----------------------------------*\
-|   This is a string attribute for DynamicObject                            |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __STRING_H__
 #define __STRING_H__
 
-
-#include "iattribute.h"
-#include "scalar.h"
 #include <string>
+
+#include "scalar.h"
 
 using namespace std;
 using namespace boost;
@@ -40,41 +31,35 @@ namespace Gnoll
 {
 	namespace DynamicObject
 	{
-
 		/**
 		 *	This is a simple attribute.
 		 */
 		class String : public Scalar<string>
 		{
 			public:
-
 				/**
 				 * Returns String's DynamicObject name
 				 * @return String's DynamicObject name
 				 */
-				inline static const char * DYNAMIC_OBJECT_NAME() {return "string";}
-
+				inline static const char* DYNAMIC_OBJECT_NAME() { return "string"; }
 
 				/**
 				 * Returns attribute name "value".<br/>
 				 * This attribute contains the value of a string
 				 * @return The attribute name "value"
 				 */
-				inline static const char * ATTRIBUTE_VALUE() {return "value";}
-
+				inline static const char* ATTRIBUTE_VALUE() { return "value"; }
 
 				/**
 				 * Constructor
 				 * @param _value Initialiazion of the String value
 				 */
-				String(string _value = "");
-
+				String(string value = "");
 
 				/**
 				 * Destructor
 				 */
 				virtual ~String();
-
 
 				/**
 				 * This method deserialize the object. <br/>
@@ -83,16 +68,14 @@ namespace Gnoll
 				 *
 			  	 * @param _element This is the XML tree containing the state of this object
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element );
-
+				virtual void deSerializeXML(xmlpp::Element* element);
 
 				/**
 				 * Overloading of the conversion string -> String operator
 				 * @param _rValue Value to convert from
 				 * @return Converted value
 				 */
-			 	virtual Scalar<string> const &operator=(string _rValue);
-
+			 	virtual Scalar<string> const& operator=(string rValue);
 
 				/**
 				 * Overloading of the conversion String -> string operator
@@ -100,13 +83,11 @@ namespace Gnoll
 				 */
 		  		virtual operator string();
 
-
 				/**
 				 * Overloading of the conversion String -> Glib::ustring operator
 				 * @return Converted value
 				 */
 				virtual operator Glib::ustring();
-
 
 				/**
 				 * Overloading of the conversion String -> const string operator
@@ -114,35 +95,27 @@ namespace Gnoll
 				 */
 				virtual operator string() const;
 
-
 				/**
 				 * Overloading of the conversion String -> const Glib::ustring operator
 				 * @return Converted value
 				 */
 				virtual operator Glib::ustring() const;
-
-
-
-
 		};
-
 
 		/**
  		 * Overloading of the inserting operator
 		 * @param _stream Stream to insert the value to
 		 * @return Stream
 		 */
-		ostream &operator<<(ostream & _stream, String const & _str);
-
+		ostream& operator<<(ostream& stream, String const& str);
 
 		/**
 		 * Overloading of the extraction operator
 		 * @param _stream Streaim to extract the value from
 		 * @return Stream
 		 */
-		istream &operator>>(istream &_stream, String &_str);
-
+		istream& operator>>(istream& stream, String& str);
 	}
 }
 
-#endif // __STRING_H__
+#endif

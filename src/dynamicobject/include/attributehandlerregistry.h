@@ -17,84 +17,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------AttributeHandlerRegistry------------------------*\
-|   This is the Attributes Handler Registry. Each attribute handler is      |
-|     required to register. So when we want to handle an attribute          |
-|     we can retrive its handler quite easily                               |
-|                                                                           |
-|   Changelog :                                                             |
-|               08/10/2007 - Paf - Initial release                          |
-|               08/11/2007 - Paf - Add some comments, removed unused        |
-|                                    libxml++ include                       |
-|               09/25/2007 - Paf - Add float.h                              |
-|                                - Replace namespace Viracocha by Gnoll     |
-|               09/26/2007 - Paf - Add string.h                             |
-|                                - Add double.h                             |
-|               09/28/2007 - Paf - Add list.h                               |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #ifndef __ATTRIBUTEHANDLERREGISTRY_H__
 #define __ATTRIBUTEHANDLERREGISTRY_H__
 
-
-#include <boost/shared_ptr.hpp>
 #include <string>
 
-#include "iattributehandler.h"
+#include <boost/shared_ptr.hpp>
+
+#include "abstractattributehandler.h"
 #include "../../core/include/singleton.h"
-
-
-
 
 using namespace boost;
 using namespace std;
 using namespace Gnoll::Core;
 
-
 namespace Gnoll
 {
-
 	namespace DynamicObject
 	{
-
 		/**
-		*	This is where an attribute has its handler registered.</br>
-		*	This is a Singleton.
-		*/ 
-		class AttributeHandlerRegistry: public Singleton<AttributeHandlerRegistry>
+		 * This is where an attribute has its handler registered.</br>
+		 * This is a Singleton.
+		 */ 
+		class AttributeHandlerRegistry : public Singleton<AttributeHandlerRegistry>
 		{
-
-			private:
-
-				/**
-				 * This the map that associates an attribute handler to its attribute
-				 */
-				map<string, shared_ptr<IAttributeHandler> > m_handlersMap;
-
 			public:
-
 				/**
 				* This is a constructor.
 				*/
 				AttributeHandlerRegistry();
-
 
 				/**
 				* This is a destructor.
 				*/
 				~AttributeHandlerRegistry();
 
-
 				/**
 				 * This method provides a way to register an attribute handler
 				 * @param _attributeType The attribute to associate the attribute handler with
 				 * @param _handler The attributehHandler
 				 */	
-				void registerHandler(string _attributeType, shared_ptr<IAttributeHandler> _handler);
-
+				void registerHandler(string _attributeType, shared_ptr<AbstractAttributeHandler> _handler);
 
 				/**
 				 *	This method unregisters an attribute handler
@@ -106,10 +69,14 @@ namespace Gnoll
 				 * This method returns the attribute handler associated to an attribute type
 				 * @param _attributeType The attribute type
 				 */
-				shared_ptr<IAttributeHandler> getHandler(string _attributeType);
+				shared_ptr<AbstractAttributeHandler> getHandler(string _attributeType);
 
+			private:
+				/**
+				 * This the map that associates an attribute handler to its attribute
+				 */
+				map<string, shared_ptr<AbstractAttributeHandler> > m_handlersMap;
 		};
-
 	}
 }
 

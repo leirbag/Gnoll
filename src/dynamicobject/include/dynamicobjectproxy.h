@@ -17,35 +17,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------CDynamicObjectProxy---------------------------*\
-|   This is a DynamicObject proxy                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               12/14/2007 - Bruno Mahe - Initial release                   |
-|               02/15/2008 - Bruno Mahe - Make destructor virtual           |
-|               02/15/2008 - Bruno Mahe - Add a new method                  |
-|                                          getAttributeOrDefault()          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#ifndef __CDYNAMICOBJECTPROXY_H__
-#define __CDYNAMICOBJECTPROXY_H__
-
+#ifndef __DYNAMICOBJECTPROXY_H__
+#define __DYNAMICOBJECTPROXY_H__
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 #include <glibmm/ustring.h>
 
-
-#include "iattribute.h"
-#include "iattributehandler.h"
+#include "abstractattribute.h"
+#include "abstractattributehandler.h"
 #include "dynamicobject.h"
-
 #include "string.h"
 #include "list.h"
-
 
 using namespace std;
 using namespace boost;
@@ -54,36 +37,25 @@ namespace Gnoll
 {
 	namespace DynamicObject
 	{
-
-
 		/**
 		 *	This is a proxy for Dynamic Object.
 		 *	This object can be used as a base for objects using DynamicObject capabilities </br>
-		 * @see IAttribute </br>
+		 * @see AbstractAttribute </br>
 		 * @see DynamicObject
 		 */
-		class CDynamicObjectProxy
+		class DynamicObjectProxy
 		{
-
-
-			protected:
-				shared_ptr<DynamicObject> m_self;
-
-
-
 			public:
-
 				/**
 				 * This is a constructor
 				 * @param _instanceName Instance name of the DynamicObject
 				 */
-				CDynamicObjectProxy (string _instanceName);
-
+				DynamicObjectProxy(string instanceName);
 
 				/**
 				 * This is a destructor
 				 */
-				virtual ~CDynamicObjectProxy ();
+				virtual ~DynamicObjectProxy();
 
 				/**
 				 * Save the instance
@@ -95,19 +67,17 @@ namespace Gnoll
 				 * @param _name The name of the attribute
 				 * @param _value The attribute itself
 				 */
-				void setAttribute( const Glib::ustring _name, shared_ptr<IAttribute> _value );
-
+				void setAttribute(const Glib::ustring name, shared_ptr<AbstractAttribute> value);
 
 				/**
 				 * This return an attribute
 				 * @param _name The name of the attribute we want
 				 * @return The attribute
 				 */
-				template< class T > shared_ptr<T> getAttribute( const Glib::ustring _name  ) const
+				template<class T> shared_ptr<T> getAttribute(const Glib::ustring name) const
 				{
-					return m_self->getAttribute<T>(_name);
+					return m_self->getAttribute<T>(name);
 				}
-
 
 				/**
 				 * This return an attribute. If the attribute doesn't exists, it will<br/>
@@ -116,37 +86,35 @@ namespace Gnoll
 				 * @return The attribute if it exists, or a default value
 				 */
 				template< class T >
-						shared_ptr<T> getAttributeOrDefault( const Glib::ustring _name, shared_ptr<T> _defaultValue = shared_ptr<T>()  )
+				shared_ptr<T> getAttributeOrDefault(const Glib::ustring name, 
+													shared_ptr<T> defaultValue = shared_ptr<T>())
 				{
-					return m_self->getAttributeOrDefault<T>(_name, _defaultValue);
+					return m_self->getAttributeOrDefault<T>(name, defaultValue);
 				}
-
 
 				/**
 				 * Check if an attribute exists
 				 * @param _name Name of the attribute
 				 * @return It returns true if an attribute with such a name exists, or false if it doesn't
 				 */
-				bool hasAttribute ( const Glib::ustring & _name ) const;
-
+				bool hasAttribute(const Glib::ustring & name) const;
 
 				/**
 				 * Delete an attribute
 				 * @param _name Name of the attribute to delete
 				 */
-				void deleteAttribute ( Glib::ustring _name );
-
+				void deleteAttribute(Glib::ustring name);
 
 				/**
 				 * Delete all the attributes
 				 */
-				void deleteAllAttributes ( void ) ;
+				void deleteAllAttributes() ;
 
 				/**
 				 * Get a list of attributes names
 				 * @return A list of all attribute's names
 				 */
-				List getAttributesNames(void);
+				List getAttributesNames();
 
 				/**
 				 * Get a const_iterator on the first element of the map of the attributes
@@ -166,8 +134,10 @@ namespace Gnoll
 				 */
 				string getInstance() const;
 
+			protected:
+				shared_ptr<DynamicObject> m_self;
 		};
 	}
 }
 
-#endif // __CDYNAMICOBJECTPROXY_H__
+#endif

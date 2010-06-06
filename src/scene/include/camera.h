@@ -34,7 +34,7 @@
 #include <OgreSceneNode.h>
 #include <map>
 #include "camerawrapper.h"
-#include "../../dynamicobject/include/cdynamicobjectproxy.h"
+#include "../../dynamicobject/include/dynamicobjectproxy.h"
 
 namespace Gnoll
 {
@@ -50,7 +50,7 @@ namespace Gnoll
 	{
 		class CMessageListenerCamera;
 
-		class Camera : public Gnoll::DynamicObject::CDynamicObjectProxy
+		class Camera : public Gnoll::DynamicObject::DynamicObjectProxy
 		{
 			private:
 				typedef std::pair<shared_ptr<CMessageListenerCamera>, shared_ptr<Messages::MessageType> > PairsListener;

@@ -89,7 +89,7 @@ namespace Gnoll
 
 
 				shared_ptr<List> actionList = mouseButtonEventTranslationMap->getAttribute<List>( buttonValue );
-				typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+				typedef list< shared_ptr<AbstractAttribute> >::iterator ListIterator;
 
 
 				shared_ptr<Float> defaultMouseSensibility = shared_ptr<Float> (new Float(1.0f));

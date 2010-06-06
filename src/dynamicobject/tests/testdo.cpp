@@ -155,7 +155,7 @@ int main() {
 		cout << "Squared Double PI in Zelda : " << setprecision(16) << (*dpi) * (*dpi) << endl;
 
 
-		typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+		typedef list< shared_ptr<AbstractAttribute> >::iterator ListIterator;
 		shared_ptr< List > list = Zelda->getAttribute< List > ("ListPreums");
 		for (ListIterator it = list->begin(); it != list->end(); it++)
 		{

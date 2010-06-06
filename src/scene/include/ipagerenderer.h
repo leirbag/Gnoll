@@ -36,7 +36,7 @@
 #include <glibmm/ustring.h>
 
 
-#include "../../dynamicobject/include/iattribute.h"
+#include "../../dynamicobject/include/abstractattribute.h"
 
 #include <string.h>
 #include "cpage.h"
@@ -50,7 +50,7 @@ namespace Gnoll
 	namespace Scene
 	{
 
-		class IPageRenderer : public IAttribute
+		class IPageRenderer : public AbstractAttribute
 		{
 			
 				

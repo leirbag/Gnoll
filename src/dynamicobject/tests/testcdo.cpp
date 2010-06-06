@@ -54,12 +54,12 @@ using namespace Gnoll::DynamicObject;
 
 
 
-class PJ : public CDynamicObjectProxy
+class PJ : public DynamicObjectProxy
 {
 
 	public:
 	
-		PJ(string _instanceName) : CDynamicObjectProxy(_instanceName)
+		PJ(string _instanceName) : DynamicObjectProxy(_instanceName)
 		{
 		
 		}

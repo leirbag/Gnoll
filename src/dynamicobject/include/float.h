@@ -17,22 +17,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*----------------------------------float----------------------------------*\
-|   This is a float attribute for DynamicObject                             |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/24/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __FLOAT_H__
 #define __FLOAT_H__
 
-
-#include "iattribute.h"
+#include "abstractattribute.h"
 #include "scalar.h"
 
 using namespace std;
@@ -42,28 +30,22 @@ namespace Gnoll
 {
 	namespace DynamicObject
 	{
-
 		/**
 		 *	This is a simple attribute.
 		 */
 		class Float : public Scalar<float>
 		{
 			public:
-
-
 				/**
 				 * Returns Float's DynamicObject name
 				 * @return Float's DynamicObject name
 				 */
-				inline static const char * DYNAMIC_OBJECT_NAME() {return "float";}
+				inline static const char* DYNAMIC_OBJECT_NAME() { return "float"; }
 
-
-
-				Float(float _value = 0.0f) : Scalar<float>(Float::DYNAMIC_OBJECT_NAME(), _value) {};
-
+				Float(float value = 0.0f) : 
+					Scalar<float>(Float::DYNAMIC_OBJECT_NAME(), value) {};
 		};
-
 	}
 }
 
-#endif // __FLOAT_H__
+#endif

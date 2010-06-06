@@ -17,30 +17,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------iattribute----------------------------------*\
-|   This is the interface of all the attributes. Each Attribute has to be   |
-|     (de)serializable                                                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               07/09/2007 - Paf - Initial release                          |
-|               07/10/2007 - Paf - Add some comments                        |
-|                          - Paf - serializeXML() now returns a             |
-|                                    shared_ptr<xmlpp::Document>            |
-|               08/14/2007 - Paf - Update comments                          |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
-#ifndef __IATTRIBUTE_H__
-#define __IATTRIBUTE_H__
-
+#ifndef __ABSTRACTATTRIBUTE_H__
+#define __ABSTRACTATTRIBUTE_H__
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
-
 
 using namespace boost;
 
@@ -52,21 +33,18 @@ namespace Gnoll
 		 *	This is the interface of an attribute.
 		 *	This make sure each Attribute will be (de)serializable
 		 */
-		class IAttribute
+		class AbstractAttribute
 		{
 			public:
-
 				/**
 				 * This is a constructor.
 				 */
-				IAttribute() {};
-
+				AbstractAttribute() {};
 
 				/**
 				 * This is a destructor.
 				 */
-				virtual ~IAttribute() {};
-
+				virtual ~AbstractAttribute() {};
 
 				/**
 				 * This method serialize the object. <br/>
@@ -76,7 +54,6 @@ namespace Gnoll
 				 */
 				virtual shared_ptr<xmlpp::Document> serializeXML() = 0;
 
-
 				/**
 				 * This method deserialize the object. <br/>
 				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
@@ -84,11 +61,9 @@ namespace Gnoll
 				 *
 				 * @param _element This is the XML tree containing the state of this object
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element ) = 0;
-
+				virtual void deSerializeXML(xmlpp::Element* _element) = 0;
 		};
 	};
 };
-
 
 #endif // __IATTRIBUTE_H__

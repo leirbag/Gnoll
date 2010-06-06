@@ -24,7 +24,7 @@
 #include <libxml++/libxml++.h>
 #include <glibmm/ustring.h>
 
-#include "../../dynamicobject/include/cdynamicobjectproxy.h"
+#include "../../dynamicobject/include/dynamicobjectproxy.h"
 #include "../../core/include/cpoolthreads.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../include/cpage.h"
@@ -49,7 +49,7 @@ namespace Gnoll
 		 * The world has been divided in chunks, and only the visible ones will be <br/>
 		 * displayed.
 		 */
-		class CSceneManager : public CDynamicObjectProxy
+		class CSceneManager : public DynamicObjectProxy
 		{
 
 			private:

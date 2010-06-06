@@ -65,7 +65,7 @@ namespace Gnoll
 
 			// We get all the dynamicobject filenames
 			shared_ptr< List > ruleList = rules->getAttribute< List >("ruleList");
-			typedef list< shared_ptr< IAttribute > >::iterator ListIterator;
+			typedef list< shared_ptr< AbstractAttribute > >::iterator ListIterator;
 			for (ListIterator itAttrs = ruleList->begin(); itAttrs != ruleList->end(); itAttrs++)
 			{
 				if (shared_ptr< String > rule = dynamic_pointer_cast< String >(*itAttrs))

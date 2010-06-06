@@ -103,7 +103,7 @@ namespace Gnoll
 			if ( mouseMotionEventTranslationMap->hasAttribute(_event) )
 			{
 				shared_ptr<List> actionList = mouseMotionEventTranslationMap->getAttribute<List>( _event );
-				typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+				typedef list< shared_ptr<AbstractAttribute> >::iterator ListIterator;
 
 				/**
 				 * Send all action messages in the list

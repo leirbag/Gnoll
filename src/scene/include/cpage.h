@@ -34,7 +34,7 @@
 #include <glibmm/ustring.h>
 #include <Ogre.h>
 
-#include "../../dynamicobject/include/cdynamicobjectproxy.h"
+#include "../../dynamicobject/include/dynamicobjectproxy.h"
 
 #include "string.h"
 
@@ -55,7 +55,7 @@ namespace Gnoll
 		 * A page is a chunk of the scene.<br/>
 		 * A scene is made of tiles named pages
 		 */
-		class CPage : public CDynamicObjectProxy
+		class CPage : public DynamicObjectProxy
 		{
 			private:
 

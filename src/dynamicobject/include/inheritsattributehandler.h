@@ -17,69 +17,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------inheritsattributehandler-----------------------*\
-|   This is an attribute handler for Inherits attribute.                    |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               10/15/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #ifndef __INHERITSATTRIBUTEHANDLER_H__
 #define __INHERITSATTRIBUTEHANDLER_H__
-
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 
 #include "dynamicobject.h"
-#include "iattributehandler.h"
+#include "abstractattributehandler.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
 
-
 namespace Gnoll
 {
-
 	namespace DynamicObject
 	{
-
 		/**
 		*	This is the interface of an attribute handler.</br>
 		*	This make sure each Attribute will be (de)serializable.</br>
-		*	This works as long as T inherits from IAttribute.
+		*	This works as long as T inherits from AbstractAttribute.
 		*/
-		class InheritsAttributeHandler : public IAttributeHandler
+		class InheritsAttributeHandler : public AbstractAttributeHandler
 		{
-
 			public:
+				typedef shared_ptr<AbstractAttribute> AbstractAttribute_ptr;
 
 				/**
 				* This is a constructor.
 				*/
 				InheritsAttributeHandler();
 
-
 				/**
 				* This is a destructor.
 				*/
 				~InheritsAttributeHandler();
 
-
 				/**
 				 * This is the handler method
-				 * @param _node Node to process and extract the IAttribute smart pointer from
-				 * @return Smart pointer to an IAttribute
+				 * @param _node Node to process and extract the AbstractAttribute smart pointer from
+				 * @return Smart pointer to an AbstractAttribute
 				 */
-				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, DynamicObject* _po = NULL);
-
+				virtual AbstractAttribute_ptr handle(xmlpp::Element* node, 
+													 DynamicObject* po = NULL);
 		};
-
 	}
 }
 
-#endif // __GENERICATTRIBUTEHANDLER_H__
+#endif

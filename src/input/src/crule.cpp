@@ -47,7 +47,7 @@ namespace Gnoll
 
 			// We get all the rule conditions and store them in the conditions map
 			shared_ptr< List > conditions = rule->getAttribute< List >("conditions");
-			typedef list< shared_ptr< IAttribute > >::iterator ListIterator;
+			typedef list< shared_ptr< AbstractAttribute > >::iterator ListIterator;
 			for (ListIterator itAttrs = conditions->begin(); itAttrs != conditions->end(); itAttrs++)
 			{
 				if (shared_ptr< String > condition = dynamic_pointer_cast< String >(*itAttrs))

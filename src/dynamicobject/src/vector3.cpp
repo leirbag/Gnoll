@@ -17,23 +17,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-  /*---------------------------------Vector3----------------------------------*\
-  |   This is a vector3 attribute for DynamicObject                            |
-  |                                                                            |
-  \*-------------------------------------------------------------------------*/
-
-
 #include "../include/vector3.h"
-#include <boost/lexical_cast.hpp>
+
 #include <string>
+
+#include <boost/lexical_cast.hpp>
 
 using namespace boost;
 using namespace std;
 
 namespace Gnoll
 {
-
 	namespace DynamicObject
 	{
 		Vector3::Vector3(const Ogre::Vector3& vec) : Ogre::Vector3(vec)
@@ -61,21 +55,17 @@ namespace Gnoll
 			return document;
 		}
 
-		void Vector3::deSerializeXML( xmlpp::Element* _element )
+		void Vector3::deSerializeXML(xmlpp::Element* element)
 		{
-			if (_element == NULL)
-			{
+			if (element == NULL)
 				return;
-			}
 
-			xmlpp::Attribute* attrX = _element->get_attribute(Vector3::ATTRIBUTE_X());
-			xmlpp::Attribute* attrY = _element->get_attribute(Vector3::ATTRIBUTE_Y());
-			xmlpp::Attribute* attrZ = _element->get_attribute(Vector3::ATTRIBUTE_Z());
+			xmlpp::Attribute* attrX = element->get_attribute(Vector3::ATTRIBUTE_X());
+			xmlpp::Attribute* attrY = element->get_attribute(Vector3::ATTRIBUTE_Y());
+			xmlpp::Attribute* attrZ = element->get_attribute(Vector3::ATTRIBUTE_Z());
 
 			if (attrX == NULL || attrY == NULL || attrZ == NULL)
-			{
 				return;
-			}
 
 			x = lexical_cast<float>(attrX->get_value());
 			y = lexical_cast<float>(attrY->get_value());
