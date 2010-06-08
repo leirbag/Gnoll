@@ -33,10 +33,10 @@
 #include "../include/crulemanager.h"
 #include "../include/ctranslationevents.h"
 
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
@@ -79,7 +79,7 @@ namespace Gnoll
 
 
 
-		void CRuleManager::handle( shared_ptr<CMessage> message )
+		void CRuleManager::handle( shared_ptr<Message> message )
 		{
 			ActionEvent actionEvent = message->getData<ActionEvent>();
 			Messages::MessageType msgType = message->getType();

@@ -20,8 +20,8 @@
 #include "../include/cinputmouseevents.h"
 #include "../include/cinputjoystickevents.h"
 #include "../include/coisinputmanager.h"
-#include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/messagemodule.h"
+#include "../../core/include/message.h"
 #include "../../log/include/clogmacros.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
@@ -201,9 +201,9 @@ bool COISInputManager::keyPressed( const OIS::KeyEvent &e )
 	Messages::MessageType keydown("KEYBOARD_KEYDOWN");
 
 	shared_ptr<boost::any> kc (new boost::any(OIS::KeyCode(e.key)) ) ;
-	shared_ptr<CMessage>  mymessage (new CMessage(keydown, kc ));
+	shared_ptr<Message>  mymessage (new Message(keydown, kc ));
 
-	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
+	MessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 
 	return true;
 }
@@ -213,9 +213,9 @@ bool COISInputManager::keyReleased( const OIS::KeyEvent &e )
 	Messages::MessageType keyup("KEYBOARD_KEYUP");
 
 	shared_ptr<boost::any> kc (new boost::any(OIS::KeyCode(e.key)) ) ;
-	shared_ptr<CMessage>  mymessage (new CMessage(keyup, kc ));
+	shared_ptr<Message>  mymessage (new Message(keyup, kc ));
 
-	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
+	MessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 
 	return true;
 }
@@ -230,11 +230,11 @@ bool COISInputManager::mouseMoved( const OIS::MouseEvent &arg )
 				arg.state.X.absOnly );
 
 	shared_ptr<boost::any> data ( new boost::any(mouseE) )  ;
-	shared_ptr<CMessage>  mymessage (new CMessage(mouseMoved, data ));
+	shared_ptr<Message>  mymessage (new Message(mouseMoved, data ));
 
 	CEGUI::System::getSingleton().injectMousePosition( arg.state.X.abs, arg.state.Y.abs );
 
-	CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
+	MessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 
 	return true;
 }
@@ -259,11 +259,11 @@ bool COISInputManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButto
 		if ( (buttonCurState == 1) && (buttonOldState == 0) )
 		{
 			shared_ptr<boost::any> button (new boost::any(MouseButton(static_cast<MouseButton>(i)))  )  ;
-			shared_ptr<CMessage>  mymessage (new CMessage(mousePressed, button ));
+			shared_ptr<Message>  mymessage (new Message(mousePressed, button ));
 
 			CEGUI::System::getSingleton().injectMouseButtonDown( CEGUI::MouseButton(i) );
 
-			CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
+			MessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 		}
 
 	}
@@ -294,11 +294,11 @@ bool COISInputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButt
 		if ( (buttonCurState == 0) && (buttonOldState == 1) )
 		{
 			shared_ptr<boost::any> button (new boost::any(MouseButton(static_cast<MouseButton>(i)) ) )  ;
-			shared_ptr<CMessage>  mymessage (new CMessage(mouseReleased, button ));
+			shared_ptr<Message>  mymessage (new Message(mouseReleased, button ));
 
 			CEGUI::System::getSingleton().injectMouseButtonUp( CEGUI::MouseButton(i) );
 
-			CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
+			MessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 		}
 
 	}

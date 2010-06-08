@@ -31,10 +31,10 @@
 
 
 
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/listener.h"
 #include "../include/ctimemodule.h"
 #include "../include/itimer.h"
@@ -55,7 +55,7 @@ using namespace Gnoll::Core;
 /**
  * An idiot message listener 
  */
-class MyMessageListener : public CMessageListener
+class MyMessageListener : public MessageListener
 {
 
 	public:
@@ -74,7 +74,7 @@ class MyMessageListener : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
+		virtual void handle ( shared_ptr<Message> message ) 
 		{ 
 			/*
 			 * A string is embeded in the message and is displayed
@@ -91,8 +91,8 @@ int main()
 {
 
 	// A message manager 
-	CMessageModule* messageModule = CMessageModule::getInstancePtr();
-	CMessageManager* myManager = messageModule->getMessageManager();
+	MessageModule* messageModule = MessageModule::getInstancePtr();
+	MessageManager* myManager = messageModule->getMessageManager();
 	CTimeModule* myTimeModule = CTimeModule::getInstancePtr();
 
 	// A message type called "string" 
@@ -100,7 +100,7 @@ int main()
 
 
 	// A simple listener
-	shared_ptr<CMessageListener> mylistener(new MyMessageListener);
+	shared_ptr<MessageListener> mylistener(new MyMessageListener);
 
 
 	// Initialization of the message module
@@ -124,8 +124,8 @@ int main()
 	shared_ptr<boost::any> texte (new boost::any(string("blablabla..."))) ;
 	shared_ptr<boost::any> texte2 (new boost::any(string("bliblublo..."))) ;
 
-	shared_ptr<CMessage>  mymessage (new CMessage(mytype, texte ));
-	shared_ptr<CMessage>  mymessage2 (new CMessage(mytype, texte2 ));
+	shared_ptr<Message>  mymessage (new Message(mytype, texte ));
+	shared_ptr<Message>  mymessage2 (new Message(mytype, texte2 ));
 
 	// In 20 000 milliseconds mymessage will be sent
 	myTimeModule->addDelayedEvent(20000, mymessage);
@@ -151,7 +151,7 @@ int main()
 	shared_ptr<boost::any> ave(new boost::any(ev));
 
 
-	shared_ptr<CMessage> periodicMsg (new CMessage(creation, ave));	
+	shared_ptr<Message> periodicMsg (new Message(creation, ave));	
 
 	// We send a message to ask for the creation of the timer
 	if (myManager->queueMessage(periodicMsg))
@@ -174,7 +174,7 @@ int main()
 	// Mesage that will destroy the previous timer :
 	// destroyation means we want to destroy one periodic timer
 	// ave describes the timer we want to destroy
-	shared_ptr<CMessage> destroyPeriodicMsg (new CMessage(destroyation, ave));	
+	shared_ptr<Message> destroyPeriodicMsg (new Message(destroyation, ave));	
 
 	// We want to create a one-shot timer in 35 seconds.
 	// This timer will shout the message desztroyPeriodicMsg
@@ -185,7 +185,7 @@ int main()
 
 	shared_ptr<boost::any> simpleEv(new boost::any(sTimer));
 
-	shared_ptr<CMessage> destroyMsg (new CMessage(simpleTimer, simpleEv));	
+	shared_ptr<Message> destroyMsg (new Message(simpleTimer, simpleEv));	
 	
 	if (myManager->queueMessage(destroyMsg))
 		cout << "Message enqueued" << endl;

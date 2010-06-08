@@ -21,8 +21,10 @@
 #define __LISTENER_H__
 
 #include <string>
+
 #include <boost/shared_ptr.hpp>
-#include "../../include/cmessage.h"
+
+#include "../../include/message.h"
 
 namespace Gnoll
 {
@@ -34,7 +36,7 @@ namespace Gnoll
 			class Listener
 			{
 				public:
-					typedef boost::shared_ptr<CMessage> MessagePtr;
+					typedef boost::shared_ptr<Message> MessagePtr;
 
 					// Listener();
 					virtual ~Listener() {}
@@ -47,4 +49,3 @@ namespace Gnoll
 }
 
 #endif
-

@@ -25,7 +25,7 @@
 #include <glibmm/ustring.h>
 
 #include "../../dynamicobject/include/dynamicobjectproxy.h"
-#include "../../core/include/cpoolthreads.h"
+#include "../../core/include/poolthread.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../include/cpage.h"
 #include "../../core/messages/include/listener.h"
@@ -57,7 +57,7 @@ namespace Gnoll
 				/**
 				 * Pool of threads used for all sort of jobs
 				 */
-				CPoolThreads m_poolOfThreads;
+				PoolThread m_poolOfThreads;
 
 
 				/**
@@ -173,7 +173,7 @@ namespace Gnoll
 				/**
 				 * Enqueue a job in the pool of threads
 				 */
-				void queueJob( shared_ptr<CJob> _job);
+				void queueJob( shared_ptr<Job> _job);
 
 
 				/**

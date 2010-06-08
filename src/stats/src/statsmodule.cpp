@@ -19,7 +19,7 @@
 
 #include "../include/statsmodule.h"
 
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
 #include "../../input/include/coisinputmodule.h"
@@ -43,7 +43,7 @@ namespace Gnoll
 
 		void StatsModule::init()
 		{
-			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
+			Gnoll::Core::MessageModule* messageModule = Gnoll::Core::MessageModule::getInstancePtr();
 			m_listenerModule = boost::shared_ptr<StatsModuleListener>(new StatsModuleListener);
 			messageModule->getMessageManager()->addListener(m_listenerModule, Messages::MessageType("GRAPHIC_FRAME_RENDERED"));
 			m_pStats->render_time = 0.0f;

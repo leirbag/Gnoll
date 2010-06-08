@@ -50,7 +50,7 @@ namespace Gnoll
 		{
 		}
 
-		void DefaultCameraFreeFlyListener::handle ( shared_ptr<CMessage> message )
+		void DefaultCameraFreeFlyListener::handle ( shared_ptr<Message> message )
 		{
 			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
 			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();

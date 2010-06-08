@@ -17,78 +17,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------------CMTQueue---------------------------------*\
-|   This is basic queue.                                                    |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               10/30/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __CMTQUEUE_H__
 #define __CMTQUEUE_H__
 
-
+#include <list>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread.hpp>
-#include <list>
-
-
 
 using namespace std;
 
-namespace Gnoll {
-
-	namespace Core {
-
+namespace Gnoll
+{
+	namespace Core
+	{
 		/**
 		 *	This is a multi-thread friendly queue.</br>
 		 */
-		template <typename T> class CMTQueue
+		template<typename T>
+		class MultiThreadQueue
 		{
-			private:
-
-				/**
-				 * A mutex used to synchronize all operations on the queue
-				 */
-				boost::mutex m_queueMutex;
-
-				/**
-				 * The actual list
-				 */
-				list<T> m_queue;
-
-
 			public:
-			
 				/**
 				 * A constructor
 				 */
-				CMTQueue() {}
-
+				MultiThreadQueue() {}
 
 				/**
 				 * A destructor
 				 */
-				virtual ~CMTQueue() {}
-
+				virtual ~MultiThreadQueue() {}
 
 				/**
 				 * Push an element to the queue
-				 * @param _elem Element to be pushed
+				 * @param elem Element to be pushed
 				 */
-				void push(T& _elem)
+				void push(T& elem)
 				{
 					boost::mutex::scoped_lock scoped_lock(m_queueMutex);
-					m_queue.push_back(_elem);
+					m_queue.push_back(elem);
 				}
-
 
 				/**
 				 * Pop an element from the queue
@@ -97,12 +66,10 @@ namespace Gnoll {
 				T pop()
 				{
 					boost::mutex::scoped_lock scoped_lock(m_queueMutex);
-
 					T elem = m_queue.front();
 					m_queue.pop_front();
 					return elem;
 				}
-
 
 				/**
 				 * Check if the queue is empty
@@ -113,7 +80,6 @@ namespace Gnoll {
 					boost::mutex::scoped_lock scoped_lock(m_queueMutex);
 					return m_queue.empty();
 				}
-
 
 				/**
 				 * Get the size of the queue
@@ -133,11 +99,19 @@ namespace Gnoll {
 					boost::mutex::scoped_lock scoped_lock(m_queueMutex);
 					m_queue.clear();
 				}
-		
-		};
 
+			private:
+				/**
+				 * A mutex used to synchronize all operations on the queue
+				 */
+				boost::mutex m_queueMutex;
+
+				/**
+				 * The actual list
+				 */
+				list<T> m_queue;
+		};
 	}
 }
 
-#endif // __CMTQUEUE_H__
-
+#endif

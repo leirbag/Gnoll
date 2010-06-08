@@ -84,7 +84,7 @@ namespace Gnoll
 
 			bool result = true;
 
-			Messages::Messenger* messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+			Messages::Messenger* messageManager = MessageModule::getInstancePtr()->getMessageManager();
 			
 			try
 			{
@@ -111,7 +111,7 @@ namespace Gnoll
 			{
 				if(it->first < m_timer->getMsecs())
 				{
-					CMessageModule::getInstancePtr()->getMessageManager()->triggerMessage(it->second);
+					MessageModule::getInstancePtr()->getMessageManager()->triggerMessage(it->second);
 
 					// Delete this timer
 					msgMapIter tmp = it;
@@ -129,7 +129,7 @@ namespace Gnoll
 		{
 			boost::recursive_mutex::scoped_lock lock(m_timersPeriodicMutex);
 
-			pair<unsigned long int, shared_ptr<CMessage> > p;
+			pair<unsigned long int, shared_ptr<Message> > p;
 			perMsgMapIter itPeriodic = m_timersPeriodic.begin();
 
 			while ( itPeriodic != m_timersPeriodic.end() )
@@ -137,10 +137,10 @@ namespace Gnoll
 				if(itPeriodic->first < m_timer->getMsecs())
 				{
 	
-					pair<unsigned long int, shared_ptr<CMessage> > p = itPeriodic->second;
+					pair<unsigned long int, shared_ptr<Message> > p = itPeriodic->second;
 
 					unsigned long int period = p.first;
-					shared_ptr<CMessage> msg = p.second;
+					shared_ptr<Message> msg = p.second;
 
 					addPeriodicEvent(period, msg, period);
 			
@@ -149,7 +149,7 @@ namespace Gnoll
 					itPeriodic++;
 					m_timersPeriodic.erase(tmp);
 
-					CMessageModule::getInstancePtr()->getMessageManager()->triggerMessage(msg);
+					MessageModule::getInstancePtr()->getMessageManager()->triggerMessage(msg);
 				}
 				else
 				{
@@ -177,7 +177,7 @@ namespace Gnoll
 			 * Removing all registered listeners
 			 */
 
-			Messages::Messenger * messageManager = CMessageModule::getInstancePtr()->getMessageManager();
+			Messages::Messenger * messageManager = MessageModule::getInstancePtr()->getMessageManager();
 
 			for(list< pair< shared_ptr<Messages::Listener>, Messages::MessageType> >::iterator it = m_listListeners.begin(); it != m_listListeners.end(); it++)
 			{
@@ -196,15 +196,15 @@ namespace Gnoll
 		}
 
 
-		void CTimeModule::addDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg)
+		void CTimeModule::addDelayedEvent(unsigned long int delay, shared_ptr<Message> msg)
 		{
 			boost::recursive_mutex::scoped_lock lock(m_timersMutex);
 
-			m_timers.insert(pair<unsigned long int, shared_ptr<CMessage> >(m_timer->getMsecs() + delay, msg));
+			m_timers.insert(pair<unsigned long int, shared_ptr<Message> >(m_timer->getMsecs() + delay, msg));
 		}
 
 
-		void CTimeModule::delDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg)
+		void CTimeModule::delDelayedEvent(unsigned long int delay, shared_ptr<Message> msg)
 		{
 			boost::recursive_mutex::scoped_lock lock(m_timersMutex);
 
@@ -218,20 +218,20 @@ namespace Gnoll
 		}
 
 
-		void CTimeModule::addPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
+		void CTimeModule::addPeriodicEvent(unsigned long int delay, shared_ptr<Message> msg, unsigned long int period)
 		{
 			boost::recursive_mutex::scoped_lock lock(m_timersPeriodicMutex);
 
-			pair<unsigned long int, shared_ptr<CMessage> > p(period, msg);
-			m_timersPeriodic.insert(pair<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >(m_timer->getMsecs() + delay, p));
+			pair<unsigned long int, shared_ptr<Message> > p(period, msg);
+			m_timersPeriodic.insert(pair<unsigned long int, pair<unsigned long int, shared_ptr<Message> > >(m_timer->getMsecs() + delay, p));
 		}
 
 
-		void CTimeModule::delPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period)
+		void CTimeModule::delPeriodicEvent(unsigned long int delay, shared_ptr<Message> msg, unsigned long int period)
 		{
 			boost::recursive_mutex::scoped_lock lock(m_timersPeriodicMutex);
 	 
-			pair<unsigned long int, shared_ptr<CMessage> > p(period, msg);
+			pair<unsigned long int, shared_ptr<Message> > p(period, msg);
 	
 		  	for(perMsgMapIter it = m_timersPeriodic.begin(); it != m_timersPeriodic.end(); it++)
 			{

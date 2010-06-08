@@ -17,69 +17,40 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------cidiotstate.h-------------------------------*\
-|   aan idiot FSM's states                                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/27/2006 - Paf - Initial release                          |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#include "cstate.h"
-#include <string>
-#include <iostream>
-
-using namespace std;
-
-#ifndef __CIDIOTSTATE_H__
-#define __CIDIOTSTATE_H__
+#ifndef __STATE_H__
+#define __STATE_H__
 
 namespace Gnoll
 {
 	namespace Core
 	{
 		/**
-		 *	An idiot FSM's state
+		 *	Interface of all the FSM's states. <br>A state is a description of an activity.
 		 */
-		class CIdiotState: public CState
+		class State
 		{
-			private:
-
-				/**
-				 * It is the state's name
-				 */
-				string m_name;
-
 			public:
 				/**
 				 * This is called after entering this state
 				 */
-				virtual void onInit() { cout << "Je rentre dans l'etat : " << m_name << endl;}
+				virtual void onInit() = 0;
 
 				/**
 				 * This is called during its activation
 				 */
-				virtual void onProcess() { cout << "Je suis dans l'etat : " << m_name << endl; }
+				virtual void onProcess() = 0;
 
 				/**
 				 * This is called before exiting this state
 				 */
-				virtual void onExit() { cout << "Je sors de l'etat : " << m_name << endl << endl; }
+				virtual void onExit() = 0;
 
 				/**
-				 * This is a constructor
+				 * This is a virtual destructor
 				 */
-				CIdiotState( string myname = "Anne nonyme" ) : m_name(myname) {}
-
-				/**
-				 * This is a destructor
-				 */
-				~CIdiotState() {}
+				virtual ~State() {};
 		};
 	};
 };
 
-#endif // __CIDIOTSTATE_H__
+#endif

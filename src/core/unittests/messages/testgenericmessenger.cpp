@@ -5,7 +5,7 @@
 #include "../../messages/include/messagetype.h"
 #include "../../messages/include/listener.h"
 #include "../../messages/include/exceptions.h"
-#include "../../include/cmessage.h"
+#include "../../include/message.h"
 
 BOOST_AUTO_TEST_SUITE(TestGenericMessenger)
 
@@ -38,7 +38,7 @@ struct MockListener : public Listener
 	}
 
 	int countCalls;
-	Gnoll::Core::CMessage * lastestMessage;
+	Gnoll::Core::Message * lastestMessage;
 };
 
 BOOST_AUTO_TEST_CASE(empty_message_type_throws)
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(cannot_delete_non_added_listener)
 BOOST_AUTO_TEST_CASE(cannot_trigger_when_no_listener)
 {
 	GenericMessenger messenger;
-	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_2)));
+	Messenger::MessagePtr message(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_2)));
 
 	BOOST_CHECK_THROW(messenger.triggerMessage(message), Exceptions::NoOneIsListening);
 }
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(cannot_trigger_when_listener_with_different_type)
 	Messenger::ListenerPtr listener1(new MockListener);
 
 	messenger.addListener(listener1, MessageType(MESSAGE_TYPENAME_1));
-	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_2)));
+	Messenger::MessagePtr message(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_2)));
 
 	BOOST_CHECK_THROW(messenger.triggerMessage(message), Exceptions::NoOneIsListening);
 }
@@ -130,14 +130,14 @@ struct ThreeListenersFixture
 
 BOOST_FIXTURE_TEST_CASE(trigger_calls_listeners_for_correct_type, ThreeListenersFixture)
 {
-	Messenger::MessagePtr message1(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+	Messenger::MessagePtr message1(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1)));
 	messenger.triggerMessage(message1);
 
 	BOOST_CHECK_EQUAL(1, listener1->countCalls);
 	BOOST_CHECK_EQUAL(0, listener2->countCalls);
 	BOOST_CHECK_EQUAL(1, listener3->countCalls);
 
-	Messenger::MessagePtr message2(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_2)));
+	Messenger::MessagePtr message2(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_2)));
 	messenger.triggerMessage(message2);
 
 	BOOST_CHECK_EQUAL(1, listener1->countCalls);
@@ -148,7 +148,7 @@ BOOST_FIXTURE_TEST_CASE(trigger_calls_listeners_for_correct_type, ThreeListeners
 BOOST_AUTO_TEST_CASE(cannot_queue_when_no_listener)
 {
 	GenericMessenger messenger;
-	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_2)));
+	Messenger::MessagePtr message(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_2)));
 
 	BOOST_CHECK_THROW(messenger.queueMessage(message), Exceptions::NoOneIsListening);
 }
@@ -159,21 +159,21 @@ BOOST_AUTO_TEST_CASE(cannot_queue_when_listener_with_different_type)
 	Messenger::ListenerPtr listener1(new MockListener);
 
 	messenger.addListener(listener1, MessageType(MESSAGE_TYPENAME_1));
-	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_2)));
+	Messenger::MessagePtr message(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_2)));
 
 	BOOST_CHECK_THROW(messenger.queueMessage(message), Exceptions::NoOneIsListening);
 }
 
 BOOST_FIXTURE_TEST_CASE(process_after_queue_calls_listeners_for_correct_type, ThreeListenersFixture)
 {
-	Messenger::MessagePtr message1(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+	Messenger::MessagePtr message1(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1)));
 	messenger.queueMessage(message1);
 
 	BOOST_CHECK_EQUAL(0, listener1->countCalls);
 	BOOST_CHECK_EQUAL(0, listener2->countCalls);
 	BOOST_CHECK_EQUAL(0, listener3->countCalls);
 
-	Messenger::MessagePtr message2(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_2)));
+	Messenger::MessagePtr message2(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_2)));
 	messenger.queueMessage(message2);
 	messenger.queueMessage(message1);
 
@@ -197,9 +197,9 @@ BOOST_FIXTURE_TEST_CASE(process_after_queue_calls_listeners_for_correct_type, Th
 struct ThreeMessagesType121 : public ThreeListenersFixture
 {
 	ThreeMessagesType121() :
-		message1(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1))),
-		message2(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_2))),
-		message3(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)))
+		message1(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1))),
+		message2(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_2))),
+		message3(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1)))
 	{
 		messenger.queueMessage(message1);
 		messenger.queueMessage(message2);
@@ -260,7 +260,7 @@ struct MockLoopListener : public MockListener
 {
 	MockLoopListener(Messenger & messengerToCall) :
 		messenger(messengerToCall),
-		loopMessage(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)))
+		loopMessage(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1)))
 	{
 	}
 
@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_CASE(listener_adding_a_message_does_not_cause_a_loop)
 	boost::shared_ptr<MockListener> listener1(new MockLoopListener(messenger));
 	messenger.addListener(listener1, MessageType(MESSAGE_TYPENAME_1));
 
-	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+	Messenger::MessagePtr message(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1)));
 	messenger.queueMessage(message);
 
 	messenger.processQueue();
@@ -312,7 +312,7 @@ BOOST_AUTO_TEST_CASE(cannot_listen_to_anytype_messages)
 	Messenger::ListenerPtr listener1(new MockListener);
 	messenger.addListener(listener1, MessageType(Gnoll::Core::MSG_ANYTYPE));
 
-	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+	Messenger::MessagePtr message(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1)));
 
 	BOOST_CHECK_THROW(messenger.triggerMessage(message), Exceptions::NoOneIsListening);
 }
@@ -325,7 +325,7 @@ BOOST_AUTO_TEST_CASE(can_listen_to_anytype_messages_if_listener_for_message_type
 	messenger.addListener(listener1, MessageType(Gnoll::Core::MSG_ANYTYPE));
 	messenger.addListener(listener1, MessageType(MESSAGE_TYPENAME_1));
 
-	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+	Messenger::MessagePtr message(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1)));
 
 	messenger.triggerMessage(message);
 	BOOST_CHECK_EQUAL(2, listener1->countCalls);
@@ -340,7 +340,7 @@ BOOST_AUTO_TEST_CASE(can_listen_to_anytype_messages_if_other_listener_for_messag
 	messenger.addListener(listener1, MessageType(Gnoll::Core::MSG_ANYTYPE));
 	messenger.addListener(listener2, MessageType(MESSAGE_TYPENAME_1));
 
-	Messenger::MessagePtr message(new Gnoll::Core::CMessage(MessageType(MESSAGE_TYPENAME_1)));
+	Messenger::MessagePtr message(new Gnoll::Core::Message(MessageType(MESSAGE_TYPENAME_1)));
 
 	messenger.triggerMessage(message);
 	BOOST_CHECK_EQUAL(1, listener1->countCalls);

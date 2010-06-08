@@ -31,7 +31,7 @@
 #include "../include/camerawrapper.h"
 #include "../include/cmessagelistenercamera.h"
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../dynamicobject/include/string.h"
@@ -157,12 +157,12 @@ namespace Gnoll
 		{
 			// Destroy all listeners attach to this camera
 			// -------------------------------------------
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 
 			while (!queueListener.empty())
 			{
 				shared_ptr<PairsListener> pairs = shared_ptr<PairsListener>(queueListener.front());
-				messageModule->getMessageManager()->delListener(shared_ptr<CMessageListenerCamera>(pairs->first), *pairs->second);
+				messageModule->getMessageManager()->delListener(shared_ptr<MessageListenerCamera>(pairs->first), *pairs->second);
 				queueListener.pop();
 			}
 
@@ -262,7 +262,7 @@ namespace Gnoll
 		{
 		}
 
-		void Camera::enqueueListener(shared_ptr<CMessageListenerCamera> listener, shared_ptr<Messages::MessageType> type)
+		void Camera::enqueueListener(shared_ptr<MessageListenerCamera> listener, shared_ptr<Messages::MessageType> type)
 		{
 			// Add the listener to the queue
 			// -----------------------------

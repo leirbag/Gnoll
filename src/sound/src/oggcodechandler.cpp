@@ -52,7 +52,7 @@ namespace Gnoll
 		/**
 		 * Instanciate a new Sound object from the data extracted from the audio stream
 		 */
-		shared_ptr<Sound> OggCodecHandler::handle(shared_ptr<IStream> _stream)
+		shared_ptr<Sound> OggCodecHandler::handle(shared_ptr<AbstractStream> _stream)
 		{
 			shared_ptr<Sound> _sound(new Sound);
 			
@@ -190,10 +190,10 @@ namespace Gnoll
 
 			
 			char buffer [maxSizeBuffer];
-			IStream * stream;
+			AbstractStream * stream;
 			size_t res;
 		
-			stream = (IStream *)datasource;
+			stream = (AbstractStream *)datasource;
 
 			/**
 			 * Nothing to read

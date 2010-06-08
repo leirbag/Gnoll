@@ -17,43 +17,40 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __CIDIOTTRANSITION_H__
+#define __CIDIOTTRANSITION_H__
 
-/*-----------------------------ctransition.h-------------------------------*\
-|   Interface of all the FSM's transitions                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/27/2006 - Paf - Initial release                          |
-|               07/10/2007 - Paf - Virtual destructor added                 |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-#ifndef __CTRANSITION_H__
-#define __CTRANSITION_H__
+#include "ctransition.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
 		/**
-		 *	Interface of all the FSM's transitions
+		 *	An idiot FSM's transition. <br> It will always be evaluated as True or False.
 		 */
-		class CTransition
+		class IdiotTransition : public Transition
 		{
 			public:
-
 				/**
-				 * This is a destructor
+				 * This is a constructor.
+				 * @param validation This the value this transition will always return when it's evaluated.
 				 */
-				virtual ~CTransition() {};
+				IdiotTransition(bool validation) : m_valid(validation) {};
 
 				/**
 				 * This will check if this transition is valid, or not.
 				 * @return The validation test's result
 				 */
-				virtual bool isValid() = 0;
+				bool isValid() { return m_valid; }
 
+			private:
+				/**
+				 * isvalidate() will always return this value.
+				 */
+				bool m_valid;
 		};
 	};
 };
-#endif // __CTRANSITION_H__
+
+#endif

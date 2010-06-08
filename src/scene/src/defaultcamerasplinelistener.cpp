@@ -44,7 +44,7 @@ namespace Gnoll
 		{
 		}
 
-		void DefaultCameraSplineListener::handle ( shared_ptr<CMessage> message )
+		void DefaultCameraSplineListener::handle ( shared_ptr<Message> message )
 		{
 			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
 			lasttime = lasttime * 1000.0f;

@@ -18,11 +18,13 @@
  ***************************************************************************/
 
 #include "../include/listenercontainer.h"
-#include "../include/messagetype.h"
-#include "../include/exceptions.h"
-#include <boost/bind.hpp>
 
 #include <iostream>
+
+#include <boost/bind.hpp>
+
+#include "../include/messagetype.h"
+#include "../include/exceptions.h"
 
 namespace Gnoll
 {

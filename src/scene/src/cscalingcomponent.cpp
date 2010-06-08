@@ -22,10 +22,10 @@
 #include "../../graphic/include/cgraphicmodule.h"
 
 #include "../include/cscalingcomponent.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/listener.h"
 
 using namespace Gnoll::DynamicObject;
@@ -56,7 +56,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					Ogre::Vector3 scale = message->getData<Ogre::Vector3>();
 					scaleComponent->setScaling(scale);
@@ -100,7 +100,7 @@ namespace Gnoll {
 			/**
 			 * Register the listener
 			 */
-			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			MessageModule*  messageModule  = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			scalingListener = shared_ptr<Messages::Listener> (new ScalingListener(this));
@@ -116,7 +116,7 @@ namespace Gnoll {
 			 */
 			Messages::MessageType messageType("SET_SCALING_" + parent->getInstance());
 			shared_ptr<boost::any> data(new boost::any(scale)) ;
-			shared_ptr<CMessage> message = shared_ptr<CMessage>(new CMessage(messageType, data));
+			shared_ptr<Message> message = shared_ptr<Message>(new Message(messageType, data));
 			messageManager->queueMessage(message);
 		}
 
@@ -126,7 +126,7 @@ namespace Gnoll {
 			/**
 			 * Unregister the listener
 			 */
-			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			MessageModule*  messageModule  = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( scalingListener, "SET_SCALING_" + parent->getInstance() );

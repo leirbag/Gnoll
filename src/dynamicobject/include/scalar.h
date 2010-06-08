@@ -54,17 +54,17 @@ namespace Gnoll
 				 * This is a constructor
 				 * @param _attributeType Type name of the value to hold
 				 */
-				Scalar(string attributeType ) : m_attributeType(attributeType) {}
+				Scalar(string attributeType) : m_attributeType(attributeType) {}
 
 				/**
 				 * This operator gives a convenient way to get the value hold by an instance of this class
 				 */
-				T operator() () { return melement;}
+				T operator() () { return melement; }
 
 				/**
 				 * This operator gives a convenient way to get the value hold by an instance of this class
 				 */
-				T getValue() const {return melement;}
+				T getValue() const { return melement; }
 
 				/**
 				 * This operator gives a convenient way to set the value hold by an instance of this class
@@ -79,7 +79,7 @@ namespace Gnoll
 				/**
 				 * This operator gives a convenient way to set the attribute type
 				 */
-				void setAttrType( string type) { m_attributeType = type; }
+				void setAttrType(string type) { m_attributeType = type; }
 
 				/**
 				 * This method serialize the object. <br/>
@@ -89,11 +89,11 @@ namespace Gnoll
 				 */
 				virtual shared_ptr<xmlpp::Document> serializeXML() 
 				{
-					shared_ptr<xmlpp::Document> document( new xmlpp::Document("1.0"));  
+					shared_ptr<xmlpp::Document> document(new xmlpp::Document("1.0"));  
 
-					xmlpp::Element* root = document->create_root_node( m_attributeType );
+					xmlpp::Element* root = document->create_root_node(m_attributeType );
 
-					string finalString = lexical_cast<string> (melement);
+					string finalString = lexical_cast<string>(melement);
 
 					root->set_attribute("value", finalString);
 
@@ -139,10 +139,8 @@ namespace Gnoll
 				virtual istream& operator>>(istream& stream)
 				{
 					T value;
-					if (stream >> value)    
-					{
+					if(stream >> value)    
 						this->setValue(value);
-					}
 
 					return stream;
 				}
@@ -238,6 +236,7 @@ namespace Gnoll
 		{
 			return Scalar<T>(lValue.getAttrType(), lValue.getValue() ^ rValue.getValue());
 		}
+
 		/**
 		 * Overloading operator ==
 		 * @param lValue Left value

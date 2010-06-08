@@ -61,7 +61,7 @@ namespace Gnoll
 		}
 			
 		
-		shared_ptr<AudioCodecHandler> AudioCodecManager::getAudioCodecHandler(shared_ptr<IStream> _stream, string _instance)
+		shared_ptr<AudioCodecHandler> AudioCodecManager::getAudioCodecHandler(shared_ptr<AbstractStream> _stream, string _instance)
 		{
 			string type;
 

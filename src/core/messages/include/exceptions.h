@@ -46,11 +46,9 @@ namespace Gnoll
 				class NoOneIsListening : std::exception
 				{
 				};
-				
 			}
 		}
 	}
 }
 
 #endif
-

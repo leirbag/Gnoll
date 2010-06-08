@@ -46,7 +46,7 @@ namespace Gnoll {
 		{
 		}
 
-		void CCreatePeriodicEventListener::handle ( shared_ptr<CMessage> message )
+		void CCreatePeriodicEventListener::handle ( shared_ptr<Message> message )
 		{
 		
 			TimerPeriodicEvent timerEvent ( message->getData<TimerPeriodicEvent>());

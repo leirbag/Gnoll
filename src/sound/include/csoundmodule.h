@@ -18,7 +18,7 @@
 ***************************************************************************/
 
 
-/*----------------------------csoundcmodule.h-------------------------------*\
+/*----------------------------csoundmodule.h-------------------------------*\
 |   The sound module                                                         |
 |                                                                            |
 |   Changelog :                                                              |
@@ -27,9 +27,9 @@
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
-#include "../../core/include/cmodule.h"
+#include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "soundplaylistener.h"
 #include "soundmanager.h"
 
@@ -51,7 +51,7 @@ namespace Gnoll {
 		/**
 		 *	The sound module
 		 */
-		class CSoundModule : public CModule, public Singleton<CSoundModule>
+		class CSoundModule : public Module, public Singleton<CSoundModule>
 		{
 
 			private :
@@ -89,22 +89,22 @@ namespace Gnoll {
 				CSoundModule();
 		
 				/**
-				* @copydoc CModule::init
+				* @copydoc Module::init
 				*/
 				virtual void init();
 		
 				/**
-				* @copydoc CModule::process
+				* @copydoc Module::process
 				*/
 				virtual void process();
 		
 				/**
-				* @copydoc CModule::exit 
+				* @copydoc Module::exit 
 				*/
 				virtual void exit();
 		
 				/**
-				* @copydoc CModule::~CModule
+				* @copydoc Module::~Module
 				*/
 				virtual ~CSoundModule();
 				

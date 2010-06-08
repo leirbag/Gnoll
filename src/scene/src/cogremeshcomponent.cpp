@@ -23,7 +23,7 @@
 #include "../../graphic/include/cgraphicmodule.h"
 
 #include "../../core/messages/include/messagetype.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../include/cogremeshcomponent.h"
 #include "../include/gobject.h"
 
@@ -55,7 +55,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					Ogre::Vector3 position = message->getData<Ogre::Vector3>();
 					component->setPosition(position);
@@ -84,7 +84,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					Ogre::Vector3 scale = message->getData<Ogre::Vector3>();
 					component->setScaling(scale);
@@ -113,7 +113,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					Ogre::Vector3 rotation = message->getData<Ogre::Vector3>();
 					component->setRotation(rotation);
@@ -229,7 +229,7 @@ namespace Gnoll {
 			/**
 			 * Register the listener
 			 */
-			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			MessageModule*  messageModule  = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			componentPositionListener = shared_ptr<Messages::Listener> (new OgreMeshPositionListener(this));
@@ -268,7 +268,7 @@ namespace Gnoll {
 			/**
 			 * Unregister the listener
 			 */
-			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			MessageModule*  messageModule  = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( componentPositionListener, "SET_POSITION_" + m_parent->getInstance() );

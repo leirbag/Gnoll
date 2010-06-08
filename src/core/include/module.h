@@ -17,54 +17,40 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------cidiottransition.h----------------------------*\
-|   An idiot FSM's transitions                                              |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/29/2006 - Paf - Initial release                          |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-#include "ctransition.h"
-
-
-#ifndef __CIDIOTTRANSITION_H__
-#define __CIDIOTTRANSITION_H__
+#ifndef __MODULE_H__
+#define __MODULE_H__
 
 namespace Gnoll
 {
 	namespace Core
 	{
 		/**
-		 *	An idiot FSM's transition. <br> It will always be evaluated as True or False.
+		 *	Interface of all game modules.
 		 */
-		class CIdiotTransition : public CTransition
+		class Module
 		{
-			private:
-
-				/**
-				 * isvalidate() will always return this value.
-				 */
-				bool m_valid;
-
 			public:
+				/**
+				 * This inits a module
+				 */
+				virtual void init() = 0;
 
 				/**
-				 * This is a constructor.
-				 * @param validation This the value this transition will always return when it's evaluated.
+				 * This lets a module to do its own business
 				 */
-				CIdiotTransition( bool validation): m_valid(validation) {};
+				virtual void process() = 0;
 
 				/**
-				 * This will check if this transition is valid, or not.
-				 * @return The validation test's result
+				 * This is called on exiting
 				 */
-				bool isValid() { return m_valid; }
+				virtual void exit() = 0;
 
+				/**
+				 * This is a virtual destructor
+				 */
+				virtual ~Module() {};
 		};
 	};
 };
 
-#endif // __CIDIOTTRANSITION_H__
+#endif 

@@ -22,7 +22,7 @@
 #include "../include/camerafreefly.h"
 #include "../include/defaultcamerafreeflylistener.h"
 #include "../include/cmessagelistenercamera.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
 #include "../../input/include/coisinputmodule.h"
@@ -39,8 +39,8 @@ namespace Gnoll
 			// ------------------
 			shared_ptr<OgreCameraWrapper> wrapper = shared_ptr<OgreCameraWrapper>(new OgreCameraWrapper(instanceName));
 
-			Gnoll::Core::CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
-			shared_ptr<CMessageListenerCamera> listenerInput(new DefaultCameraFreeFlyListener);
+			Gnoll::Core::MessageModule* messageModule = Gnoll::Core::MessageModule::getInstancePtr();
+			shared_ptr<MessageListenerCamera> listenerInput(new DefaultCameraFreeFlyListener);
 			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::Messages::MessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
 			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::Messages::MessageType(Gnoll::Input::ACTION_EVENT_STATE_TYPE) );
 			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFreeFly(instanceName, wrapper));

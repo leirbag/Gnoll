@@ -17,97 +17,82 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------filestream----------------------------------*\
-|   This is a stream based on files                                         |
-|                                                                           |
-|   Changelog :                                                             |
-|               07/18/2007 - Paf - Initial release                          |
-|               08/18/2007 - Paf - Update comments                          |
-|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include "../include/filestream.h"
-#include "../../log/include/clogmodule.h"
+
 #include <boost/filesystem/operations.hpp>
+
+#include "../../log/include/clogmacros.h"
 
 using namespace boost::filesystem;
 
-namespace Gnoll {
-
-	namespace Core {
-
-
-		FileStream::FileStream( string _filename, bool _overWrite) : m_filename(_filename)
+namespace Gnoll
+{
+	namespace Core
+	{
+		FileStream::FileStream(string filename, bool overWrite) : 
+			m_filename(filename)
 		{
 			ios::openmode mode = ios::in | ios::binary;
 			m_isOpen = false;
 
-			if (is_directory(_filename))
+			if(is_directory(filename))
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( _filename + " is a directory" );
+				GNOLL_LOG().logMessage(filename + " is a directory");
 				return;
 			}
 
-			if (_overWrite)
-			{
+			if(overWrite)
 				mode = mode | ios::trunc | ios::out;
-			}
 
 			m_stream.open (m_filename.c_str(), mode);
-
-			if (m_stream.good())
+			if(m_stream.good())
 			{
 				m_isOpen = true;
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( m_filename + " succesfully opened" );
-			} else {
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( m_filename + " UNsuccesfully opened" );
-			}
+				GNOLL_LOG().logMessage(m_filename + " succesfully opened");
+			} 
+			else 
+				GNOLL_LOG().logMessage(m_filename + " UNsuccesfully opened");
 		}
-
 
 		FileStream::~FileStream()
 		{
-			if (m_isOpen)
+			if(m_isOpen)
 			{
 				this->close();
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Closing file " + m_filename );
+				GNOLL_LOG().logMessage("Closing file " + m_filename);
 			}
 		}
 
-
-		size_t FileStream::read( char* _buff, size_t _size)
+		size_t FileStream::read(char* buff, size_t size)
 		{
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Reading " + m_filename );
-			if (m_isOpen)
+			GNOLL_LOG().logMessage( "Reading " + m_filename );
+			if(m_isOpen)
 			{
-				m_stream.read(_buff, _size);
+				m_stream.read(buff, size);
 				return m_stream.gcount();
-			} else
+			} 
+			else
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( m_filename + "was not opened" );
+				GNOLL_LOG().logMessage( m_filename + "was not opened" );
 				return 0;
 			}
 		}
 
-		size_t FileStream::write( const char* _buff, size_t _size)
+		size_t FileStream::write(const char* buff, size_t size)
 		{
 			if (m_isOpen)
 			{
 				unsigned int before = m_stream.tellp();
-				m_stream.write(_buff, _size);
+				m_stream.write(buff, size);
 				return (unsigned int)m_stream.tellp() - before;
-			} else
-			{
+			} 
+			else
 				return 0;
-			}
 		}
 
 		void FileStream::close()
 		{
-			if (m_isOpen)
+			if(m_isOpen)
 			{
 				m_stream.flush();
 				m_stream.close();
@@ -116,18 +101,13 @@ namespace Gnoll {
 
 		bool FileStream::eof()
 		{
-			if (m_isOpen)
-			{
+			if(m_isOpen)
 				return m_stream.eof();
-			} else
+			else
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Trying to get an EOF on a closed file: " + m_filename );
+				GNOLL_LOG().logMessage("Trying to get an EOF on a closed file: " + m_filename);
 				return 1;
 			}
 		}
 	}
 }
-
-
-
-

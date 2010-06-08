@@ -17,50 +17,54 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------------cmodule.h---------------------------------*\
-|   Interface of all the game modules                                        |
-|                                                                            |
-|   Changelog :                                                              |
-|               06/23/2006 - Paf - Initial release                           |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Core          |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-
-#ifndef __CMODULE_H__
-#define __CMODULE_H__
+#ifndef __ABSTRACTSTREAM_H__
+#define __ABSTRACTSTREAM_H__
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		/**
-		 *	Interface of all game modules.
-		 */
-		class CModule
+		class AbstractStream
 		{
 			public:
 				/**
-				 * This inits a module
+				 * This is a constructor.
 				 */
-				virtual void init() = 0;
+				AbstractStream() {};
 
 				/**
-				 * This lets a module to do its own business
+				 * This is a destructor.
 				 */
-				virtual void process() = 0;
+				virtual ~AbstractStream() {};
 
 				/**
-				 * This is called on exiting
+				 * This methods reads at most _size bytes and store them in the buffer _buff
+				 * @param _buff Buffer where data will be stored
+				 * @param _size Maximum number of bytes to read
+				 * @return Number of bytes actually read
 				 */
-				virtual void exit() = 0;
+				virtual size_t read(char* buff, size_t size) = 0;
 
 				/**
-				 * This is a virtual destructor
+				 * This methods writes at most _size bytes from the buffer _buff
+				 * @param _buff Buffer from where data will be read
+				 * @param _size Maximum number of bytes to written
+				 * @return Number of bytes actually written
 				 */
-				virtual ~CModule() {};
+				virtual size_t write(const char* buff, size_t size) = 0;
+
+				/**
+				 * This method closes the stream
+				 */
+				virtual void close() = 0;
+
+				/**
+				 * This method tells you if it's the end of the stream
+				 * @return True if it's the end of the stream. False otherwise
+				 */
+				virtual bool eof() = 0;
 		};
-	};
-};
+	}
+}
 
-#endif // __CMODULE_H__
+#endif

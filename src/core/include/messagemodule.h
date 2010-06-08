@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2006 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,50 +17,66 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __MESSAGEMODULE_H__
+#define __MESSAGEMODULE_H__
 
-/*--------------------------------cstate.h---------------------------------*\
-|   Interface of all the FSM's states                                       |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/27/2006 - Paf - Initial release                          |
-|               04/10/2006 - Gabriel - Add namespace Gnoll and Core         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include "../include/module.h"
+#include "../include/singleton.h"
+#include "../messages/include/messenger.h"
 
-#ifndef __CSTATE_H__
-#define __CSTATE_H__
+using namespace std;
+using namespace boost;
 
 namespace Gnoll
 {
 	namespace Core
 	{
 		/**
-		 *	Interface of all the FSM's states. <br>A state is a description of an activity.
+		 *	The game messaging module.
 		 */
-		class CState
+		class MessageModule : public Module, public Singleton<MessageModule>
 		{
 			public:
 				/**
-				 * This is called after entering this state
+				 * Default constructor
 				 */
-				virtual void onInit() = 0;
+				MessageModule();
 
 				/**
-				 * This is called during its activation
+				 * Return the default message manager</br>
+				 *   So if one write a new implementation of a Messages::Messenger, there would be
+				 *   only one line to replace
+				 * @Return Default message manager
 				 */
-				virtual void onProcess() = 0;
+				Messages::Messenger* getMessageManager();
 
 				/**
-				 * This is called before exiting this state
+				 * @copydoc Module::init
 				 */
-				virtual void onExit() = 0;
+				virtual void init();
 
 				/**
-				 * This is a virtual destructor
+				 * @copydoc Module::process
 				 */
-				virtual ~CState() {};
+				virtual void process();
+
+				/**
+				 * @copydoc Module::exit
+				 */
+				virtual void exit();
+
+				/**
+				 * @copydoc Module::~Module
+				 */
+				virtual ~MessageModule();
+
+			private:
+				/**
+				 * Pointer to the Message Manager
+				 */
+				shared_ptr<Messages::Messenger> m_messageManager;
 		};
-	};
-};
+	}
+}
 
-#endif // __CSTATE_H__
+#endif

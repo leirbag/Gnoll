@@ -24,7 +24,7 @@
 |   Changelog :                                                              |
 |               06/26/2006 - Paf - Initial release                           |
 |               05/09/2007 - Paf - Adapt everything to the new interface of  |
-|                                   CMessage                                 |
+|                                   Message                                 |
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 

@@ -37,7 +37,7 @@ struct MockListener : public Listener
 	}
 
 	int countCalls;
-	Gnoll::Core::CMessage * lastestMessage;
+	Gnoll::Core::Message * lastestMessage;
 };
 
 BOOST_AUTO_TEST_CASE(can_add_listeners_with_different_types)

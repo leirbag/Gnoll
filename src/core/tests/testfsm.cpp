@@ -28,7 +28,7 @@
 
 
 
-#include "../include/cfsm.h"
+#include "../include/finitestatemachine.h"
 #include "../include/cidiotstate.h"
 #include "../include/cidiottransition.h"
 
@@ -44,10 +44,10 @@ int main()
 	CFSM myfsm;
 
 	// Some states are created
-	shared_ptr<CState> initialstate( new CIdiotState("le 1er") );
-	shared_ptr<CState> deusm( new CIdiotState("le 2eme") );
-	shared_ptr<CState> treusm( new CIdiotState("le 3eme") );
-	shared_ptr<CState> quatreusm( new CIdiotState("le 4eme") );
+	shared_ptr<State> initialstate( new CIdiotState("le 1er") );
+	shared_ptr<State> deusm( new CIdiotState("le 2eme") );
+	shared_ptr<State> treusm( new CIdiotState("le 3eme") );
+	shared_ptr<State> quatreusm( new CIdiotState("le 4eme") );
 
 	// Two transitions are created : one is always false and the other is always true :)
    shared_ptr<CIdiotTransition> faux(new CIdiotTransition( false));

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Paf                                             *
+ *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,46 +17,62 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __MESSAGE_H__
+#define __MESSAGE_H__
 
-/*------------------------------CThreadStopper-----------------------------*\
-|   This is basic thread object.                                            |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/09/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include <string>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
 
-
-#include "../include/cthreadstopper.h"
-
-
+#include "../messages/include/messagetype.h"
 
 using namespace std;
 using namespace boost;
+using namespace Gnoll::Core::Messages;
+using boost::any_cast;
 
-namespace Gnoll {
+namespace Gnoll
+{
+	namespace Core
+	{
+		typedef shared_ptr<boost::any> Any_ptr;
+		const Messages::MessageType MSG_ANYTYPE("*");
 
-	namespace Core {
-
-
-		void CThreadStopper::run ()
+		/**
+		 *	A message.
+		 */
+		class Message
 		{
-			m_worker->stop();
-		}
+			public:
+				/**
+				 * This is a constructor
+				 */
+				Message(MessageType msgtype = MSG_ANYTYPE, Any_ptr data = Any_ptr()) :
+					m_type(msgtype), m_userdata(data) {}
 
+				/**
+				 * This is a destructor
+				 */
+				~Message() {}
 
-		CThreadStopper::CThreadStopper(shared_ptr<CWorker> _worker) : m_worker(_worker)
-		{
-		}
-	
-		CThreadStopper::~CThreadStopper()
-		{
-		}
+				/**
+				 * This returns the type of this message
+				 *	@return Messages::MessageType	:	Its type
+				 */
+				MessageType getType() { return m_type; }
 
+				/**
+				 * This returns the data contained in this message
+				 *	@return shared_ptr<boost::any>	:	Its data
+				 */
+				template<class T>
+				T getData() { return T (any_cast<T>(*m_userdata)); }
 
-	}
-}
-
-
+			private:
+				MessageType m_type;
+				shared_ptr<boost::any> m_userdata;
+		};
+	};
+};
+#endif

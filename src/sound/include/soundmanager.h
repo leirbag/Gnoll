@@ -67,12 +67,12 @@ namespace Gnoll {
 				/**
 				 * @copydoc BaseManager::loadImpl
 				 */
-				virtual shared_ptr<Sound> loadImpl( shared_ptr<IStream> _stream, string _instance);
+				virtual shared_ptr<Sound> loadImpl( shared_ptr<AbstractStream> _stream, string _instance);
 
 				/**
 				 * @copydoc BaseManager::saveImpl
 				 */
-				virtual bool saveImpl( shared_ptr<IStream> _stream, shared_ptr<Sound> _obj, string _instance);
+				virtual bool saveImpl( shared_ptr<AbstractStream> _stream, shared_ptr<Sound> _obj, string _instance);
 
 			public:
 	

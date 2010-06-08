@@ -21,8 +21,8 @@
 #include "../../config.h"
 #include "../../log/include/clogmacros.h"
 
-#include "../../core/include/cmessage.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/message.h"
+#include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/messenger.h"
 #include "../../core/messages/include/listener.h"
 #include "../../core/messages/include/messagetype.h"
@@ -285,9 +285,9 @@ namespace Gnoll
 			shared_ptr<boost::any> tempTime (
 					new boost::any (time)
 					);
-			shared_ptr<CMessage>  mymessage (new CMessage(framerendered, tempTime));
+			shared_ptr<Message>  mymessage (new Message(framerendered, tempTime));
 
-			Gnoll::Core::CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
+			Gnoll::Core::MessageModule::getInstancePtr()->getMessageManager()->queueMessage(mymessage);
 
 			m_lastframe = newframe;
 		}

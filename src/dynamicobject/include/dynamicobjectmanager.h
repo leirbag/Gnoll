@@ -56,7 +56,7 @@ namespace Gnoll
 				 * @param _stream Stream from which the ressource will be extracted
 				 * @return Smart pointer to the newly created object
 				 */
-				virtual shared_ptr<DynamicObject> loadImpl(shared_ptr<IStream> stream, string instance);
+				virtual shared_ptr<DynamicObject> loadImpl(shared_ptr<AbstractStream> stream, string instance);
 
 				/**
 				 * This method saves a DynamicObject to a stream
@@ -64,7 +64,7 @@ namespace Gnoll
 				 * @param _obj Smart pointer to the object to be saved
 				 * @return The successfulness of this operation
 				 */
-				virtual bool saveImpl(shared_ptr<IStream> stream, shared_ptr<DynamicObject> obj, string instance);
+				virtual bool saveImpl(shared_ptr<AbstractStream> stream, shared_ptr<DynamicObject> obj, string instance);
 		};
 	}
 }

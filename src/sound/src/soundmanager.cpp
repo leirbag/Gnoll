@@ -46,7 +46,7 @@ namespace Gnoll {
 		}
 		
 		
-		shared_ptr<Sound> SoundManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
+		shared_ptr<Sound> SoundManager::loadImpl( shared_ptr<AbstractStream> _stream, string _instance)
 		{	
 			shared_ptr<AudioCodecHandler> audioCodecHandler = AudioCodecManager::getInstancePtr()->getAudioCodecHandler(_stream, _instance);
 
@@ -66,7 +66,7 @@ namespace Gnoll {
 		}
 		
 		
-		bool SoundManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<Sound> _obj, string _instance)
+		bool SoundManager::saveImpl( shared_ptr<AbstractStream> _stream, shared_ptr<Sound> _obj, string _instance)
 		{
 			return false;	
 		}

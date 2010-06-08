@@ -24,7 +24,7 @@
 
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../core/messages/include/listener.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 
 
 using namespace boost;
@@ -102,7 +102,7 @@ namespace Gnoll
 				/**
 				* Send mouse button events if any button has been pressed
 				*/
-				void trigger(shared_ptr<CMessage> _msg);
+				void trigger(shared_ptr<Message> _msg);
 		};
 	};
 };

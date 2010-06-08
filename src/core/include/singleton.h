@@ -17,22 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*------------------------------singleton.h--------------------------------*\
-|   A singleton template                                                    |
-|                                                                           |
-|   Changelog :                                                             |
-|               06/23/2006 - Paf - Initial release                          |
-|               07/13/2007 - Yellow - 'Singleton' ambiguous symbol, change  |
-|                                       to '::Singleton'                    |
-|               11/27/2007 - Paf - Singleton is now part of the namespace   |
-|                                    Gnoll::Core                            |
-|                                  Add a mutex to make it thread friendly   |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __SINGLETON_H__
 #define __SINGLETON_H__
 
@@ -43,32 +27,15 @@
 
 namespace Gnoll
 {
-
 	namespace Core
 	{
-
-
 		/**
 		 *	Interface of all game modules.
 		 */
-		template <typename T> class Singleton
+		template <typename T>
+		class Singleton
 		{
-			private:
-
-				/**
-				 * Instance pointer
-				 */
-				static T* m_instance;
-
-				/**
-				 * Mutex
-				 */
-				static boost::mutex m_mutex;
-
-
-
 			public:
-
 				/**
 				 * A constructor
 				 */
@@ -97,25 +64,32 @@ namespace Gnoll
 				 */
 				static void destroy()
 				{
-
 					boost::mutex::scoped_lock lock(m_mutex);
 
 					if (m_instance != 0)
 					{
-
 						delete m_instance;
 						m_instance = 0;
 					}
 
 				}
 
+			private:
+
+				/**
+				 * Instance pointer
+				 */
+				static T* m_instance;
+
+				/**
+				 * Mutex
+				 */
+				static boost::mutex m_mutex;
 		};
 
-		template <typename T> T * Singleton<T>::m_instance = 0;
+		template <typename T> T* Singleton<T>::m_instance = 0;
 		template <typename T> boost::mutex Singleton<T>::m_mutex;
-
 	}
 }
-
 
 #endif // __SINGLETON_H__

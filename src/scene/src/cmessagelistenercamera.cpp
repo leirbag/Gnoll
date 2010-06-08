@@ -4,16 +4,16 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		CMessageListenerCamera::CMessageListenerCamera() :
+		MessageListenerCamera::MessageListenerCamera() :
 			Gnoll::Core::Messages::Listener()
 		{
 		}
 
-		CMessageListenerCamera::~CMessageListenerCamera()
+		MessageListenerCamera::~MessageListenerCamera()
 		{
 		}
 
-		void CMessageListenerCamera::setCamera(shared_ptr<Camera> pCamera)
+		void MessageListenerCamera::setCamera(shared_ptr<Camera> pCamera)
 		{
 			if(pCamera == NULL)
 				return;
@@ -21,7 +21,7 @@ namespace Gnoll
 			m_pCamera = pCamera;
 		}
 
-		void CMessageListenerCamera::handle ( shared_ptr<Gnoll::Core::CMessage> message )
+		void MessageListenerCamera::handle ( shared_ptr<Gnoll::Core::Message> message )
 		{
 		}
 	};

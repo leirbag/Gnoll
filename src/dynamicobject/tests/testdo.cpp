@@ -40,7 +40,7 @@
 #include "../include/inherits.h"
 
 #include "../../core/include/sourcefile.h"
-#include "../../core/include/istream.h"
+#include "../../core/include/abstractstream.h"
 
 
 using namespace std;
@@ -97,7 +97,7 @@ int main() {
 
 	SourceFile sf("./");
 
-	shared_ptr<IStream> stream = sf.loadStream("testpo.cpp");
+	shared_ptr<AbstractStream> stream = sf.loadStream("testpo.cpp");
 	unsigned int bytesRead = 0;
 	while (!stream->eof())
 	{
@@ -113,7 +113,7 @@ int main() {
 
 	sf.setOverWrite(true);
 
-	shared_ptr<IStream> streamW = sf.saveStream("testpo.cppW");
+	shared_ptr<AbstractStream> streamW = sf.saveStream("testpo.cppW");
 
 	unsigned int bytesWritten = streamW->write("Jesuislorsdelajusticeetdel'emeriteca\nvalier", 40);
 	streamW->close();
@@ -122,8 +122,8 @@ int main() {
 
 
 
-	shared_ptr<ISource> loadChannel(new SourceFile(".", false));
-	shared_ptr<ISource> saveChannel(new SourceFile(".", true));
+	shared_ptr<AbstractSource> loadChannel(new SourceFile(".", false));
+	shared_ptr<AbstractSource> saveChannel(new SourceFile(".", true));
 
 	DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 

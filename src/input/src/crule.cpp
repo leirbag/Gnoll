@@ -22,10 +22,10 @@
 #include "../include/crule.h"
 #include "../include/ctranslationevents.h"
 
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
@@ -111,12 +111,12 @@ namespace Gnoll
 			ActionEvent actionEvent(m_action, 1.0f);
 
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+			shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
 			std::ostringstream tmpString;
 			try
 			{
-				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+				MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				tmpString << "Message ajoute ["<< m_action << "]";
 			}
 			catch(...)

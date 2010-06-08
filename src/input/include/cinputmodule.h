@@ -26,7 +26,7 @@
 |                                                                            |
 \*--------------------------------------------------------------------------*/
 
-#include "../../core/include/cmodule.h"
+#include "../../core/include/module.h"
 
 
 #ifndef __CINPUTMODULE_H__
@@ -37,26 +37,26 @@ using namespace Gnoll::Core;
 /**
  *	Interface of all game modules. 
  */ 
-class CInputModule: public CModule
+class CInputModule: public Module
 {
 	public:
 		/**
-		 * @copydoc CModule::init
+		 * @copydoc Module::init
 		 */
 		virtual void init() = 0;
 
 		/**
-		 * @copydoc CModule::process
+		 * @copydoc Module::process
 		 */
 		virtual void process() = 0;
 
 		/**
-		 * @copydoc CModule::exit 
+		 * @copydoc Module::exit 
 		 */
 		virtual void exit() = 0;
 
 		/**
-		 * @copydoc CModule::~CModule
+		 * @copydoc Module::~Module
 		 */
 		virtual ~CInputModule() {};
 };

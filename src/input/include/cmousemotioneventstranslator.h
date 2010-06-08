@@ -25,7 +25,7 @@
 
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../core/messages/include/listener.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 
 #include "cinputmouseevents.h"
 
