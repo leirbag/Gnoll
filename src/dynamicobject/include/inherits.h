@@ -17,22 +17,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------Inherits----------------------------------*\
-|   This is an inheritance attribute for DynamicObject                      |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __INHERITS_H__
 #define __INHERITS_H__
 
-
-#include "iattribute.h"
+#include "abstractattribute.h"
 #include "string.h"
 #include "attributehandlerregistry.h"
-
 
 using namespace std;
 using namespace boost;
@@ -41,37 +31,27 @@ namespace Gnoll
 {
 	namespace DynamicObject
 	{
-
 		/**
 		 *	This is an inheritance attribute for DynamicObject.
 		 */
-		class Inherits : public IAttribute
+		class Inherits : public AbstractAttribute
 		{
-			private:
-
-				String m_parent;
-
 			public:
-
-
 				/**
 				 * Returns Inherits's DynamicObject name
 				 * @return Inherits's DynamicObject name
 				 */
-				inline static const char * DYNAMIC_OBJECT_NAME() {return "inherits";}
-
+				inline static const char* DYNAMIC_OBJECT_NAME() { return "inherits"; }
 
 				/**
 				 * This is a constructor
 				 */
-				Inherits(String _parent = String());
-
+				Inherits(String parent = String());
 
 				/**
 				 * This is a destructor
 				 */
 				~Inherits();
-
 
 				/**
 				 * Get the parent DynamicObject instance name
@@ -79,13 +59,11 @@ namespace Gnoll
 				 */
 				String getParent();
 
-
 				/**
 				 * Set the parent DynamicObject instance name
 				 * @param _parent Parent DynamicObject instance name
 				 */
-				void setParent (String _parent);
-
+				void setParent(String parent);
 
 				/**
 				 * This method serialize the object. <br/>
@@ -95,7 +73,6 @@ namespace Gnoll
 				 */
 				virtual shared_ptr<xmlpp::Document> serializeXML();
 
-
 				/**
 				 * This method deserialize the object. <br/>
 				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
@@ -103,15 +80,17 @@ namespace Gnoll
 				 *
 			  	 * @param _element This is the XML tree containing the state of this object
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element );
+				virtual void deSerializeXML(xmlpp::Element* element);
 
-
+				/**
+				 * @TODO
+				 */
 				virtual void applyInheritance() {}
 
-
+			private:
+				String m_parent;
 		};
-
 	}
 }
 
-#endif // __INHERITS_H__
+#endif

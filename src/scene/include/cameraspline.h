@@ -49,7 +49,7 @@ namespace Gnoll
 			Ogre::NodeAnimationTrack* pNodeAT;
 			Ogre::AnimationState* pAnimState;
 
-			struct Spline : public Gnoll::DynamicObject::CDynamicObjectProxy
+			struct Spline : public Gnoll::DynamicObject::DynamicObjectProxy
 			{
 				unsigned long length;
 				Ogre::NodeAnimationTrack* pNodeAT;

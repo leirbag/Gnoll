@@ -145,7 +145,7 @@ namespace Gnoll
 					float intensity = (float) timePressed / (float) period * (*keyboardSensibility);
 
 					shared_ptr<List> actionList = keyboardEventTranslationMap->getAttribute<List>( it->first );
-					typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+					typedef list< shared_ptr<AbstractAttribute> >::iterator ListIterator;
 
 					/**
 					 * Send all action messages in the list

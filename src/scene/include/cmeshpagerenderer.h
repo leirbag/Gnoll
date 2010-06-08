@@ -36,7 +36,7 @@
 #include <glibmm/ustring.h>
 
 
-#include "../../dynamicobject/include/iattribute.h"
+#include "../../dynamicobject/include/abstractattribute.h"
 #include "ipagerenderer.h"
 #include <string>
 

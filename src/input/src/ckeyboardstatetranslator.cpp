@@ -94,7 +94,7 @@ namespace Gnoll
 			if ( keyboardEventTranslationMap->hasAttribute(keyCodeValue) )
 			{
 				shared_ptr<List> actionList = keyboardEventTranslationMap->getAttribute<List>( keyCodeValue );
-				typedef list< shared_ptr<IAttribute> >::iterator ListIterator;
+				typedef list< shared_ptr<AbstractAttribute> >::iterator ListIterator;
 
 				float intensity = *keyboardSensibility;
 				if( message->getType() == keyUp )

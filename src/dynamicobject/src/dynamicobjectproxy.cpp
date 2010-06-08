@@ -17,21 +17,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/dynamicobjectproxy.h"
 
-/*---------------------------CDynamicObjectProxy---------------------------*\
-|   This is a DynamicObject proxy                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               12/14/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
-
-#include "../include/cdynamicobjectproxy.h"
 #include "../include/dynamicobjectmanager.h"
-
 
 using namespace std;
 using namespace boost;
@@ -40,73 +28,62 @@ namespace Gnoll
 {
 	namespace DynamicObject
 	{
-
-
-		CDynamicObjectProxy::CDynamicObjectProxy (string _instanceName)
+		DynamicObjectProxy::DynamicObjectProxy(string instanceName)
 		{
-			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
-			m_self = pom->load(_instanceName);
+			DynamicObjectManager* pom = DynamicObjectManager::getInstancePtr();
+			m_self = pom->load(instanceName);
 		}
 
-		CDynamicObjectProxy::~CDynamicObjectProxy ()
+		DynamicObjectProxy::~DynamicObjectProxy()
 		{
 			this->save();
 		}
 
-		void CDynamicObjectProxy::save()
+		void DynamicObjectProxy::save()
 		{
-			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
-			pom->save( m_self->getInstance(), m_self);
+			DynamicObjectManager* pom = DynamicObjectManager::getInstancePtr();
+			pom->save(m_self->getInstance(), m_self);
 		}
 
-		void CDynamicObjectProxy::setAttribute( const Glib::ustring _name, shared_ptr<IAttribute> _value )
+		void DynamicObjectProxy::setAttribute(const Glib::ustring name, 
+				                               shared_ptr<AbstractAttribute> value)
 		{
-			m_self->setAttribute(_name, _value);
+			m_self->setAttribute(name, value);
 		}
 
-
-		bool CDynamicObjectProxy::hasAttribute ( const Glib::ustring & _name ) const
+		bool DynamicObjectProxy::hasAttribute(const Glib::ustring& name) const
 		{
-			return m_self->hasAttribute(_name);
+			return m_self->hasAttribute(name);
 		}
 
-
-		void CDynamicObjectProxy::deleteAttribute ( Glib::ustring _name )
+		void DynamicObjectProxy::deleteAttribute(Glib::ustring name)
 		{
-			m_self->deleteAttribute(_name);
+			m_self->deleteAttribute(name);
 		}
 
-
-		void CDynamicObjectProxy::deleteAllAttributes ( void )
+		void DynamicObjectProxy::deleteAllAttributes ( void )
 		{
 			m_self->deleteAllAttributes();
 		}
 
-
-		List CDynamicObjectProxy::getAttributesNames(void)
+		List DynamicObjectProxy::getAttributesNames(void)
 		{
 			return m_self->getAttributesNames();
 		}
 
-
-		DynamicObject::mapAttributes::const_iterator CDynamicObjectProxy::begin() const
+		DynamicObject::mapAttributes::const_iterator DynamicObjectProxy::begin() const
 		{
 			return m_self->begin();
 		}
 
-
-		DynamicObject::mapAttributes::const_iterator CDynamicObjectProxy::end() const
+		DynamicObject::mapAttributes::const_iterator DynamicObjectProxy::end() const
 		{
 			return m_self->end();
 		}
 
-
-		string CDynamicObjectProxy::getInstance() const
+		string DynamicObjectProxy::getInstance() const
 		{
 			return m_self->getInstance();
 		}
-
 	}
 }
-
-

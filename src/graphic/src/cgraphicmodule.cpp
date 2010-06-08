@@ -66,7 +66,7 @@ namespace Gnoll
 			shared_ptr<Gnoll::DynamicObject::DynamicObject> resources = pom->load("ogre_resources");
 
 
-			typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+			typedef list< shared_ptr<Gnoll::DynamicObject::AbstractAttribute> >::iterator ListIterator;
 
 			Gnoll::DynamicObject::List attributesNames = resources->getAttributesNames();
 
@@ -109,7 +109,7 @@ namespace Gnoll
 			// Load plugins paths from config file
 			shared_ptr<Gnoll::DynamicObject::DynamicObject> plugins = pom->load("ogre_plugins");
 
-			typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+			typedef list< shared_ptr<Gnoll::DynamicObject::AbstractAttribute> >::iterator ListIterator;
 
 			// Get the list of plugins' paths
 			shared_ptr<Gnoll::DynamicObject::List> pluginList = plugins->getAttribute<Gnoll::DynamicObject::List>("PluginList");
@@ -152,7 +152,7 @@ namespace Gnoll
 			Gnoll::DynamicObject::List listAttrNames = config->getAttributesNames();
 			for (Gnoll::DynamicObject::List::iterator it = listAttrNames.begin(); it != listAttrNames.end(); it++)
 			{
-				shared_ptr<Gnoll::DynamicObject::IAttribute> attrNameRaw = *it;
+				shared_ptr<Gnoll::DynamicObject::AbstractAttribute> attrNameRaw = *it;
 				shared_ptr<Gnoll::DynamicObject::String> attrName = static_pointer_cast<Gnoll::DynamicObject::String>(attrNameRaw);
 
 

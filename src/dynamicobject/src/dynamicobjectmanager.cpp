@@ -17,40 +17,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/*---------------------------DynamicObjectManager--------------------------*\
-|   This is as a manager for DynamicObject instances                        |
-|                                                                           |
-|   Changelog :                                                             |
-|               07/18/2007 - Paf - Initial release                          |
-|               08/18/2007 - Paf - Update comments                          |
-|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
-|               10/17/2007 - Paf - Handle case where content file is empty  |
-|                                    in loadImpl()                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #include "../include/dynamicobjectmanager.h"
+
 #include "../include/attributehandlerregistry.h"
+#include "../../log/include/clogmacros.h"
 
-#include "../../log/include/clogmodule.h"
-
-namespace Gnoll {
-
-	namespace DynamicObject {
-
+namespace Gnoll 
+{
+	namespace DynamicObject 
+	{
 		DynamicObjectManager::DynamicObjectManager()
 		{
-
 		}
 
 		DynamicObjectManager::~DynamicObjectManager()
 		{
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Deleting DynamicObjectManager" );
+			GNOLL_LOG().logMessage("Deleting DynamicObjectManager");
 		}
 
-		shared_ptr<DynamicObject> DynamicObjectManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
+		shared_ptr<DynamicObject> DynamicObjectManager::loadImpl(shared_ptr<IStream> stream, 
+																 string instance)
 		{
-
 			// First : Stream -> XML
 			// The file is read and stored in a string
 			// Then this string is parsed by a DOM parser
@@ -58,18 +45,18 @@ namespace Gnoll {
 			char buffer[256];
 			string content;
 
-			while (! _stream->eof())
+			while(!stream->eof())
 			{
-				int nb = _stream->read(buffer, 256);
+				int nb = stream->read(buffer, 256);
 				content.append(buffer, nb);
 			}
 
 			xmlpp::Document* document;
-			shared_ptr<DynamicObject> po (new DynamicObject(_instance));
+			shared_ptr<DynamicObject> po(new DynamicObject(instance));
 
 			// Second : XML -> DynamicObject
 			// Only if some data are available
-			if (content.length() > 0)
+			if(content.length() > 0)
 			{
 				xmlpp::DomParser parser;
 				parser.parse_memory(content);
@@ -79,26 +66,24 @@ namespace Gnoll {
 				xmlpp::Element* root = document->get_root_node();
 
 				po->deSerializeXML(root);
-
 			}
 
 			return po;
 		}
 
-		bool DynamicObjectManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<DynamicObject> _obj, string _instance)
+		bool DynamicObjectManager::saveImpl(shared_ptr<IStream> stream, 
+											shared_ptr<DynamicObject> obj, 
+											string instance)
 		{
-			shared_ptr<xmlpp::Document> output = _obj->serializeXML();
+			shared_ptr<xmlpp::Document> output = obj->serializeXML();
 			string outputString = output->write_to_string_formatted();
 
-			unsigned int bytesWritten = _stream->write( outputString.c_str() , outputString.length());
+			unsigned int bytesWritten = stream->write(outputString.c_str() , outputString.length());
 
-			if (bytesWritten){
+			if (bytesWritten)
 				return true;
-			} else {
+			else
 				return false;
-			}
-
 		}
-
 	}
 }

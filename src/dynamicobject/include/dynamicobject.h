@@ -17,44 +17,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------dynamicobject-------------------------------*\
-|   This is a DynamicObject. An object that can store any kind of data      |
-|     and can be readt/written from anywhere                                |
-|                                                                           |
-|   Changelog :                                                             |
-|               07/09/2007 - Paf - Initial release                          |
-|               07/10/2007 - Paf - Add Doxygen comments                     |
-|                          - Paf - Implements                               |
-|                                     PersistentObject::serializeXML()      |
-|               08/10/2007 - Paf - Add Doxygen comments                     |
-|               10/11/2007 - Paf - Add method getAttributesNames()          |
-|               						- Make const_iterator on attributes        |
-|                                    possible                               |
-|               12/15/2007 - Paf - Add policies when an attribute is not    |
-|                                    not found                              |
-|               02/15/2008 - Bruno Mahe - Add a new method                  |
-|                                    getAttributeOrDefault()                |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #ifndef __DYNAMICOBJECT_H__
 #define __DYNAMICOBJECT_H__
 
+#include <map>
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 #include <glibmm/ustring.h>
-#include <map>
 
-#include "iattribute.h"
-#include "iattributehandler.h"
+#include "abstractattribute.h"
+#include "abstractattributehandler.h"
 #include "attributehandlerregistry.h"
-
 #include "string.h"
 #include "list.h"
-
 
 using namespace std;
 using namespace boost;
@@ -63,67 +39,44 @@ namespace Gnoll
 {
 	namespace DynamicObject
 	{
-
 		/**
 		 * Forward declaration
 		 */
 		class List;
 
-
 		template <class T> class ErrorPolicyExceptions
 		{
 			public:
-
-				static shared_ptr<T> attributeNotFound( const Glib::ustring _name )
+				static shared_ptr<T> attributeNotFound(const Glib::ustring name)
 				{
-					throw("Attribut [" + _name + "] non trouve !");
+					throw("Attribut [" + name + "] non trouve !");
 				}
-
 		};
 
 		template <class T> class NicePolicyExceptions
 		{
 			public:
-
-				static shared_ptr<T> attributeNotFound( const Glib::ustring _name )
+				static shared_ptr<T> attributeNotFound(const Glib::ustring name)
 				{
-					return shared_ptr<T>( new T() );
+					return shared_ptr<T>(new T());
 				}
-
 		};
-
-
 
 		/**
 		 *	This is a Dynamic Object.
-		 *	This object maps a unicode string to any object inheriting from IAttribute (ie is (de)serializable).<br/>
-		 * Thus we can store any data or game object through a DynamicObject (as long as it inherits from IAttribute).<br/>
-		 * Each DynamicObject is referenced via its instance name.
-		 * @see IAttribute
+		 *	This object maps a unicode string to any object inheriting from 
+		 *	AbstractAttribute (ie is (de)serializable).<br/>
+		 *  Thus we can store any data or game object through a DynamicObject 
+		 *  (as long as it inherits from AbstractAttribute).<br/>
+		 *  Each DynamicObject is referenced via its instance name.
+		 *  @see AbstractAttribute
 		 */
-		class DynamicObject : public IAttribute
+		class DynamicObject : public AbstractAttribute
 		{
 			public:
-
-				typedef map< Glib::ustring, shared_ptr<IAttribute> > mapAttributes;
-
-
-			private:
-
-				/**
-				 * This maps all the attributes to their names
-				 */
-				mapAttributes m_attributes;
-
-				/**
-				 * This is the instance name
-				 */
-				Glib::ustring m_instance;
-
+				typedef map< Glib::ustring, shared_ptr<AbstractAttribute> > mapAttributes;
 
 			public:
-
-
 				/**
 				 * This is the constructor.
 				 * @param _instance This is the instance name; the DynamicObject's name
@@ -135,82 +88,72 @@ namespace Gnoll
 				 */
 				virtual ~DynamicObject();
 
-
 				/**
 				 * This sets an attribute
-				 * @param _name The name of the attribute
+				 * @param name The name of the attribute
 				 * @param _value The attribute itself
 				 */
-				void setAttribute( const Glib::ustring _name, shared_ptr<IAttribute> _value );
-
+				void setAttribute(const Glib::ustring name, shared_ptr<AbstractAttribute> _value);
 
 				/**
 				 * This return an attribute
-				 * @param _name The name of the attribute we want
+				 * @param name The name of the attribute we want
 				 * @return The attribute
 				 */
 				template< class T >
-						shared_ptr<T> getAttribute( const Glib::ustring _name  ) const
+						shared_ptr<T> getAttribute(const Glib::ustring name) const
 				{
-					typedef  NicePolicyExceptions<T> ErrorPolicy;
+					typedef NicePolicyExceptions<T> ErrorPolicy;
 
-
-					mapAttributes::const_iterator iter = m_attributes.find(_name);
+					mapAttributes::const_iterator iter = m_attributes.find(name);
 
 					// If there is no attribute with such a name, throw an exception.
-					if( iter == m_attributes.end() ) {
-						return ErrorPolicy::attributeNotFound(_name);
-					}
+					if( iter == m_attributes.end())
+						return ErrorPolicy::attributeNotFound(name);
 
-
-					shared_ptr<IAttribute> value = iter->second;
+					shared_ptr<AbstractAttribute> value = iter->second;
 					return dynamic_pointer_cast<T>(value);
 				}
-
 
 				/**
 				 * This return an attribute. If the attribute doesn't exists, it will<br/>
 				 * return a default value
-				 * @param _name The name of the attribute we want
+				 * @param name The name of the attribute we want
 				 * @return The attribute if it exists, or a default value
 				 */
 				template< class T >
-						shared_ptr<T> getAttributeOrDefault( const Glib::ustring _name, shared_ptr<T> _defaultValue = shared_ptr<T>()  )
+				shared_ptr<T> getAttributeOrDefault(const Glib::ustring name,
+													shared_ptr<T> defaultValue = shared_ptr<T>())
 				{
-					if (this->hasAttribute(_name))
-					{
-						return getAttribute<T>(_name);
-					}
-
-					return _defaultValue;
+					if (this->hasAttribute(name))
+						return getAttribute<T>(name);
+					return defaultValue;
 				}
-
 
 				/**
 				 * Check if an attribute exists
-				 * @param _name Name of the attribute
-				 * @return It returns true if an attribute with such a name exists, or false if it doesn't
+				 * @param name Name of the attribute
+				 * @return It returns true if an attribute with such a name exists, 
+				 * 		   or false if it doesn't
 				 */
-				bool hasAttribute ( const Glib::ustring _name ) const;
-
+				bool hasAttribute(const Glib::ustring name)const;
 
 				/**
 				 * Delete an attribute
-				 * @param _name Name of the attribute to delete
+				 * @param name Name of the attribute to delete
 				 */
-				void deleteAttribute ( Glib::ustring _name );
-
+				void deleteAttribute(Glib::ustring name);
 
 				/**
 				 * Delete all the attributes
 				 */
-				void deleteAllAttributes ( void ) ;
+				void deleteAllAttributes();
 
 				/**
 				 * Get a list of attributes names
 				 * @return A list of all attribute's names
 				 */
-				List getAttributesNames(void);
+				List getAttributesNames();
 
 				/**
 				 * Get a const_iterator on the first element of the map of the attributes
@@ -230,7 +173,6 @@ namespace Gnoll
 				 */
 				string getInstance();
 
-
 				/**
 				 * This method serialize the DynamicObject and all its attributes
 				 *
@@ -238,13 +180,24 @@ namespace Gnoll
 				 */
 				virtual shared_ptr<xmlpp::Document> serializeXML();
 
-
 				/**
-				 * This method deserialize the DynamicObject and all its attributes from a XML element
+				 * This method deserialize the DynamicObject and all its attributes 
+				 * from a XML element
 				 *
 				 * @param _element The XML Element to parse data from
 				 */
 				virtual void deSerializeXML( xmlpp::Element* _element );
+
+			private:
+				/**
+				 * This maps all the attributes to their names
+				 */
+				mapAttributes m_attributes;
+
+				/**
+				 * This is the instance name
+				 */
+				Glib::ustring m_instance;
 		};
 	}
 }

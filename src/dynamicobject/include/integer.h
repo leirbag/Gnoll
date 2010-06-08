@@ -17,56 +17,36 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------integer---------------------------------*\
-|   This is a basic container supposed to an integer basic type             |
-|                                                                           |
-|   Changelog :                                                             |
-|               08/04/2007 - Paf - Initial release                          |
-|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
-|                                - Make Integer inherits from Scalar<int>   |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #ifndef __INTEGER_H__
 #define __INTEGER_H__
 
-
-#include "iattribute.h"
-#include "scalar.h"
 #include <sstream>
+
+#include "scalar.h"
 
 using namespace std;
 using namespace boost;
 
-
 namespace Gnoll
 {
-
 	namespace DynamicObject
 	{
-
 		/**
 		*	This is a simple attribute. </br>
 		*	This hold a signed integer.
 		*/
 		class Integer : public Scalar<int>
 		{
-
 			public:
-
-
 				/**
 				 * Returns Integer's DynamicObject name
 				 * @return Integer's DynamicObject name
 				 */
-				inline static const char * DYNAMIC_OBJECT_NAME() {return "integer";}
+				inline static const char* DYNAMIC_OBJECT_NAME() { return "integer"; }
 
-				Integer(int _value = 0) : Scalar<int>(Integer::DYNAMIC_OBJECT_NAME(), _value) {};
-
+				Integer(int value = 0) : Scalar<int>(Integer::DYNAMIC_OBJECT_NAME(), value) {};
 		};
 	};
 };
 
-#endif // __INTEGER_H__
+#endif

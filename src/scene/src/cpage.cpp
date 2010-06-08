@@ -45,7 +45,7 @@ namespace Gnoll
 	{
 
 
-		CPage::CPage(string _instanceName): CDynamicObjectProxy(_instanceName)
+		CPage::CPage(string _instanceName): DynamicObjectProxy(_instanceName)
 		{
 		}
 
@@ -76,7 +76,7 @@ namespace Gnoll
 			{
 				shared_ptr< Gnoll::DynamicObject::List > listGameObjects = this->getAttribute < Gnoll::DynamicObject::List > ( CPage::ATTRIBUTE_GAME_OBJECTS() );
 
-				typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+				typedef list< shared_ptr<Gnoll::DynamicObject::AbstractAttribute> >::iterator ListIterator;
 
 				for( ListIterator it = listGameObjects->begin(); it != listGameObjects->end(); it++)
 				{
@@ -103,7 +103,7 @@ namespace Gnoll
 				{
 					shared_ptr< Gnoll::DynamicObject::List > listGameObjects = this->getAttribute < Gnoll::DynamicObject::List > ( CPage::ATTRIBUTE_GAME_OBJECTS() );
 
-					typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+					typedef list< shared_ptr<Gnoll::DynamicObject::AbstractAttribute> >::iterator ListIterator;
 
 					for( ListIterator it = listGameObjects->begin(); it != listGameObjects->end(); it++)
 					{

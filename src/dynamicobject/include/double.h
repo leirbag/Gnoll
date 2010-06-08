@@ -17,22 +17,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------double----------------------------------*\
-|   This is a double attribute for DynamicObject                            |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/26/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __DOUBLE_H__
 #define __DOUBLE_H__
 
-
-#include "iattribute.h"
+#include "abstractattribute.h"
 #include "scalar.h"
 
 using namespace std;
@@ -42,29 +30,24 @@ namespace Gnoll
 {
 	namespace DynamicObject
 	{
-
 		/**
 		 *	This is a simple attribute.
 		 */
 		class Double : public Scalar<double>
 		{
 			public:
-
-
 				/**
 				 * Returns Double's DynamicObject name
 				 * @return Double's DynamicObject name
 				 */
-				inline static const char * DYNAMIC_OBJECT_NAME() {return "double";}
-
+				inline static const char* DYNAMIC_OBJECT_NAME() { return "double"; }
 
 				/*
 				 * This is a constructor
 				 */
-				Double(double _value = 0.0f) : Scalar<double>(Double::DYNAMIC_OBJECT_NAME(), _value) {};
-
+				Double(double value = 0.0f) : 
+					Scalar<double>(Double::DYNAMIC_OBJECT_NAME(), value) {};
 		};
-
 	}
 }
 

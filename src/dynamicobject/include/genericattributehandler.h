@@ -37,7 +37,7 @@
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 
-#include "iattributehandler.h"
+#include "abstractattributehandler.h"
 #include "dynamicobject.h"
 
 
@@ -53,9 +53,9 @@ namespace Gnoll
 		/**
 		*	This is the interface of an attribute handler.</br>
 		*	This make sure each Attribute will be (de)serializable.</br>
-		*	This works as long as T inherits from IAttribute.
+		*	This works as long as T inherits from AbstractAttribute.
 		*/
-		template <class T> class GenericAttributeHandler : public IAttributeHandler
+		template <class T> class GenericAttributeHandler : public AbstractAttributeHandler
 		{
 
 			public:
@@ -74,15 +74,15 @@ namespace Gnoll
 
 				/**
 				 * This is the handler method
-				 * @param _node Node to process and extract the IAttribute smart pointer from
-				 * @return Smart pointer to an IAttribute
+				 * @param _node Node to process and extract the AbstractAttribute smart pointer from
+				 * @return Smart pointer to an AbstractAttribute
 				 */
-				virtual shared_ptr<IAttribute> handle (xmlpp::Element* _node, DynamicObject* _po = NULL)
+				virtual shared_ptr<AbstractAttribute> handle (xmlpp::Element* _node, DynamicObject* _po = NULL)
 				{
 					shared_ptr<T> attribute( new T() );
 					attribute->deSerializeXML(_node);
 
-					return dynamic_pointer_cast<IAttribute>(attribute);
+					return dynamic_pointer_cast<AbstractAttribute>(attribute);
 				}
 
 		};

@@ -17,25 +17,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------Set-------------------------------------*\
-|   This is a Set attribute for DynamicObject                               |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
 #ifndef __SET_H__
 #define __SET_H__
 
+#include <set>
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
-#include <set>
 
-#include "iattribute.h"
+#include "abstractattribute.h"
 #include "attributehandlerregistry.h"
-
 
 using namespace std;
 using namespace boost;
@@ -44,38 +35,33 @@ namespace Gnoll
 {
 	namespace DynamicObject
 	{
-		bool operator<(IAttribute const & a, IAttribute const & b);
+		bool operator<(AbstractAttribute const& a, AbstractAttribute const& b);
 
-		struct IAttributeComparison
+		struct AbstractAttributeComparison
 		{
-			bool operator()(shared_ptr<IAttribute> ia1, shared_ptr<IAttribute> ia2) const
+			bool operator()(shared_ptr<AbstractAttribute> ia1, shared_ptr<AbstractAttribute> ia2) const
 			{
 				return (*ia1) < (*ia2);
 			}
 		};
 
-
-
 		/**
 		 *	This is a set attribute for DynamicObject.
 		 */
-		class Set : public set< shared_ptr<IAttribute>, IAttributeComparison >, public IAttribute
+		class Set : public set< shared_ptr<AbstractAttribute>, AbstractAttributeComparison >, 
+					public AbstractAttribute
 		{
-
 			public:
-
 				/**
 				 * Returns Set's DynamicObject name
 				 * @return Set's DynamicObject name
 				 */
-				inline static const char * DYNAMIC_OBJECT_NAME() {return "set";}
-
+				inline static const char* DYNAMIC_OBJECT_NAME() { return "set"; }
 
 				/**
 				 * This is a constructor
 				 */
 				Set();
-
 
 				/**
 				 * This method serialize the object. <br/>
@@ -85,7 +71,6 @@ namespace Gnoll
 				 */
 				virtual shared_ptr<xmlpp::Document> serializeXML();
 
-
 				/**
 				 * This method deserialize the object. <br/>
 				 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
@@ -93,10 +78,9 @@ namespace Gnoll
 				 *
 				 * @param _element This is the XML tree containing the state of this object
 				 */
-				virtual void deSerializeXML( xmlpp::Element* _element );
+				virtual void deSerializeXML(xmlpp::Element* element);
 		};
-
 	}
 }
 
-#endif // __SET_H__
+#endif 

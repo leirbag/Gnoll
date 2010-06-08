@@ -17,149 +17,75 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------String----------------------------------*\
-|   This is a string attribute for DynamicObject                            |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include "../include/string.h"
 
-
-
-namespace Gnoll {
-
-	namespace DynamicObject {
-
-		/**
-		 * Constructor
-		 * @param _value Initialiazion of the String value
-		 */
-		String::String(string _value) : Scalar<string>(String::DYNAMIC_OBJECT_NAME(), _value)
+namespace Gnoll 
+{
+	namespace DynamicObject 
+	{
+		String::String(string value) : 
+			Scalar<string>(String::DYNAMIC_OBJECT_NAME(), value)
 		{
 		}
 
-
-		/**
-		 * Destructor
-		 */
 		String::~String()
 		{
 		}
 
-
-		/**
-		 * This method deserialize the object. <br/>
-		 * This method initializes this object thanks to a XML tree given as a parameter. <br/>
-		 * It has to be implemented by all classes that inherits from this class.
-		 *
-	  	 * @param _element This is the XML tree containing the state of this object
-		 */
-		void String::deSerializeXML( xmlpp::Element* _element )
+		void String::deSerializeXML(xmlpp::Element* element)
 		{
-
-			if (_element == NULL)
-			{
+			if (element == NULL)
 				return;
-			}
 
-			xmlpp::Attribute* attr = _element->get_attribute(String::ATTRIBUTE_VALUE());
+			xmlpp::Attribute* attr = element->get_attribute(String::ATTRIBUTE_VALUE());
 
 			if (attr == NULL)
-			{
 				return;
-			}
 
 			this->setValue(attr->get_value());
 
 		};
 
-
-		/**
-		 * Overloading of the conversion string -> String operator
-		 * @param _rValue Value to convert from
-		 * @return Converted value
-		 */
-	 	Scalar<string> const & String::operator=(string _rValue)
+	 	Scalar<string> const & String::operator=(string rValue)
 		{
-			this->setValue(_rValue);
+			this->setValue(rValue);
 			return *this;
 		}
 
-
-		/**
-		 * Overloading of the conversion String -> string operator
-		 * @return Converted value
-		 */
   		String::operator string()
 		{
 			return this->getValue();
 		}
 
-
-		/**
-		 * Overloading of the conversion String -> Glib::ustring operator
-		 * @return Converted value
-		 */
 		String::operator Glib::ustring()
 		{
 			return this->getValue();
 		}
 
-
-		/**
-		 * Overloading of the conversion String -> const string operator
-		 * @return Converted value
-		 */
 		String::operator string() const
 		{
 			return this->getValue();
 		}
 
-
-		/**
-		 * Overloading of the conversion String -> const Glib::ustring operator
-		 * @return Converted value
-		 */
 		String::operator Glib::ustring() const
 		{
 			return this->getValue();
 		}
 
-
-		/**
- 		 * Overloading of the inserting operator
-		 * @param _stream Stream to insert the value to
-		 * @return Stream
-		 */
-		ostream &operator<<(ostream & _stream, String const & _str)
+		ostream &operator<<(ostream& stream, String const& str)
 		{
-			return  _stream << _str.getValue();
+			return  stream << str.getValue();
 		}
 
-
-		/**
-		 * Overloading of the extraction operator
-		 * @param _stream Streaim to extract the value from
-		 * @return Stream
-		 */
-		istream &operator>>(istream &_stream, String &_str)
+		istream &operator>>(istream& stream, String& str)
 		{
-
 			string value;
-			if (_stream >> value)
+			if (stream >> value)
 			{
-				_str.setValue(value);
+				str.setValue(value);
 			}
 
-			return _stream;
+			return stream;
 		}
-
-
 	}
 }
-
-
-
-

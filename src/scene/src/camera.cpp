@@ -52,7 +52,7 @@ namespace Gnoll
 	namespace Scene
 	{
 		Camera::Camera(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper) :
-			CDynamicObjectProxy(instanceName)
+			DynamicObjectProxy(instanceName)
 		{
 
 			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Loading camera [" + instanceName + "]" );
@@ -144,7 +144,7 @@ namespace Gnoll
 		}
 
 		Camera::Camera(const Camera& copy) :
-			CDynamicObjectProxy(copy)
+			DynamicObjectProxy(copy)
 		{
 		}
 

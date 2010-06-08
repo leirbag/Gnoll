@@ -78,7 +78,7 @@ namespace Gnoll
 			{
 				shared_ptr< Gnoll::DynamicObject::List > listComponents = this->getAttribute < Gnoll::DynamicObject::List > ( GObject::ATTRIBUTE_COMPONENTS() );
 
-				typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+				typedef list< shared_ptr<Gnoll::DynamicObject::AbstractAttribute> >::iterator ListIterator;
 
 				for( ListIterator it = listComponents->begin(); it != listComponents->end(); it++)
 				{
@@ -101,7 +101,7 @@ namespace Gnoll
 			{
 				shared_ptr< Gnoll::DynamicObject::List > listComponents = this->getAttribute < Gnoll::DynamicObject::List > ( GObject::ATTRIBUTE_COMPONENTS() );
 
-				typedef list< shared_ptr<Gnoll::DynamicObject::IAttribute> >::iterator ListIterator;
+				typedef list< shared_ptr<Gnoll::DynamicObject::AbstractAttribute> >::iterator ListIterator;
 
 				for( ListIterator it = listComponents->begin(); it != listComponents->end(); it++)
 				{
