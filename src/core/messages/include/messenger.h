@@ -30,7 +30,7 @@ namespace Gnoll
 {
 	namespace Core
 	{
-		class CMessage;
+		class Message;
 
 		namespace Messages
 		{
@@ -45,7 +45,7 @@ namespace Gnoll
 			{
 				public:
 					typedef boost::shared_ptr<Listener> ListenerPtr;
-					typedef boost::shared_ptr<CMessage> MessagePtr;
+					typedef boost::shared_ptr<Message> MessagePtr;
 
 					// Messenger();
 					virtual ~Messenger() {};

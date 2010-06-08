@@ -86,7 +86,7 @@ namespace Gnoll {
 				 * @param _streamName Name of the stream (file name...)
 				 * @return A shared pointer to an AudioCodecHandler able to decode the audio stream passed as a parameter
 				 */
-				shared_ptr<AudioCodecHandler> getAudioCodecHandler(shared_ptr<IStream> _stream, string _streamName);
+				shared_ptr<AudioCodecHandler> getAudioCodecHandler(shared_ptr<AbstractStream> _stream, string _streamName);
 
 		};
 	}

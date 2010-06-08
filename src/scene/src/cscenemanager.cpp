@@ -28,9 +28,9 @@
 #include "../../time/include/ctimemodule.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../core/include/sourcefile.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messenger.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/listener.h"
 #include "../../log/include/clogmacros.h"
 #include "../include/cameramanager.h"
@@ -74,7 +74,7 @@ namespace Gnoll
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle ( shared_ptr<CMessage> message )
+				virtual void handle ( shared_ptr<Message> message )
 				{
 
 					if (sceneManager)
@@ -171,7 +171,7 @@ namespace Gnoll
 		void CSceneManager::setupMessages()
 		{
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
@@ -185,7 +185,7 @@ namespace Gnoll
 			 * Message for updating scene has no data
 			 */
 			shared_ptr<boost::any> msgData (new boost::any()) ;
-			shared_ptr<CMessage>  message (new CMessage(updateMsgType, msgData) );
+			shared_ptr<Message>  message (new Message(updateMsgType, msgData) );
 
 
 			/**
@@ -258,7 +258,7 @@ namespace Gnoll
 
 		CSceneManager::~CSceneManager()
 		{
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( sceneUpdateListener, UPDATE_MSG_TYPE() );
@@ -298,7 +298,7 @@ namespace Gnoll
 
 		}
 
-		void CSceneManager::queueJob( shared_ptr<CJob> _job)
+		void CSceneManager::queueJob( shared_ptr<Job> _job)
 		{
 			m_poolOfThreads.pushJob(_job);
 		}

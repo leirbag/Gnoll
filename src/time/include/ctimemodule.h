@@ -26,9 +26,9 @@
 #include <boost/thread/recursive_mutex.hpp>
 
 #include "itimer.h"
-#include "../../core/include/cmodule.h"
+#include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/listener.h"
 #include "../../core/messages/include/messagetype.h"
 
@@ -47,7 +47,7 @@ namespace Gnoll
 	namespace Time
 	{
 
-		class CTimeModule : public CModule, public Gnoll::Core::Singleton<CTimeModule>
+		class CTimeModule : public Module, public Gnoll::Core::Singleton<CTimeModule>
 		{
 			public:
 				/**
@@ -83,26 +83,26 @@ namespace Gnoll
 				 *   Add an unique event @ delay msecs after timer start/reset, sending
 		 	 	 *   msg when triggered
 		 	 	 */
-				void addDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg);
+				void addDelayedEvent(unsigned long int delay, shared_ptr<Message> msg);
 
 
 				/**
 				 *   Delete an unique event
 				 */
-				void delDelayedEvent(unsigned long int delay, shared_ptr<CMessage> msg);
+				void delDelayedEvent(unsigned long int delay, shared_ptr<Message> msg);
 
 
 				/**
 				 *   Add a periodic event @ delay msecs after timer start/reset, sending
 				 *   msg when triggered, every period msecs
 				 */
-				void addPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period);
+				void addPeriodicEvent(unsigned long int delay, shared_ptr<Message> msg, unsigned long int period);
 
 
 				/**
 				 *   Delete a periodic event
 				 */
-				void delPeriodicEvent(unsigned long int delay, shared_ptr<CMessage> msg, unsigned long int period);
+				void delPeriodicEvent(unsigned long int delay, shared_ptr<Message> msg, unsigned long int period);
 
 
 				/**
@@ -126,8 +126,8 @@ namespace Gnoll
 
 			private:
 
-				typedef multimap<unsigned long int, shared_ptr<CMessage> >::iterator msgMapIter;
-				typedef multimap<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > >::iterator perMsgMapIter;
+				typedef multimap<unsigned long int, shared_ptr<Message> >::iterator msgMapIter;
+				typedef multimap<unsigned long int, pair<unsigned long int, shared_ptr<Message> > >::iterator perMsgMapIter;
 
 
 				/**
@@ -147,7 +147,7 @@ namespace Gnoll
 				 *	Key : When an event will happen (in milliseconds) </br>
 			 	 *	Value : Message to send when the delay expires
 				 */
-				multimap<unsigned long int, shared_ptr<CMessage> > m_timers;
+				multimap<unsigned long int, shared_ptr<Message> > m_timers;
 
 
 				/**
@@ -161,7 +161,7 @@ namespace Gnoll
 				 *	Key : When an event will happen (in milliseconds) </br>
 			 	 *	Value : Pair of the following values : period and message to send when the delay expires
 				 */
-				multimap<unsigned long int, pair<unsigned long int, shared_ptr<CMessage> > > m_timersPeriodic;
+				multimap<unsigned long int, pair<unsigned long int, shared_ptr<Message> > > m_timersPeriodic;
 
 
 				/**

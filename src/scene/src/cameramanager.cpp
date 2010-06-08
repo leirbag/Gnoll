@@ -53,7 +53,7 @@ namespace Gnoll
 			GNOLL_LOG() << "Camera manager exiting\n";
 		}
 
-		shared_ptr<Camera> CameraManager::loadImpl( shared_ptr<IStream> _stream, string _instance)
+		shared_ptr<Camera> CameraManager::loadImpl( shared_ptr<AbstractStream> _stream, string _instance)
 		{
 			string type;
 
@@ -77,7 +77,7 @@ namespace Gnoll
 			}
 		}
 
-		bool CameraManager::saveImpl( shared_ptr<IStream> _stream, shared_ptr<Camera> _obj, string _instance)
+		bool CameraManager::saveImpl( shared_ptr<AbstractStream> _stream, shared_ptr<Camera> _obj, string _instance)
 		{
 			camerasMap[_instance].reset();
 			camerasMap.erase(camerasMap.find(_instance));

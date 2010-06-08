@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Paf                                             *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,49 +17,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "../include/cmessagemodule.h"
-#include "../messages/include/genericmessenger.h"
+#include "../include/threadstopper.h"
 
 using namespace std;
 using namespace boost;
 
 namespace Gnoll
 {
-
 	namespace Core
 	{
-	
-		Messages::Messenger* CMessageModule::getMessageManager()
+		void ThreadStopper::run()
 		{
-			/**
-			 * The default Message Manager is GenericMessenger
-			 */
-			return m_messageManager.get();
+			m_worker->stop();
 		}
 
-
-		CMessageModule::CMessageModule() : m_messageManager( new Messages::GenericMessenger() )
+		ThreadStopper::ThreadStopper(shared_ptr<Worker> worker) : 
+			m_worker(worker)
 		{
 		}
 
-		void CMessageModule::init() 
+		ThreadStopper::~ThreadStopper()
 		{
 		}
-
-		void CMessageModule::process() 
-		{
-			m_messageManager->processQueue();
-		}
-
-		void CMessageModule::exit() 
-		{
-		}
-	
-		CMessageModule::~CMessageModule()
-		{
-		}
-
 	}
-
 }
 

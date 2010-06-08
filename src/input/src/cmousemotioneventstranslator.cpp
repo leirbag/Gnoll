@@ -28,7 +28,7 @@
 #include "../include/ctranslationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../log/include/clogmodule.h"
 #include "../../graphic/include/cgraphicmodule.h"
 
@@ -115,13 +115,13 @@ namespace Gnoll
 						ActionEvent actionEvent(*actionName, intensity);
 
 						shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-						shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+						shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
 
 						std::ostringstream tmpString;
                         try
                         {
-						    CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+						    MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
 						catch(...)
@@ -217,7 +217,7 @@ namespace Gnoll
 		}
 
 
-		void CMouseMotionEventsTranslator::handle ( shared_ptr<CMessage> message )
+		void CMouseMotionEventsTranslator::handle ( shared_ptr<Message> message )
 		{
 
 

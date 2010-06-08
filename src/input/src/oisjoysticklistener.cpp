@@ -19,8 +19,8 @@
 
 #include "../include/oisjoysticklistener.h"
 #include "../include/cinputjoystickevents.h"
-#include "../../core/include/cmessagemodule.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/messagemodule.h"
+#include "../../core/include/message.h"
 #include "../../log/include/clogmacros.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
@@ -53,9 +53,9 @@ namespace Gnoll
 			Gnoll::Input::JoystickEvent joystickEvent(arg, button, Gnoll::Input::Axis);
 
 			shared_ptr<boost::any> data (new boost::any(joystickEvent) ) ;
-			shared_ptr<CMessage>  message (new CMessage(buttonPressedType, data ));
+			shared_ptr<Message>  message (new Message(buttonPressedType, data ));
 
-			CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
+			MessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
 
 			return true;
 		}
@@ -70,9 +70,9 @@ namespace Gnoll
 			Gnoll::Input::JoystickEvent joystickEvent(arg, button, Gnoll::Input::Axis);
 
 			shared_ptr<boost::any> data (new boost::any(joystickEvent) ) ;
-			shared_ptr<CMessage>  message (new CMessage(buttonReleasedType, data ));
+			shared_ptr<Message>  message (new Message(buttonReleasedType, data ));
 
-			CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
+			MessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
 
 			return true;
 		}
@@ -87,9 +87,9 @@ namespace Gnoll
 			Gnoll::Input::JoystickEvent joystickEvent(arg, axis, Gnoll::Input::Axis);
 
 			shared_ptr<boost::any> data (new boost::any(joystickEvent) ) ;
-			shared_ptr<CMessage>  message (new CMessage(axisMovedType, data ));
+			shared_ptr<Message>  message (new Message(axisMovedType, data ));
 
-			CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
+			MessageModule::getInstancePtr()->getMessageManager()->queueMessage(message);
 
 			return true;
 		}

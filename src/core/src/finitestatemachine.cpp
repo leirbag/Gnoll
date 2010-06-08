@@ -17,59 +17,45 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*--------------------------------cfsm.cpp---------------------------------*\
-|   The Finite State Machine                                                |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/29/2006 - Paf - Initial release                          |
-|               04/10/2008 - Gabriel - Add namespace Gnoll and Core         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
+#include "../include/finitestatemachine.h"
 
 #include <boost/shared_ptr.hpp>
-#include "../include/cfsm.h"
 
 namespace Gnoll
 {
 	namespace Core
 	{
-		CFSM::CFSM()
+		FiniteStateMachine::FiniteStateMachine()
 		{
 		}
 
-		CFSM::~CFSM()
+		FiniteStateMachine::~FiniteStateMachine()
 		{
-			if (m_activestate.get() != NULL)
+			if(m_activestate.get() != NULL)
 				m_activestate->onExit();
 		}
 
-		void CFSM::add ( shared_ptr<CState> first, shared_ptr<CState> second, shared_ptr<CTransition> transition)
+		void FiniteStateMachine::add(shared_ptr<State> first, shared_ptr<State> second, shared_ptr<Transition> transition)
 		{
-			if ( (first.get() != NULL) && (second.get() != NULL) && (transition.get() != NULL) )
+			if((first.get() != NULL) && (second.get() != NULL) && (transition.get() != NULL))
 			{
-				shared_ptr<superTransition> sttemp (new superTransition( second, transition) );
-
-				m_graph.insert(pair<shared_ptr<CState>, shared_ptr<superTransition> >(first, sttemp));
+				shared_ptr<superTransition> sttemp(new superTransition(second, transition));
+				m_graph.insert(pair<shared_ptr<State>, shared_ptr<superTransition> >(first, sttemp));
 			}
 		}
 
-		void CFSM::del ( shared_ptr<CState> first, shared_ptr<CState> second, shared_ptr<CTransition> transition)
+		void FiniteStateMachine::del(shared_ptr<State> first, shared_ptr<State> second, shared_ptr<Transition> transition)
 		{
-
-			if ( (first.get() != NULL) && (second.get() != NULL) && (transition.get() != NULL) )
+			if((first.get() != NULL) && (second.get() != NULL) && (transition.get() != NULL))
 			{
 
-				shared_ptr<superTransition> sttemp (new superTransition( second, transition) );
-				multimap< shared_ptr<CState>, shared_ptr<superTransition> >::iterator temp;
+				shared_ptr<superTransition> sttemp (new superTransition( second, transition));
+				multimap< shared_ptr<State>, shared_ptr<superTransition> >::iterator temp;
 
-
-				for ( multimap< shared_ptr<CState>, shared_ptr<superTransition> >::iterator it = m_graph.lower_bound(first);
+				for(multimap< shared_ptr<State>, shared_ptr<superTransition> >::iterator it = m_graph.lower_bound(first);
 						it != m_graph.upper_bound(first);
 						it++)
 				{
-
 					if (*(it->second) == *sttemp)
 					{
 						/*
@@ -84,23 +70,22 @@ namespace Gnoll
 			}
 		}
 
-
-		void CFSM::execute()
+		void FiniteStateMachine::execute()
 		{
 			// First, the active state is executed
-			if (m_activestate.get() != NULL)
+			if(m_activestate.get() != NULL)
 			{
 				m_activestate->onProcess();
 
 				// Then we will evaluate each of the active state's transitions.
 				// If a transition is evaluated to True, it will activate its associated state.
 				bool done = false;
-				for ( multimap< shared_ptr<CState>, shared_ptr<superTransition> >::iterator it = m_graph.lower_bound(m_activestate);
-						( (it != m_graph.upper_bound(m_activestate)) && (done == false ) );
+				for(multimap< shared_ptr<State>, shared_ptr<superTransition> >::iterator it = m_graph.lower_bound(m_activestate);
+						((it != m_graph.upper_bound(m_activestate)) && (done == false ));
 						it++)
 				{
 					// each active state's transition is evaluated
-					if( ((it->second)->transition)->isValid() )
+					if(((it->second)->transition)->isValid())
 					{
 						/*
 						 * It has been evaluated to True.
@@ -108,7 +93,6 @@ namespace Gnoll
 						 *  update the active state,
 						 *  and initialize the newly active state
 						 */
-
 						m_activestate->onExit();
 
 						m_activestate = (it->second)->state;
@@ -120,15 +104,13 @@ namespace Gnoll
 			}
 		}
 
-		void CFSM::setActiveState( shared_ptr<CState> state)
+		void FiniteStateMachine::setActiveState(shared_ptr<State> state)
 		{
 			/*
 			 * Previous state is deactivated
 			 */
 			if (m_activestate.get() != NULL)
-			{
 				m_activestate->onExit();
-			}
 
 			/*
 			 * The new state is set and activated
@@ -136,10 +118,8 @@ namespace Gnoll
 			if (state.get() != NULL)
 			{
 				m_activestate = state;
-
 				state->onInit();
 			}
 		}
-	};
-};
-
+	}
+}

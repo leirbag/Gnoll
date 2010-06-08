@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Paf                                             *
+ *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,79 +17,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef __CMESSAGEMODULE_H__
-#define __CMESSAGEMODULE_H__
-
-#include "../include/cmodule.h"
-#include "../messages/include/messenger.h"
-#include "../include/singleton.h"
-
-using namespace std;
-using namespace boost;
+#ifndef __TRANSITION_H__
+#define __TRANSITION_H__
 
 namespace Gnoll
 {
-
 	namespace Core
 	{
-
 		/**
-		 *	The game messaging module. 
-		 */ 
-		class CMessageModule: public CModule, public Singleton<CMessageModule>
+		 *	Interface of all the FSM's transitions
+		 */
+		class Transition
 		{
-			private:
-
-				/**
-				 * Pointer to the Message Manager
-				 */
-				shared_ptr<Messages::Messenger> m_messageManager;
-
-
 			public:
+				/**
+				 * This is a destructor
+				 */
+				virtual ~Transition() {};
 
 				/**
-				 * Default constructor
+				 * This will check if this transition is valid, or not.
+				 * @return The validation test's result
 				 */
-				CMessageModule();
-	
-
-				/**
-				 * Return the default message manager</br>
-				 *   So if one write a new implementation of a Messages::Messenger, there would be
-				 *   only one line to replace
-				 * @Return Default message manager
-				 */
-				Messages::Messenger * getMessageManager();
-
-
-				/**
-				 * @copydoc CModule::init
-				 */
-				virtual void init(); 
-
-
-				/**
-				 * @copydoc CModule::process
-				 */
-				virtual void process();
-
-
-				/**
-				 * @copydoc CModule::exit 
-				 */
-				virtual void exit();
-	
-
-				/**
-				 * @copydoc CModule::~CModule
-				 */
-				virtual ~CMessageModule();
-
+				virtual bool isValid() = 0;
 		};
-	}
+	};
+};
 
-}
-
-
-#endif // __CMESSAGEMODULE_H__
+#endif

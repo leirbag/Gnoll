@@ -18,10 +18,10 @@
  ***************************************************************************/
 
 #include "../include/crule.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/listener.h"
 #include <vector>
 

@@ -17,91 +17,60 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------CWorker---------------------------------*\
-|   This is thread object used by CPoolThreads.                             |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/08/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
-
-#ifndef __CWORKER_H__
-#define __CWORKER_H__
-
-
+#ifndef __THREAD_H__
+#define __THREAD_H__
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread.hpp>
 
-#include "cthread.h"
-
-
-
-namespace Gnoll {
-
-	namespace Core {
-
-		/**
-		 * Forward declaration
-		 */
-		class CPoolThreads;
-
-
-
+namespace Gnoll
+{
+	namespace Core
+	{
 		/**
 		 *	This is a ressource template.</br>
 		 *	This hold the ressource itself and some information
 		 */
-		class CWorker : public CThread
+		class Thread
 		{
-			private:
-
-				/**
-				 * Stop flag
-				 */
-				bool m_stop;
-				
-				/**
-				 * Pointer on the pool this worker belongs to
-				 */
-				CPoolThreads* m_poolOfThreads;
-
-
 			public:
+				/**
+				 * This is a constructor
+				 */
+				Thread() {}
+
+				/**
+				 * This is a copy constructor
+				 */
+				Thread(const Thread& thread) {}
+
+				/**
+				 * This is a destructor
+				 */
+				virtual ~Thread() {};
+
+				/**
+				 * Functor that will run the code
+				 */
+				void operator()()
+				{
+					boost::mutex::scoped_lock scoped_lock(m_threadMutex);
+					this->run();
+				}
 
 				/**
 				 * What is going to be executed by this thread
 				 */
-				virtual void run ();
+				virtual void run() = 0;
 
-
-
+			private:
 				/**
-				 * This is a constructor
-				 * @param _pool Pool containing the worker
+				 * There can be only one instance of a thread running a the same time
 				 */
-				CWorker (CPoolThreads* _pool);
-			
-				/**
-				 * This is a destructor
-				 */
-				virtual ~CWorker();
-
-				/**
-				 * Tells the worker to exit as soon as it has finished its current job
-				 */
-				void stop(); 
-
+				boost::mutex m_threadMutex;
 		};
-
 	}
 }
 
-#endif // __CWORKER_H__
-
+#endif 

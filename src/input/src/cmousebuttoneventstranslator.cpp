@@ -27,7 +27,7 @@
 #include "../include/ctranslationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../time/include/ctimemodule.h"
 #include "../../log/include/clogmodule.h"
 
@@ -69,7 +69,7 @@ namespace Gnoll
 		{
 		}
 
-		void CMouseButtonEventsTranslator::handle ( shared_ptr<CMessage> message )
+		void CMouseButtonEventsTranslator::handle ( shared_ptr<Message> message )
 		{
 			/**
 			 * Get the key code
@@ -121,7 +121,7 @@ namespace Gnoll
 		}
 
 
-		void CMouseButtonEventsTranslator::trigger ( shared_ptr<CMessage> _msg )
+		void CMouseButtonEventsTranslator::trigger ( shared_ptr<Message> _msg )
 		{
 			Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
@@ -163,13 +163,13 @@ namespace Gnoll
 							ActionEvent actionEvent(*actionName, intensity);
 
 							shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-							shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+							shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
 
 							std::ostringstream tmpString;
 							try
 							{
-								CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+								MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 								tmpString << "Message ajoute ["<< *actionName << "]" << endl;
 							}
 							catch(...)

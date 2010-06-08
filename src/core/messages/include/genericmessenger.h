@@ -20,11 +20,13 @@
 #ifndef __GENERICMESSENGER_H__
 #define __GENERICMESSENGER_H__
 
-#include "../include/messenger.h"
-#include <boost/thread/recursive_mutex.hpp>
 #include <set>
 #include <map>
 #include <list>
+
+#include <boost/thread/recursive_mutex.hpp>
+
+#include "../include/messenger.h"
 
 namespace Gnoll
 {
@@ -77,4 +79,3 @@ namespace Gnoll
 }
 
 #endif
-

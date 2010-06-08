@@ -17,18 +17,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/poolthread.h"
 
-/*------------------------------CPoolThreads-------------------------------*\
-|   This is basic pool of threads executing jobs.                           |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               10/30/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
+#include <utility>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
@@ -36,25 +27,19 @@
 #include <boost/thread/condition.hpp>
 #include <boost/function/function0.hpp>
 #include <boost/thread/xtime.hpp>
-#include <utility>
 
-
-#include "../include/cthread.h"
-#include "../include/cthreadstopper.h"
-#include "../include/cmtqueue.h"
-#include "../include/cpoolthreads.h"
-
+#include "../include/thread.h"
+#include "../include/threadstopper.h"
+#include "../include/multithreadqueue.h"
 
 using namespace std;
 using namespace boost;
 
-
-namespace Gnoll {
-
-	namespace Core {
-
-
-		void CPoolThreads::updateWorkers() 
+namespace Gnoll
+{
+	namespace Core
+	{
+		void PoolThread::updateWorkers()
 		{
 			/**
 			 * This method has a lock since we don't want to mess up
@@ -62,14 +47,12 @@ namespace Gnoll {
 			 */
 			 boost::mutex::scoped_lock lock(m_updateMutex);
 
-
 			/**
 			 * Too many threads are running.
 			 * Need to stop some
 			 */
-			while ( this->getMaxThreads() < this->getNumRunningThreads() )
+			while(this->getMaxThreads() < this->getNumRunningThreads())
 			{
-				
 				/**
 				 * The way terminate a thread is simple :
 				 *  - Pick any running thread
@@ -77,23 +60,21 @@ namespace Gnoll {
 				 *  - Join on the thread hosting this worker
 				 */
 
-
 				/**
 				 * First step : get the first thread on the list
-				 */ 
-				pair< shared_ptr<boost::thread> , shared_ptr<CWorker> > pair = m_listThreads.front();
+				 */
+				pair< shared_ptr<boost::thread> , shared_ptr<Worker> > pair = m_listThreads.front();
 				m_listThreads.pop_front();
 
 				shared_ptr<boost::thread> thread = pair.first;
-				shared_ptr<CWorker> worker = pair.second;
+				shared_ptr<Worker> worker = pair.second;
 
-				
+
 				/**
 				 * Second step : create a job to set the stop flag of the worker associated to the thread
 				 *  we want to stop
 				 */
-				shared_ptr<CJob> stopWorker( new CThreadStopper(worker));
-
+				shared_ptr<Job> stopWorker(new ThreadStopper(worker));
 				this->pushJob(stopWorker);
 
 
@@ -101,19 +82,15 @@ namespace Gnoll {
 				 * Third step : join on the future terminated thread
 				 */
 				thread->join();
-				
 			}
-				
-
 
 			/**
 			 * Too few threads are running
 			 * Need to create some
 			 */
-			while ( this->getMaxThreads() > this->getNumRunningThreads() )
+			while(this->getMaxThreads() > this->getNumRunningThreads())
 			{
-
-				shared_ptr<CWorker> worker ( new CWorker(this) );
+				shared_ptr<Worker> worker(new Worker(this));
 
 				/**
 				 * This gets a reference on the instance () operator directly.
@@ -121,94 +98,76 @@ namespace Gnoll {
 				boost::function0<void> functor;
 				functor = boost::ref(*worker);
 
-
 				/**
 				 * If *worker would have been directly used, the thread would have used a
 				 *  copy of *worker. So we wouldn't get any control over the worker since we
 				 *  wouldn't have any reference of this one
 				 */
-				shared_ptr<boost::thread> thread (new boost::thread( functor ) );
-
-				pair< shared_ptr<boost::thread>, shared_ptr<CWorker> > newThread(thread, worker);
-
+				shared_ptr<boost::thread> thread(new boost::thread(functor));
+				pair< shared_ptr<boost::thread>, shared_ptr<Worker> > newThread(thread, worker);
 				m_listThreads.push_back(newThread);
-
 			}
-
 		}
 
-		void CPoolThreads::clearPool()
+		void PoolThread::clearPool()
 		{
 			/**
 			 * This method has a lock since we don't want to mess up
 			 * with multiple updates/clearpool happening at the same time
 			 */
 			boost::mutex::scoped_lock lock(m_updateMutex);
-	
 
 			/**
 			 * This goes through each thread and send a message making it to stop
 			 */
-
-			for (list< pair< shared_ptr<boost::thread> , shared_ptr<CWorker> > >::iterator it = m_listThreads.begin(); it != m_listThreads.end(); it++)	
+			for(list< pair< shared_ptr<boost::thread> , shared_ptr<Worker> > >::iterator it = m_listThreads.begin(); 
+				 it != m_listThreads.end(); it++)
 			{
-				
-				pair< shared_ptr<boost::thread> , shared_ptr<CWorker> > pair = *it;
+				pair< shared_ptr<boost::thread> , shared_ptr<Worker> > pair = *it;
 
 				shared_ptr<boost::thread> thread = pair.first;
-				shared_ptr<CWorker> worker = pair.second;
-				
-				
-				shared_ptr<CJob> stopWorker( new CThreadStopper(worker));
+				shared_ptr<Worker> worker = pair.second;
+				shared_ptr<Job> stopWorker(new ThreadStopper(worker));
 
 				this->pushJob(stopWorker);
 				thread->join();
-
 			}
-				
 		}
 
-
-		CPoolThreads::CPoolThreads() : m_maxThreads(MAX_THREADS)
+		PoolThread::PoolThread() : 
+			m_maxThreads(MAX_THREADS)
 		{
 			updateWorkers();
 		}
 
-
-		CPoolThreads::~CPoolThreads()
+		PoolThread::~PoolThread()
 	  	{
-			clearPool(); 
+			clearPool();
 		}
 
-
-		void CPoolThreads::setMaxThreads(unsigned int _maxThreads) 
+		void PoolThread::setMaxThreads(unsigned int maxThreads)
 		{
 			boost::mutex::scoped_lock lock(m_mutatorMutex);
-
-			m_maxThreads = _maxThreads;
+			m_maxThreads = maxThreads;
 		}
 
-
-		unsigned int CPoolThreads::getMaxThreads() 
+		unsigned int PoolThread::getMaxThreads()
 		{
 			return m_maxThreads;
 		}
 
-
-		unsigned int CPoolThreads::getNumRunningThreads() 
+		unsigned int PoolThread::getNumRunningThreads()
 		{
 			return m_listThreads.size();
 		}
 
-
-		void CPoolThreads::pushJob( shared_ptr<CJob> _job) 
+		void PoolThread::pushJob(shared_ptr<Job> job)
 		{
-			m_listJobs.push(_job); // Job added to the list
+			m_listJobs.push(job);   // Job added to the list
 			m_jobAdded.notify_one(); // Threads are notified about it
 		}
 
-
-		shared_ptr<CJob> CPoolThreads::popJob() 
+		shared_ptr<Job> PoolThread::popJob()
 		{
 			boost::mutex::scoped_lock lock(m_mutex);
 
@@ -216,29 +175,23 @@ namespace Gnoll {
 			boost::xtime_get(&xt, boost::TIME_UTC);
 			xt.sec += TIMED_WAIT;
 
-
-			if ( m_listJobs.empty() )
+			if(m_listJobs.empty())
 			{
 				m_jobAdded.timed_wait(lock, xt);
-				//m_jobAdded.wait(lock);
-			} 
-
-			shared_ptr<CJob> job;
-
-			if (m_listJobs.empty() == false)
-			{
-				job = m_listJobs.pop();
+				//mjobAdded.wait(lock);
 			}
-			
+
+			shared_ptr<Job> job;
+			if(m_listJobs.empty() == false)
+				job = m_listJobs.pop();
+
 			return job;
 		}
 
-		bool CPoolThreads::emptyQueue()
+		bool PoolThread::emptyQueue()
 		{
 			return m_listJobs.empty();
-		}		
-
+		}
 	}
 }
-
 

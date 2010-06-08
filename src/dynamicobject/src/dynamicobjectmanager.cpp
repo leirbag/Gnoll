@@ -35,7 +35,7 @@ namespace Gnoll
 			GNOLL_LOG().logMessage("Deleting DynamicObjectManager");
 		}
 
-		shared_ptr<DynamicObject> DynamicObjectManager::loadImpl(shared_ptr<IStream> stream, 
+		shared_ptr<DynamicObject> DynamicObjectManager::loadImpl(shared_ptr<AbstractStream> stream, 
 																 string instance)
 		{
 			// First : Stream -> XML
@@ -71,7 +71,7 @@ namespace Gnoll
 			return po;
 		}
 
-		bool DynamicObjectManager::saveImpl(shared_ptr<IStream> stream, 
+		bool DynamicObjectManager::saveImpl(shared_ptr<AbstractStream> stream, 
 											shared_ptr<DynamicObject> obj, 
 											string instance)
 		{

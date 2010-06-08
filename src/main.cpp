@@ -17,7 +17,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/include/isource.h"
+#include "core/include/abstractsource.h"
 #include "dynamicobject/include/dynamicobjectmanager.h"
 #include "core/include/sourcefile.h"
 #include "core/messages/include/listener.h"
@@ -67,14 +67,14 @@ namespace Gnoll
 	/**
 	 * Application class, the main class
 	 */
-	class Application : public Gnoll::Core::CModule, public Gnoll::Core::Singleton<Application>
+	class Application : public Gnoll::Core::Module, public Gnoll::Core::Singleton<Application>
 	{
 		private:
 			CLogModule *            logModule;
 			CGraphicModule*         graphicmanager;
 			COISInputModule         inputmanager;
 			CTimeModule*            timeModule;
-			CMessageModule*         messageModule;
+			MessageModule*         messageModule;
 			CSoundModule *          soundmanager;
 			CInputEventsTranslator* inputEventsTranslator;
 			StatsModule*           statsModule;
@@ -203,14 +203,12 @@ namespace Gnoll
 		 */
 		if (vm.count("load-source-directory"))
 		{
-
-
 			vector<string> lsd = vm["load-source-directory"].as< vector<string> >();
 			for (vector<string>::iterator it = lsd.begin(); it != lsd.end(); it++)
 			{
 
 				GNOLL_LOG() << "Adding new load source directory : \n";
-				shared_ptr<ISource> userLoadChannel(new SourceFile(*it, false, 10));
+				shared_ptr<AbstractSource> userLoadChannel(new SourceFile(*it, false, 10));
 				pom->addLoadSource(userLoadChannel);
 				soundManager->addLoadSource(userLoadChannel);
 				cameraManager->addLoadSource(userLoadChannel);
@@ -223,13 +221,12 @@ namespace Gnoll
 		 */
 		if (vm.count("save-source-directory"))
 		{
-
 			vector<string> lsd = vm["save-source-directory"].as< vector<string> >();
 			for (vector<string>::iterator it = lsd.begin(); it != lsd.end(); it++)
 			{
 
 				GNOLL_LOG() << "Adding new save source directory : \n";
-				shared_ptr<ISource> userSaveChannel(new SourceFile( *it, true, 10 ));
+				shared_ptr<AbstractSource> userSaveChannel(new SourceFile( *it, true, 10 ));
 				pom->addSaveSource(userSaveChannel);
 				soundManager->addSaveSource(userSaveChannel);
 				cameraManager->addLoadSource(userSaveChannel);
@@ -253,8 +250,8 @@ namespace Gnoll
 	{
 		// The very first thing to do is to add the current directory in DynamicObjectManager's list of repositories
 		// In case some modules would need to load some config files
-		shared_ptr<ISource> loadChannel(new SourceFile(".", false));
-		shared_ptr<ISource> saveChannel(new SourceFile(".", true));
+		shared_ptr<AbstractSource> loadChannel(new SourceFile(".", false));
+		shared_ptr<AbstractSource> saveChannel(new SourceFile(".", true));
 
 		DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 		SoundManager *soundManager = SoundManager::getInstancePtr();
@@ -276,12 +273,11 @@ namespace Gnoll
 		logModule             = CLogModule::getInstancePtr();
 		graphicmanager        = CGraphicModule::getInstancePtr();
 		timeModule            = CTimeModule::getInstancePtr();
-		messageModule         = CMessageModule::getInstancePtr();
+		messageModule         = MessageModule::getInstancePtr();
 		soundmanager          = CSoundModule::getInstancePtr();
 		inputEventsTranslator = CInputEventsTranslator::getInstancePtr();
 		statsModule           = StatsModule::getInstancePtr();
 		GNOLL_LOG() << "Instanciating modules...[DONE]\n";
-
 
 		try
 		{
@@ -375,7 +371,7 @@ namespace Gnoll
 		CTimeModule::destroy();
 		CInputEventsTranslator::destroy();
 		CGraphicModule::destroy();
-		CMessageModule::destroy();
+		MessageModule::destroy();
 		CLogModule::destroy();
 		StatsModule::destroy();
 		Gnoll::DynamicObject::AttributeHandlerRegistry::destroy();

@@ -31,7 +31,7 @@
 #include "../include/crulemanager.h"
 #include "../include/coisinputmanager.h"
 #include "../../core/messages/include/listener.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/integer.h"
@@ -98,7 +98,7 @@ namespace Gnoll
 			shared_ptr< Gnoll::DynamicObject::Integer > periodFromConfig = keyboardConfig->getAttribute< Gnoll::DynamicObject::Integer >("period");
 			period = *periodFromConfig;
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 
@@ -136,7 +136,7 @@ namespace Gnoll
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 			m_periodData = shared_ptr<boost::any> (new boost::any(period)) ;
-			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, m_periodData ));
+			shared_ptr<Message>  message (new Message(updateKeyboard, m_periodData ));
 
 			timeModule->addPeriodicEvent(0, message, period);
 		}
@@ -148,7 +148,7 @@ namespace Gnoll
 			Messages::MessageType updateKeyboard("UPDATE_KEYBOARD");
 
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			try
@@ -181,7 +181,7 @@ namespace Gnoll
 
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-			shared_ptr<CMessage>  message (new CMessage(updateKeyboard, m_periodData ));
+			shared_ptr<Message>  message (new Message(updateKeyboard, m_periodData ));
 			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (*m_periodData) );
 		}
 
@@ -191,7 +191,7 @@ namespace Gnoll
 
 			Messages::MessageType mouseMoved("MOUSE_MOVED");
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			mouseMotionEventsTranslator = shared_ptr<Messages::Listener> ( new CMouseMotionEventsTranslator() );
@@ -218,7 +218,7 @@ namespace Gnoll
 
 			Messages::MessageType mouseMoved("MOUSE_MOVED");
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			try
@@ -252,7 +252,7 @@ namespace Gnoll
 			period = *periodFromConfig;
 
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 
@@ -292,7 +292,7 @@ namespace Gnoll
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
 			m_periodData = shared_ptr<boost::any> (new boost::any(period)) ;
-			shared_ptr<CMessage>  message (new CMessage(updateMouse, m_periodData ));
+			shared_ptr<Message>  message (new Message(updateMouse, m_periodData ));
 
 			timeModule->addPeriodicEvent(0, message, period);
 		}
@@ -305,7 +305,7 @@ namespace Gnoll
 			Messages::MessageType mouseReleased("MOUSE_RELEASED");
 			Messages::MessageType updateMouse("UPDATE_MOUSE");
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			try
@@ -337,7 +337,7 @@ namespace Gnoll
 			}
 
 			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-			shared_ptr<CMessage>  message (new CMessage(updateMouse, m_periodData ));
+			shared_ptr<Message>  message (new Message(updateMouse, m_periodData ));
 			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (*m_periodData) );
 
 		}
@@ -349,7 +349,7 @@ namespace Gnoll
 
 			Messages::MessageType axisEventType(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			joystickAxisEventsTranslator = shared_ptr<Messages::Listener> ( new JoystickAxisEventsTranslator() );
@@ -376,7 +376,7 @@ namespace Gnoll
 
 			Messages::MessageType axisEventType(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			try
@@ -399,7 +399,7 @@ namespace Gnoll
 			ruleManager = shared_ptr<Messages::Listener>( new CRuleManager("ruleManager") );
 
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			try
@@ -420,7 +420,7 @@ namespace Gnoll
 		void CInputEventsTranslator::deactivateRuleManager()
 		{
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
+			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			try

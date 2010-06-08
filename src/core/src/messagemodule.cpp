@@ -1,6 +1,5 @@
-
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2006 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,44 +17,45 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/messagemodule.h"
+#include "../messages/include/genericmessenger.h"
 
-/*---------------------------DefaultCameraThirdPersonListener--------------*\
-|   This is a message's listener for camera third person                    |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/08/2008 - Gabriel - Initial release                      |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-#ifndef INCLUDED_DEFAULTCAMERATHIRDPERSONLISTENER_H
-#define INCLUDED_DEFAULTCAMERATHIRDPERSONLISTENER_H
-
-#include "cmessagelistenercamera.h"
+using namespace std;
+using namespace boost;
 
 namespace Gnoll
 {
-	namespace Scene
+	namespace Core
 	{
-		class DefaultCameraThirdPersonListener : public MessageListenerCamera
+		Messages::Messenger* MessageModule::getMessageManager()
 		{
-		public:
 			/**
-			 * This is a constructor
+			 * The default Message Manager is GenericMessenger
 			 */
-			DefaultCameraThirdPersonListener();
+			return m_messageManager.get();
+		}
 
-			/**
-			 * This is a destructor
-			 */
-			~DefaultCameraThirdPersonListener();
+		MessageModule::MessageModule() : 
+			m_messageManager(new Messages::GenericMessenger())
+		{
+		}
 
-			/**
-			 * This method is called in order to process a message
-			 * @param message The message this method will have to process
-			 */
-			void handle ( shared_ptr<Message> message );
-		};
-	};
-};
+		void MessageModule::init()
+		{
+		}
 
-#endif
+		void MessageModule::process()
+		{
+			m_messageManager->processQueue();
+		}
+
+		void MessageModule::exit()
+		{
+		}
+
+		MessageModule::~MessageModule()
+		{
+		}
+	}
+}
+

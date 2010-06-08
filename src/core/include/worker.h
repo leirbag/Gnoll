@@ -17,88 +17,65 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*---------------------------------CThread---------------------------------*\
-|   This is basic thread object.                                            |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               10/30/2007 - Paf - Initial release                          |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
-#ifndef __CTHREAD_H__
-#define __CTHREAD_H__
-
-
+#ifndef __WORKER_H__
+#define __WORKER_H__
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread.hpp>
 
+#include "thread.h"
 
-
-namespace Gnoll {
-
-	namespace Core {
+namespace Gnoll
+{
+	namespace Core
+	{
+		/**
+		 * Forward declaration
+		 */
+		class PoolThread;
 
 		/**
 		 *	This is a ressource template.</br>
 		 *	This hold the ressource itself and some information
 		 */
-		class CThread
+		class Worker : public Thread
 		{
-			private:
+			public:
+				/**
+				 * This is a constructor
+				 * @param _pool Pool containing the worker
+				 */
+				Worker(PoolThread* pool);
 
 				/**
-				 * There can be only one instance of a thread running a the same time
+				 * This is a destructor
 				 */
-				boost::mutex m_threadMutex;
+				virtual ~Worker();
 
-
-			public:
+				/**
+				 * Tells the worker to exit as soon as it has finished its current job
+				 */
+				void stop();
 
 				/**
 				 * What is going to be executed by this thread
 				 */
-				virtual void run () = 0;
+				virtual void run();
 
-
-				/**
-				 * This is a constructor
-				 */
-				CThread()
-				{
-				}
-	
-				/**
-				 * This is a copy constructor
-				 */
-				CThread(const CThread& _thread)
-				{
-				}
-		
-				/**
-				 * This is a destructor
-				 */
-				virtual ~CThread() {};
-
+			private:
 
 				/**
-				 * Functor that will run the code
+				 * Stop flag
 				 */
-				void operator()()
-				{
-					boost::mutex::scoped_lock scoped_lock(m_threadMutex);
-					this->run();
-				}
+				bool m_stop;
 
+				/**
+				 * Pointer on the pool this worker belongs to
+				 */
+				PoolThread* m_poolOfThreads;
 		};
-
 	}
 }
 
-#endif // __CTHREAD_H__
-
+#endif

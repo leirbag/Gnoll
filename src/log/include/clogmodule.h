@@ -33,7 +33,7 @@
 
 
 
-#include "../../core/include/cmodule.h"
+#include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
 
 #include <sstream>
@@ -46,7 +46,7 @@ namespace Gnoll
 	namespace Log
 	{
 
-		class CLogModule : public CModule, public Gnoll::Core::Singleton<CLogModule>
+		class CLogModule : public Module, public Gnoll::Core::Singleton<CLogModule>
 		{
 			public:
 

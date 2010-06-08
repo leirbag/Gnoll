@@ -17,104 +17,83 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------sourcefile----------------------------------*\
-|   This is a source that interface files                                   |
-|                                                                           |
-|   Changelog :                                                             |
-|               07/11/2007 - Paf - Initial release                          |
-|               08/17/2007 - Paf - Update comments                          |
-|               09/25/2007 - Paf - Replace namespace Viracocha by Gnoll     |
-|               02/15/2008 - Bruno Mahe - ISource objects provide a new     |
-|                                    method to check if a source can        |
-|                                    find a writable stream                 |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
+#ifndef __SOURCEFILE_H__
+#define __SOURCEFILE_H__
 
 #include <boost/shared_ptr.hpp>
 #include <libxml++/libxml++.h>
 
-#include "isource.h"
+#include "abstractsource.h"
 #include "filestream.h"
-
-#ifndef __SOURCEFILE_H__
-#define __SOURCEFILE_H__
 
 using namespace std;
 using namespace boost;
-
 
 namespace  Gnoll
 {
 	namespace Core
 	{
+		typedef unsigned int uint;
 
-		class SourceFile : public ISource
+		class SourceFile : public AbstractSource
 		{
-			private:
-
-				const string m_path;
-				bool m_overWrite;
-
-				/**
-				 * This creates a stream from a given URL
-				 * @param _url URL to load
-				 * @return Stream based on this URL
-				 */ 
-				shared_ptr<IStream> newStream(const string _url);
-
 			public:
 
 				/**
 				* This is a constructor.
 				*/
-				SourceFile( const string _path, bool _overWrite = false, unsigned int _priority = 0);
-
+				SourceFile(const string _path, bool _overWrite = false, uint _priority = 0);
 
 				/**
 				* This is a destructor.
 				*/
 				virtual ~SourceFile();
 
-
 				/**
 				 * This loads a stream from a given URL
 				 * @param _url URL to load
 				 * @return Stream based on this URL
-				 */ 
-				virtual shared_ptr<IStream> loadStream( const string _url);
-
+				 */
+				virtual shared_ptr<AbstractStream> loadStream(const string _url);
 
 				/**
 				 * This loads a stream with writing permissions to a given URL
 				 * @param _url URL to save to
 				 * @return True if the operation is successful. False otherwise
-				 */ 
-				virtual shared_ptr<IStream> saveStream( const string _url);
-
+				 */
+				virtual shared_ptr<AbstractStream> saveStream(const string _url);
 
 				/**
 				 *	This methods tells if a stream can be built from a given URL
 				 *	@param _url URL to be tested
 				 *	@param True if a stream can be built from this URL
 				 */
-				virtual bool isFetchable( const string _url);
-
+				virtual bool isFetchable(const string _url);
 
 				/**
 				 *	This methods tells if a writable stream can be built from a given URL
 				 *	@param _url URL to be tested
 				 *	@param True if a writable stream can be built from this URL
 				 */
-				virtual bool isWritable( const string _url);
-
+				virtual bool isWritable(const string _url);
 
 				/**
 				 * This methods set the overwriting mode
 				 * @param _mode True means files will be overwritten. False means no file will be overwritten.
 				 */
 				void setOverWrite(bool _mode);
+
+			private:
+				/**
+				 * This creates a stream from a given URL
+				 * @param _url URL to load
+				 * @return Stream based on this URL
+				 */
+				shared_ptr<AbstractStream> newStream(const string _url);
+
+			private:
+				const string m_path;
+				bool m_overWrite;
 		};
 	}
 }

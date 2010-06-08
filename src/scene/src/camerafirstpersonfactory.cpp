@@ -22,7 +22,7 @@
 #include "../include/camerafirstperson.h"
 #include "../include/defaultcamerafirstpersonlistener.h"
 #include "../include/cmessagelistenercamera.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
 #include "../../input/include/coisinputmodule.h"
@@ -39,8 +39,8 @@ namespace Gnoll
 			// ------------------
 			shared_ptr<OgreCameraWrapper> wrapper = shared_ptr<OgreCameraWrapper>(new OgreCameraWrapper(instanceName));
 
-			CMessageModule* messageModule = CMessageModule::getInstancePtr();
-			shared_ptr<CMessageListenerCamera> listenerInput = shared_ptr<CMessageListenerCamera>(
+			MessageModule* messageModule = MessageModule::getInstancePtr();
+			shared_ptr<MessageListenerCamera> listenerInput = shared_ptr<MessageListenerCamera>(
 															   new Gnoll::Scene::DefaultCameraFirstPersonListener);
 			messageModule->getMessageManager()->addListener(listenerInput, Messages::MessageType(Gnoll::Input::ACTION_EVENT_TYPE));
 			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFirstPerson(instanceName, wrapper));

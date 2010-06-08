@@ -55,7 +55,7 @@ namespace Gnoll
 		{
 		}
 
-		void CMouseButtonEventsTrigger::handle ( shared_ptr<CMessage> message )
+		void CMouseButtonEventsTrigger::handle ( shared_ptr<Message> message )
 		{
 			m_cMouseButtonEventsTranslator->trigger( message );
 		}

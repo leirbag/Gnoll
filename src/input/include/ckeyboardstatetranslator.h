@@ -24,7 +24,7 @@
 
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../core/messages/include/listener.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 
 using namespace boost;
 using namespace Gnoll::Core;

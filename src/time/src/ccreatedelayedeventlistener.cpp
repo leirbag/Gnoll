@@ -46,7 +46,7 @@ namespace Gnoll {
 		{
 		}
 
-		void CCreateDelayedEventListener::handle ( shared_ptr<CMessage> message )
+		void CCreateDelayedEventListener::handle ( shared_ptr<Message> message )
 		{
 		
 			TimerEvent timerEvent ( message->getData<TimerEvent>());

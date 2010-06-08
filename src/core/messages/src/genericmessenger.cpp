@@ -21,13 +21,15 @@
 
 #include <iostream>
 #include <string>
+
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
+
 #include "../include/messagetype.h"
 #include "../include/listener.h"
-#include "../../include/cmessage.h"
 #include "../include/exceptions.h"
 #include "../include/listenercontainer.h"
+#include "../../include/message.h"
 
 namespace Gnoll
 {

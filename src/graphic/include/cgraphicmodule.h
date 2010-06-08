@@ -28,7 +28,7 @@
 |                                - CGraphicModule::getWindowHandle() handles |
 |                                   now both Windows and GNU/Linux plateforms|
 |               04/25/2007 - Paf - Added CEGUI                               |
-|               05/09/2007 - Paf - Use boost::any due to a change in CMessage|
+|               05/09/2007 - Paf - Use boost::any due to a change in Message|
 |               12/17/2007 - Paf - Add private method loadOgreResourcesPath()|
 |               02/15/2008 - Bruno Mahe - Need to keep track of Camera's     |
 |                                  address, so it can be freed when exiting  |
@@ -45,7 +45,7 @@
 #ifndef __CGRAPHICMODULE_H__
 #define __CGRAPHICMODULE_H__
 
-#include "../../core/include/cmodule.h"
+#include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
 #include "../../core/messages/include/messagetype.h"
 
@@ -99,7 +99,7 @@ namespace Gnoll
 		/**
 		 *	The game graphic module.
 		 */
-		class CGraphicModule: public CModule, public Gnoll::Core::Singleton<CGraphicModule>
+		class CGraphicModule: public Module, public Gnoll::Core::Singleton<CGraphicModule>
 		{
 
 			private:
@@ -155,22 +155,22 @@ namespace Gnoll
 				CGraphicModule();
 
 				/**
-				 * @copydoc CModule::init
+				 * @copydoc Module::init
 				 */
 				virtual void init();
 
 				/**
-				 * @copydoc CModule::process
+				 * @copydoc Module::process
 				 */
 				virtual void process();
 
 				/**
-				 * @copydoc CModule::exit
+				 * @copydoc Module::exit
 				 */
 				virtual void exit();
 
 				/**
-				 * @copydoc CModule::~CModule
+				 * @copydoc Module::~Module
 				 */
 				virtual ~CGraphicModule();
 

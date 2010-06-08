@@ -28,10 +28,10 @@
 
 
 
-#include "../include/cthread.h"
+#include "../include/thread.h"
 #include "../include/cworker.h"
-#include "../include/cmtqueue.h"
-#include "../include/cpoolthreads.h"
+#include "../include/multithreadqueue.h"
+#include "../include/poolthread.h"
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>

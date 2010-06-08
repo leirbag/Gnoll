@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "../include/cfsm.h"
+#include "../include/finitestatemachine.h"
 
 #define INIT_CALL_COUNT(METHODNAME) \
 	METHODNAME##CallCount = 0;
@@ -22,7 +22,7 @@
 		return METHODNAME##ReturnValue; \
 	}
 
-struct MockState : public Gnoll::Core::CState
+struct MockState : public Gnoll::Core::State
 {
 	MockState()
 	{
@@ -41,7 +41,7 @@ struct MockState : public Gnoll::Core::CState
 
 };
 
-struct MockTransition : public Gnoll::Core::CTransition
+struct MockTransition : public Gnoll::Core::Transition
 {
 	MockTransition()
 	{

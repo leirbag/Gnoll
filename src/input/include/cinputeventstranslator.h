@@ -22,7 +22,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/include/cmodule.h"
+#include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
 #include "../../core/messages/include/listener.h"
 
@@ -36,7 +36,7 @@ namespace Gnoll
 		/**
 		 *	Interface of all game modules.
 		 */
-		class CInputEventsTranslator: public CModule, public Gnoll::Core::Singleton<CInputEventsTranslator>
+		class CInputEventsTranslator: public Module, public Gnoll::Core::Singleton<CInputEventsTranslator>
 		{
 			private:
 
@@ -90,27 +90,27 @@ namespace Gnoll
 
 			public:
 				/**
-				 * @copydoc CModule::init
+				 * @copydoc Module::init
 				 */
 				virtual void init();
 
 				/**
-				 * @copydoc CModule::process
+				 * @copydoc Module::process
 				 */
 				virtual void process();
 
 				/**
-				 * @copydoc CModule::exit
+				 * @copydoc Module::exit
 				 */
 				virtual void exit();
 
 				/**
-				 * @copydoc CModule::~CModule
+				 * @copydoc Module::~Module
 				 */
 				virtual ~CInputEventsTranslator();
 
 				/**
-				 * @copydoc CModule::CModule
+				 * @copydoc Module::Module
 				 */
 				CInputEventsTranslator();
 

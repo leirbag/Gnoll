@@ -22,7 +22,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "../../core/messages/include/listener.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 
 using namespace boost;
 
@@ -53,7 +53,7 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle ( shared_ptr<Message> message );
 		};
 	}
 }

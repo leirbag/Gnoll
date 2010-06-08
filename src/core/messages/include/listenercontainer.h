@@ -20,9 +20,10 @@
 #ifndef __LISTENERCONTAINER_H__
 #define __LISTENERCONTAINER_H__
 
+#include <map>
+
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
-#include <map>
 
 namespace Gnoll
 {
@@ -37,7 +38,7 @@ namespace Gnoll
 			{
 				public:
 					typedef boost::shared_ptr<Listener> ListenerPtr;
-					typedef boost::function<void (ListenerContainer::ListenerPtr &) > ForEachFunction;
+					typedef boost::function<void (ListenerContainer::ListenerPtr&) > ForEachFunction;
 
 					ListenerContainer();
 					virtual ~ListenerContainer();
@@ -46,7 +47,7 @@ namespace Gnoll
 					void del(ListenerPtr listener, const MessageType & messageType);
 
                                         // TODO : not sure if next method should be public
-					bool isListenerAssociatedToType(ListenerPtr listener, const MessageType & messageType);
+					bool isListenerAssociatedToType(ListenerPtr listener, const MessageType& messageType);
 					bool hasListenerForType(const MessageType & messageType);
 
 					void forEach(const MessageType & messageType, ForEachFunction function);
@@ -58,11 +59,11 @@ namespace Gnoll
 
 					void throwIfAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
 					bool isAlreadyListeningToType(ListenerPtr listener, const MessageType & messageType);
-					ContainerType::iterator getListenerIteratorForType(ListenerPtr listener, const MessageType & messageType);
+					ContainerType::iterator getListenerIteratorForType(ListenerPtr listener,
+																	   const MessageType & messageType);
 			};
 		}
 	}
 }
 
 #endif
-

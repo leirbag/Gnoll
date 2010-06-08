@@ -23,7 +23,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "../include/statsmodulelistener.h"
-#include "../../core/include/cmodule.h"
+#include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
 
 using namespace Gnoll::Core;
@@ -37,7 +37,7 @@ namespace Gnoll
 		/**
 		 *	The game stats module.
 		 */
-		class StatsModule : public CModule, public Gnoll::Core::Singleton<StatsModule>
+		class StatsModule : public Module, public Gnoll::Core::Singleton<StatsModule>
 		{
 			public:
 				/**
@@ -46,22 +46,22 @@ namespace Gnoll
 				StatsModule();
 
 				/**
-				 * @copydoc CModule::~CModule
+				 * @copydoc Module::~Module
 				 */
 				~StatsModule();
 
 				/**
-				 * @copydoc CModule::init
+				 * @copydoc Module::init
 				 */
 				void init();
 
 				/**
-				 * @copydoc CModule::process
+				 * @copydoc Module::process
 				 */
 				void process();
 
 				/**
-				 * @copydoc CModule::exit
+				 * @copydoc Module::exit
 				 */
 				void exit();
 

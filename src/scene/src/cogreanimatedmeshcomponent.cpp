@@ -30,7 +30,7 @@
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../stats/include/statsmodule.h"
 #include "../../core/messages/include/messagetype.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../include/cogreanimatedmeshcomponent.h"
 #include "../include/gobject.h"
 
@@ -62,7 +62,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
 					component->update(lasttime/1000.0f);
@@ -90,7 +90,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					Ogre::Vector3 position = message->getData<Ogre::Vector3>();
 					component->setPosition(position);
@@ -119,7 +119,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					Ogre::Vector3 scale = message->getData<Ogre::Vector3>();
 					component->setScaling(scale);
@@ -148,7 +148,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					Ogre::Vector3 rotation = message->getData<Ogre::Vector3>();
 					component->setRotation(rotation);
@@ -177,7 +177,7 @@ namespace Gnoll {
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle (shared_ptr<CMessage> message)
+				virtual void handle (shared_ptr<Message> message)
 				{
 					std::string name = message->getData<std::string>();
 					component->setCurrentAnimationState(name);
@@ -358,7 +358,7 @@ namespace Gnoll {
 			/**
 			 * Register the listener
 			 */
-			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			MessageModule*  messageModule  = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			componentListener = shared_ptr<Messages::Listener> (new OgreAnimatedMeshListener(this));
@@ -404,7 +404,7 @@ namespace Gnoll {
 			/**
 			 * Unregister the listener
 			 */
-			CMessageModule*  messageModule  = CMessageModule::getInstancePtr();
+			MessageModule*  messageModule  = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			messageManager->delListener ( componentListener, Gnoll::Core::Messages::MessageType("GRAPHIC_FRAME_RENDERED") );

@@ -28,7 +28,7 @@
 \*-------------------------------------------------------------------------*/
 
 
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 #include <boost/shared_ptr.hpp>
 
 
@@ -57,7 +57,7 @@ namespace Gnoll
 			/**
 			 * Message to be sent when the event occurs
 			 */
-			shared_ptr<CMessage> message;
+			shared_ptr<Message> message;
 
 		} TimerEvent;
 
@@ -81,7 +81,7 @@ namespace Gnoll
 			/**
 			 * Message to be sent when the event occurs
 			 */
-			shared_ptr<CMessage> message;
+			shared_ptr<Message> message;
 
 		} TimerPeriodicEvent;
 

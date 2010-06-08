@@ -25,7 +25,7 @@
 #include "../include/ctranslationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include "../../log/include/clogmodule.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../log/include/clogmacros.h"
@@ -103,11 +103,11 @@ namespace Gnoll
 
 			ActionEvent actionEvent ("BORDER_LEFT", value);
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+			shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
 			try
 			{
-				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+				MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				GNOLL_LOG() << "Message ajoute [BORDER_LEFT]\n";
 			}
 			catch(...)
@@ -131,11 +131,11 @@ namespace Gnoll
 
 			ActionEvent actionEvent ("BORDER_RIGHT", value);
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+			shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
 			try
 			{
-				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+				MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				GNOLL_LOG() << "Message ajoute [BORDER_RIGHT]\n";
 			}
 			catch(...)
@@ -158,11 +158,11 @@ namespace Gnoll
 
 			ActionEvent actionEvent ("BORDER_BOTTOM", value);
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+			shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
 			try
 			{
-				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+				MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				GNOLL_LOG() << "Message ajoute [BORDER_BOTTOM]\n";
 			}
 			catch(...)
@@ -186,11 +186,11 @@ namespace Gnoll
 
 			ActionEvent actionEvent ("BORDER_TOP", value);
 			shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
-			shared_ptr<CMessage>  actionMessage (new CMessage( actionEventType, data ));
+			shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
 			try
 			{
-				CMessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
+				MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
 				GNOLL_LOG() << "Message ajoute [BORDER_TOP]\n";
 			}
 			catch(...)
@@ -199,7 +199,7 @@ namespace Gnoll
 			}
 		}
 
-		void CMouseMotionStateTranslator::handle ( shared_ptr<CMessage> message )
+		void CMouseMotionStateTranslator::handle ( shared_ptr<Message> message )
 		{
 			/**
 			 * Get the motion information

@@ -45,7 +45,7 @@ namespace Gnoll
 	{	
 
 		/**
-		 * Custom read function to make vorbislib able to extract data from a shared_ptr<IStream>
+		 * Custom read function to make vorbislib able to extract data from a shared_ptr<AbstractStream>
 		 */
 		size_t vorbisRead(void * ptr, size_t size, size_t nmemb, void * datasource);
 	
@@ -70,7 +70,7 @@ namespace Gnoll
 				/**
 				 * @copydoc AudioCodecHandler::handle
 				 */
-				virtual shared_ptr<Sound> handle(shared_ptr<IStream>);
+				virtual shared_ptr<Sound> handle(shared_ptr<AbstractStream>);
 
 				/**
 				 * @copydoc AudioCodecHandler::getFileType

@@ -36,7 +36,7 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-		class DefaultCameraFreeFlyListener : public CMessageListenerCamera
+		class DefaultCameraFreeFlyListener : public MessageListenerCamera
 		{
 		public:
 			/**
@@ -53,7 +53,7 @@ namespace Gnoll
 			 * This method is called in order to process a message
 			 * @param message The message this method will have to process
 			 */
-			void handle ( shared_ptr<CMessage> message );
+			void handle ( shared_ptr<Message> message );
 		};
 	};
 };

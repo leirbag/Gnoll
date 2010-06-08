@@ -31,7 +31,7 @@
 
 
 
-#include "../include/cmessagemodule.h"
+#include "../include/messagemodule.h"
 
 
 #include <boost/shared_ptr.hpp>
@@ -47,7 +47,7 @@ using namespace Gnoll::Core;
 /**
  * An idiot message listener 
  */
-class MyMessageListener : public CMessageListener
+class MyMessageListener : public MessageListener
 {
 
 	public:
@@ -66,7 +66,7 @@ class MyMessageListener : public CMessageListener
 		 * This method is called in order to process a message
 		 * @param message The message this method will have to process
 		 */
-		virtual void handle ( shared_ptr<CMessage> message ) 
+		virtual void handle ( shared_ptr<Message> message ) 
 		{ 
 			/*
 			 * A string is embeded in the message and is displayed
@@ -83,14 +83,14 @@ class MyMessageListener : public CMessageListener
 int main()
 {
 	// A message manager 
-	CMessageModule* messageModule = Gnoll::Core::CMessageModule::getInstancePtr();
-	CMessageManager* mymanager = messageModule->getMessageManager();
+	MessageModule* messageModule = Gnoll::Core::MessageModule::getInstancePtr();
+	MessageManager* mymanager = messageModule->getMessageManager();
 
 	// A message type called "string" 
 	Messages::MessageType mytype("string");
 
 	// A listener
-	shared_ptr<CMessageListener> mylistener(new MyMessageListener);
+	shared_ptr<MessageListener> mylistener(new MyMessageListener);
 
 
 
@@ -105,7 +105,7 @@ int main()
 
 	shared_ptr<boost::any> texte (new boost::any(string("blablabla..."))) ;
 
-	shared_ptr<CMessage>  mymessage (new CMessage(mytype, texte ));
+	shared_ptr<Message>  mymessage (new Message(mytype, texte ));
 
 	try
 	{

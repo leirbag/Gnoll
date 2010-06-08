@@ -32,7 +32,7 @@ namespace Gnoll
 		class Camera;
 
 		/// This is a message's listener for camera
-		class CMessageListenerCamera : public Gnoll::Core::Messages::Listener
+		class MessageListenerCamera : public Gnoll::Core::Messages::Listener
 		{
 		protected:
 			weak_ptr<Camera> m_pCamera;
@@ -41,12 +41,12 @@ namespace Gnoll
 			/**
 			 * This is a constructor
 			 */
-			CMessageListenerCamera();
+			MessageListenerCamera();
 
 			/**
 			 * This is a destructor
 			 */
-			~CMessageListenerCamera();
+			~MessageListenerCamera();
 
 			/**
 			 * This method set the camera of the listener
@@ -59,7 +59,7 @@ namespace Gnoll
 			 * This method is called in order to process a message
 			 * @param message The message this method will have to process
 			 */
-			void handle ( shared_ptr<Gnoll::Core::CMessage> message );
+			void handle ( shared_ptr<Gnoll::Core::Message> message );
 		};
 	};
 };

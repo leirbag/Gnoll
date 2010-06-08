@@ -45,7 +45,7 @@ namespace Gnoll
 			sound_queue = _sound_queue;
 		}
 		
-		void SoundPlayListener::handle( shared_ptr<CMessage> message)
+		void SoundPlayListener::handle( shared_ptr<Message> message)
 		{
 			string instance = message->getData<string>();
 			sound_queue->push_back(instance);

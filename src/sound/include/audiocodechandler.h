@@ -32,7 +32,7 @@
 
 #include "../../core/include/singleton.h"
 
-#include "../../core/include/istream.h"
+#include "../../core/include/abstractstream.h"
 #include "sound.h"
 
 #include <boost/shared_ptr.hpp>
@@ -74,7 +74,7 @@ namespace Gnoll {
 				 * @param _stream Stream to decode
 				 * @return Sound object containing the decoded stream
 				 */
-				virtual shared_ptr<Sound> handle(shared_ptr<IStream> _stream) = 0;
+				virtual shared_ptr<Sound> handle(shared_ptr<AbstractStream> _stream) = 0;
 
 				/**
 				 * Audio codec that the class is handling (ogg...)

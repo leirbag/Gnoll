@@ -17,42 +17,58 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __IDIOTSTATE_H__
+#define __IDIOTSTATE_H__
 
-/*-------------------------------DefaultCameraFirstPersonListener----------*\
-|   This is a first person camera listener                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-|               06/30/2008 - Gabriel - Adapt handle to use weak_ptr         |
-\*-------------------------------------------------------------------------*/
+#include <string>
+#include <iostream>
 
-#include "../include/defaultcamerafirstpersonlistener.h"
-#include "../include/camerafirstperson.h"
-#include "../../stats/include/statsmodule.h"
-#include "../../input/include/ctranslationevents.h"
-#include "../../input/include/cinputmouseevents.h"
-#include "../../dynamicobject/include/float.h"
+#include "cstate.h"
+
+using namespace std;
 
 namespace Gnoll
 {
-	namespace Scene
+	namespace Core
 	{
-		DefaultCameraFirstPersonListener::DefaultCameraFirstPersonListener()
+		/**
+		 *	An idiot FSM's state
+		 */
+		class IdiotState: public State
 		{
-		}
+			public:
+				/**
+				 * This is called after entering this state
+				 */
+				virtual void onInit() { cout << "Je rentre dans l'etat : " << m_name << endl; }
 
-		DefaultCameraFirstPersonListener::~DefaultCameraFirstPersonListener()
-		{
-		}
+				/**
+				 * This is called during its activation
+				 */
+				virtual void onProcess() { cout << "Je suis dans l'etat : " << m_name << endl; }
 
-		void DefaultCameraFirstPersonListener::handle ( shared_ptr<Message> message )
-		{
-			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
-			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
+				/**
+				 * This is called before exiting this state
+				 */
+				virtual void onExit() { cout << "Je sors de l'etat : " << m_name << endl << endl; }
 
-			// Update
-			m_pCamera.lock()->update(lasttime);
-		}
+				/**
+				 * This is a constructor
+				 */
+				IdiotState(string myname = "Anne nonyme") : m_name(myname) {}
+
+				/**
+				 * This is a destructor
+				 */
+				~IdiotState() {}
+
+			private:
+				/**
+				 * It is the state's name
+				 */
+				string m_name;
+		};
 	};
 };
+
+#endif // __CIDIOTSTATE_H__

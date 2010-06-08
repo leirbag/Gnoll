@@ -23,7 +23,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "../../core/messages/include/listener.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 
 using namespace boost;
 

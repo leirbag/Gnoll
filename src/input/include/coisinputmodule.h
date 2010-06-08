@@ -28,7 +28,7 @@
 
 #include "cinputmodule.h"
 #include "coisinputmanager.h"
-#include "../../core/include/cmessagemodule.h"
+#include "../../core/include/messagemodule.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include <OgreRenderWindow.h>
@@ -63,22 +63,22 @@ class COISInputModule
 		COISInputModule( );
 
 		/**
-		 * @copydoc CModule::init
+		 * @copydoc Module::init
 		 */
 		virtual void init();
 
 		/**
-		 * @copydoc CModule::process
+		 * @copydoc Module::process
 		 */
 		virtual void process();
 
 		/**
-		 * @copydoc CModule::exit 
+		 * @copydoc Module::exit 
 		 */
 		virtual void exit();
 
 		/**
-		 * @copydoc CModule::~CModule
+		 * @copydoc Module::~Module
 		 */
 		virtual ~COISInputModule();
 };

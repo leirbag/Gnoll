@@ -53,7 +53,7 @@ namespace Gnoll
 		{
 		}
 
-		void DefaultCameraThirdPersonListener::handle ( shared_ptr<CMessage> message )
+		void DefaultCameraThirdPersonListener::handle ( shared_ptr<Message> message )
 		{
 			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
 			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();

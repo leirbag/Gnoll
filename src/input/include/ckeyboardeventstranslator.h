@@ -24,7 +24,7 @@
 
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../core/messages/include/listener.h"
-#include "../../core/include/cmessage.h"
+#include "../../core/include/message.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -90,12 +90,12 @@ namespace Gnoll
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
-				virtual void handle ( shared_ptr<CMessage> message );
+				virtual void handle ( shared_ptr<Message> message );
 
 				/**
 				* Send keyboard events if any key has been pressed
 				*/
-				void trigger(shared_ptr<CMessage> _msg);
+				void trigger(shared_ptr<Message> _msg);
 		};
 	};
 };
