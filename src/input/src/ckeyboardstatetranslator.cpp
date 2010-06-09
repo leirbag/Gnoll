@@ -29,7 +29,7 @@
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
 #include "../../log/include/logmodule.h"
-#include "../../time/include/ctimemodule.h"
+#include "../../time/include/timemodule.h"
 
 #include "../../config.h"
 

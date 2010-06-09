@@ -17,48 +17,50 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __DESTROYPERIODICEVENTLISTENER_H__
+#define __DESTROYPERIODICEVENTLISTENER_H__ 
 
-/*----------------------CCreatePeriodicEventListener-----------------------*\
-|   This is defines listeners used by the time module                       |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/20/2007 - Paf - Initial release                          |
-|               09/23/2007 - Paf - Renamed to CCreatePeriodicEventListener  |
-|               09/30/2007 - Paf - Fix namespace (replace Core by time)     |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include <string>
 
+#include <boost/shared_ptr.hpp>
 
-#include "../include/ccreateperiodiceventlistener.h"
+#include "../../core/messages/include/listener.h"
+#include "timermessages.h"
+#include "timemodule.h"
 
+using namespace std;
+using namespace boost;
+using namespace Gnoll::Core;
 
-
-namespace Gnoll {
-
-	namespace Time {
-
-				
-		CCreatePeriodicEventListener::CCreatePeriodicEventListener() 
+namespace Gnoll
+{
+	namespace Time
+	{
+		/**
+		 *	A message listener for the timer module.
+		 *	This listener destroy registered periodic events
+		 */ 
+		class DestroyPeriodicEventListener : public Messages::Listener
 		{
-		}
+			public:
 
-		CCreatePeriodicEventListener::~CCreatePeriodicEventListener() 
-		{
-		}
+				/**
+				 * This is a constructor
+				 */
+				DestroyPeriodicEventListener(); 
 
-		void CCreatePeriodicEventListener::handle ( shared_ptr<Message> message )
-		{
-		
-			TimerPeriodicEvent timerEvent ( message->getData<TimerPeriodicEvent>());
+				/**
+				 * This is a destructor
+				 */
+				virtual ~DestroyPeriodicEventListener();
 
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-
-			timeModule->addPeriodicEvent(timerEvent.delay, timerEvent.message, timerEvent.period);
-		}
-
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle(MessagePtr message);
+		};
 	}
 }
 
-
-
-
+#endif

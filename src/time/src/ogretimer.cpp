@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Paf                                             *
+ *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,50 +17,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef __CDESTROYDELAYEDEVENTLISTENER_H__
-#define __CDESTROYDELAYEDEVENTLISTENER_H__ 
-
-#include <string>
-#include <boost/shared_ptr.hpp>
-
-#include "../../core/messages/include/listener.h"
-#include "ctimermessages.h"
-
-#include "ctimemodule.h"
-
-using namespace Gnoll::Core;
-using namespace boost;
+#include "../include/ogretimer.h"
 
 namespace Gnoll
 {
 	namespace Time
 	{
-
-		/**
-		*	A message listener for the timer module.
-		*	This listener destroy registered delayed events
-		*/ 
-		class CDestroyDelayedEventListener : public Messages::Listener
+		OgreTimer::OgreTimer()
 		{
-			public:
-				
-				/**
-				* This is a constructor
-				*/
-				CDestroyDelayedEventListener(); 
+			m_timer = shared_ptr<Ogre::Timer>(new Ogre::Timer());
+			m_timer->reset();
+		}
 
-				/**
-				* This is a destructor
-				*/
-				virtual ~CDestroyDelayedEventListener();
+		OgreTimer::~OgreTimer()
+		{
+		}
 
-				/**
-				* This method is called in order to process a message
-				* @param message The message this method will have to process
-				*/
-				virtual void handle(MessagePtr message);
-			};
+		unsigned long int OgreTimer::getMsecs()
+		{
+			return m_timer->getMilliseconds();
+		}
+
+		void OgreTimer::reset()
+		{
+			m_timer->reset();
+		}
 	}
 }
-
-#endif // __CDESTROYDELAYEDEVENTLISTENER_H__

@@ -29,7 +29,7 @@
 #include "../../log/include/logmodule.h"
 #include "../include/cinputmouseevents.h"
 #include <OIS/OISKeyboard.h>
-#include "../../time/include/ctimemodule.h"
+#include "../../time/include/timemodule.h"
 
 #include "../../config.h"
 
@@ -90,7 +90,7 @@ namespace Gnoll
 			 */
 			if ( keyboardEventTranslationMap->hasAttribute(keyCodeValue) )
 			{
-				CTimeModule* timeModule = CTimeModule::getInstancePtr();
+				TimeModule* timeModule = TimeModule::getInstancePtr();
 
 				Messages::MessageType messageType = message->getType();
 
@@ -118,7 +118,7 @@ namespace Gnoll
 		{
 
 			Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			TimeModule* timeModule = TimeModule::getInstancePtr();
 
 			shared_ptr<Float> defaultKeyboardSensibility = shared_ptr<Float> (new Float(1.0f));
 			shared_ptr< Gnoll::DynamicObject::Float > keyboardSensibility = keyboardConfig->getAttributeOrDefault<Float>("sensibility", defaultKeyboardSensibility);

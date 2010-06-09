@@ -17,49 +17,50 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef __CDESTROYPERIODICEVENTLISTENER_H__
-#define __CDESTROYPERIODICEVENTLISTENER_H__ 
+#ifndef __LINUXTIMER_H__
+#define __LINUXTIMER_H__
 
-#include <string>
-#include <boost/shared_ptr.hpp>
-
-#include "../../core/messages/include/listener.h"
-#include "ctimermessages.h"
-#include "ctimemodule.h"
+#include <sys/time.h>
+#include "abstracttimer.h"
 
 using namespace std;
-using namespace boost;
-using namespace Gnoll::Core;
 
 namespace Gnoll
 {
 	namespace Time
 	{
-		/**
-		*	A message listener for the timer module.
-		*	This listener destroy registered periodic events
-		*/ 
-		class CDestroyPeriodicEventListener : public Messages::Listener
+		class LinuxTimer : public AbstractTimer
 		{
 			public:
-				
 				/**
-				* This is a constructor
-				*/
-				CDestroyPeriodicEventListener(); 
+				 *  A constructor
+				 */
+				LinuxTimer();
 
 				/**
-				* This is a destructor
-				*/
-				virtual ~CDestroyPeriodicEventListener();
+				 *  A destructor
+				 */
+				~LinuxTimer();
 
 				/**
-				* This method is called in order to process a message
-				* @param message The message this method will have to process
-				*/
-				virtual void handle(MessagePtr message);
-			};
+				 *  Returns elapsed milliseconds since timer start/reset
+				 *  @return milliseconds elapsed
+				 */
+				unsigned long int getMsecs();
+
+				/**
+				 *  Reset the timer
+				 */
+				void reset(void);
+
+			private:
+				/**
+				 * Initial time </br>
+				 * This will be used as the reference time to compare to
+				 */
+				struct timeval m_initialTime;
+		};
 	}
 }
 
-#endif // __CDESTROYPERIODICEVENTLISTENER_H__
+#endif 

@@ -17,48 +17,49 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __CREATEPERIODICEVENTLISTENER_H__
+#define __CREATEPERIODICEVENTLISTENER_H__ 
 
-/*------------------------CCreateDelayedEventListener----------------------*\
-|   This is defines listeners used by the time module                       |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/14/2007 - Paf - Initial release                          |
-|               09/23/2007 - Paf - Renamed to CCreateDelayedEventListener   |
-|               09/30/2007 - Paf - Fix namespace (replace Core by Time)     |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include <string>
 
+#include <boost/shared_ptr.hpp>
 
-#include "../include/ccreatedelayedeventlistener.h"
+#include "../../core/messages/include/listener.h"
+#include "timermessages.h"
+#include "timemodule.h"
 
+using namespace std;
+using namespace boost;
+using namespace Gnoll::Core;
 
-
-namespace Gnoll {
-
-	namespace Time {
-
-				
-		CCreateDelayedEventListener::CCreateDelayedEventListener() 
+namespace Gnoll
+{
+	namespace Time
+	{
+		/**
+		 *	A message listener for the timer module.
+		 */ 
+		class CreatePeriodicEventListener : public Messages::Listener
 		{
-		}
+			public:
 
-		CCreateDelayedEventListener::~CCreateDelayedEventListener() 
-		{
-		}
+				/**
+				 * This is a constructor
+				 */
+				CreatePeriodicEventListener(); 
 
-		void CCreateDelayedEventListener::handle ( shared_ptr<Message> message )
-		{
-		
-			TimerEvent timerEvent ( message->getData<TimerEvent>());
+				/**
+				 * This is a destructor
+				 */
+				virtual ~CreatePeriodicEventListener();
 
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-
-			timeModule->addDelayedEvent(timerEvent.delay, timerEvent.message);
-		}
-
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle(MessagePtr message);
+		};
 	}
 }
 
-
-
-
+#endif 

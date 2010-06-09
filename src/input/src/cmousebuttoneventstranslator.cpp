@@ -28,7 +28,7 @@
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
-#include "../../time/include/ctimemodule.h"
+#include "../../time/include/timemodule.h"
 #include "../../log/include/logmodule.h"
 
 #include "../../config.h"
@@ -97,7 +97,7 @@ namespace Gnoll
 				Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
 
 
-				CTimeModule* timeModule = CTimeModule::getInstancePtr();
+				TimeModule* timeModule = TimeModule::getInstancePtr();
 
 				Messages::MessageType messageType = message->getType();
 
@@ -124,7 +124,7 @@ namespace Gnoll
 		void CMouseButtonEventsTranslator::trigger ( shared_ptr<Message> _msg )
 		{
 			Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			TimeModule* timeModule = TimeModule::getInstancePtr();
 
 			unsigned long int now = timeModule->getMsecs();
 			unsigned long int period = now - m_lastTimeTriggerCalled;

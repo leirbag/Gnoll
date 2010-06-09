@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Paf                                             *
+ *   Copyright (C) 2006 by Puzzle Team                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,46 +17,36 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef __CCREATEDELAYEDEVENTLISTENER_H__
-#define __CCREATEDELAYEDEVENTLISTENER_H__ 
-
-#include <string>
-#include <boost/shared_ptr.hpp>
-
-#include "../../core/messages/include/listener.h"
-#include "ctimermessages.h"
-#include "ctimemodule.h"
-
-using namespace Gnoll::Core;
-using namespace boost;
+#ifndef __ABSTRACTTIMER_H__
+#define __ABSTRACTTIMER_H__
 
 namespace Gnoll
 {
 	namespace Time
 	{
 		/**
-		*	A message listener for the timer module.
-		*/ 
-		class CCreateDelayedEventListener : public Messages::Listener
+		 *   An abstract base class for timer classes
+		 */
+		class AbstractTimer
 		{
 			public:
 				/**
-				* This is a constructor
-				*/
-				CCreateDelayedEventListener(); 
+				 * A virtual destructor
+				 */
+				virtual ~AbstractTimer() {}
 
 				/**
-				* This is a destructor
-				*/
-				virtual ~CCreateDelayedEventListener();
+				 * Returns amount of milliseconds since timer start or reset
+				 * @return Amount of milliseconds
+				 */
+				virtual unsigned long int getMsecs() = 0;
 
 				/**
-				* This method is called in order to process a message
-				* @param message The message this method will have to process
-				*/
-				virtual void handle(MessagePtr message);
-			};
+				 * Reset the timer
+				 */
+				virtual void reset() = 0;
+		};
 	}
 }
 
-#endif // __CCREATEDELAYEDEVENTLISTENER_H__
+#endif

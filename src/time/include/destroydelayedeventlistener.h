@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,49 +17,49 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __DESTROYDELAYEDEVENTLISTENER_H__
+#define __DESTROYDELAYEDEVENTLISTENER_H__ 
 
-/*---------------------------------cogretimer.h----------------------------*\
-|   A class to encapsulate the Ogre Timer                                   |
-|                                                                           |
-|   Changelog :                                                             |
-|               05/12/2007 - Vince - Initial release                        |
-|               09/30/2007 - Paf   - Enclose class in namespace Gnoll::Time |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include <string>
 
-#include "../include/cogretimer.h"
+#include <boost/shared_ptr.hpp>
 
+#include "../../core/messages/include/listener.h"
+#include "timermessages.h"
+#include "timemodule.h"
+
+using namespace Gnoll::Core;
+using namespace boost;
 
 namespace Gnoll
 {
 	namespace Time
 	{
-
-
-		COgreTimer::COgreTimer(void)
+		/**
+		 *	A message listener for the timer module.
+		 *	This listener destroy registered delayed events
+		 */ 
+		class DestroyDelayedEventListener : public Messages::Listener
 		{
-			mTimer = shared_ptr<Ogre::Timer>(new Ogre::Timer());
-			mTimer->reset();
-		}
+			public:
 
+				/**
+				 * This is a constructor
+				 */
+				DestroyDelayedEventListener(); 
 
-		COgreTimer::~COgreTimer(void)
-		{
-		}
+				/**
+				 * This is a destructor
+				 */
+				virtual ~DestroyDelayedEventListener();
 
-
-		unsigned long int COgreTimer::getMsecs(void)
-		{
-			return mTimer->getMilliseconds();
-		}
-
-
-		void COgreTimer::reset(void)
-		{
-			mTimer->reset();
-		}
-
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle(MessagePtr message);
+		};
 	}
 }
 
-
+#endif

@@ -17,54 +17,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/destroyperiodiceventlistener.h"
 
-/*----------------------------clinuxtimer.cpp------------------------------*\
-|   A class to encapsulate a timer based on standard GNU/Linux libraries    |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/07/2007 - Paf - Initial release                          |
-|               09/30/2007 - Paf - Enclose class in namespace Gnoll::Time   |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#include "../include/clinuxtimer.h"
-#include <sys/time.h>
-#include <stddef.h>
-
-namespace Gnoll
+namespace Gnoll 
 {
-	namespace Time
+	namespace Time 
 	{
-
-
-		CLinuxTimer::CLinuxTimer(void)
-		{
-			this->reset();
-		}
-
-
-		CLinuxTimer::~CLinuxTimer(void)
+		DestroyPeriodicEventListener::DestroyPeriodicEventListener() 
 		{
 		}
 
-
-		unsigned long int CLinuxTimer::getMsecs(void)
+		DestroyPeriodicEventListener::~DestroyPeriodicEventListener() 
 		{
-			struct timeval now;
-			gettimeofday( &now, NULL);
-
-			return (now.tv_sec - m_initialTime.tv_sec) * 1000 + (now.tv_usec - m_initialTime.tv_usec) / 1000;
-
 		}
 
-
-		void CLinuxTimer::reset(void)
+		void DestroyPeriodicEventListener::handle(shared_ptr<Message> message)
 		{
-			gettimeofday( &m_initialTime, NULL);
+			TimerPeriodicEvent timerEvent(message->getData<TimerPeriodicEvent>());
+			TimeModule* timeModule = TimeModule::getInstancePtr();
+			timeModule->delPeriodicEvent(timerEvent.delay, timerEvent.message, timerEvent.period);
 		}
-
 	}
 }
-
-

@@ -35,7 +35,7 @@
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/integer.h"
-#include "../../time/include/ctimemodule.h"
+#include "../../time/include/timemodule.h"
 #include "../../log/include/logmodule.h"
 #include "../include/oisjoysticklistener.h"
 using namespace Gnoll::Input;
@@ -134,7 +134,7 @@ namespace Gnoll
 				throw;
 			}
 
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			TimeModule* timeModule = TimeModule::getInstancePtr();
 			m_periodData = shared_ptr<boost::any> (new boost::any(period)) ;
 			shared_ptr<Message>  message (new Message(updateKeyboard, m_periodData ));
 
@@ -180,7 +180,7 @@ namespace Gnoll
 			}
 
 
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			TimeModule* timeModule = TimeModule::getInstancePtr();
 			shared_ptr<Message>  message (new Message(updateKeyboard, m_periodData ));
 			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (*m_periodData) );
 		}
@@ -290,7 +290,7 @@ namespace Gnoll
 			}
 
 
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			TimeModule* timeModule = TimeModule::getInstancePtr();
 			m_periodData = shared_ptr<boost::any> (new boost::any(period)) ;
 			shared_ptr<Message>  message (new Message(updateMouse, m_periodData ));
 
@@ -336,7 +336,7 @@ namespace Gnoll
 				throw;
 			}
 
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			TimeModule* timeModule = TimeModule::getInstancePtr();
 			shared_ptr<Message>  message (new Message(updateMouse, m_periodData ));
 			timeModule->delPeriodicEvent(0, message, boost::any_cast<unsigned long int> (*m_periodData) );
 

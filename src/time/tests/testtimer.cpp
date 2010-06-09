@@ -36,10 +36,10 @@
 #include "../../core/messages/include/messenger.h"
 #include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/listener.h"
-#include "../include/ctimemodule.h"
-#include "../include/itimer.h"
+#include "../include/timemodule.h"
+#include "../include/abstracttimer.h"
 #include "../include/clinuxtimer.h"
-#include "../include/ctimermessages.h"
+#include "../include/timermessages.h"
 
 
 #include <boost/shared_ptr.hpp>
@@ -93,7 +93,7 @@ int main()
 	// A message manager 
 	MessageModule* messageModule = MessageModule::getInstancePtr();
 	MessageManager* myManager = messageModule->getMessageManager();
-	CTimeModule* myTimeModule = CTimeModule::getInstancePtr();
+	TimeModule* myTimeModule = TimeModule::getInstancePtr();
 
 	// A message type called "string" 
 	Messages::MessageType mytype("string");

@@ -17,48 +17,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/createdelayedeventlistener.h"
 
-/*----------------------CDestroyDelayedEventListener-----------------------*\
-|   This is defines listeners used by the time module                       |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/20/2007 - Paf - Initial release                          |
-|               09/23/2007 - Paf - Renamed to CDestroyDelayedEventListener  |
-|               09/30/2007 - Paf - Fix namespace (replace Core by Time)     |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#include "../include/cdestroydelayedeventlistener.h"
-
-
-
-namespace Gnoll {
-
-	namespace Time {
-
-				
-		CDestroyDelayedEventListener::CDestroyDelayedEventListener() 
+namespace Gnoll 
+{
+	namespace Time 
+	{
+		CreateDelayedEventListener::CreateDelayedEventListener() 
 		{
 		}
 
-		CDestroyDelayedEventListener::~CDestroyDelayedEventListener() 
+		CreateDelayedEventListener::~CreateDelayedEventListener() 
 		{
 		}
 
-		void CDestroyDelayedEventListener::handle ( shared_ptr<Message> message )
+		void CreateDelayedEventListener::handle(shared_ptr<Message> message)
 		{
-		
-			TimerEvent timerEvent ( message->getData<TimerEvent>());
-
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-
-			timeModule->delDelayedEvent(timerEvent.delay, timerEvent.message);
+			TimerEvent timerEvent(message->getData<TimerEvent>());
+			TimeModule* timeModule = TimeModule::getInstancePtr();
+			timeModule->addDelayedEvent(timerEvent.delay, timerEvent.message);
 		}
-
 	}
 }
-
-
-
-

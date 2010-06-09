@@ -17,48 +17,54 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef __CCREATEPERIODICEVENTLISTENER_H__
-#define __CCREATEPERIODICEVENTLISTENER_H__ 
+#ifndef __OGRETIMER_H__
+#define __OGRETIMER_H__
 
-#include <string>
+#include <Ogre.h>
+#include <OgreTimer.h>
+#include <OgrePlatform.h>
 #include <boost/shared_ptr.hpp>
 
-#include "../../core/messages/include/listener.h"
-#include "ctimermessages.h"
-#include "ctimemodule.h"
+#include "abstracttimer.h"
 
 using namespace std;
 using namespace boost;
-using namespace Gnoll::Core;
 
 namespace Gnoll
 {
 	namespace Time
 	{
-		/**
-		*	A message listener for the timer module.
-		*/ 
-		class CCreatePeriodicEventListener : public Messages::Listener
+		class OgreTimer : public AbstractTimer
 		{
 			public:
-				
 				/**
-				* This is a constructor
-				*/
-				CCreatePeriodicEventListener(); 
+				 *   A constructor
+				 */
+				OgreTimer();
 
 				/**
-				* This is a destructor
-				*/
-				virtual ~CCreatePeriodicEventListener();
+				 *   A destructor
+				 */
+				~OgreTimer();
 
 				/**
-				* This method is called in order to process a message
-				* @param message The message this method will have to process
-				*/
-				virtual void handle(MessagePtr message);
-			};
+				 *   Returns elapsed milliseconds since timer start/reset
+				 *   @return milliseconds elapsed
+				 */
+				unsigned long int getMsecs();
+
+				/**
+				 *   Reset the timer
+				 */
+				void reset();
+
+			private:
+				/**
+				 * An Ogre timer 
+				 */
+				shared_ptr<Ogre::Timer> m_timer;
+		};
 	}
 }
 
-#endif // __CCREATEPERIODICEVENTLISTENER_H__
+#endif

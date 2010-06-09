@@ -17,48 +17,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/createperiodiceventlistener.h"
 
-/*----------------------CDestroyPeriodicEventListener----------------------*\
-|   This is defines listeners used by the time module                       |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/20/2007 - Paf - Initial release                          |
-|               09/23/2007 - Paf - Renamed to CDestroyPeriodicEventListener |
-|               09/30/2007 - Paf - Fix namespace (replace Core by Time)     |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#include "../include/cdestroyperiodiceventlistener.h"
-
-
-
-namespace Gnoll {
-
-	namespace Time {
-
-				
-		CDestroyPeriodicEventListener::CDestroyPeriodicEventListener() 
+namespace Gnoll 
+{
+	namespace Time 
+	{
+		CreatePeriodicEventListener::CreatePeriodicEventListener() 
 		{
 		}
 
-		CDestroyPeriodicEventListener::~CDestroyPeriodicEventListener() 
+		CreatePeriodicEventListener::~CreatePeriodicEventListener() 
 		{
 		}
 
-		void CDestroyPeriodicEventListener::handle ( shared_ptr<Message> message )
+		void CreatePeriodicEventListener::handle(shared_ptr<Message> message)
 		{
-		
-			TimerPeriodicEvent timerEvent ( message->getData<TimerPeriodicEvent>());
-
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
-
-			timeModule->delPeriodicEvent(timerEvent.delay, timerEvent.message, timerEvent.period);
+			TimerPeriodicEvent timerEvent(message->getData<TimerPeriodicEvent>());
+			TimeModule* timeModule = TimeModule::getInstancePtr();
+			timeModule->addPeriodicEvent(timerEvent.delay, timerEvent.message, timerEvent.period);
 		}
-
 	}
 }
-
-
-
-

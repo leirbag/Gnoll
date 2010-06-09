@@ -17,76 +17,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/linuxtimer.h"
 
-/*---------------------------------cogretimer.h----------------------------*\
-|   A class to encapsulate the Ogre Timer                                   |
-|                                                                           |
-|   Changelog :                                                             |
-|               05/12/2007 - Vince - Initial release                        |
-|               09/20/2007 - Paf   - Make it prettier                       |
-|               09/30/2007 - Paf   - Enclose class in namespace Gnoll::Time |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#include <OgreTimer.h>
-#include <Ogre.h>
-#include <OgrePlatform.h>
-#include <boost/shared_ptr.hpp>
-#include "itimer.h"
-
-
-#ifndef __COGRETIMER_H__
-#define __COGRETIMER_H__
-
-
-using namespace std;
-using namespace boost;
-
+#include <sys/time.h>
+#include <stddef.h>
 
 namespace Gnoll
 {
 	namespace Time
 	{
-
-		class COgreTimer : public ITimer
+		LinuxTimer::LinuxTimer()
 		{
-			private:
+			this->reset();
+		}
 
-				/**
-				 * An Ogre timer 
-				 */
-				shared_ptr<Ogre::Timer> mTimer;
+		LinuxTimer::~LinuxTimer()
+		{
+		}
 
+		unsigned long int LinuxTimer::getMsecs()
+		{
+			struct timeval now;
+			gettimeofday(&now, NULL);
 
-			public:
+			return (now.tv_sec - m_initialTime.tv_sec) * 1000 + (now.tv_usec - m_initialTime.tv_usec) / 1000;
+		}
 
-				/**
-				 *   A constructor
-				 */
-				COgreTimer(void);
-
-
-				/**
-				 *   A destructor
-				 */
-				~COgreTimer(void);
-
-
-				/**
-				 *   Returns elapsed milliseconds since timer start/reset
-				 *   @return milliseconds elapsed
-				 */
-				unsigned long int getMsecs(void);
-
-
-				/**
-				 *   Reset the timer
-				 */
-				void reset(void);
-
-		};
+		void LinuxTimer::reset()
+		{
+			gettimeofday(&m_initialTime, NULL);
+		}
 	}
 }
-	
-#endif // __COGRETIMER_H__

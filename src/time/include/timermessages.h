@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2007 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,54 +17,57 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __CTIMERMESSAGES_H__
+#define __CTIMERMESSAGES_H__
 
-/*---------------------------------itimer.h--------------------------------*\
-|   An interface for timer functions                                        |
-|                                                                           |
-|   Changelog :                                                             |
-|               05/12/2007 - Vince - Initial release                        |
-|               09/30/2007 - Paf   - Enclose class in namespace Gnoll::Time |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include <boost/shared_ptr.hpp>
 
+#include "../../core/include/message.h"
 
-#ifndef __ITIMER_H__
-#define __ITIMER_H__
-
+using namespace boost;
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {
 	namespace Time
 	{
+		/**
+		 * This defines a one-time event
+		 */
+		struct TimerEvent 
+		{
+			/**
+			 * How long before this event occurs
+			 */
+			unsigned long int delay;
+
+			/**
+			 * Message to be sent when the event occurs
+			 */
+			shared_ptr<Message> message;
+		};
 
 		/**
-		 *   An abstract base class for timer classes
+		 * This defines a periodic event
 		 */
-		class ITimer
+		struct TimerPeriodicEvent 
 		{
-			public:
+			/**
+			 * How long before this periodic event begins
+			 */
+			unsigned long int delay;
 
-				/**
-				 * A virtual destructor
-   		    */
-				virtual ~ITimer()  {}
+			/**
+			 * How often this event occurs
+			 */ 
+			unsigned long int period;
 
-
-				/**
-				 * Returns amount of milliseconds since timer start or reset
-				 * @return Amount of milliseconds
-				 */
-		        virtual unsigned long int getMsecs() = 0;
-
-
-				/**
-				 * Reset the timer
-				 */
-				virtual void reset() = 0;
-
-			};
+			/**
+			 * Message to be sent when the event occurs
+			 */
+			shared_ptr<Message> message;
+		};
 	}
 }
 
-
-#endif // __ITIMER_H__
+#endif

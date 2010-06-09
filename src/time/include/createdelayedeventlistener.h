@@ -17,75 +17,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __CREATEDELAYEDEVENTLISTENER_H__
+#define __CREATEDELAYEDEVENTLISTENER_H__ 
 
-/*---------------------------clinuxtimer.h---------------------------------*\
-|   A class to encapsulate a timer based on GNU/Linux standard libraries    |
-|                                                                           |
-|   Changelog :                                                             |
-|               09/07/2007 - Paf - Initial release                          |
-|               09/30/2007 - Paf - Enclose class in Gnoll::Time namespace   |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include <string>
 
+#include <boost/shared_ptr.hpp>
 
+#include "../../core/messages/include/listener.h"
+#include "timermessages.h"
+#include "timemodule.h"
 
-#ifndef __CLINUXTIMER_H__
-#define __CLINUXTIMER_H__
-
-
-#include "itimer.h"
-#include <sys/time.h>
-
-
-using namespace std;
+using namespace Gnoll::Core;
+using namespace boost;
 
 namespace Gnoll
 {
 	namespace Time
 	{
-
-		class CLinuxTimer : public ITimer
+		/**
+		 *	A message listener for the timer module.
+		 */ 
+		class CreateDelayedEventListener : public Messages::Listener
 		{
-	
-			private:
-
-				/**
-				 * Initial time </br>
-				 * This will be used as the reference time to compare to
-				 */
-				struct timeval m_initialTime;
-
-
-
-
 			public:
+				/**
+				 * This is a constructor
+				 */
+				CreateDelayedEventListener(); 
 
 				/**
-				 *   A constructor
+				 * This is a destructor
 				 */
-				CLinuxTimer(void);
-
+				virtual ~CreateDelayedEventListener();
 
 				/**
-				 *   A destructor
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
 				 */
-				~CLinuxTimer(void);
-
-
-				/**
-			 	 *   Returns elapsed milliseconds since timer start/reset
-				 *   @return milliseconds elapsed
-				 */
-				unsigned long int getMsecs(void);
-
-
-				/**
-				 *   Reset the timer
-				 */
-				void reset(void);
-
+				virtual void handle(MessagePtr message);
 		};
 	}
 }
 
-#endif // __CLINUXTIMER_H__
+#endif

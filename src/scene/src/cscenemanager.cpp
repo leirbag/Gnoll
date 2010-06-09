@@ -25,7 +25,7 @@
 #include "../include/cameramanager.h"
 #include "../include/cscenemanager.h"
 #include "../include/cpage.h"
-#include "../../time/include/ctimemodule.h"
+#include "../../time/include/timemodule.h"
 #include "../../graphic/include/graphicmodule.h"
 #include "../../core/include/sourcefile.h"
 #include "../../core/include/message.h"
@@ -172,7 +172,7 @@ namespace Gnoll
 		{
 
 			MessageModule* messageModule = MessageModule::getInstancePtr();
-			CTimeModule* timeModule = CTimeModule::getInstancePtr();
+			TimeModule* timeModule = TimeModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
 
 			/**
