@@ -17,26 +17,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __LOGMODULE_H__
+#define __LOGMODULE_H__
 
-/*-----------------------------CLogModule----------------------------------*\
-|   This module provides some logging facilities                            |
-|                                                                           |
-|   Changelog :                                                             |
-|               06/12/2008 - Bruno Mahe - Initial release                   |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
-#ifndef __CLOGMODULE_H__
-#define __CLOGMODULE_H__
-
-
+#include <sstream>
 
 #include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
-
-#include <sstream>
 
 using namespace Gnoll::Core;
 using namespace std;
@@ -45,22 +32,18 @@ namespace Gnoll
 {
 	namespace Log
 	{
-
-		class CLogModule : public Module, public Gnoll::Core::Singleton<CLogModule>
+		class LogModule : public Module, public Gnoll::Core::Singleton<LogModule>
 		{
 			public:
-
 				/**
 				 *   Default constructor
 				 */
-				CLogModule();
-
+				LogModule();
 
 				/**
 				 *   Virtual destructor
 				 */
-				virtual ~CLogModule();
-
+				virtual ~LogModule();
 
 				/**
 				 * Init the module and its subsystems
@@ -77,12 +60,10 @@ namespace Gnoll
 				 */
 				virtual void exit();
 
-
 				/**
 				 * Define the log filename
 				 */
 				void setLogFileName(string logFileName);
-
 
 				/**
 				 * Log a message
@@ -90,18 +71,16 @@ namespace Gnoll
 				 */
 				void logMessage(string msg, bool logIt = true);
 
-
 				/**
 				 * Return a reference to the log module
 				 */
-				CLogModule& log() const { return *(this->getInstancePtr()); }
-
+				LogModule& log() const { return *(this->getInstancePtr()); }
 
 				/**
 				 * Overloaded << operator
 				 */
 				template <class T>
-				CLogModule& operator<<(const T &toLog)
+				LogModule& operator<<(const T& toLog)
 				{
 					std::ostringstream stream;
 					stream << toLog;
@@ -111,22 +90,19 @@ namespace Gnoll
 					return log();
 				}
 
-
 			private:
-
 				/**
 				 * Log file name
 				 */
 				string m_logFileName;
 
-
 				/**
 				 * String buffer.<br/>
 				 * It will hold log messages until it encounters a '\n'
 				 */
-				std::string strBuffer;
+				std::string m_strBuffer;
 		};
 	}
 }
 
-#endif // __CLOGMODULE_H__
+#endif

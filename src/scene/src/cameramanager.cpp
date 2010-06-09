@@ -27,7 +27,7 @@
 
 #include "../include/cameramanager.h"
 #include "../../dynamicobject/include/list.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include "../include/camerafixefactory.h"
 #include "../include/camerafirstpersonfactory.h"
 #include "../include/camerathirdpersonfactory.h"

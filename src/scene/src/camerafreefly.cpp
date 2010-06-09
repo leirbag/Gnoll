@@ -28,7 +28,7 @@
 #include "../include/camerafreefly.h"
 #include "../include/camerawrapper.h"
 #include "../../dynamicobject/include/float.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include <cmath>
 
 using namespace Gnoll::DynamicObject;

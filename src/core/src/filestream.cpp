@@ -21,7 +21,7 @@
 
 #include <boost/filesystem/operations.hpp>
 
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 
 using namespace boost::filesystem;
 

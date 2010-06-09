@@ -26,7 +26,7 @@
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include <OIS/OISMouse.h>
 
 #include "../../config.h"
@@ -77,7 +77,7 @@ namespace Gnoll
 			 */
 			string buttonValue = lexical_cast<string> (button);
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Looking for KeyCode [" + buttonValue + "]" );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Looking for KeyCode [" + buttonValue + "]" );
 
 
 			/**
@@ -126,7 +126,7 @@ namespace Gnoll
 						{
 							tmpString << "Message NON ajoute ["<< *actionName << "]";
 						}
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
 

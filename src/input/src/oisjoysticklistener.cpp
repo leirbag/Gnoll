@@ -21,7 +21,7 @@
 #include "../include/cinputjoystickevents.h"
 #include "../../core/include/messagemodule.h"
 #include "../../core/include/message.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
 
@@ -46,7 +46,7 @@ namespace Gnoll
 
 		bool OISJoystickListener::buttonPressed( const OIS::JoyStickEvent &arg, int button )
 		{
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage("JOYSTICK: Button pressed");
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage("JOYSTICK: Button pressed");
 
 			Messages::MessageType buttonPressedType(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_BUTTON_PRESSED());
 
@@ -63,7 +63,7 @@ namespace Gnoll
 
 		bool OISJoystickListener::buttonReleased( const OIS::JoyStickEvent &arg, int button )
 		{
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage("JOYSTICK: Button released");
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage("JOYSTICK: Button released");
 
 			Messages::MessageType buttonReleasedType(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_BUTTON_RELEASED());
 
@@ -80,7 +80,7 @@ namespace Gnoll
 
 		bool OISJoystickListener::axisMoved( const OIS::JoyStickEvent &arg, int axis )
 		{
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage("JOYSTICK: axis moved");
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage("JOYSTICK: axis moved");
 
 			Messages::MessageType axisMovedType(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED());
 

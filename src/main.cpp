@@ -31,7 +31,7 @@
 #include "scene/include/cscenemanager.h"
 #include "scene/include/cameramanager.h"
 #include "stats/include/statsmodule.h"
-#include "log/include/clogmacros.h"
+#include "log/include/logmacros.h"
 #include "input/include/ctranslationevents.h"
 #include "config.h"
 
@@ -70,7 +70,7 @@ namespace Gnoll
 	class Application : public Gnoll::Core::Module, public Gnoll::Core::Singleton<Application>
 	{
 		private:
-			CLogModule *            logModule;
+			LogModule *            logModule;
 			CGraphicModule*         graphicmanager;
 			COISInputModule         inputmanager;
 			CTimeModule*            timeModule;
@@ -181,7 +181,7 @@ namespace Gnoll
 		}
 
 
-		CLogModule *logModule = CLogModule::getInstancePtr();
+		LogModule *logModule = LogModule::getInstancePtr();
 
 		if (vm.count("log"))
 		{
@@ -270,7 +270,7 @@ namespace Gnoll
 		 */
 
 		GNOLL_LOG() << "Instanciating modules...\n";
-		logModule             = CLogModule::getInstancePtr();
+		logModule             = LogModule::getInstancePtr();
 		graphicmanager        = CGraphicModule::getInstancePtr();
 		timeModule            = CTimeModule::getInstancePtr();
 		messageModule         = MessageModule::getInstancePtr();
@@ -372,7 +372,7 @@ namespace Gnoll
 		CInputEventsTranslator::destroy();
 		CGraphicModule::destroy();
 		MessageModule::destroy();
-		CLogModule::destroy();
+		LogModule::destroy();
 		StatsModule::destroy();
 		Gnoll::DynamicObject::AttributeHandlerRegistry::destroy();
 

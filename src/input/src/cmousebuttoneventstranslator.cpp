@@ -29,7 +29,7 @@
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
 #include "../../time/include/ctimemodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 
 #include "../../config.h"
 
@@ -84,7 +84,7 @@ namespace Gnoll
 
 			std::ostringstream tmpString;
 			tmpString << "Looking for KeyCode [" << buttonValue << "]";
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 			tmpString.clear();
 
 
@@ -178,7 +178,7 @@ namespace Gnoll
 								tmpString <<  intensity << " => " << timePressed << " / " << period;
 							}
 
-							Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+							Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 							it->second = 0;
 						}
 					}

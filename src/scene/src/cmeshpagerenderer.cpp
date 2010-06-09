@@ -30,7 +30,7 @@
 
 #include "../include/cmeshpagerenderer.h"
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 
 using namespace std;
 using namespace boost;
@@ -59,7 +59,7 @@ namespace Gnoll
 			m_parentPage = _parentPage;
 			SceneNode *parentNode = _parentPage->getPageRootNode();
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Init meshPAgeRenderer of parent : " + parentNode->getName() );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Init meshPAgeRenderer of parent : " + parentNode->getName() );
 
 			SceneNode * pageNode = parentNode->createChildSceneNode( _parentPage->getInstance() + "_renderer" );
 

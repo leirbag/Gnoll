@@ -26,7 +26,7 @@
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include "../include/cinputmouseevents.h"
 #include <OIS/OISKeyboard.h>
 #include "../../time/include/ctimemodule.h"
@@ -83,7 +83,7 @@ namespace Gnoll
 			string keyCodeValue = lexical_cast<string> (keyCode);
 
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Looking for KeyCode [" + keyCodeValue + "]");
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Looking for KeyCode [" + keyCodeValue + "]");
 
 			/**
 			 * If an action is associated to this key code, an action message is sent
@@ -172,7 +172,7 @@ namespace Gnoll
 								tmpString <<  intensity << " => " << timePressed << " / " << period << endl;
 							}
 
-							Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+							Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 
 							it->second = 0;
 						}

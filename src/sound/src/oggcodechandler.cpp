@@ -31,7 +31,7 @@
 
 #include <string.h>
 
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include <sstream>
 
 
@@ -82,39 +82,39 @@ namespace Gnoll
 				
 			if (ovOpenCallbacksResult != 0)
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Error while calling ov_opencallbacks()" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Error while calling ov_opencallbacks()" );
 
 				switch (ovOpenCallbacksResult)
 				{
 					case OV_EREAD:
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  A read from media returned an error." );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  A read from media returned an error." );
 						break;
 
 					case OV_ENOTVORBIS:
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Bitstream does not contain any Vorbis data." );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Bitstream does not contain any Vorbis data." );
 						break;
 
 					case OV_EVERSION:
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Vorbis version mismatch." );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Vorbis version mismatch." );
 						break;
 
 					case OV_EBADHEADER:
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Invalid Vorbis bitstream header." );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Invalid Vorbis bitstream header." );
 						break;
 
 					case OV_EFAULT:
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Internal logic fault; indicates a bug or heap/stack corruption." );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Internal logic fault; indicates a bug or heap/stack corruption." );
 						break;
 
 					default:
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  ->  Error unknown." );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Error unknown." );
 						break;
 
 				}
 
 				if (_stream->eof())
 				{
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ERROR : End of OGG stream" );
+					Gnoll::Log::LogModule::getInstancePtr()->logMessage( "ERROR : End of OGG stream" );
 				}
 
 			}
@@ -168,7 +168,7 @@ namespace Gnoll
 			 */
 			ov_clear(&ogg_stream);
 				
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Sound resource created" );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Sound resource created" );
 			return _sound;
 		}
 			

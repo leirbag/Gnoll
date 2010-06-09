@@ -72,7 +72,7 @@ namespace Gnoll
 				{
 					// Add the rule to the table
 					m_rules.push_back(CRule( *rule ));
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( *rule );
+					Gnoll::Log::LogModule::getInstancePtr()->logMessage( *rule );
 				}
 			}
 		}

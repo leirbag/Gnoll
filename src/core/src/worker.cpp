@@ -27,7 +27,7 @@
 
 #include "../include/thread.h"
 #include "../include/poolthread.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 
 using namespace std;
 
@@ -42,7 +42,7 @@ namespace Gnoll
 		{
 			if(m_poolOfThreads == NULL)
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage("  No Poolthread sent. Exiting.");
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage("  No Poolthread sent. Exiting.");
 				return;
 			}
 
@@ -50,27 +50,27 @@ namespace Gnoll
 			while(m_stop == false)
 			{
 				tmpString << this << " I don't have to stop [" << m_stop << "]. Popping a job...";
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 				tmpString.clear();
 
 				shared_ptr<Job> job = m_poolOfThreads->popJob();
 
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "  Job popped" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  Job popped" );
 				if (job.get())
 				{
 					tmpString << this << " It's a real job ! It's not empty";
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage(  tmpString.str() );
+					Gnoll::Log::LogModule::getInstancePtr()->logMessage(  tmpString.str() );
 					tmpString.clear();
 
 					job->run();
 
 					tmpString << this << " Job run";
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+					Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 					tmpString.clear();
 				}
 			}
 			tmpString << this << " I have to stop. Byebye..." << endl;
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(tmpString.str());
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage(tmpString.str());
 			tmpString.clear();
 		}
 
@@ -94,7 +94,7 @@ namespace Gnoll
 			m_stop = true;
 			std::ostringstream tmpString;
 			tmpString << this << "  m_stop changed to true";
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 			tmpString.clear();
 		}
 	}

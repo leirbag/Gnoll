@@ -25,7 +25,7 @@
 
 #include "../include/camerafirstperson.h"
 #include "../../dynamicobject/include/float.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include "../../dynamicobject/include/vector3.h"
 
 using namespace Gnoll::DynamicObject;

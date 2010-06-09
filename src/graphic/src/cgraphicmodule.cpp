@@ -19,7 +19,7 @@
 
 #include "../include/cgraphicmodule.h"
 #include "../../config.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 
 #include "../../core/include/message.h"
 #include "../../core/include/messagemodule.h"
@@ -119,7 +119,7 @@ namespace Gnoll
 				if (shared_ptr<Gnoll::DynamicObject::String> path = dynamic_pointer_cast<Gnoll::DynamicObject::String>(*itAttrs))
 				{
 					string pathStr(*path);
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Loading Ogre Plugin : " + pathStr);
+					Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Loading Ogre Plugin : " + pathStr);
 					mRoot->loadPlugin( (*path) );
 				}
 		}
@@ -142,7 +142,7 @@ namespace Gnoll
 			if(rs == NULL)
 			{
 				// Ogre throws an exception if there's no RenderSystem defined
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ogre_config file doesn't contain any 'Render System' attribute");
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "ogre_config file doesn't contain any 'Render System' attribute");
 				return;
 			}
 
@@ -201,16 +201,16 @@ namespace Gnoll
 			shared_ptr<Gnoll::DynamicObject::String> fontName = guiConfig->getAttribute<Gnoll::DynamicObject::String>("defaultFont");
 			shared_ptr<Gnoll::DynamicObject::String> defaultLayoutName = guiConfig->getAttribute<Gnoll::DynamicObject::String>("defaultLayout");
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(string("[GUI]   Loading GUI scheme named "+(string)(*schemeName.get())).c_str());
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(string("[GUI]   Loading mouse cursor named "+(string)(*mouseCursor.get())).c_str());
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(string("[GUI]   Loading cursor image named "+(string)(*cursorImage.get())).c_str());
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage(string("[GUI]   Loading GUI scheme named "+(string)(*schemeName.get())).c_str());
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage(string("[GUI]   Loading mouse cursor named "+(string)(*mouseCursor.get())).c_str());
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage(string("[GUI]   Loading cursor image named "+(string)(*cursorImage.get())).c_str());
 
 			CEGUI::SchemeManager::getSingleton().loadScheme( ((*(schemeName.get()))+Glib::ustring(".scheme")).c_str() );
 			mGUISystem->setDefaultMouseCursor( ((string)(*schemeName.get()) ).c_str(), ((string)(*mouseCursor.get()) ).c_str());
 			CEGUI::MouseCursor::getSingleton().setImage(((string)(*schemeName.get()) ).c_str(), ((string)(*cursorImage.get()) ).c_str());
 
 			CEGUI::FontManager::getSingleton().createFont(((string)(*fontName.get()) ).c_str());
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage(string("[GUI]   Loading GUI layout from "+(string)(*defaultLayoutName.get())).c_str());
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage(string("[GUI]   Loading GUI layout from "+(string)(*defaultLayoutName.get())).c_str());
 
 			mRootWindow = CEGUI::WindowManager::getSingleton().loadWindowLayout(((string)(*defaultLayoutName.get()) ).c_str());
 			CEGUI::System::getSingleton().setGUISheet(mRootWindow);

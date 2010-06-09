@@ -36,7 +36,7 @@
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/integer.h"
 #include "../../time/include/ctimemodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include "../include/oisjoysticklistener.h"
 using namespace Gnoll::Input;
 
@@ -112,22 +112,22 @@ namespace Gnoll
 				 * Continuous keyboard messages
 				 */
 				messageManager->addListener ( keyboardEventsTranslator, keyDown );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener installed" );
 
 				messageManager->addListener ( keyboardEventsTranslator, keyUp );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener installed" );
 
 				messageManager->addListener ( keyboardEventsTrigger, updateKeyboard );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTrigger listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardEventsTrigger listener installed" );
 
 				/**
 				 * State based keyboard messages
 				 */
 				messageManager->addListener ( keyboardStateTranslator, keyDown );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener installed" );
 
 				messageManager->addListener ( keyboardStateTranslator, keyUp );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener installed" );
 			}
 			catch(...)
 			{
@@ -157,22 +157,22 @@ namespace Gnoll
 				 * Continuous keybord messages
 				 */
 				messageManager->delListener ( keyboardEventsTranslator, keyDown );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener removed" );
 
 				messageManager->delListener ( keyboardEventsTranslator, keyUp );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardEventsTranslator listener removed" );
 
 				messageManager->delListener ( keyboardEventsTrigger, updateKeyboard );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardEventsTrigger listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardEventsTrigger listener removed" );
 
 				/**
 				 * State based keyboard messages
 				 */
 				messageManager->delListener ( keyboardStateTranslator, keyDown );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener removed" );
 
 				messageManager->delListener ( keyboardStateTranslator, keyUp );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "KeyboardStateTranslator listener removed" );
 			}
 			catch(...)
 			{
@@ -200,10 +200,10 @@ namespace Gnoll
 			try
 			{
 				messageManager->addListener ( mouseMotionEventsTranslator, mouseMoved );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseMotionEventsTranslator listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "mouseMotionEventsTranslator listener installed" );
 
 				messageManager->addListener ( mouseMotionStateTranslator, mouseMoved );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseMotionStateTranslator listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "mouseMotionStateTranslator listener installed" );
 			}
 			catch(...)
 			{
@@ -224,10 +224,10 @@ namespace Gnoll
 			try
 			{
 				messageManager->delListener ( mouseMotionEventsTranslator, mouseMoved );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseMotionEventsTranslator listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "mouseMotionEventsTranslator listener removed" );
 
 				messageManager->delListener ( mouseMotionStateTranslator, mouseMoved );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseMotionStateTranslator listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "mouseMotionStateTranslator listener removed" );
 			}
 			catch(...)
 			{
@@ -267,22 +267,22 @@ namespace Gnoll
 				 * Continuous mouse messages
 				 */
 				messageManager->addListener ( mouseButtonEventsTranslator, mousePressed );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseButtonEventsTranslator listener installed for MOUSE_PRESSED" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "mouseButtonEventsTranslator listener installed for MOUSE_PRESSED" );
 
 				messageManager->addListener ( mouseButtonEventsTranslator, mouseReleased );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "mouseButtonEventsTranslator listener installed for MOUSE_RELEASED" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "mouseButtonEventsTranslator listener installed for MOUSE_RELEASED" );
 
 				messageManager->addListener ( mouseButtonEventsTrigger, updateMouse );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTrigger listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTrigger listener installed" );
 
 				/**
 				 * State based mouse messages
 				 */
 				messageManager->addListener ( mouseButtonStateTranslator, mousePressed );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener installed for MOUSE_PRESSED" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener installed for MOUSE_PRESSED" );
 
 				messageManager->addListener ( mouseButtonStateTranslator, mouseReleased );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener installed for MOUSE_RELEASED" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener installed for MOUSE_RELEASED" );
 			}
 			catch(...)
 			{
@@ -314,22 +314,22 @@ namespace Gnoll
 				 * Continuous mouse messages
 				 */
 				messageManager->delListener ( mouseButtonEventsTranslator, mousePressed );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTranslator listener removed for MOUSE_PRESSED" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTranslator listener removed for MOUSE_PRESSED" );
 
 				messageManager->delListener ( mouseButtonEventsTranslator, mouseReleased );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTranslator listener removed for MOUSE_RELEASED" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTranslator listener removed for MOUSE_RELEASED" );
 
 				messageManager->delListener ( mouseButtonEventsTrigger, updateMouse );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTrigger listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage ( "mouseButtonEventsTrigger listener removed" );
 
 				/**
 				 * State based mouse messages
 				 */
 				messageManager->delListener ( mouseButtonStateTranslator, mousePressed );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener removed for MOUSE_PRESSED" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener removed for MOUSE_PRESSED" );
 
 				messageManager->delListener ( mouseButtonStateTranslator, mouseReleased );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener removed for MOUSE_RELEASED" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage ( "mouseButtonStateTranslator listener removed for MOUSE_RELEASED" );
 			}
 			catch(...)
 			{
@@ -358,10 +358,10 @@ namespace Gnoll
 			try
 			{
 				messageManager->addListener ( joystickAxisEventsTranslator, axisEventType );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "joystickAxisEventsTranslator listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "joystickAxisEventsTranslator listener installed" );
 
 				messageManager->addListener ( joystickAxisStateTranslator, axisEventType );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "joystickAxisStateTranslator listener installed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "joystickAxisStateTranslator listener installed" );
 			}
 			catch(...)
 			{
@@ -382,10 +382,10 @@ namespace Gnoll
 			try
 			{
 				messageManager->delListener ( joystickAxisEventsTranslator, axisEventType );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "joystickAxisEventsTranslator listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "joystickAxisEventsTranslator listener removed" );
 
 				messageManager->delListener ( joystickAxisStateTranslator, axisEventType );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "joystickAxisStateTranslator listener removed" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "joystickAxisStateTranslator listener removed" );
 			}
 			catch(...)
 			{
@@ -405,10 +405,10 @@ namespace Gnoll
 			try
 			{
 				messageManager->addListener ( ruleManager, ACTION_EVENT_TYPE );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager installed for ACTION_EVENT_TYPE" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "ruleManager installed for ACTION_EVENT_TYPE" );
 
 				messageManager->addListener ( ruleManager, ACTION_EVENT_STATE_TYPE );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager installed for ACTION_EVENT_STATE_TYPE" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "ruleManager installed for ACTION_EVENT_STATE_TYPE" );
 			}
 			catch(...)
 			{
@@ -426,10 +426,10 @@ namespace Gnoll
 			try
 			{
 				messageManager->delListener ( ruleManager, ACTION_EVENT_TYPE );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager removed for ACTION_EVENT_TYPE" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "ruleManager removed for ACTION_EVENT_TYPE" );
 
 				messageManager->delListener ( ruleManager, ACTION_EVENT_STATE_TYPE );
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "ruleManager removed for ACTION_EVENT_STATE_TYPE" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "ruleManager removed for ACTION_EVENT_STATE_TYPE" );
 			}
 			catch(...)
 			{

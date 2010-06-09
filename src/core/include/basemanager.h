@@ -31,7 +31,7 @@
 #include <boost/thread/recursive_mutex.hpp>
 
 #include "abstractsource.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include "../../config.h"
 
 using namespace std;

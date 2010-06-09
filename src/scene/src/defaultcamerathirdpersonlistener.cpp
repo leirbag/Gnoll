@@ -34,7 +34,7 @@
 #include "../../input/include/ctranslationevents.h"
 #include "../../input/include/cinputmouseevents.h"
 #include "../../dynamicobject/include/float.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 
 #include <sstream>
 

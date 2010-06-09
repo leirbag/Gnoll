@@ -19,7 +19,7 @@
 
 #include "../../dynamicobject/include/float.h"
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
 
 #include "../../core/messages/include/messagetype.h"

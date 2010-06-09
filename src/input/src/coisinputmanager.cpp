@@ -22,7 +22,7 @@
 #include "../include/coisinputmanager.h"
 #include "../../core/include/messagemodule.h"
 #include "../../core/include/message.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include <boost/shared_ptr.hpp>
 #include <string>
 
@@ -62,7 +62,7 @@ COISInputManager::~COISInputManager( void )
 			delete this->joystickListener;
 		}
 
-		Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Destroying OIS" );
+		Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Destroying OIS" );
 		OIS::InputManager::destroyInputSystem( mInputSystem );
 		mInputSystem = 0;
 	}
@@ -166,7 +166,7 @@ void COISInputManager::initialise(  )
 
 		} else {
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "JOYSTICK: no joystick found" );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "JOYSTICK: no joystick found" );
 		}
 
 	}

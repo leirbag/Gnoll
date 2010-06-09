@@ -35,7 +35,7 @@
 #include "../../core/messages/include/messagetype.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../dynamicobject/include/string.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include "../../dynamicobject/include/vector3.h"
 #include <sstream>
 #include <queue>
@@ -55,7 +55,7 @@ namespace Gnoll
 			DynamicObjectProxy(instanceName)
 		{
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Loading camera [" + instanceName + "]" );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Loading camera [" + instanceName + "]" );
 
 			// Set in the DO the name of the camera
 			// ------------------------------------
@@ -94,9 +94,9 @@ namespace Gnoll
 				cameraWrapper->setFarValue(0);
 			}
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Near: " << cameraWrapper->getNearValue() << ";\t";
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Far: " << cameraWrapper->getFarValue() << ";\t";
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Fov: " << cameraWrapper->getFovValue() << "\n";
+			(*Gnoll::Log::LogModule::getInstancePtr()) << "Near: " << cameraWrapper->getNearValue() << ";\t";
+			(*Gnoll::Log::LogModule::getInstancePtr()) << "Far: " << cameraWrapper->getFarValue() << ";\t";
+			(*Gnoll::Log::LogModule::getInstancePtr()) << "Fov: " << cameraWrapper->getFovValue() << "\n";
 
 			// Extract Camera's position
 			// -------------------------
@@ -107,7 +107,7 @@ namespace Gnoll
 			// ----------------------------------------------------------------
 			cameraWrapper->setPosition(*dynamic_pointer_cast<Ogre::Vector3>(temp_pos));
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Position: " << cameraWrapper->getPosition() << "\n";
+			(*Gnoll::Log::LogModule::getInstancePtr()) << "Position: " << cameraWrapper->getPosition() << "\n";
 
 			// Extract Camera's direction
 			// --------------------------
@@ -119,7 +119,7 @@ namespace Gnoll
 			// ----------------------------------------------------------------
 			cameraWrapper->setDirection(*dynamic_pointer_cast<Ogre::Vector3>(temp_dir));
 
-			(*Gnoll::Log::CLogModule::getInstancePtr()) << "Direction: " << cameraWrapper->getDirection() << "\n";
+			(*Gnoll::Log::LogModule::getInstancePtr()) << "Direction: " << cameraWrapper->getDirection() << "\n";
 
 			// Extract Camera's movement configuration
 			// ---------------------------------------
@@ -203,7 +203,7 @@ namespace Gnoll
 				it++;
 			}
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Saving camera [" + this->getInstance() + "]" );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Saving camera [" + this->getInstance() + "]" );
 		}
 
 		const Glib::ustring& Camera::getTargetName() const

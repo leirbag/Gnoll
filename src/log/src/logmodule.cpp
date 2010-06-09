@@ -17,47 +17,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/logmodule.h"
 
-/*-----------------------------CLogModule----------------------------------*\
-|   The module provides some logging facilities                             |
-|                                                                           |
-|   Changelog :                                                             |
-|               06/12/2008 - Bruno Mahe - Initial release                   |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include <iostream>
 
 #include <OgrePlatform.h>
 #include <OgreLogManager.h>
-#include "../include/clogmodule.h"
-#include <iostream>
-#include "../../config.h"
 
+#include "../../config.h"
 
 using namespace std;
 using namespace Ogre;
 
-
 namespace Gnoll
 {
-
 	namespace Log
 	{
-
-		CLogModule::CLogModule() : m_logFileName(DEFAULT_LOG_FILENAME)
+		LogModule::LogModule() :
+			m_logFileName(DEFAULT_LOG_FILENAME)
 		{
 		}
 
-
-		CLogModule::~CLogModule()
+		LogModule::~LogModule()
 		{
 		}
 
-
-		void CLogModule::init()
+		void LogModule::init()
 		{
-
 			Ogre::LogManager* logManager = new Ogre::LogManager::LogManager();
-
 			logManager = NULL;
 
 			/**
@@ -74,55 +61,40 @@ namespace Gnoll
 #endif
 		}
 
-		void CLogModule::process()
+		void LogModule::process()
 		{
-
-
 		}
 
-
-		void CLogModule::exit()
+		void LogModule::exit()
 		{
-
 		}
 
-		void CLogModule::setLogFileName(string logFileName)
+		void LogModule::setLogFileName(string logFileName)
 		{
 			m_logFileName = logFileName;
 		}
 
-
-		void CLogModule::logMessage(string msg, bool logIt)
+		void LogModule::logMessage(string msg, bool logIt)
 		{
 #if DO_LOG
 			if(logIt)
-			{
-				Ogre::LogManager::getSingleton().logMessage( msg );
-			}
+				Ogre::LogManager::getSingleton().logMessage(msg);
 			else
 			{
 				size_t blankPosition = msg.find("\n");
-				if( blankPosition != std::string::npos )
+				if(blankPosition != std::string::npos)
 				{
-					strBuffer += msg.substr(0, blankPosition);
-					logMessage(strBuffer);
-					if (blankPosition <= msg.size())
-					{
-						strBuffer = msg.substr(blankPosition + 1);
-					}
+					m_strBuffer += msg.substr(0, blankPosition);
+					logMessage(m_strBuffer);
+					if(blankPosition <= msg.size())
+						m_strBuffer = msg.substr(blankPosition + 1);
 					else
-					{
-						strBuffer.erase();
-					}
+						m_strBuffer.erase();
 				}
 				else
-				{
-					strBuffer += msg;
-				}
+					m_strBuffer += msg;
 			}
 #endif
 		}
 	}
 }
-
-

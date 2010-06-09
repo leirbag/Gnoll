@@ -17,22 +17,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __LOGMACROS_H__
+#define __LOGMACROS_H__
 
-/*-----------------------------CLogModule----------------------------------*\
-|   This contains helper macros for logging facilities                      |
-|                                                                           |
-|   Changelog :                                                             |
-|               12/09/2008 - Sylvain Glaize - Initial release               |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include "logmodule.h"
 
+#define GNOLL_LOG() (*Gnoll::Log::LogModule::getInstancePtr())
 
-
-#ifndef __CLOGMACROS_H__
-#define __CLOGMACROS_H__
-
-#include "clogmodule.h"
-
-#define GNOLL_LOG() (*Gnoll::Log::CLogModule::getInstancePtr())
-
-#endif // __CLOGMODULE_H__
+#endif

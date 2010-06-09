@@ -19,7 +19,7 @@
 
 #include "../include/dynamicobject.h"
 
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 
 namespace Gnoll
 {

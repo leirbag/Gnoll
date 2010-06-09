@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "../../dynamicobject/include/vector3.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
 
 #include "../include/cscalingcomponent.h"

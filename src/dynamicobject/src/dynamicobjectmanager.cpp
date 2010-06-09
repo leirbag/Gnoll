@@ -20,7 +20,7 @@
 #include "../include/dynamicobjectmanager.h"
 
 #include "../include/attributehandlerregistry.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 
 namespace Gnoll 
 {

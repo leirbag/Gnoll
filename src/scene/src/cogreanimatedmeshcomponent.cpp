@@ -26,7 +26,7 @@
 #include "../../dynamicobject/include/float.h"
 #include "../../dynamicobject/include/string.h"
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include "../../graphic/include/cgraphicmodule.h"
 #include "../../stats/include/statsmodule.h"
 #include "../../core/messages/include/messagetype.h"

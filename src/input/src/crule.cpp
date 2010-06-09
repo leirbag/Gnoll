@@ -123,7 +123,7 @@ namespace Gnoll
 			{
 				tmpString << "Message NON ajoute ["<< m_action << "]";
 			}
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 
 			return true;
 		}

@@ -25,7 +25,7 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../include/cpage.h"
@@ -63,7 +63,7 @@ namespace Gnoll
 			 */
 			if (this->hasAttribute( CPage::ATTRIBUTE_PAGE_RENDERER() ))
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "From " + this->getInstance() + " // Initializing PageRenderer" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "From " + this->getInstance() + " // Initializing PageRenderer" );
 				shared_ptr<IPageRenderer> pRenderer = this->getAttribute<IPageRenderer>( CPage::ATTRIBUTE_PAGE_RENDERER() );
 				pRenderer->init(this);
 			}
@@ -90,7 +90,7 @@ namespace Gnoll
 
 		void CPage::unInit()
 		{
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "!!!!!!!!!!!!!!!! DE-INIT OF PAGE " + this->getInstance() );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "!!!!!!!!!!!!!!!! DE-INIT OF PAGE " + this->getInstance() );
 
 			if (this->isInitialized())
 			{
@@ -170,7 +170,7 @@ namespace Gnoll
 			// Compute AABB box
 			// Check with the current camera if the AABB box is inside the view frustrum
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "       Checking visibility from camera : " + string(*_cameraName) + " for page " + this->getInstance());
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "       Checking visibility from camera : " + string(*_cameraName) + " for page " + this->getInstance());
 			Ogre::Camera* ogreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->getCamera(*_cameraName);
 			Ogre::SceneNode* rootNode = this->getPageRootNode();
 
@@ -186,7 +186,7 @@ namespace Gnoll
 				std::ostringstream tmpString;
 				tmpString << "        root node available (" <<  this->getInstance() << ")" << endl;
 				tmpString << "         Number of children : " << rootNode->numChildren() << endl;
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 				tmpString.clear();
 
 				//const Ogre::AxisAlignedBox aabb = rootNode->_getWorldAABB();
@@ -237,7 +237,7 @@ namespace Gnoll
 				}
 				tmpString << "         Camera : " << *ogreCamera << endl;
 
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 
 				result = ogreCamera->isVisible(aabb);
 
@@ -248,8 +248,8 @@ namespace Gnoll
 				 * We need to check if any direct neighbor is initialized
 				 */
 
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "        root node unavailable (" + this->getInstance() + ")" );;
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "        looking at neighbors" );
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "        root node unavailable (" + this->getInstance() + ")" );;
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "        looking at neighbors" );
 
 				// Find an initialized neighbor (return false if no neighbor is found)
 				// Get its world position
@@ -275,7 +275,7 @@ namespace Gnoll
 				for (unsigned int i = 0; (i < 4) && (loadedNeighbor.get() == NULL); i++)
 				{
 
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "                Looking at neighbor from " + string(neighbors[i]) );
+					Gnoll::Log::LogModule::getInstancePtr()->logMessage( "                Looking at neighbor from " + string(neighbors[i]) );
 
 					if (this->hasAttribute( neighbors[i] ))
 					{
@@ -283,7 +283,7 @@ namespace Gnoll
 						shared_ptr< Gnoll::DynamicObject::String > neighbor = this->getAttribute< Gnoll::DynamicObject::String >( neighbors[i] );
 
 						tmpString << "                Looking at neighbor " << *neighbor << " from " << neighbors[i] << endl;
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 						tmpString.clear();
 
 						if (pom->isInstanceInCache (*neighbor) )
@@ -292,7 +292,7 @@ namespace Gnoll
 							if (neighborPage.isInitialized())
 							{
 								loadedNeighbor = neighbor;
-								Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "Youpi !" );
+								Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Youpi !" );
 							}
 						}
 					}
@@ -305,7 +305,7 @@ namespace Gnoll
 				if (loadedNeighbor)
 				{
 					CPage neighborPage(*loadedNeighbor);
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "        neighbor found : " +  neighborPage.getInstance() );
+					Gnoll::Log::LogModule::getInstancePtr()->logMessage( "        neighbor found : " +  neighborPage.getInstance() );
 					const char* neighborStr = string(*loadedNeighbor).c_str();
 
 					Ogre::SceneNode* rootNode = neighborPage.getPageRootNode();
@@ -350,7 +350,7 @@ namespace Gnoll
 					std::ostringstream tmpString;
 					tmpString << "         AABB Min : " << min << endl;
 					tmpString << "         AABB Max : " << max;
-					Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+					Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 
 					shared_ptr<Gnoll::DynamicObject::Float> pageSize = neighborPage.getAttribute<Float>(CPage::ATTRIBUTE_SIZE());
 
@@ -391,7 +391,7 @@ namespace Gnoll
 
 			std::ostringstream tmpString;
 			tmpString << "             Is " << this->getInstance() << " visible : " << result;
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 			return result;
 		}
 

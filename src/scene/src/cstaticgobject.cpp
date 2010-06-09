@@ -26,7 +26,7 @@
 
 #include "../include/cstaticgobject.h"
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include "../include/cpage.h"
 #include <glibmm/ustring.h>
 #include "../../dynamicobject/include/float.h"
@@ -47,7 +47,7 @@ namespace Gnoll
 														DynamicObject::DynamicObject(Glib::ustring(""))
 		{
 
-			Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "CStaticGObject object created");
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "CStaticGObject object created");
 		}
 
 
@@ -64,7 +64,7 @@ namespace Gnoll
 			 */
 			if (_parentPage == NULL)
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "CStaticGObject object initialized without any parent page");
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "CStaticGObject object initialized without any parent page");
 				return;
 			}
 
@@ -136,7 +136,7 @@ namespace Gnoll
 		{
 			if (_parentPage == NULL)
 			{
-				Gnoll::Log::CLogModule::getInstancePtr()->logMessage( "CStaticGObject object exiting without any parent page");
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "CStaticGObject object exiting without any parent page");
 				return;
 			}
 

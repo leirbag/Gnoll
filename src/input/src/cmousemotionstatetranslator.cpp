@@ -26,9 +26,9 @@
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include "../../graphic/include/cgraphicmodule.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include <OIS/OISMouse.h>
 
 #include "../../config.h"

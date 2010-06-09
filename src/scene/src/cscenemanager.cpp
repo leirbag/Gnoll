@@ -32,7 +32,7 @@
 #include "../../core/messages/include/messenger.h"
 #include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/listener.h"
-#include "../../log/include/clogmacros.h"
+#include "../../log/include/logmacros.h"
 #include "../include/cameramanager.h"
 #include "../include/cscenemanager.h"
 #include "../include/cpage.h"

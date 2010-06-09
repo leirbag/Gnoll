@@ -29,7 +29,7 @@
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
-#include "../../log/include/clogmodule.h"
+#include "../../log/include/logmodule.h"
 #include "../../graphic/include/cgraphicmodule.h"
 
 
@@ -128,7 +128,7 @@ namespace Gnoll
 						{
 							tmpString << "Message NON ajoute ["<< *actionName << "]" << endl;
 						}
-						Gnoll::Log::CLogModule::getInstancePtr()->logMessage( tmpString.str() );
+						Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
 
