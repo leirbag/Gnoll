@@ -17,18 +17,10 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#ifndef __SOUNDMANAGER_H__
+#define __SOUNDMANAGER_H__
 
-/*-------------------------------SoundManager.h----------------------------*\
-|   This is basic sound manager with cache ability.                         |
-|                                                                           |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/06/2007 - Soax - Initial release                         |
-|               02/04/2008 - Bruno Mahe - Add some doxygen comments         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
+#include <iostream>
 
 #include "../../core/include/basemanager.h"
 #include "../../core/include/singleton.h"
@@ -36,58 +28,44 @@
 #include "../../core/include/sourcefile.h"
 #include "sound.h"
 #include "audiocodecmanager.h"
-#include <iostream>
-
-
-#ifndef __SOUNDMANAGER_H__
-#define __SOUNDMANAGER_H__
-
-
 
 using namespace std;
 using namespace boost;
-
 using namespace Gnoll::Core;
 using namespace Gnoll::DynamicObject;
 
-
-namespace Gnoll {
-
-	namespace Sound {
-	
+namespace Gnoll 
+{
+	namespace Sound 
+	{
 		/**
 		 * Sound manager <br/>
 		 * * This singleton is in charge of loading and caching Sound objects
 		 */
-		class SoundManager : public BaseManager<Sound, ObjectNotFoundError<Sound> >, public Singleton<SoundManager>
+		class SoundManager : public BaseManager<Sound, ObjectNotFoundError<Sound> >, 
+							 public Singleton<SoundManager>
 		{
+			public:
+				/**
+				 * This is a constructor.
+				 */
+				SoundManager();
+
+				/**
+				 * This is a destructor.
+				 */
+				virtual ~SoundManager();
 
 			protected:
-
 				/**
 				 * @copydoc BaseManager::loadImpl
 				 */
-				virtual shared_ptr<Sound> loadImpl( shared_ptr<AbstractStream> _stream, string _instance);
+				virtual shared_ptr<Sound> loadImpl(shared_ptr<AbstractStream> stream, string instance);
 
 				/**
 				 * @copydoc BaseManager::saveImpl
 				 */
-				virtual bool saveImpl( shared_ptr<AbstractStream> _stream, shared_ptr<Sound> _obj, string _instance);
-
-			public:
-	
-				/**
-				* This is a constructor.
-				*/
-				SoundManager();
-			
-			
-				/**
-				* This is a destructor.
-				*/
-				virtual ~SoundManager();
-
-
+				virtual bool saveImpl(shared_ptr<AbstractStream> stream, shared_ptr<Sound> obj, string instance);
 		};
 	}
 }

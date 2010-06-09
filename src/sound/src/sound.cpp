@@ -17,33 +17,21 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*--------------------------------sound.cpp--------------------------------*\
-|   This is a simple sound                                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/06/2007 - Soax - Initial release                         |
-|               02/04/2008 - Bruno Mahe - Update comments                   |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
 #include "../include/sound.h"
+
 #include <iostream>
 
-
-namespace Gnoll {
-
-	namespace Sound {
-
-
+namespace Gnoll
+{
+	namespace Sound 
+	{
 		Sound::Sound()
 		{
-			alGenBuffers(1, &buffer);
+			alGenBuffers(1, &m_buffer);
 		}
 		
 		void Sound::play()
 		{
-
 			/**
 			 * Need to make sure everything is up to date
 			 */
@@ -69,71 +57,64 @@ namespace Gnoll {
 			 * The sound is played
 			 * The sound is also added to the play list
 			 */
-			alSourcei(source, AL_BUFFER, buffer);
+			alSourcei(source, AL_BUFFER, m_buffer);
 			alSourcePlay(source);
-			source_list.push_back(source);
+			m_source_list.push_back(source);
 		}
-		
-		
+
 		/**
 		 * Update play list
 		 */
-		void Sound::update(){
-		        
-			if (source_list.empty())
+		void Sound::update()
+		{
+			if (m_source_list.empty())
 				return;
-							
+
 			ALint status;
-			for (unsigned int i = 0; i < source_list.size(); i++)
+			for (unsigned int i = 0; i < m_source_list.size(); i++)
 			{
-			        ALuint t_source = source_list[i];
+				ALuint t_source = m_source_list[i];
 				alGetSourcei(t_source, AL_SOURCE_STATE, &status);
 				if (status != AL_PLAYING)
 				{
-				    	alSourcei(t_source, AL_BUFFER, 0);
+					alSourcei(t_source, AL_BUFFER, 0);
 					alDeleteSources(1, &t_source);	
-					source_list.erase(source_list.begin() + i);
+					m_source_list.erase(m_source_list.begin() + i);
 					i--;
 				}
 			}		
 		}
-					
 
 		ALuint Sound::getBuffer()
 		{
-			return buffer;
+			return m_buffer;
 		}
-			
 
 		void Sound::delBuffer()
 		{
-			alDeleteBuffers(1, &buffer);
+			alDeleteBuffers(1, &m_buffer);
 		}	
 
-
-		void Sound::setBuffer(ALuint _buffer)
+		void Sound::setBuffer(ALuint buffer)
 		{	
-			buffer = _buffer;
+			m_buffer = buffer;
 		}
-					
 
 		Sound::~Sound()
 		{
-
 			/**
 			 * Delete sounds that are being played
 			 */
-			for (unsigned int i = 0; i < source_list.size(); i++)
+			for (unsigned int i = 0; i < m_source_list.size(); i++)
 			{
-				alSourcei(source_list[i], AL_BUFFER, 0);
-				alDeleteSources(1, &(source_list[i]));
+				alSourcei(m_source_list[i], AL_BUFFER, 0);
+				alDeleteSources(1, &(m_source_list[i]));
 			}
 
 			/**
-			 * Delete audio buffer
+			 * Delete audio m_buffer
 			 */
 			delBuffer();
-
 		}
 	}
 }

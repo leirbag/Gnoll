@@ -17,77 +17,59 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#ifndef __AUDIOCODECMANAGER_H__
+#define __AUDIOCODECMANAGER_H__
 
-/*---------------------------audiocodecmanager.h----------------------------*\
-|   The Audio codec manager                                                  |
-|                                                                            |
-|   Changelog :                                                              |
-|               11/06/2007 - Soax - Initial release                          |
-|               02/04/2008 - Bruno Mahe - Add some doxygen comments          |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
+#include <iostream>
+#include <map>
+
+#include <boost/shared_ptr.hpp>
 
 #include "../../core/include/singleton.h"
 #include "sound.h"
 #include "audiocodechandler.h"
 #include "oggcodechandler.h"
-//#include "../include/defaultcodechandler.h"
 
-#include <boost/shared_ptr.hpp>
-#include <iostream>
-#include <map>
-
-
-#ifndef __AUDIOCODECMANAGER_H__
-#define __AUDIOCODECMANAGER_H__
-
-namespace Gnoll {
-	namespace Sound {
-
+namespace Gnoll 
+{
+	namespace Sound 
+	{
 		/**
 		 * Singleton managing AudioCodecHandler classes
 		 */
 		class AudioCodecManager : public Singleton<AudioCodecManager>
 		{
-			
-			private :
-				
-				/**
-				 * Associative container to associate an audio codec to an handler
-				 */
-				map<string, shared_ptr<AudioCodecHandler> > list_codec;
-
-
-			public :
-
-
+			public:
 				/**
 				 * Constructor
 				 */
 				AudioCodecManager();
-
 
 				/**
 				 * Destructor
 				 */
 				~AudioCodecManager();
 
-
 				/**
 				 * Add a new codec handler
 				 * @param _audiocodecHandler Audio codec to add
 				 */
-				void addAudioCodec(shared_ptr<AudioCodecHandler> _audioCodecHandler);
-
+				void addAudioCodec(shared_ptr<AudioCodecHandler> audioCodecHandler);
 
 				/**
 				 * Returns an AudioCodecHandler able to decode a specific audio stream
-				 * @param _stream Stream to decode
-				 * @param _streamName Name of the stream (file name...)
-				 * @return A shared pointer to an AudioCodecHandler able to decode the audio stream passed as a parameter
+				 * @param stream Stream to decode
+				 * @param streamName Name of the stream (file name...)
+				 * @return A shared pointer to an AudioCodecHandler able to decode the audio 
+				 * 		   stream passed as a parameter
 				 */
-				shared_ptr<AudioCodecHandler> getAudioCodecHandler(shared_ptr<AbstractStream> _stream, string _streamName);
+				shared_ptr<AudioCodecHandler> getAudioCodecHandler(shared_ptr<AbstractStream> stream, string streamName);
 
+			private :
+				/**
+				 * Associative container to associate an audio codec to an handler
+				 */
+				map<string, shared_ptr<AudioCodecHandler> > m_list_codec;
 		};
 	}
 }

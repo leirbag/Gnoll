@@ -17,59 +17,38 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-----------------------------soundmanager.cpp----------------------------*\
-|   This is basic sound manager with cache ability.                         |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/06/2007 - Soax - Initial release                         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
 #include "../include/soundmanager.h"
 
-
-namespace Gnoll {
-	namespace Sound {
-
-							
-
+namespace Gnoll
+{
+	namespace Sound 
+	{
 		SoundManager::SoundManager()
 		{
-				
-		
 		}
-		
+
 		SoundManager::~SoundManager()
 		{
 		}
-		
-		
-		shared_ptr<Sound> SoundManager::loadImpl( shared_ptr<AbstractStream> _stream, string _instance)
+
+		shared_ptr<Sound> SoundManager::loadImpl( shared_ptr<AbstractStream> stream, string instance)
 		{	
-			shared_ptr<AudioCodecHandler> audioCodecHandler = AudioCodecManager::getInstancePtr()->getAudioCodecHandler(_stream, _instance);
+			shared_ptr<AudioCodecHandler> audioCodecHandler;
+			audioCodecHandler = AudioCodecManager::getInstancePtr()->getAudioCodecHandler(stream, instance);
 
 			/**
 			 * If an AudioCodecHandler has been found, decode the stream.
 			 * Else return NULL
 			 */
-
 			if (audioCodecHandler.get())
-			{
-				return audioCodecHandler->handle(_stream);
-			} else
-			{
+				return audioCodecHandler->handle(stream);
+			else
 				return shared_ptr<Sound>();
-			}
-			
 		}
-		
-		
-		bool SoundManager::saveImpl( shared_ptr<AbstractStream> _stream, shared_ptr<Sound> _obj, string _instance)
+
+		bool SoundManager::saveImpl(shared_ptr<AbstractStream> stream, shared_ptr<Sound> obj, string instance)
 		{
 			return false;	
 		}
-
 	}
 }

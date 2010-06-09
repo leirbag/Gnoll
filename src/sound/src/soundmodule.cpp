@@ -17,79 +17,54 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include "../include/soundmodule.h"
 
-/*--------------------------csoundmodule.cpp------------------------------*\
-|   The sound module                                                        |
-|                                                                           |
-|   Changelog :                                                             |
-|          11/06/2007 - Soax - Initial release                              |
-|          02/04/2008 - Bruno Mahe - Update comments                        |
-|                                                                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-#include "../include/csoundmodule.h"
-#include "../include/soundmanager.h"
-#include "../../config.h"
-
-#include "../../log/include/logmodule.h"
 #include <sstream>
 
-namespace Gnoll {
-	namespace Sound {
+#include "../../config.h"
+#include "../../log/include/logmacros.h"
+#include "../include/soundmanager.h"
 
-
-		CSoundModule::CSoundModule()
+namespace Gnoll 
+{
+	namespace Sound 
+	{
+		SoundModule::SoundModule()
 		{
-
 			/**
 			 * Initialize sound queue
 			 */
-			sound_queue = new vector <string>;
-
-
+			m_sound_queue = new vector<string>;
 		}
 
-		
-		CSoundModule::~CSoundModule()
+		SoundModule::~SoundModule()
 		{
-
 			/**
 			 * Delete sound queue
 			 */
-			delete sound_queue;
-
+			delete m_sound_queue;
 		}
 		
-		
-		void CSoundModule::init()
+		void SoundModule::init()
 		{
-
-			/**
-			 * Initialize listeners
-			 */
-
 			/**
 			 * SoudPlayListener is in charge of handling messages asking to play a sound
 			 */
-			play_listener = shared_ptr<Messages::Listener>(new SoundPlayListener(sound_queue));
+			m_play_listener = shared_ptr<Messages::Listener>(new SoundPlayListener(m_sound_queue));
 			MessageModule* messageModule = MessageModule::getInstancePtr();
-			messageModule->getMessageManager()->addListener(play_listener, Messages::MessageType("PLAY_SOUND"));
+			messageModule->getMessageManager()->addListener(m_play_listener, Messages::MessageType("PLAY_SOUND"));
 
-			
 			/**
-			 * Default OpenAL device
+			 * Default OpenAL m_device
 			 * XXX Might need to be updated
 			 */
-			device = alcOpenDevice(NULL);
+			m_device = alcOpenDevice(NULL);
 			
-			if (device)
+			if(m_device)
 			{
-				context = alcCreateContext(device, NULL);
-				alcMakeContextCurrent(context);
+				m_context = alcCreateContext(m_device, NULL);
+				alcMakeContextCurrent(m_context);
 			}
-						
 		
 			//Listener properties -- To be redefined
 			ALfloat listenerPos[] = { 0.0, 0.0, 0.0 };
@@ -99,50 +74,44 @@ namespace Gnoll {
 			alListenerfv(AL_VELOCITY,    listenerVel);
 			alListenerfv(AL_ORIENTATION, listenerOri);
 			//-----------------------
-		
 
 			/**
 			 * Initialize the sound manager
 			 */	
-			sMgr = SoundManager::getInstancePtr();
+			m_soundMgr = SoundManager::getInstancePtr();
 		}
 		
-		void CSoundModule::process()
+		void SoundModule::process()
 		{
 			shared_ptr<Sound> currentSound;
 			
-			//Parcours la liste des sons dont la lecture a été demandée
 			/**
 			 * Go through the list of sound to play
 			 */
-			for (unsigned int i = 0; i < sound_queue->size(); i++)
+			for(unsigned int i = 0; i < m_sound_queue->size(); i++)
 			{
 				/**
 				 * Load that sound
 				 * Since the SoundManager cache them, they should be loaded only once (except if
-				 * sound_queue->size is greater than the number of sound the SoundManager is caching)
+				 * m_sound_queue->size is greater than the number of sound the SoundManager is caching)
 				 */
-				currentSound = sMgr->load((*sound_queue)[i]);
+				currentSound = m_soundMgr->load((*m_sound_queue)[i]);
 
-				if (!currentSound)
+				if(!currentSound)
 				{
 					std::ostringstream tmpString;
-					tmpString << "Impossible de trouver " << (*sound_queue)[i] << " dans les paths existants !";
-					Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
+					tmpString << "Impossible de trouver " << (*m_sound_queue)[i] << " dans les paths existants !";
+					GNOLL_LOG().logMessage( tmpString.str() );
 				}
 				else
-				{
 					currentSound->play();
-				}
 			}
 
-			sound_queue->clear();
-		
+			m_sound_queue->clear();
 		}
 		
-		void CSoundModule::exit()
+		void SoundModule::exit()
 		{
-
 			/**
 			 * Destroy SoundManager
 			 */
@@ -152,22 +121,22 @@ namespace Gnoll {
 			 * Delete listeners
 			 */
 			MessageModule* messageModule = MessageModule::getInstancePtr();
-			messageModule->getMessageManager()->delListener(play_listener, Messages::MessageType("PLAY_SOUND"));
+			messageModule->getMessageManager()->delListener(m_play_listener, Messages::MessageType("PLAY_SOUND"));
 
 			/**
 			 * Uninitialize OpenAL
 			 */
-			if( device )
+			if(m_device)
 			{
 				alcMakeContextCurrent(NULL);
-				alcDestroyContext(context);
-				alcCloseDevice(device);
+				alcDestroyContext(m_context);
+				alcCloseDevice(m_device);
 			}
 		}
 			
-		void CSoundModule::enqueueSound(const string instance)
+		void SoundModule::enqueueSound(const string instance)
 		{
-			sound_queue->push_back(instance);	
+			m_sound_queue->push_back(instance);	
 		}
 	}
 }

@@ -17,24 +17,15 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*---------------------------oggcodechandler.h------------------------------*\
-|   The Ogg Codec Handler                                                    |
-|                                                                            |
-|   Changelog :                                                              |
-|               11/06/2007 - Soax - Initial release                          |
-|               02/04/2008 - Bruno Mahe - Add some doxygen comments          |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-
-#include "audiocodechandler.h"
-
-#include <vorbis/vorbisfile.h>
-
 #ifndef __OGGCODECHANDLER_H__
 #define __OGGCODECHANDLER_H__
 
+#include <vorbis/vorbisfile.h>
+
+#include "audiocodechandler.h"
+
 #define SIZE_BUFFER 2048
+
 using namespace std;
 using namespace Gnoll::Core;
 using namespace Gnoll::Sound;
@@ -43,20 +34,18 @@ namespace Gnoll
 {
 	namespace Sound 
 	{	
-
 		/**
-		 * Custom read function to make vorbislib able to extract data from a shared_ptr<AbstractStream>
+		 * Custom read function to make vorbislib able to extract data from a 
+		 * shared_ptr<AbstractStream>
 		 */
-		size_t vorbisRead(void * ptr, size_t size, size_t nmemb, void * datasource);
+		size_t vorbisRead(void* ptr, size_t size, size_t nmemb, void* datasource);
 	
 		/**
 		 * Audio codec handler able to decode vorbis streams
 		 */
 		class OggCodecHandler : public AudioCodecHandler
 		{
-					
-			public :
-
+			public:
 				/**
 				 * Constructor
 				 */
@@ -70,7 +59,7 @@ namespace Gnoll
 				/**
 				 * @copydoc AudioCodecHandler::handle
 				 */
-				virtual shared_ptr<Sound> handle(shared_ptr<AbstractStream>);
+				virtual shared_ptr<Sound> handle(shared_ptr<AbstractStream> stream);
 
 				/**
 				 * @copydoc AudioCodecHandler::getFileType
@@ -79,5 +68,5 @@ namespace Gnoll
 		};
 	}
 }
-		
+
 #endif

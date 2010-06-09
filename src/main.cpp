@@ -27,7 +27,7 @@
 #include "input/include/cinputeventstranslator.h"
 #include "graphic/include/graphicmodule.h"
 #include "time/include/ctimemodule.h"
-#include "sound/include/csoundmodule.h"
+#include "sound/include/soundmodule.h"
 #include "scene/include/cscenemanager.h"
 #include "scene/include/cameramanager.h"
 #include "stats/include/statsmodule.h"
@@ -75,7 +75,7 @@ namespace Gnoll
 			COISInputModule         inputmanager;
 			CTimeModule*            timeModule;
 			MessageModule*         messageModule;
-			CSoundModule *          soundmanager;
+			SoundModule *          soundmanager;
 			CInputEventsTranslator* inputEventsTranslator;
 			StatsModule*           statsModule;
 
@@ -274,7 +274,7 @@ namespace Gnoll
 		graphicmanager        = GraphicModule::getInstancePtr();
 		timeModule            = CTimeModule::getInstancePtr();
 		messageModule         = MessageModule::getInstancePtr();
-		soundmanager          = CSoundModule::getInstancePtr();
+		soundmanager          = SoundModule::getInstancePtr();
 		inputEventsTranslator = CInputEventsTranslator::getInstancePtr();
 		statsModule           = StatsModule::getInstancePtr();
 		GNOLL_LOG() << "Instanciating modules...[DONE]\n";
@@ -367,7 +367,7 @@ namespace Gnoll
 		statsModule->exit();
 
 		Gnoll::Stats::StatsModule::destroy();
-		CSoundModule::destroy();
+		SoundModule::destroy();
 		CTimeModule::destroy();
 		CInputEventsTranslator::destroy();
 		GraphicModule::destroy();

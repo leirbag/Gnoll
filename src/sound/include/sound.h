@@ -17,75 +17,52 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#ifndef __SOUND_H__
+#define __SOUND_H__
 
-/*----------------------------------sound----------------------------------*\
-|   This is a sound                                                         |
-|                                                                           |
-|   Changelog :                                                             |
-|               11/06/2007 - Soax - Initial release                         |
-|               02/04/2008 - Bruno Mahe - Add some doxygen comments         |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
+#include <vector>
 
 #include <AL/al.h>
 #include <AL/alc.h>
 
-
-#include <vector>
 using namespace std;
 
-#ifndef __SOUND_H__
-#define __SOUND_H__
-
-namespace Gnoll {
-	namespace Sound {
-	
+namespace Gnoll 
+{
+	namespace Sound 
+	{
 		/**
 		 * Sound object
 		 */
 		class Sound
 		{	
-
-			protected :
-
-				/**
-				 * OpenAL buffer
-				 */
-				ALuint buffer;	
-
-				/**
-				 * List of OpenAL sources
-				 */
-				vector<ALuint> source_list;
-				
-			public :
-		
+			public:
 				/**
 				 * Constructor
 				 */
 				Sound();
-			
+
 				/**
 				 * Destructor
 				 */
 				~Sound();
-				
+
 				/**
 				 * Play that sound
 				 */
 				void play();
-				
+
 				/**
 				 * Update that sound
 				 */
 				void update();
-				
+
 				//virtual void stop(int);
-				
+
 				//virtual void pause(int);
-				
+
 				//virtual bool isPlaying(){};
-				
+
 				/**
 				 * Accessor to the OpenAL buffer
 				 */
@@ -100,8 +77,19 @@ namespace Gnoll {
 				 * Delete the OpenAL buffer
 				 */
 				void delBuffer();
+
+			protected:
+				/**
+				 * OpenAL buffer
+				 */
+				ALuint m_buffer;	
+
+				/**
+				 * List of OpenAL sources
+				 */
+				vector<ALuint> m_source_list;
 		};
 	}
 }
-	
+
 #endif	

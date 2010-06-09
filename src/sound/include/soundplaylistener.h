@@ -17,11 +17,12 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#include "../../core/messages/include/listener.h"
-#include <vector>
-
 #ifndef __SOUNDPLAYLISTENER_H__
 #define __SOUNDPLAYLISTENER_H__
+
+#include <vector>
+
+#include "../../core/messages/include/listener.h"
 
 using namespace Gnoll::Core;
 
@@ -29,39 +30,36 @@ namespace Gnoll
 {
 	namespace Sound
 	{
-
 		/**
 		 * Listener that will load and play a sound when it receives a message
 		 */
 		class SoundPlayListener : public Messages::Listener
 		{
-			private:
+			public:
+				/**
+				 * This is a constructor
+				 * @param _sound_queue list of sound used to initialize sound_queue attribute
+				 */
+				SoundPlayListener(vector<string>* sound_queue);
 
+				/**
+				 * This is a destructor
+				 */
+				virtual ~SoundPlayListener() {}
+
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle(MessagePtr message);
+
+			private:
 				/**
 				 * List of sound to play
 				 */
-				vector<string> * sound_queue;
-				
-			public:
-			
-				/**
-				* This is a constructor
-				* @param _sound_queue list of sound used to initialize sound_queue attribute
-				*/
-				SoundPlayListener(vector<string> * _sound_queue);
-		
-				/**
-				* This is a destructor
-				*/
-				virtual ~SoundPlayListener() {}
-		
-				/**
-				* This method is called in order to process a message
-				* @param message The message this method will have to process
-				*/
-				virtual void handle(MessagePtr message);
+				vector<string>* m_sound_queue;
 		};
 	}
 }
-	
+
 #endif

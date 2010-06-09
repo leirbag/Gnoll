@@ -17,15 +17,11 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#ifndef __SOUNDMODULE_H__
+#define __SOUNDMODULE_H__
 
-/*----------------------------csoundmodule.h-------------------------------*\
-|   The sound module                                                         |
-|                                                                            |
-|   Changelog :                                                              |
-|               11/06/2007 - Soax - Initial release                          |
-|               02/02/2008 - Bruno Mahe - Add some doxygen comments          |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
+#include <iostream>
+#include <vector>
 
 #include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
@@ -33,89 +29,78 @@
 #include "soundplaylistener.h"
 #include "soundmanager.h"
 
-#include <iostream>
-#include <vector>
-
-
-#ifndef __CSOUNDMODULE_H__
-#define __CSOUNDMODULE_H__
-
 using namespace Gnoll::Core;
 using namespace Gnoll::Sound;
 using namespace std;
 
-namespace Gnoll {
-
-	namespace Sound {
-
+namespace Gnoll 
+{
+	namespace Sound 
+	{
 		/**
 		 *	The sound module
 		 */
-		class CSoundModule : public Module, public Singleton<CSoundModule>
+		class SoundModule : public Module, public Singleton<SoundModule>
 		{
-
-			private :
-
-				/**
-				 * OpenAL device object
-				 */
-				ALCdevice * device;
-
-				/**
-				 * OpenAL context object
-				 */
-				ALCcontext * context;
-
-				/**
-				 * Sound manager
-				 */
-				SoundManager * sMgr;
-				
-				/**
-				 * Playlist
-				 */
-				vector< string > * sound_queue;
-
-				/**
-				 * Listener used to play sound
-				 */
-				shared_ptr<Messages::Listener> play_listener;
-				
 			public:
-		
 				/**
-				* A constructor
-				*/
-				CSoundModule();
-		
+				 * A constructor
+				 */
+				SoundModule();
+
 				/**
-				* @copydoc Module::init
-				*/
+				 * @copydoc Module::~Module
+				 */
+				virtual ~SoundModule();
+
+				/**
+				 * @copydoc Module::init
+				 */
 				virtual void init();
-		
+
 				/**
-				* @copydoc Module::process
-				*/
+				 * @copydoc Module::process
+				 */
 				virtual void process();
-		
+
 				/**
-				* @copydoc Module::exit 
-				*/
+				 * @copydoc Module::exit 
+				 */
 				virtual void exit();
-		
-				/**
-				* @copydoc Module::~Module
-				*/
-				virtual ~CSoundModule();
-				
+
 				/**
 				 * Add a sound to the playlist
 				 * @param _soundName Name of the sound to add to the playlist
 				 */
-				void enqueueSound(const string _soundName);
+				void enqueueSound(const string soundName);
 
+			private:
+				/**
+				 * OpenAL device object
+				 */
+				ALCdevice* m_device;
+
+				/**
+				 * OpenAL context object
+				 */
+				ALCcontext* m_context;
+
+				/**
+				 * Sound manager
+				 */
+				SoundManager* m_soundMgr;
+
+				/**
+				 * Playlist
+				 */
+				vector<string>* m_sound_queue;
+
+				/**
+				 * Listener used to play sound
+				 */
+				shared_ptr<Messages::Listener> m_play_listener;
 		};
 	}		
 }	
-		
+
 #endif		

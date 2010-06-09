@@ -17,64 +17,48 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*---------------------------audiocodechandler.h----------------------------*\
-|   Basic codec handler                                                      |
-|                                                                            |
-|   Changelog :                                                              |
-|               11/06/2007 - Soax - Initial release                          |
-|               01/16/2007 - Bruno Mahe - getFileType() should be virtual    |
-|                                           pure                             |
-|               02/04/2008 - Bruno Mahe - Add some doxygen comments          |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-
-
-#include "../../core/include/singleton.h"
-
-#include "../../core/include/abstractstream.h"
-#include "sound.h"
-
-#include <boost/shared_ptr.hpp>
-#include <iostream>
-#include <map>
-
-
 #ifndef __AUDIOCODECHANDLER_H__
 #define __AUDIOCODECHANDLER_H__
 
+#include <iostream>
+#include <map>
+
+#include <boost/shared_ptr.hpp>
+
+#include "../../core/include/singleton.h"
+#include "../../core/include/abstractstream.h"
+#include "sound.h"
 
 using namespace Gnoll::Core;
 using namespace boost;
 
-namespace Gnoll {
-	namespace Sound {
-
+namespace Gnoll 
+{
+	namespace Sound 
+	{
 		/**
 		 * Interface for audio codecs handles.
 		 * An audio codec handler is a class that will decode audio streams
 		 */
 		class AudioCodecHandler
 		{
-					
-			public :
-
+			public:
 				/**
 				 * Constructor
 				 */
-				AudioCodecHandler(){};
+				AudioCodecHandler() {};
 
 				/**
 				 * destructor
 				 */
-				virtual ~AudioCodecHandler(){};
+				virtual ~AudioCodecHandler() {};
 				
 				/**
 				 * Handler method
 				 * @param _stream Stream to decode
 				 * @return Sound object containing the decoded stream
 				 */
-				virtual shared_ptr<Sound> handle(shared_ptr<AbstractStream> _stream) = 0;
+				virtual shared_ptr<Sound> handle(shared_ptr<AbstractStream> stream) = 0;
 
 				/**
 				 * Audio codec that the class is handling (ogg...)

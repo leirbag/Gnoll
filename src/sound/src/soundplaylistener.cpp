@@ -17,41 +17,25 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-------------------------soundplaylistener.cpp---------------------------*\
-|   The sound module                                                        |
-|                                                                           |
-|   Changelog :                                                             |
-|          11/06/2007 - Soax - Initial release                              |
-|          02/04/2008 - Bruno Mahe - Update comments                        |
-|                                                                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-
-
-
 #include "../include/soundplaylistener.h"
+
 #include <iostream>
+
 using namespace std;
 
 namespace Gnoll
 {
 	namespace Sound
 	{
-
-		SoundPlayListener::SoundPlayListener(vector< string > * _sound_queue)
+		SoundPlayListener::SoundPlayListener(vector<string>* sound_queue)
 		{
-			sound_queue = _sound_queue;
+			m_sound_queue = sound_queue;
 		}
 		
-		void SoundPlayListener::handle( shared_ptr<Message> message)
+		void SoundPlayListener::handle(shared_ptr<Message> message)
 		{
 			string instance = message->getData<string>();
-			sound_queue->push_back(instance);
+			m_sound_queue->push_back(instance);
 		}
 	}
 }
-
-
-

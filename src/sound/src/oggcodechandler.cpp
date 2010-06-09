@@ -17,23 +17,13 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*---------------------------oggcodechandler.cpp----------------------------*\
-|   Codec handler for Ogg files                                              |
-|                                                                            |
-|   Changelog :                                                              |
-|               11/06/2007 - Soax - Initial release                          |
-|               02/04/2008 - Bruno Mahe - Update comments                    |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-
 #include "../include/oggcodechandler.h"
 
-#include <string.h>
-
-#include "../../log/include/logmodule.h"
+#include <cstdlib>
+#include <cstring>
 #include <sstream>
 
+#include "../../log/include/logmacros.h"
 
 namespace Gnoll 
 {
@@ -43,16 +33,14 @@ namespace Gnoll
 		{
 		}
 	
-		
 		OggCodecHandler::~OggCodecHandler()
 		{
 		}
 
-		
 		/**
 		 * Instanciate a new Sound object from the data extracted from the audio stream
 		 */
-		shared_ptr<Sound> OggCodecHandler::handle(shared_ptr<AbstractStream> _stream)
+		shared_ptr<Sound> OggCodecHandler::handle(shared_ptr<AbstractStream> stream)
 		{
 			shared_ptr<Sound> _sound(new Sound);
 			
@@ -65,64 +53,58 @@ namespace Gnoll
 			 * File sample rate
 			 */
 			ALsizei sampleRate = 0;
-				
-			OggVorbis_File ogg_stream;
-			
+			OggVorbis_File oggstream;
 			ov_callbacks vorbisCallbacks;
 			vorbisCallbacks.read_func = vorbisRead;
 			vorbisCallbacks.close_func = NULL;
 			vorbisCallbacks.seek_func = NULL;
 			vorbisCallbacks.tell_func = NULL;
 		
-	
 			/**
 			 * Create an ogg stream from the input stream
 			 */
-			int ovOpenCallbacksResult = ov_open_callbacks(_stream.get(), &ogg_stream, NULL, 0, vorbisCallbacks);
+			int ovOpenCallbacksResult = ov_open_callbacks(stream.get(), &oggstream, NULL, 0, vorbisCallbacks);
 				
 			if (ovOpenCallbacksResult != 0)
 			{
-				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Error while calling ov_opencallbacks()" );
+				GNOLL_LOG().logMessage("Error while calling ov_opencallbacks()");
 
 				switch (ovOpenCallbacksResult)
 				{
 					case OV_EREAD:
-						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  A read from media returned an error." );
+						GNOLL_LOG().logMessage("  ->  A read from media returned an error.");
 						break;
 
 					case OV_ENOTVORBIS:
-						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Bitstream does not contain any Vorbis data." );
+						GNOLL_LOG().logMessage("  ->  Bitstream does not contain any Vorbis data.");
 						break;
 
 					case OV_EVERSION:
-						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Vorbis version mismatch." );
+						GNOLL_LOG().logMessage("  ->  Vorbis version mismatch.");
 						break;
 
 					case OV_EBADHEADER:
-						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Invalid Vorbis bitstream header." );
+						GNOLL_LOG().logMessage("  ->  Invalid Vorbis bitstream header.");
 						break;
 
 					case OV_EFAULT:
-						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Internal logic fault; indicates a bug or heap/stack corruption." );
+						GNOLL_LOG().logMessage("  ->  Internal logic fault; indicates a bug or heap/stack corruption.");
 						break;
 
 					default:
-						Gnoll::Log::LogModule::getInstancePtr()->logMessage( "  ->  Error unknown." );
+						GNOLL_LOG().logMessage("  ->  Error unknown.");
 						break;
 
 				}
 
-				if (_stream->eof())
-				{
-					Gnoll::Log::LogModule::getInstancePtr()->logMessage( "ERROR : End of OGG stream" );
-				}
-
+				if (stream->eof())
+					GNOLL_LOG().logMessage("ERROR : End of OGG stream");
 			}
 				
 			/**
 			 * Get audio stream information
 			 */
-			vorbis_info* infos = ov_info(&ogg_stream, 0);
+			vorbis_info* infos = ov_info(&oggstream, 0);
 				
 			if (infos->channels == 1)
 				format = AL_FORMAT_MONO16;
@@ -130,8 +112,6 @@ namespace Gnoll
 				format = AL_FORMAT_STEREO16;
 				
 			sampleRate = infos->rate;
-				
-				
 			
 			/**
 			 * Get all samples
@@ -143,7 +123,7 @@ namespace Gnoll
 			
 			do 
 			{
-				nb_read = ov_read(&ogg_stream, temp_buffer, SIZE_BUFFER, 0, 2, 1, NULL);
+				nb_read = ov_read(&oggstream, temp_buffer, SIZE_BUFFER, 0, 2, 1, NULL);
 					
 				if (nb_read > 0)
 				{
@@ -153,54 +133,46 @@ namespace Gnoll
 					//cout <<  "  " << size_read << endl;
 				}
 			}
-			while (nb_read > 0);
+			while(nb_read > 0);
 		
 			/**
 			 * Fill out OpenAL sound buffer
 			 */
-			if (size_read > 0){
-				
+			if(size_read > 0)
 				alBufferData(_sound->getBuffer(), format, file_buffer, size_read, sampleRate);
-			}
 
 			/**
 			 * Close ogg stream
 			 */
-			ov_clear(&ogg_stream);
+			ov_clear(&oggstream);
 				
-			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Sound resource created" );
+			GNOLL_LOG().logMessage("Sound resource created");
 			return _sound;
 		}
-			
-		
 		
 		string OggCodecHandler::getFileType()
 		{
 			return "ogg";
 		}
 			
-			
-			
-		size_t vorbisRead(void * ptr, size_t size, size_t nmemb, void * datasource)
+		size_t vorbisRead(void* ptr, size_t size, size_t nmemb, void * datasource)
 		{
 			/**
 			 * Size of the buffer
 			 */ 
 			const unsigned int maxSizeBuffer = 4096;
 
-			
 			char buffer [maxSizeBuffer];
 			AbstractStream * stream;
 			size_t res;
 		
-			stream = (AbstractStream *)datasource;
+			stream = (AbstractStream*) datasource;
 
 			/**
 			 * Nothing to read
 			 */
-			if (stream->eof()) {
+			if (stream->eof())
 				return 0;
-			}
 
 			/**
 			 * Number of bytes read
@@ -219,14 +191,11 @@ namespace Gnoll
 				res = stream->read(buffer, maxSizeBuffer);
 			
 				if (res == 0)	
-				{ 
 					endOfStream = true;
-
-				} else {
-			
+				else 
+				{
 					memcpy((char*)ptr+i, buffer, res);
 					i += maxSizeBuffer;
-
 				}
 			}				
 

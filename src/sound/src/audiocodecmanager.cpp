@@ -17,19 +17,9 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
-/*-------------------------audiocodecmanager.cpp----------------------------*\
-|   The Audio Codec Manager                                                  |
-|                                                                            |
-|   Changelog :                                                              |
-|               11/06/2007 - Soax - Initial release                          |
-|               02/04/2008 - Bruno Mahe - Update comments                    |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-
-
 #include "../include/audiocodecmanager.h"
-#include "../../log/include/logmodule.h"
+
+#include "../../log/include/logmacros.h"
 
 namespace Gnoll
 {
@@ -40,9 +30,8 @@ namespace Gnoll
 		   /**
 			 * Initialize list of AudioCodecHandler
 			 */
-
 			// OGG codec
-			shared_ptr<AudioCodecHandler> oggAch (new OggCodecHandler);
+			shared_ptr<AudioCodecHandler> oggAch(new OggCodecHandler);
 			this->addAudioCodec(oggAch);
 
 			// Default codec
@@ -52,39 +41,34 @@ namespace Gnoll
 		
 		AudioCodecManager::~AudioCodecManager()
 		{
-		
 		}
 		
 		void AudioCodecManager::addAudioCodec(shared_ptr<AudioCodecHandler> ach)
 		{
-			list_codec[ach->getFileType()] = ach;
+			m_list_codec[ach->getFileType()] = ach;
 		}
 			
-		
-		shared_ptr<AudioCodecHandler> AudioCodecManager::getAudioCodecHandler(shared_ptr<AbstractStream> _stream, string _instance)
+		shared_ptr<AudioCodecHandler> AudioCodecManager::getAudioCodecHandler(shared_ptr<AbstractStream> stream, string instance)
 		{
 			string type;
 
 			/**
 			 * Get audio codec from the file extension
 			 */
-			size_t pos = _instance.find_last_of('.') + 1;
+			size_t pos = instance.find_last_of('.') + 1;
 
-		
-			if ( pos != string::npos )
-				type = _instance.substr(pos);
+			if(pos != string::npos)
+				type = instance.substr(pos);
 			
-			
-			if (list_codec.find(type) != list_codec.end())
-				return list_codec[type];
+			if(m_list_codec.find(type) != m_list_codec.end())
+				return m_list_codec[type];
 			else
 			{
-				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Codec par defaut (ogg pour le moment)" );
-				return list_codec["ogg"];
+				GNOLL_LOG().logMessage("Codec par defaut (ogg pour le moment)");
+				return m_list_codec["ogg"];
 			}
 			
-			//return list_codec["ogg"]->handle(_stream);
-		}		
-		
+			//return m_list_codec["ogg"]->handle(stream);
+		}
 	}
 }
