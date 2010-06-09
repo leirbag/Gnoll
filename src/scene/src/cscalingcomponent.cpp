@@ -19,7 +19,7 @@
 
 #include "../../dynamicobject/include/vector3.h"
 #include "../../log/include/logmacros.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 
 #include "../include/cscalingcomponent.h"
 #include "../../core/include/message.h"

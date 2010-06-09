@@ -25,7 +25,7 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../include/cstaticgobject.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include "../../log/include/logmodule.h"
 #include "../include/cpage.h"
 #include <glibmm/ustring.h>
@@ -77,7 +77,7 @@ namespace Gnoll
 			SceneNode *staticGObjectNode = parentNode->createChildSceneNode( _parentPage->getInstance() + "_" + instanceNameStr );
 
 			std::string entName = _parentPage->getInstance() + "_" + instanceNameStr + CStaticGObject::ENTITY_SUFFIX();
-			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 
 			Ogre::Entity *ent = sm->createEntity( entName, meshNameStr );
 			staticGObjectNode->attachObject( ent );
@@ -143,7 +143,7 @@ namespace Gnoll
 			string instanceNameStr(this->getInstance());
 
 			std::string entName = _parentPage->getInstance() + "_" + instanceNameStr  + CStaticGObject::ENTITY_SUFFIX();
-			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 
 			SceneNode* staticGObjectNode = sm->getSceneNode( _parentPage->getInstance() + "_" + instanceNameStr );
 			staticGObjectNode->detachObject( entName );

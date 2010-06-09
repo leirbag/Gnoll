@@ -17,58 +17,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*------------------------------CCEGUILogger--------------------------------*\
-|   This is a logger for CEGUI which redirects everything to Ogre's logger   |
-|                                                                            |
-|   Changelog :                                                              |
-|               05/15/2008 - Bruno Mahe - Initial release                    |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-
-
-
-#ifndef __CCEGUILOGGER__H_
-#define __CCEGUILOGGER__H_
+#ifndef __CEGUILOGGER__H_
+#define __CEGUILOGGER__H_
 
 #include <CEGUI/CEGUILogger.h>
 
-
 namespace Gnoll
 {
-
 	namespace Graphic
 	{
-
 		/**
 		 * @brief
 		 * Implementation for the Logger class which redirects messages to Ogre's logger.
 		 */
-		class CCEGUILogger : public CEGUI::Logger
+		class CEGUILogger : public CEGUI::Logger
 		{
-
 			public:
+				/**
+				 * @brief
+				 * Constructor for CEGUILogger object.
+				 */
+				CEGUILogger();
 
 				/**
 				 * @brief
-				 * Constructor for CCEGUILogger object.
+				 * Constructor for CEGUILogger object.
 				 */
-				CCEGUILogger(void);
-
-
-				/**
-				 * @brief
-				 * Constructor for CCEGUILogger object.
-				 */
-				virtual ~CCEGUILogger(void);
-
+				virtual ~CEGUILogger();
 
 				/**
 				 * @brief
 				 * Add an event to the log.
 				 *
 				 * @param message	String object containing the message to be added to the event log.
-				 * @param level LoggingLevel for this message.  If \a level is greater than the current set logging level, the message is not logged.
+				 * @param level LoggingLevel for this message.  If \a level is greater than the current 
+				 * set logging level, the message is not logged.
 				 * @return Nothing
 				 */
 				virtual void logEvent(const CEGUI::String& message, CEGUI::LoggingLevel level = CEGUI::Standard);
@@ -83,10 +66,8 @@ namespace Gnoll
 				 *  - false if the current contents of the file should be discarded.
 				 */
 				virtual void setLogFilename(const CEGUI::String& filename, bool append = false);
-
 		};
 	}
-
 }
 
-#endif	// __CCEGUILOGGER__H_
+#endif

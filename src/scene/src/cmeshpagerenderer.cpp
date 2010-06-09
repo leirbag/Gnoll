@@ -29,7 +29,7 @@
 
 
 #include "../include/cmeshpagerenderer.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include "../../log/include/logmodule.h"
 
 using namespace std;
@@ -64,7 +64,7 @@ namespace Gnoll
 			SceneNode * pageNode = parentNode->createChildSceneNode( _parentPage->getInstance() + "_renderer" );
 
 			std::string entName = _parentPage->getInstance() + "_entity";
-			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 
 			Ogre::Entity *ent = sm->createEntity( entName, m_meshName );
 			pageNode->attachObject( ent );
@@ -80,7 +80,7 @@ namespace Gnoll
 		void CMeshPageRenderer::exit()
 		{
 			std::string entName = m_parentPage->getInstance() + "_entity";
-			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 
 			SceneNode* pageNode = sm->getSceneNode( m_parentPage->getInstance() + "_renderer" );
 			pageNode->detachObject( entName );

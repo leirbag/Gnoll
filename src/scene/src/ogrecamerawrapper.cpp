@@ -22,7 +22,7 @@
  ***************************************************************************/
 
 #include "../include/ogrecamerawrapper.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include <OgreRoot.h>
 
 using namespace Gnoll::Graphic;
@@ -37,7 +37,7 @@ namespace Gnoll
 		{
 			// Create the camera from the scenemanager
 			// ---------------------------------------
-			camera = CGraphicModule::getInstancePtr()->getSceneManager()->createCamera(name);
+			camera = GraphicModule::getInstancePtr()->getSceneManager()->createCamera(name);
 
 			// Create one viewport, entire window
 			// ----------------------------------
@@ -49,7 +49,7 @@ namespace Gnoll
 
 		OgreCameraWrapper::~OgreCameraWrapper()
 		{
-			CGraphicModule::getInstancePtr()->getSceneManager()->destroyCamera(camera->getName());
+			GraphicModule::getInstancePtr()->getSceneManager()->destroyCamera(camera->getName());
 		}
 
 		void OgreCameraWrapper::setNearValue(float value)

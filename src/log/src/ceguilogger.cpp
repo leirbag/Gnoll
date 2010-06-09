@@ -17,47 +17,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/ceguilogger.h"
 
-/*------------------------------CCEGUILogger--------------------------------*\
-|   This is a logger for CEGUI which redirects everything to Ogre's logger   |
-|                                                                            |
-|   Changelog :                                                              |
-|               05/15/2008 - Bruno Mahe - Initial release                    |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-
-
-
-#include "../include/cceguilogger.h"
-#include <OgreLogManager.h>
 #include <string>
+
+#include <OgreLogManager.h>
 
 namespace Gnoll
 {
-
 	namespace Graphic
 	{
-
-		CCEGUILogger::CCEGUILogger(void)
+		CEGUILogger::CEGUILogger()
 		{
 		}
 
-
-		CCEGUILogger::~CCEGUILogger(void)
+		CEGUILogger::~CEGUILogger()
 		{
 		}
 
-
-		void CCEGUILogger::logEvent(const CEGUI::String& message, CEGUI::LoggingLevel level)
+		void CEGUILogger::logEvent(const CEGUI::String& message, CEGUI::LoggingLevel level)
 		{
-
 			/**
 			 * This will hold the log message which will be sent to Ogre.
 			 * This should look like this :
 			 * (LEVEL)	[CEGUI]	MSG
 			 */
 			std::ostringstream line;
-
 
 			/**
 			 * Converting logging level to string
@@ -85,31 +70,23 @@ namespace Gnoll
 						break;
 			}
 
-
 			/**
 			 * This message comes from CEGUI subsystem
 			 */
 			line << "[CEGUI]\t" << message;
 
-
 			/**
 			 * Finally the processed message is sent to Ogre
 			 */
-			Ogre::LogManager::getSingleton().logMessage( line.str() );
-
+			Ogre::LogManager::getSingleton().logMessage(line.str());
 		}
 
 
-		void CCEGUILogger::setLogFilename(const CEGUI::String& filename, bool append)
+		void CEGUILogger::setLogFilename(const CEGUI::String& filename, bool append)
 		{
-
 			/**
 			 * There is no file to create since everything is redirected to Ogre's logger
 			 */
-
 		}
-
 	}
-
 }
-

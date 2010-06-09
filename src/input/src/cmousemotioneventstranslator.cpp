@@ -30,7 +30,7 @@
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
 #include "../../log/include/logmodule.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 
 
 #include "../../config.h"
@@ -61,7 +61,7 @@ namespace Gnoll
 			this->mouseConfig = pom->load("mouseConfig");
 
 
-			Ogre::RenderWindow* renderWindow = CGraphicModule::getInstancePtr()->getRenderWindow();
+			Ogre::RenderWindow* renderWindow = GraphicModule::getInstancePtr()->getRenderWindow();
 
 			if (renderWindow)
 			{

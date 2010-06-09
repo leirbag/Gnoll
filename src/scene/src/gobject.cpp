@@ -25,7 +25,7 @@
 \*-------------------------------------------------------------------------*/
 
 #include "../include/gobject.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include "../../log/include/logmodule.h"
 #include "../include/cpage.h"
 #include <glibmm/ustring.h>

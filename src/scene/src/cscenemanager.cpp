@@ -26,7 +26,7 @@
 #include "../include/cscenemanager.h"
 #include "../include/cpage.h"
 #include "../../time/include/ctimemodule.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include "../../core/include/sourcefile.h"
 #include "../../core/include/message.h"
 #include "../../core/messages/include/messenger.h"
@@ -109,7 +109,7 @@ namespace Gnoll
 					skyMaterialName = this->getAttribute< Gnoll::DynamicObject::String > ( CSceneManager::ATTRIBUTE_SKY_MATERIAL() );
 				}
 
-				Ogre::SceneManager* sm = ogreRoot->getSceneManager( Gnoll::Graphic::CGraphicModule::DEFAULT_OGRE_SCENE_MANAGER_NAME() );
+				Ogre::SceneManager* sm = ogreRoot->getSceneManager( Gnoll::Graphic::GraphicModule::DEFAULT_OGRE_SCENE_MANAGER_NAME() );
 
 
 				if (skyType->getValue() == "dome")

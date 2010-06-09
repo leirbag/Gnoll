@@ -30,7 +30,7 @@
 #include "../include/camera.h"
 #include "../include/camerawrapper.h"
 #include "../include/cmessagelistenercamera.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../dynamicobject/include/float.h"
@@ -216,10 +216,10 @@ namespace Gnoll
 			if(getTargetName() == "")
 				return NULL;
 
-			if(CGraphicModule::getInstancePtr()->getSceneManager() == NULL)
+			if(GraphicModule::getInstancePtr()->getSceneManager() == NULL)
 				return NULL;
 
-			return CGraphicModule::getInstancePtr()->getSceneManager()->getSceneNode(target);
+			return GraphicModule::getInstancePtr()->getSceneManager()->getSceneNode(target);
 		}
 
 		CameraWrapper* Camera::getCameraWrapper()

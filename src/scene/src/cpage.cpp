@@ -24,7 +24,7 @@
 |                                                                           |
 \*-------------------------------------------------------------------------*/
 
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include "../../log/include/logmodule.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
@@ -51,7 +51,7 @@ namespace Gnoll
 
 		void CPage::init()
 		{
-			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 			SceneNode* root = sm->getRootSceneNode();
 
 			// Creating root page node
@@ -94,7 +94,7 @@ namespace Gnoll
 
 			if (this->isInitialized())
 			{
-				Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+				Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 
 				/**
 				 * Unload static objects
@@ -134,7 +134,7 @@ namespace Gnoll
 
 		Ogre::SceneNode * CPage::getPageRootNode() const
 		{
-			Ogre::SceneManager* sm = CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 			SceneNode* node = NULL;
 
 			if ( sm->hasSceneNode(this->getInstance()) )
@@ -171,7 +171,7 @@ namespace Gnoll
 			// Check with the current camera if the AABB box is inside the view frustrum
 
 			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "       Checking visibility from camera : " + string(*_cameraName) + " for page " + this->getInstance());
-			Ogre::Camera* ogreCamera = CGraphicModule::getInstancePtr()->getSceneManager()->getCamera(*_cameraName);
+			Ogre::Camera* ogreCamera = GraphicModule::getInstancePtr()->getSceneManager()->getCamera(*_cameraName);
 			Ogre::SceneNode* rootNode = this->getPageRootNode();
 
 			bool result = false;

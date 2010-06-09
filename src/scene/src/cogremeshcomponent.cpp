@@ -18,9 +18,9 @@
  ***************************************************************************/
 
 #include "../../dynamicobject/include/float.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include "../../log/include/logmacros.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/include/messagemodule.h"
@@ -159,7 +159,7 @@ namespace Gnoll {
 		void COgreMeshComponent::setPosition(const Ogre::Vector3& position)
 		{
 			string instanceNameStr(this->getInstance());
-			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = Gnoll::Graphic::GraphicModule::getInstancePtr()->getSceneManager();
 
 			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
 			meshNode->setPosition(-position.x, position.y, position.z);
@@ -169,7 +169,7 @@ namespace Gnoll {
 		void COgreMeshComponent::setScaling(const Ogre::Vector3& scale)
 		{
 			string instanceNameStr(this->getInstance());
-			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = Gnoll::Graphic::GraphicModule::getInstancePtr()->getSceneManager();
 
 			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
 			meshNode->setScale(scale.x, scale.y, scale.z);
@@ -179,7 +179,7 @@ namespace Gnoll {
 		void COgreMeshComponent::setRotation(const Ogre::Vector3& rotation)
 		{
 			string instanceNameStr(this->getInstance());
-			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = Gnoll::Graphic::GraphicModule::getInstancePtr()->getSceneManager();
 
 			SceneNode* meshNode = sm->getSceneNode( m_parentPageName + "_" + instanceNameStr );
 			meshNode->pitch(Ogre::Radian(rotation.x));
@@ -220,7 +220,7 @@ namespace Gnoll {
 			SceneNode *meshNode = parentNode->createChildSceneNode( getParentPageName() + "_" + this->getInstance() );
 
 			std::string entName = getParentPageName() + "_" + this->getInstance() + COgreMeshComponent::ENTITY_SUFFIX();
-			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = Gnoll::Graphic::GraphicModule::getInstancePtr()->getSceneManager();
 
 			Ogre::Entity *ent = sm->createEntity( entName, meshNameStr );
 			meshNode->attachObject( ent );
@@ -257,7 +257,7 @@ namespace Gnoll {
 			string instanceNameStr(this->getInstance());
 
 			std::string entName = getParentPageName() + "_" + instanceNameStr  + COgreMeshComponent::ENTITY_SUFFIX();
-			Ogre::SceneManager* sm = Gnoll::Graphic::CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* sm = Gnoll::Graphic::GraphicModule::getInstancePtr()->getSceneManager();
 
 			SceneNode* meshNode = sm->getSceneNode( getParentPageName() + "_" + instanceNameStr );
 			meshNode->detachObject( entName );

@@ -22,7 +22,7 @@
  ***************************************************************************/
 
 #include "../include/ogrecamerasplinewrapper.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 
 using namespace Gnoll::Graphic;
 using namespace Gnoll::Core;
@@ -36,7 +36,7 @@ namespace Gnoll
 		{
 			// Create a scene node for the spline camera, the name is fixed
 			// ------------------------------------------------------------
-			Ogre::SceneNode* camNode = CGraphicModule::getInstancePtr()->getSceneManager()->getRootSceneNode()->createChildSceneNode("GNOLL_CAMERA_SPLINE_NODE");
+			Ogre::SceneNode* camNode = GraphicModule::getInstancePtr()->getSceneManager()->getRootSceneNode()->createChildSceneNode("GNOLL_CAMERA_SPLINE_NODE");
 			camNode->attachObject(camera);
 		}
 
@@ -44,7 +44,7 @@ namespace Gnoll
 		{
 			// Detach the camera from the scene node
 			// -------------------------------------
-			Ogre::SceneNode* camNode = CGraphicModule::getInstancePtr()->getSceneManager()->getRootSceneNode()->createChildSceneNode("GNOLL_CAMERA_SPLINE_NODE");
+			Ogre::SceneNode* camNode = GraphicModule::getInstancePtr()->getSceneManager()->getRootSceneNode()->createChildSceneNode("GNOLL_CAMERA_SPLINE_NODE");
 			camNode->detachObject(camera);
 		}
 	};

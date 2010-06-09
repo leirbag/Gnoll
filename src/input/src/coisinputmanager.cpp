@@ -79,7 +79,7 @@ void COISInputManager::initialise(  )
 		std::ostringstream windowHndStr;
 
 
-		windowHnd = CGraphicModule::getInstancePtr()->getWindowHandle();
+		windowHnd = GraphicModule::getInstancePtr()->getWindowHandle();
 
 		// Fill parameter list
 		windowHndStr << (unsigned int) windowHnd;
@@ -124,7 +124,7 @@ void COISInputManager::initialise(  )
 			mMouse = static_cast<OIS::Mouse*>( mInputSystem->createInputObject( OIS::OISMouse, true ) );
 			mMouse->setEventCallback( this );
 
-			Ogre::RenderWindow* renderWindow = CGraphicModule::getInstancePtr()->getRenderWindow();
+			Ogre::RenderWindow* renderWindow = GraphicModule::getInstancePtr()->getRenderWindow();
 
 			if (renderWindow)
 			{

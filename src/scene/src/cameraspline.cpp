@@ -29,7 +29,7 @@
 
 #include "../include/cameraspline.h"
 #include "../include/ogrecamerawrapper.h"
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../dynamicobject/include/dynamicobject.h"
 #include <boost/lexical_cast.hpp>
@@ -102,7 +102,7 @@ namespace Gnoll
 
 			// Get the scenemanager
 			// --------------------
-			Ogre::SceneManager* pSM = CGraphicModule::getInstancePtr()->getSceneManager();
+			Ogre::SceneManager* pSM = GraphicModule::getInstancePtr()->getSceneManager();
 
 			// Get back the camera Scene Node
 			// ------------------------------

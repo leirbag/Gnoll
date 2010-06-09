@@ -35,7 +35,7 @@
 
 #include <OgreRenderWindow.h>
 
-#include "../../graphic/include/cgraphicmodule.h"
+#include "../../graphic/include/graphicmodule.h"
 #include <boost/any.hpp>
 
 using boost::any_cast;
