@@ -17,80 +17,72 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
+#include "../include/joystickaxiseventstranslator.h"
+
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <OIS/OISJoyStick.h>
 
-#include "../include/coisinputmanager.h"
 #include "../include/joystickaxiseventstranslator.h"
-#include "../include/cinputjoystickevents.h"
-#include "../include/ctranslationevents.h"
+#include "../include/inputjoystickevents.h"
+#include "../include/translationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
 #include "../../log/include/logmacros.h"
-
-
 #include "../../config.h"
 #include "../include/oisjoysticklistener.h"
-using namespace Gnoll::Input;
 
+using namespace Gnoll::Input;
 using namespace boost;
 using namespace Gnoll::Core;
 using namespace Gnoll::DynamicObject;
-using namespace Gnoll::Graphic;
 
 namespace Gnoll
 {
 	namespace Input
 	{
-
-		JoystickAxisEventsTranslator::JoystickAxisEventsTranslator(): axisMoved(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED())
+		JoystickAxisEventsTranslator::JoystickAxisEventsTranslator(): m_axisMoved(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED())
 		{
-
 			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 			/**
 			 * Loading translation map : Keycode -> Action
 			 */
-			this->joystickAxisEventTranslationMap = pom->load("joystickAxisEventTranslationMap");
+			this->m_joystickAxisEventTranslationMap = pom->load("m_joystickAxisEventTranslationMap");
 
 			/**
 			 * Joystick config
 			 */
-			this->joystickConfig = pom->load("joystickConfig");
-
-
+			this->m_joystickConfig = pom->load("m_joystickConfig");
 		}
 
 		JoystickAxisEventsTranslator::~JoystickAxisEventsTranslator()
 		{
 		}
 
-
 		void JoystickAxisEventsTranslator::initPreviousAxisValues(unsigned int _numAxis)
 		{
-			this->previousAxisValues = shared_ptr < std::vector<int> > ( new std::vector<int>(_numAxis, 0));
+			this->m_previousAxisValues = shared_ptr < std::vector<int> > ( new std::vector<int>(_numAxis, 0));
 		}
-
 
 		void JoystickAxisEventsTranslator::sendActionEventForEventAndIntensity(string _event, float _intensity)
 		{
 			Messages::MessageType actionEventType(ACTION_EVENT_TYPE);
 
 			shared_ptr<Float> defaultJoystickSensibility = shared_ptr<Float> (new Float(1.0f));
-			shared_ptr< Gnoll::DynamicObject::Float > joystickSensibility = joystickConfig->getAttributeOrDefault<Float>("sensibility", defaultJoystickSensibility);
+			shared_ptr< Gnoll::DynamicObject::Float > joystickSensibility = m_joystickConfig->getAttributeOrDefault<Float>("sensibility", defaultJoystickSensibility);
 
 			float intensity = _intensity * (*joystickSensibility);
 
 			/**
 			 * If an action is associated to this key code, a list of action messages is sent
 			 */
-			if ( joystickAxisEventTranslationMap->hasAttribute(_event) )
+			if ( m_joystickAxisEventTranslationMap->hasAttribute(_event) )
 			{
-				shared_ptr<List> actionList = joystickAxisEventTranslationMap->getAttribute<List>( _event );
+				shared_ptr<List> actionList = m_joystickAxisEventTranslationMap->getAttribute<List>( _event );
 				typedef list< shared_ptr<AbstractAttribute> >::iterator ListIterator;
 
 				/**
@@ -119,9 +111,7 @@ namespace Gnoll
 						Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
-
 			}
-
 		}
 
 		void JoystickAxisEventsTranslator::handle ( shared_ptr<Message> message )
@@ -134,16 +124,16 @@ namespace Gnoll
 			/**
 			 * There is no good way yet to get the number of available joystick's axis
 			 */
-			if (this->previousAxisValues.get() == NULL)
+			if (this->m_previousAxisValues.get() == NULL)
 			{
 				this->initPreviousAxisValues(joystickAxisEvent.event.state.mAxes.size());
 			}
 
 			int valueAxis = joystickAxisEvent.event.state.mAxes.at(joystickAxisEvent.which).abs;
-			int previousAxisValue = (this->previousAxisValues)->at(joystickAxisEvent.which);
+			int previousAxisValue = (this->m_previousAxisValues)->at(joystickAxisEvent.which);
 			float newValueAxis = (previousAxisValue - valueAxis);
 
-			(this->previousAxisValues)->at(joystickAxisEvent.which) = valueAxis;
+			(this->m_previousAxisValues)->at(joystickAxisEvent.which) = valueAxis;
 
 			if (newValueAxis > 0)
 			{
@@ -156,15 +146,10 @@ namespace Gnoll
 				intensity = newValueAxis / (float)OIS::JoyStick::MIN_AXIS;
 			}
 
-
 			if (event != "")
 			{
 				sendActionEventForEventAndIntensity(event, intensity);
 			}
 		}
-
 	};
 };
-
-
-

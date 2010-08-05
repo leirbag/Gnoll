@@ -1,5 +1,5 @@
 /**************************************************************************
-*   Copyright (C) 2009 by Bruno Mahe                                      *
+*   Copyright (C) 2008 by Paf                                             *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -17,73 +17,89 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#include "../include/joystickaxisstatetranslator.h"
+#include "../include/mousebuttonstatetranslator.h"
 
-#include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <OIS/OISJoyStick.h>
+#include <OIS/OISMouse.h>
 
-#include "../include/oisinputmanager.h"
-#include "../include/inputjoystickevents.h"
+#include "../include/inputmouseevents.h"
 #include "../include/translationevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
-#include "../../log/include/logmacros.h"
+#include "../../log/include/logmodule.h"
 #include "../../config.h"
-#include "../include/oisjoysticklistener.h"
 
-using namespace Gnoll::Input;
 using namespace boost;
 using namespace Gnoll::Core;
 using namespace Gnoll::DynamicObject;
-using namespace Gnoll::Graphic;
 
 namespace Gnoll
 {
 	namespace Input
 	{
-		JoystickAxisStateTranslator::JoystickAxisStateTranslator() : 
-			m_axisMoved(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED())
+
+		MouseButtonStateTranslator::MouseButtonStateTranslator():
+			m_mouseButtonPressedEvent("MOUSE_PRESSED"),
+			m_mouseButtonReleasedEvent("MOUSE_RELEASED")
 		{
+
 			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 			/**
 			 * Loading translation map : Keycode -> Action
 			 */
-			this->m_joystickAxisStateTranslationMap = pom->load("m_joystickAxisStateTranslationMap");
+			this->m_mouseButtonEventTranslationMap = pom->load("mouseButtonEventTranslationMap");
+
 
 			/**
-			 * Joystick config
+			 * Keyboard config
 			 */
-			this->m_joystickConfig = pom->load("m_joystickConfig");
+			this->m_mouseConfig = pom->load("mouseConfig");
+
 		}
 
-		JoystickAxisStateTranslator::~JoystickAxisStateTranslator()
+		MouseButtonStateTranslator::~MouseButtonStateTranslator()
 		{
 		}
 
-		void JoystickAxisStateTranslator::sendActionEventForStateAndIntensity(string _event, float _intensity)
+		void MouseButtonStateTranslator::handle ( shared_ptr<Message> message )
 		{
-			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
-
-			shared_ptr<Float> defaultJoystickSensibility = shared_ptr<Float> (new Float(1.0f));
-			shared_ptr< Gnoll::DynamicObject::Float > joystickSensibility = m_joystickConfig->getAttributeOrDefault<Float>("sensibility", defaultJoystickSensibility);
-
-			float intensity = _intensity * (*joystickSensibility);
+			/**
+			 * Get the key code
+			 */
+			MouseButton button = message->getData<MouseButton>();
 
 			/**
-			 * If an action is associated to this key code, a list of action messages is sent
+			 * Get the value and convert it to a string
 			 */
-			if ( m_joystickAxisStateTranslationMap->hasAttribute(_event) )
+			string buttonValue = lexical_cast<string> (button);
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Looking for KeyCode [" + buttonValue + "]" );
+
+			/**
+			 * If an action is associated to this key code, an action message is sent
+			 */
+			if ( m_mouseButtonEventTranslationMap->hasAttribute(buttonValue) )
 			{
-				shared_ptr<List> actionList = m_joystickAxisStateTranslationMap->getAttribute<List>( _event );
+				Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
+				shared_ptr<List> actionList = m_mouseButtonEventTranslationMap->getAttribute<List>( buttonValue );
 				typedef list< shared_ptr<AbstractAttribute> >::iterator ListIterator;
 
+				shared_ptr<Float> defaultMouseSensibility = shared_ptr<Float> (new Float(1.0f));
+				shared_ptr< Gnoll::DynamicObject::Float > mouseSensibility = m_mouseConfig->getAttributeOrDefault<Float>("sensibility", defaultMouseSensibility);
+
+				Messages::MessageType messageType = message->getType();
+				float intensity = *mouseSensibility;
+
+				if (messageType == m_mouseButtonPressedEvent)
+				{
+					intensity = 0.0f;
+				}
+
 				/**
-				 * Send all action messages in the list
+				 * We send all action messages in the list
 				 */
 				for (ListIterator itAttrs = actionList->begin(); itAttrs != actionList->end(); itAttrs++)
 				{
@@ -94,47 +110,20 @@ namespace Gnoll
 						shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 						shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
-
 						std::ostringstream tmpString;
 						try
 						{
 							MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
-							tmpString << "Message ajoute ["<< *actionName << "] d'intensite " << _intensity << " / " << intensity;
+							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
 						catch(...)
 						{
-							tmpString << "Message NON ajoute ["<< *actionName << "]" << endl;
+							tmpString << "Message NON ajoute ["<< *actionName << "]";
 						}
 						Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
 			}
 		}
-
-		void JoystickAxisStateTranslator::handle ( shared_ptr<Message> message )
-		{
-			string event("");
-			float intensity = 0.0f;
-
-			Gnoll::Input::JoystickEvent::JoystickEvent joystickAxisEvent = message->getData<Gnoll::Input::JoystickEvent::JoystickEvent>();
-
-			int valueAxis = joystickAxisEvent.event.state.mAxes.at(joystickAxisEvent.which).abs;
-
-			if (valueAxis > 0)
-			{
-				event = "+" + boost::lexical_cast<std::string>(joystickAxisEvent.which);
-				intensity = valueAxis / (float)OIS::JoyStick::MAX_AXIS;
-
-			} else
-			{
-				event = "-" + boost::lexical_cast<std::string>(joystickAxisEvent.which);
-				intensity = valueAxis / (float)OIS::JoyStick::MIN_AXIS;
-			}
-
-			if (event != "")
-			{
-				sendActionEventForStateAndIntensity(event, intensity);
-			}
-		}
-	};
-};
+	}
+}

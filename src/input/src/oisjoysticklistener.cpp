@@ -18,31 +18,28 @@
  ***************************************************************************/
 
 #include "../include/oisjoysticklistener.h"
-#include "../include/cinputjoystickevents.h"
+
+#include <string>
+#include <boost/shared_ptr.hpp>
+
+#include "../include/inputjoystickevents.h"
 #include "../../core/include/messagemodule.h"
 #include "../../core/include/message.h"
 #include "../../log/include/logmacros.h"
-#include <boost/shared_ptr.hpp>
-#include <string>
-
 #include "../../config.h"
-#include "../include/coisinputmanager.h"
-
+#include "../include/oisinputmanager.h"
 
 namespace Gnoll
 {
 	namespace Input
 	{
-
 		OISJoystickListener::OISJoystickListener()
 		{
 		}
 
-
 		OISJoystickListener::~OISJoystickListener()
 		{
 		}
-
 
 		bool OISJoystickListener::buttonPressed( const OIS::JoyStickEvent &arg, int button )
 		{
@@ -60,7 +57,6 @@ namespace Gnoll
 			return true;
 		}
 
-
 		bool OISJoystickListener::buttonReleased( const OIS::JoyStickEvent &arg, int button )
 		{
 			Gnoll::Log::LogModule::getInstancePtr()->logMessage("JOYSTICK: Button released");
@@ -76,7 +72,6 @@ namespace Gnoll
 
 			return true;
 		}
-
 
 		bool OISJoystickListener::axisMoved( const OIS::JoyStickEvent &arg, int axis )
 		{
@@ -95,4 +90,3 @@ namespace Gnoll
 		}
 	}
 }
-

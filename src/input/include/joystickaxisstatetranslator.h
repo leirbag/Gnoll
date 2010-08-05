@@ -17,7 +17,6 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-
 #ifndef __JOYSTICKAXISSTATETRANSLATOR_H__
 #define __JOYSTICKAXISSTATETRANSLATOR_H__
 
@@ -27,7 +26,7 @@
 #include "../../core/messages/include/listener.h"
 #include "../../core/include/message.h"
 
-#include "cinputjoystickevents.h"
+#include "inputjoystickevents.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -40,36 +39,7 @@ namespace Gnoll
 		/// This is translate joystick axis events to action events
 		class JoystickAxisStateTranslator : public Messages::Listener
 		{
-			private:
-
-				/**
-				 * DynamicObject which contains a translation map for events from joystick
-				 */
-				shared_ptr<Gnoll::DynamicObject::DynamicObject> joystickAxisStateTranslationMap;
-
-
-				/**
-				 * DynamicObject which contains joystick config
-				 */
-				shared_ptr<Gnoll::DynamicObject::DynamicObject> joystickConfig;
-
-
-				/**
-				 * Messages::MessageType for MOUSE_MOVED messages
-				 */
-				Messages::MessageType axisMoved;
-
-
-				/**
-				 * Create an INPUT_ACTION_EVENT message from an event type and its intensity
-				 * @param _event event type
-				 * @param _intensity Intensity of the event
-				 */
-				void sendActionEventForStateAndIntensity(string _event, float _intensity);
-
-
 			public:
-
 				/**
 				* This is a constructor
 				*/
@@ -85,9 +55,32 @@ namespace Gnoll
 				* @param message The message this method will have to process
 				*/
 				virtual void handle(MessagePtr message);
+
+			private:
+				/**
+				 * Create an INPUT_ACTION_EVENT message from an event type and its intensity
+				 * @param _event event type
+				 * @param _intensity Intensity of the event
+				 */
+				void sendActionEventForStateAndIntensity(string _event, float _intensity);
+
+			private:
+				/**
+				 * DynamicObject which contains a translation map for events from joystick
+				 */
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_joystickAxisStateTranslationMap;
+
+				/**
+				 * DynamicObject which contains joystick config
+				 */
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_joystickConfig;
+
+				/**
+				 * Messages::MessageType for MOUSE_MOVED messages
+				 */
+				Messages::MessageType m_axisMoved;
 		};
 	};
 };
 
 #endif
-

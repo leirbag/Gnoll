@@ -17,42 +17,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/oisinputmodule.h"
 
-/*-------------------------------DefaultCameraFirstPersonListener----------*\
-|   This is a first person camera listener                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-|               06/30/2008 - Gabriel - Adapt handle to use weak_ptr         |
-\*-------------------------------------------------------------------------*/
+#include <iostream>
+#include "../include/oisinputmanager.h"
 
-#include "../include/defaultcamerafirstpersonlistener.h"
-#include "../include/camerafirstperson.h"
-#include "../../stats/include/statsmodule.h"
-#include "../../input/include/translationevents.h"
-#include "../../input/include/inputmouseevents.h"
-#include "../../dynamicobject/include/float.h"
-
-namespace Gnoll
+OISInputModule::OISInputModule()
 {
-	namespace Scene
-	{
-		DefaultCameraFirstPersonListener::DefaultCameraFirstPersonListener()
-		{
-		}
+}
 
-		DefaultCameraFirstPersonListener::~DefaultCameraFirstPersonListener()
-		{
-		}
+void OISInputModule::init()
+{
+	m_inputmanager = new OISInputManager();
+	m_inputmanager->initialise();
+}
 
-		void DefaultCameraFirstPersonListener::handle ( shared_ptr<Message> message )
-		{
-			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
-			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
+void OISInputModule::process()
+{	
+	m_inputmanager->capture();
+}
 
-			// Update
-			m_pCamera.lock()->update(lasttime);
-		}
-	};
-};
+void OISInputModule::exit()
+{
+	delete m_inputmanager;
+}
+
+OISInputModule::~OISInputModule()
+{
+}

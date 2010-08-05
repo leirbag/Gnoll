@@ -1,5 +1,5 @@
 /**************************************************************************
-*   Copyright (C) 2009 by Bruno Mahe                                      *
+*   Copyright (C) 2008 by Paf                                             *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -17,70 +17,83 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#include "../include/joystickaxisstatetranslator.h"
+#include "../include/keyboardstatetranslator.h"
 
-#include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <OIS/OISJoyStick.h>
+#include <OIS/OISKeyboard.h>
 
-#include "../include/oisinputmanager.h"
-#include "../include/inputjoystickevents.h"
 #include "../include/translationevents.h"
+#include "../include/inputmouseevents.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../core/include/messagemodule.h"
-#include "../../log/include/logmacros.h"
+#include "../../log/include/logmodule.h"
+#include "../../time/include/timemodule.h"
 #include "../../config.h"
-#include "../include/oisjoysticklistener.h"
 
-using namespace Gnoll::Input;
 using namespace boost;
 using namespace Gnoll::Core;
 using namespace Gnoll::DynamicObject;
-using namespace Gnoll::Graphic;
+using namespace Gnoll::Time;
 
 namespace Gnoll
 {
 	namespace Input
 	{
-		JoystickAxisStateTranslator::JoystickAxisStateTranslator() : 
-			m_axisMoved(OISJoystickListener::MESSAGE_TYPE_JOYSTICK_AXIS_MOVED())
+		KeyboardStateTranslator::KeyboardStateTranslator():
+			m_keyUp("KEYBOARD_KEYUP"),
+			m_keyDown("KEYBOARD_KEYDOWN")
 		{
+
 			DynamicObjectManager *pom = DynamicObjectManager::getInstancePtr();
 
 			/**
 			 * Loading translation map : Keycode -> Action
 			 */
-			this->m_joystickAxisStateTranslationMap = pom->load("m_joystickAxisStateTranslationMap");
+			this->m_keyboardEventTranslationMap = pom->load("keyboardEventTranslationMap");
 
 			/**
-			 * Joystick config
+			 * Keyboard config
 			 */
-			this->m_joystickConfig = pom->load("m_joystickConfig");
+			this->m_keyboardConfig = pom->load("keyboardConfig");
+
 		}
 
-		JoystickAxisStateTranslator::~JoystickAxisStateTranslator()
+		KeyboardStateTranslator::~KeyboardStateTranslator()
 		{
 		}
 
-		void JoystickAxisStateTranslator::sendActionEventForStateAndIntensity(string _event, float _intensity)
+		void KeyboardStateTranslator::handle ( shared_ptr<Message> message )
 		{
 			Messages::MessageType actionEventType(ACTION_EVENT_STATE_TYPE);
 
-			shared_ptr<Float> defaultJoystickSensibility = shared_ptr<Float> (new Float(1.0f));
-			shared_ptr< Gnoll::DynamicObject::Float > joystickSensibility = m_joystickConfig->getAttributeOrDefault<Float>("sensibility", defaultJoystickSensibility);
+			/**
+			 * Get the key code
+			 */
+			OIS::KeyCode keyCode = message->getData<OIS::KeyCode>();
 
-			float intensity = _intensity * (*joystickSensibility);
+			shared_ptr<Float> defaultKeyboardSensibility = shared_ptr<Float> (new Float(1.0f));
+			shared_ptr< Gnoll::DynamicObject::Float > keyboardSensibility = m_keyboardConfig->getAttributeOrDefault<Float>("sensibility", defaultKeyboardSensibility);
 
 			/**
-			 * If an action is associated to this key code, a list of action messages is sent
+			 * Get the value and convert it to a string
 			 */
-			if ( m_joystickAxisStateTranslationMap->hasAttribute(_event) )
+			string keyCodeValue = lexical_cast<string> (keyCode);
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "Looking for KeyCode [" + keyCodeValue + "]" );
+
+			/**
+			 * If an action is associated to this key code, an action message is sent
+			 */
+			if ( m_keyboardEventTranslationMap->hasAttribute(keyCodeValue) )
 			{
-				shared_ptr<List> actionList = m_joystickAxisStateTranslationMap->getAttribute<List>( _event );
+				shared_ptr<List> actionList = m_keyboardEventTranslationMap->getAttribute<List>( keyCodeValue );
 				typedef list< shared_ptr<AbstractAttribute> >::iterator ListIterator;
+
+				float intensity = *keyboardSensibility;
+				if( message->getType() == m_keyUp )
+					intensity = 0.0f;
 
 				/**
 				 * Send all action messages in the list
@@ -94,47 +107,21 @@ namespace Gnoll
 						shared_ptr<boost::any> data (new boost::any(actionEvent) ) ;
 						shared_ptr<Message>  actionMessage (new Message( actionEventType, data ));
 
-
 						std::ostringstream tmpString;
 						try
 						{
-							MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage);
-							tmpString << "Message ajoute ["<< *actionName << "] d'intensite " << _intensity << " / " << intensity;
+							MessageModule::getInstancePtr()->getMessageManager()->queueMessage(actionMessage); 
+							tmpString << "Message ajoute ["<< *actionName << "]";
 						}
 						catch(...)
 						{
-							tmpString << "Message NON ajoute ["<< *actionName << "]" << endl;
+							tmpString << "Message NON ajoute ["<< *actionName << "]";
 						}
+
 						Gnoll::Log::LogModule::getInstancePtr()->logMessage( tmpString.str() );
 					}
 				}
 			}
 		}
-
-		void JoystickAxisStateTranslator::handle ( shared_ptr<Message> message )
-		{
-			string event("");
-			float intensity = 0.0f;
-
-			Gnoll::Input::JoystickEvent::JoystickEvent joystickAxisEvent = message->getData<Gnoll::Input::JoystickEvent::JoystickEvent>();
-
-			int valueAxis = joystickAxisEvent.event.state.mAxes.at(joystickAxisEvent.which).abs;
-
-			if (valueAxis > 0)
-			{
-				event = "+" + boost::lexical_cast<std::string>(joystickAxisEvent.which);
-				intensity = valueAxis / (float)OIS::JoyStick::MAX_AXIS;
-
-			} else
-			{
-				event = "-" + boost::lexical_cast<std::string>(joystickAxisEvent.which);
-				intensity = valueAxis / (float)OIS::JoyStick::MIN_AXIS;
-			}
-
-			if (event != "")
-			{
-				sendActionEventForStateAndIntensity(event, intensity);
-			}
-		}
-	};
-};
+	}
+}

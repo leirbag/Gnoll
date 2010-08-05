@@ -17,42 +17,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __INPUTMODULE_H__
+#define __INPUTMODULE_H__
 
-/*-------------------------------DefaultCameraFirstPersonListener----------*\
-|   This is a first person camera listener                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-|               06/30/2008 - Gabriel - Adapt handle to use weak_ptr         |
-\*-------------------------------------------------------------------------*/
+#include "../../core/include/module.h"
 
-#include "../include/defaultcamerafirstpersonlistener.h"
-#include "../include/camerafirstperson.h"
-#include "../../stats/include/statsmodule.h"
-#include "../../input/include/translationevents.h"
-#include "../../input/include/inputmouseevents.h"
-#include "../../dynamicobject/include/float.h"
+using namespace Gnoll::Core;
 
-namespace Gnoll
+/**
+ *	Interface of all game modules. 
+ */ 
+class InputModule: public Module
 {
-	namespace Scene
-	{
-		DefaultCameraFirstPersonListener::DefaultCameraFirstPersonListener()
-		{
-		}
+	public:
+		/**
+		 * @copydoc Module::init
+		 */
+		virtual void init() = 0;
 
-		DefaultCameraFirstPersonListener::~DefaultCameraFirstPersonListener()
-		{
-		}
+		/**
+		 * @copydoc Module::process
+		 */
+		virtual void process() = 0;
 
-		void DefaultCameraFirstPersonListener::handle ( shared_ptr<Message> message )
-		{
-			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
-			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
+		/**
+		 * @copydoc Module::exit 
+		 */
+		virtual void exit() = 0;
 
-			// Update
-			m_pCamera.lock()->update(lasttime);
-		}
-	};
+		/**
+		 * @copydoc Module::~Module
+		 */
+		virtual ~InputModule() {};
 };
+
+#endif

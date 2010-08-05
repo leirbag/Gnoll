@@ -22,9 +22,9 @@
 #include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
-#include "../../input/include/coisinputmodule.h"
-#include "../../input/include/ctranslationevents.h"
-#include "../../input/include/cinputmouseevents.h"
+#include "../../input/include/oisinputmodule.h"
+#include "../../input/include/translationevents.h"
+#include "../../input/include/inputmouseevents.h"
 
 namespace Gnoll
 {

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2008 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,36 +17,58 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "../include/ogrecamerawrapper.h"
-#include "../include/camerafreeflyfactory.h"
-#include "../include/camerafreefly.h"
-#include "../include/defaultcamerafreeflylistener.h"
-#include "../include/cmessagelistenercamera.h"
+#ifndef __RULEMANAGER_H__
+#define __RULEMANAGER_H__
+
+#include <vector>
+
+#include "../include/rule.h"
 #include "../../core/include/message.h"
 #include "../../core/messages/include/messagetype.h"
 #include "../../core/messages/include/messenger.h"
-#include "../../input/include/oisinputmodule.h"
-#include "../../input/include/translationevents.h"
-#include "../../input/include/inputmouseevents.h"
+#include "../../core/include/messagemodule.h"
+#include "../../core/messages/include/listener.h"
+
+using namespace boost;
+using namespace Gnoll::Core;
 
 namespace Gnoll
 {
-	namespace Scene
+	namespace Input
 	{
-		boost::shared_ptr<Camera> CameraFreeFlyFactory::createCamera(const Glib::ustring& instanceName)
+		/// An input rule manager
+		class RuleManager : public Messages::Listener
 		{
-			// Create the wrapper
-			// ------------------
-			shared_ptr<OgreCameraWrapper> wrapper = shared_ptr<OgreCameraWrapper>(new OgreCameraWrapper(instanceName));
+			public:
+				/**
+				 * Constructor
+				 * @param instanceName Instance name of the Rule manager
+				 */
+				RuleManager(const std::string &instanceName);
 
-			Gnoll::Core::MessageModule* messageModule = Gnoll::Core::MessageModule::getInstancePtr();
-			shared_ptr<MessageListenerCamera> listenerInput(new DefaultCameraFreeFlyListener);
-			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::Messages::MessageType(Gnoll::Input::ACTION_EVENT_TYPE) );
-			messageModule->getMessageManager()->addListener ( listenerInput, Gnoll::Core::Messages::MessageType(Gnoll::Input::ACTION_EVENT_STATE_TYPE) );
-			boost::shared_ptr<Camera> pCam = boost::shared_ptr<Camera>(new CameraFreeFly(instanceName, wrapper));
-			listenerInput->setCamera(pCam);
+				/**
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
+				virtual void handle(MessagePtr message);
 
-			return pCam;
-		}
-	};
-};
+			private:
+				/**
+				 * Rules table
+				 */
+				std::vector<Rule> m_rules;
+
+				/**
+				 * Messages::MessageType for state messages
+				 */
+				Messages::MessageType m_stateEvent;
+
+				/**
+				 * Messages::MessageType for continuous messages
+				 */
+				Messages::MessageType m_continuousEvent;
+		};
+	}
+}
+
+#endif

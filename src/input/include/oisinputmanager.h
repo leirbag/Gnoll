@@ -17,42 +17,55 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __OISINPUTMANAGER_H__
+#define __OISINPUTMANAGER_H__
 
-/*-------------------------------DefaultCameraFirstPersonListener----------*\
-|   This is a first person camera listener                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-|               06/30/2008 - Gabriel - Adapt handle to use weak_ptr         |
-\*-------------------------------------------------------------------------*/
+#include <OISMouse.h>
+#include <OISKeyboard.h>
+#include <OISJoyStick.h>
+#include <OISInputManager.h>
 
-#include "../include/defaultcamerafirstpersonlistener.h"
-#include "../include/camerafirstperson.h"
-#include "../../stats/include/statsmodule.h"
-#include "../../input/include/translationevents.h"
-#include "../../input/include/inputmouseevents.h"
-#include "../../dynamicobject/include/float.h"
+#include <OgreRenderWindow.h>
 
-namespace Gnoll
+#include <boost/any.hpp>
+
+#include "../../graphic/include/graphicmodule.h"
+
+using boost::any_cast;
+
+class OISInputManager : public OIS::KeyListener, public OIS::MouseListener
 {
-	namespace Scene
-	{
-		DefaultCameraFirstPersonListener::DefaultCameraFirstPersonListener()
-		{
-		}
+	public:
+		OISInputManager();
+		virtual ~OISInputManager();
 
-		DefaultCameraFirstPersonListener::~DefaultCameraFirstPersonListener()
-		{
-		}
+		void initialise();
+		void capture();
 
-		void DefaultCameraFirstPersonListener::handle ( shared_ptr<Message> message )
-		{
-			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
-			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
+		void addKeyListener(OIS::KeyListener* keyListener, const std::string& instanceName);
+		void removeKeyListener(const std::string& instanceName);
+		void removeKeyListener(OIS::KeyListener* keyListener);
 
-			// Update
-			m_pCamera.lock()->update(lasttime);
-		}
-	};
+		void removeAllListeners();
+		void removeAllKeyListeners();
+
+		OIS::Keyboard* getKeyboard();
+
+	private:
+		bool keyPressed(const OIS::KeyEvent& e);
+		bool keyReleased(const OIS::KeyEvent& e);
+
+		bool mouseMoved(const OIS::MouseEvent& arg);
+		bool mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id);
+		bool mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id);
+
+		OIS::InputManager* m_inputSystem;
+		OIS::Keyboard* m_keyboard;
+		OIS::Mouse* m_mouse;
+		OIS::JoyStick* m_joystick;
+		OIS::JoyStickListener* m_joystickListener;
+
+		unsigned int m_mouseButtonsState;
 };
+
+#endif // __COISINPUTMANAGER_H__

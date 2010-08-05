@@ -17,42 +17,57 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __OISINPUTMODULE_H__
+#define __OISINPUTMODULE_H__
 
-/*-------------------------------DefaultCameraFirstPersonListener----------*\
-|   This is a first person camera listener                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-|               06/30/2008 - Gabriel - Adapt handle to use weak_ptr         |
-\*-------------------------------------------------------------------------*/
+#include <string>
 
-#include "../include/defaultcamerafirstpersonlistener.h"
-#include "../include/camerafirstperson.h"
-#include "../../stats/include/statsmodule.h"
-#include "../../input/include/translationevents.h"
-#include "../../input/include/inputmouseevents.h"
-#include "../../dynamicobject/include/float.h"
+#include <boost/shared_ptr.hpp>
+#include <OgreRenderWindow.h>
 
-namespace Gnoll
+#include "inputmodule.h"
+#include "oisinputmanager.h"
+#include "../../core/include/messagemodule.h"
+
+using namespace std;
+using namespace boost;
+
+/**
+ *	The game module that use OIS. 
+ */ 
+class OISInputModule
 {
-	namespace Scene
-	{
-		DefaultCameraFirstPersonListener::DefaultCameraFirstPersonListener()
-		{
-		}
+	public:
+		/**
+		 * A constructor
+		 */
+		OISInputModule();
 
-		DefaultCameraFirstPersonListener::~DefaultCameraFirstPersonListener()
-		{
-		}
+		/**
+		 * @copydoc Module::init
+		 */
+		virtual void init();
 
-		void DefaultCameraFirstPersonListener::handle ( shared_ptr<Message> message )
-		{
-			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
-			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
+		/**
+		 * @copydoc Module::process
+		 */
+		virtual void process();
 
-			// Update
-			m_pCamera.lock()->update(lasttime);
-		}
-	};
+		/**
+		 * @copydoc Module::exit 
+		 */
+		virtual void exit();
+
+		/**
+		 * @copydoc Module::~Module
+		 */
+		virtual ~OISInputModule();
+
+	private:
+		/**
+		 * The events which will be processed
+		 */
+		OISInputManager* m_inputmanager;
 };
+
+#endif

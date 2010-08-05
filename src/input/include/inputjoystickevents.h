@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2009 by Bruno Mahe                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,40 +17,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __INPUTJOYSTICKEVENTS_H__
+#define __INPUTJOYSTICKEVENTS_H__
 
-/*-------------------------------DefaultCameraSplineListener---------------*\
-|   This is a spline camera listener                                        |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-\*-------------------------------------------------------------------------*/
-
-#include "../include/defaultcamerasplinelistener.h"
-#include "../include/cameraspline.h"
-#include "../../stats/include/statsmodule.h"
-#include "../../input/include/translationevents.h"
-#include "../../input/include/inputmouseevents.h"
-#include "../../dynamicobject/include/float.h"
+#include <OISJoyStick.h>
 
 namespace Gnoll
 {
-	namespace Scene
+	namespace Input
 	{
-		DefaultCameraSplineListener::DefaultCameraSplineListener()
+		enum JoystickEventType
 		{
-		}
+			Axis = 0,
+			Button
+		};
 
-		DefaultCameraSplineListener::~DefaultCameraSplineListener()
+		struct JoystickEvent
 		{
-		}
+			/**
+			 * Current state of the joystick
+			 */
+			const OIS::JoyStickEvent event;
 
-		void DefaultCameraSplineListener::handle ( shared_ptr<Message> message )
-		{
-			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
+			/**
+			 * Which button or axis triggered this event
+			 */
+			int which;
 
-			// Update
-			m_pCamera.lock()->update(lasttime);
-		}
+			/**
+			 * Type of event
+			 */
+			JoystickEventType type;
+
+			/**
+			 * Constructor
+			 */
+			JoystickEvent(const OIS::JoyStickEvent _event, int _which, JoystickEventType _type):
+				event(_event), which(_which), type(_type)
+			{
+			}
+		};
 	};
 };
+
+#endif

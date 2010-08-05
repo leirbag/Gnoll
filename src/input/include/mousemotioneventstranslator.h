@@ -1,5 +1,5 @@
 /**************************************************************************
-*   Copyright (C) 2009 by Bruno Mahe                                      *
+*   Copyright (C) 2008 by Paf                                             *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -17,8 +17,8 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef __JOYSTICKAXISEVENTSTRANSLATOR_H__
-#define __JOYSTICKAXISEVENTSTRANSLATOR_H__
+#ifndef __MOUSEMOTIONEVENTSTRANSLATOR_H__
+#define __MOUSEMOTIONEVENTSTRANSLATOR_H__
 
 #include <boost/shared_ptr.hpp>
 
@@ -26,7 +26,7 @@
 #include "../../core/messages/include/listener.h"
 #include "../../core/include/message.h"
 
-#include "inputjoystickevents.h"
+#include "inputmouseevents.h"
 
 using namespace boost;
 using namespace Gnoll::Core;
@@ -34,28 +34,28 @@ using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
-	namespace Input
+	namespace Input 
 	{
-		/// This is translate joystick axis events to action events
-		class JoystickAxisEventsTranslator : public Messages::Listener
+		/// This is translate mouse motion events to action events
+		class MouseMotionEventsTranslator : public Messages::Listener
 		{
 			public:
 				/**
-				* This is a constructor
-				*/
-				JoystickAxisEventsTranslator();
+				 * This is a constructor
+				 */
+				MouseMotionEventsTranslator();
 
 				/**
-				* This is a destructor
-				*/
-				virtual ~JoystickAxisEventsTranslator();
+				 * This is a destructor
+				 */
+				virtual ~MouseMotionEventsTranslator(); 
 
 				/**
-				* This method is called in order to process a message
-				* @param message The message this method will have to process
-				*/
+				 * This method is called in order to process a message
+				 * @param message The message this method will have to process
+				 */
 				virtual void handle(MessagePtr message);
-				
+
 			private:
 				/**
 				 * Create an INPUT_ACTION_EVENT message from an event type and its intensity
@@ -65,31 +65,48 @@ namespace Gnoll
 				void sendActionEventForEventAndIntensity(string _event, float _intensity);
 
 				/**
-				 * Initialize previousAxisValue with the required number of axis
-				 * @param _numAxis Number of required axis
+				 * Extract X mouse motion and convert it to an INPUT_ACTION_EVENT
+				 * @param _mouseEvent Contains mouse motion information
 				 */
-				void initPreviousAxisValues(unsigned int _numAxis);
+				void sendXMotionEvents(MouseEvent _mouseEvent);
+
+				/**
+				 * Extract Y mouse motion and convert it to an INPUT_ACTION_EVENT
+				 * @param _mouseEvent Contains mouse motion information
+				 */
+				void sendYMotionEvents(MouseEvent _mouseEvent);
+
+				/**
+				 * Extract Z mouse motion and convert it to an INPUT_ACTION_EVENT
+				 * @param _mouseEvent Contains mouse motion information
+				 */
+				void sendZMotionEvents(MouseEvent _mouseEvent);
 
 			private:
 				/**
-				 * DynamicObject which contains a translation map for events from joystick
+				 * DynamicObject which contains a translation map for events from mouse
 				 */
-				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_joystickAxisEventTranslationMap;
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_mouseMotionEventTranslationMap;
 
 				/**
-				 * DynamicObject which contains joystick config
+				 * DynamicObject which contains mouse config
 				 */
-				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_joystickConfig;
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_mouseConfig;
 
 				/**
 				 * Messages::MessageType for MOUSE_MOVED messages
 				 */
-				Messages::MessageType m_axisMoved;
+				Messages::MessageType m_mouseMoved;
 
 				/**
-				 * Previous values for each axis
+				 * Maximum X coordinate for the mouse
 				 */
-				shared_ptr< std::vector<int> > m_previousAxisValues;
+				float m_maxX;
+
+				/**
+				 * Maximum Y coordinate for the mouse
+				 */
+				float m_maxY;
 		};
 	};
 };

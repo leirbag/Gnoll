@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Puzzle Team                                     *
+ *   Copyright (C) 2008 by Paf                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,40 +17,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-------------------------------DefaultCameraSplineListener---------------*\
-|   This is a spline camera listener                                        |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-\*-------------------------------------------------------------------------*/
-
-#include "../include/defaultcamerasplinelistener.h"
-#include "../include/cameraspline.h"
-#include "../../stats/include/statsmodule.h"
-#include "../../input/include/translationevents.h"
-#include "../../input/include/inputmouseevents.h"
-#include "../../dynamicobject/include/float.h"
+#include "../include/translationevents.h"
 
 namespace Gnoll
 {
-	namespace Scene
+	namespace Input
 	{
-		DefaultCameraSplineListener::DefaultCameraSplineListener()
-		{
-		}
+		/**
+		 * Message type for action events
+		 */
+		const std::string ACTION_EVENT_TYPE("INPUT_ACTION_EVENT");
+		const std::string ACTION_EVENT_STATE_TYPE("INPUT_ACTION_STATE");
 
-		DefaultCameraSplineListener::~DefaultCameraSplineListener()
-		{
-		}
-
-		void DefaultCameraSplineListener::handle ( shared_ptr<Message> message )
-		{
-			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
-
-			// Update
-			m_pCamera.lock()->update(lasttime);
-		}
-	};
-};
+		/**
+		 * Action events
+		 */
+		ActionEvent::ActionEvent( std::string _action, float _intensity) :
+						action(_action),
+						intensity(_intensity)
+			{
+			}
+	}
+}

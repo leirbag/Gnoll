@@ -31,8 +31,8 @@
 #include "../include/defaultcamerathirdpersonlistener.h"
 #include "../include/camerathirdperson.h"
 #include "../../stats/include/statsmodule.h"
-#include "../../input/include/ctranslationevents.h"
-#include "../../input/include/cinputmouseevents.h"
+#include "../../input/include/translationevents.h"
+#include "../../input/include/inputmouseevents.h"
 #include "../../dynamicobject/include/float.h"
 #include "../../log/include/logmodule.h"
 

@@ -17,42 +17,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef __INPUTMOUSEEVENTS_H__
+#define __INPUTMOUSEEVENTS_H__
 
-/*-------------------------------DefaultCameraFirstPersonListener----------*\
-|   This is a first person camera listener                                  |
-|                                                                           |
-|   Changelog :                                                             |
-|               04/12/2008 - Gabriel - Initial release                      |
-|               06/30/2008 - Gabriel - Adapt handle to use weak_ptr         |
-\*-------------------------------------------------------------------------*/
+const unsigned int MAX_MOUSE_BUTTONS = 8;
 
-#include "../include/defaultcamerafirstpersonlistener.h"
-#include "../include/camerafirstperson.h"
-#include "../../stats/include/statsmodule.h"
-#include "../../input/include/translationevents.h"
-#include "../../input/include/inputmouseevents.h"
-#include "../../dynamicobject/include/float.h"
-
-namespace Gnoll
+enum MouseButton
 {
-	namespace Scene
-	{
-		DefaultCameraFirstPersonListener::DefaultCameraFirstPersonListener()
-		{
-		}
-
-		DefaultCameraFirstPersonListener::~DefaultCameraFirstPersonListener()
-		{
-		}
-
-		void DefaultCameraFirstPersonListener::handle ( shared_ptr<Message> message )
-		{
-			Gnoll::Input::ActionEvent ae = message->getData<Gnoll::Input::ActionEvent>();
-			float lasttime = Gnoll::Stats::StatsModule::getInstancePtr()->getRenderTime();
-			lasttime = lasttime * 1000.0f;
-
-			// Update
-			m_pCamera.lock()->update(lasttime);
-		}
-	};
+	Left = 0, Right, Middle,
+	Button3, Button4, Button5, Button6, Button7
 };
+
+struct MouseEvent
+{
+	int abX, abY, abZ, relX, relY, relZ;
+
+	// Indicates if this Axis only supports Absolute (ie JoyStick)
+	bool absOnly;
+
+	MouseEvent(int _abX = 0, int _abY = 0, int _abZ = 0,
+				  int _relX = 0, int _relY = 0, int _relZ = 0,
+				  bool _absOnly = 0) 
+	{
+		abX = _abX;
+		abY = _abY;
+		abZ = _abZ;
+		
+		relX = _relX;
+		relY = _relY;
+		relZ = _relZ;
+
+		absOnly = _absOnly;
+	}
+};
+
+#endif

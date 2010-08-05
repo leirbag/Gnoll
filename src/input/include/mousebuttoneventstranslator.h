@@ -1,5 +1,5 @@
 /**************************************************************************
-*   Copyright (C) 2009 by Bruno Mahe                                      *
+*   Copyright (C) 2008 by Paf                                             *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -17,8 +17,8 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef __JOYSTICKAXISEVENTSTRANSLATOR_H__
-#define __JOYSTICKAXISEVENTSTRANSLATOR_H__
+#ifndef __MOUSEBUTTONEVENTSTRANSLATOR_H__
+#define __MOUSEBUTTONVENTSTRANSLATOR_H__
 
 #include <boost/shared_ptr.hpp>
 
@@ -26,70 +26,74 @@
 #include "../../core/messages/include/listener.h"
 #include "../../core/include/message.h"
 
-#include "inputjoystickevents.h"
-
 using namespace boost;
 using namespace Gnoll::Core;
 using namespace Gnoll::DynamicObject;
 
 namespace Gnoll
 {
-	namespace Input
+	namespace Input 
 	{
-		/// This is translate joystick axis events to action events
-		class JoystickAxisEventsTranslator : public Messages::Listener
+		/// This is translate mouse button events to action events
+		class MouseButtonEventsTranslator : public Messages::Listener
 		{
 			public:
 				/**
 				* This is a constructor
 				*/
-				JoystickAxisEventsTranslator();
+				MouseButtonEventsTranslator();
 
 				/**
 				* This is a destructor
 				*/
-				virtual ~JoystickAxisEventsTranslator();
+				virtual ~MouseButtonEventsTranslator(); 
 
 				/**
 				* This method is called in order to process a message
 				* @param message The message this method will have to process
 				*/
 				virtual void handle(MessagePtr message);
+
+				/**
+				* Send mouse button events if any button has been pressed
+				*/
+				void trigger(shared_ptr<Message> _msg);
 				
 			private:
 				/**
-				 * Create an INPUT_ACTION_EVENT message from an event type and its intensity
-				 * @param _event event type
-				 * @param _intensity Intensity of the event
+				 * DynamicObject which contains a translation map for events from mouse
 				 */
-				void sendActionEventForEventAndIntensity(string _event, float _intensity);
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_mouseButtonEventTranslationMap;
 
 				/**
-				 * Initialize previousAxisValue with the required number of axis
-				 * @param _numAxis Number of required axis
+				 * DynamicObject which contains mouse config
 				 */
-				void initPreviousAxisValues(unsigned int _numAxis);
-
-			private:
-				/**
-				 * DynamicObject which contains a translation map for events from joystick
-				 */
-				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_joystickAxisEventTranslationMap;
+				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_mouseConfig;
 
 				/**
-				 * DynamicObject which contains joystick config
+				 * Messages::MessageType for MOUSE_PRESSED messages
 				 */
-				shared_ptr<Gnoll::DynamicObject::DynamicObject> m_joystickConfig;
+				Messages::MessageType m_mouseButtonPressedEvent;
 
 				/**
-				 * Messages::MessageType for MOUSE_MOVED messages
+				 * Messages::MessageType for MOUSE_RELEASED messages
 				 */
-				Messages::MessageType m_axisMoved;
+				Messages::MessageType m_mouseButtonReleasedEvent;
 
 				/**
-				 * Previous values for each axis
+				 * How long a button has been pressed
 				 */
-				shared_ptr< std::vector<int> > m_previousAxisValues;
+				map<string, unsigned long int> m_durationButtonPressed;
+
+				/**
+				 * When a button has been pressed
+				 */
+				map<string, unsigned long int> m_buttonPressed;
+
+				/**
+				 * When trigger has been called last time
+				 */
+				unsigned long int m_lastTimeTriggerCalled;
 		};
 	};
 };

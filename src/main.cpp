@@ -22,9 +22,9 @@
 #include "core/include/sourcefile.h"
 #include "core/messages/include/listener.h"
 
-#include "input/include/coisinputmodule.h"
-#include "input/include/cinputmouseevents.h"
-#include "input/include/cinputeventstranslator.h"
+#include "input/include/oisinputmodule.h"
+#include "input/include/inputmouseevents.h"
+#include "input/include/inputeventstranslator.h"
 #include "graphic/include/graphicmodule.h"
 #include "time/include/timemodule.h"
 #include "sound/include/soundmodule.h"
@@ -32,7 +32,7 @@
 #include "scene/include/cameramanager.h"
 #include "stats/include/statsmodule.h"
 #include "log/include/logmacros.h"
-#include "input/include/ctranslationevents.h"
+#include "input/include/translationevents.h"
 #include "config.h"
 
 #include <boost/shared_ptr.hpp>
@@ -72,11 +72,11 @@ namespace Gnoll
 		private:
 			LogModule *            logModule;
 			GraphicModule*         graphicmanager;
-			COISInputModule         inputmanager;
+			OISInputModule         inputmanager;
 			TimeModule*            timeModule;
 			MessageModule*         messageModule;
 			SoundModule *          soundmanager;
-			CInputEventsTranslator* inputEventsTranslator;
+			InputEventsTranslator* inputEventsTranslator;
 			StatsModule*           statsModule;
 
 
@@ -275,7 +275,7 @@ namespace Gnoll
 		timeModule            = TimeModule::getInstancePtr();
 		messageModule         = MessageModule::getInstancePtr();
 		soundmanager          = SoundModule::getInstancePtr();
-		inputEventsTranslator = CInputEventsTranslator::getInstancePtr();
+		inputEventsTranslator = InputEventsTranslator::getInstancePtr();
 		statsModule           = StatsModule::getInstancePtr();
 		GNOLL_LOG() << "Instanciating modules...[DONE]\n";
 
@@ -369,7 +369,7 @@ namespace Gnoll
 		Gnoll::Stats::StatsModule::destroy();
 		SoundModule::destroy();
 		TimeModule::destroy();
-		CInputEventsTranslator::destroy();
+		InputEventsTranslator::destroy();
 		GraphicModule::destroy();
 		MessageModule::destroy();
 		LogModule::destroy();
