@@ -29,14 +29,14 @@
 #include "../include/list.h"
 #include "../include/set.h"
 #include "../include/inherits.h"
-#include "../../scene/include/cmeshpagerenderer.h"
+#include "../../scene/page/include/cmeshpagerenderer.h"
 #include "../../scene/include/cstaticgobject.h"
-#include "../../scene/include/gobject.h"
-#include "../../scene/include/cogremeshcomponent.h"
-#include "../../scene/include/cogreanimatedmeshcomponent.h"
-#include "../../scene/include/cpositioncomponent.h"
-#include "../../scene/include/cscalingcomponent.h"
-#include "../../scene/include/crotationcomponent.h"
+#include "../../scene/gameobject/include/gobject.h"
+#include "../../scene/gameobject/components/include/cogremeshcomponent.h"
+#include "../../scene/gameobject/components/include/cogreanimatedmeshcomponent.h"
+#include "../../scene/gameobject/components/include/cpositioncomponent.h"
+#include "../../scene/gameobject/components/include/cscalingcomponent.h"
+#include "../../scene/gameobject/components/include/crotationcomponent.h"
 
 using namespace Gnoll::Scene;
 

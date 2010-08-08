@@ -27,7 +27,7 @@
 #include "../include/cstaticgobject.h"
 #include "../../graphic/include/graphicmodule.h"
 #include "../../log/include/logmodule.h"
-#include "../include/cpage.h"
+#include "../page/include/cpage.h"
 #include <glibmm/ustring.h>
 #include "../../dynamicobject/include/float.h"
 

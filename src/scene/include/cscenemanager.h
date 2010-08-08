@@ -27,7 +27,7 @@
 #include "../../dynamicobject/include/dynamicobjectproxy.h"
 #include "../../core/include/poolthread.h"
 #include "../../core/messages/include/messagetype.h"
-#include "../include/cpage.h"
+#include "../page/include/cpage.h"
 #include "../../core/messages/include/listener.h"
 
 #include "../../dynamicobject/include/string.h"

@@ -31,9 +31,6 @@
 #include "../../core/messages/include/messenger.h"
 #include "../../core/messages/include/listener.h"
 #include "../../core/messages/include/messagetype.h"
-#include "../../scene/include/camerafreefly.h"
-#include "../../scene/include/camerafirstperson.h"
-#include "../../scene/include/cameraspline.h"
 #include "../../dynamicobject/include/dynamicobject.h"
 #include "../../dynamicobject/include/dynamicobjectmanager.h"
 

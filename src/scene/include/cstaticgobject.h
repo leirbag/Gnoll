@@ -30,7 +30,7 @@
 
 
 #include "../../dynamicobject/include/dynamicobject.h"
-#include "cpage.h"
+#include "../page/include/cpage.h"
 
 using namespace std;
 using namespace boost;

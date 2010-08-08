@@ -29,7 +29,7 @@
 #include "time/include/timemodule.h"
 #include "sound/include/soundmodule.h"
 #include "scene/include/cscenemanager.h"
-#include "scene/include/cameramanager.h"
+#include "scene/camera/include/cameramanager.h"
 #include "stats/include/statsmodule.h"
 #include "log/include/logmacros.h"
 #include "input/include/translationevents.h"

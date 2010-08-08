@@ -56,12 +56,12 @@
 #include "../../core/include/module.h"
 #include "../../core/include/singleton.h"
 #include "../../core/messages/include/messagetype.h"
-#include "../../scene/include/camera.h"
-#include "../../scene/include/abstractcamerafactory.h"
-#include "../../scene/include/camerathirdpersonfactory.h"
-#include "../../scene/include/camerafirstpersonfactory.h"
-#include "../../scene/include/camerasplinefactory.h"
-#include "../../scene/include/camerafreeflyfactory.h"
+#include "../../scene/camera/include/camera.h"
+#include "../../scene/camera/factory/include/abstractcamerafactory.h"
+#include "../../scene/camera/factory/include/camerathirdpersonfactory.h"
+#include "../../scene/camera/factory/include/camerafirstpersonfactory.h"
+#include "../../scene/camera/factory/include/camerasplinefactory.h"
+#include "../../scene/camera/factory/include/camerafreeflyfactory.h"
 
 using namespace std;
 using namespace boost;

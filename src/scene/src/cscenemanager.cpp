@@ -21,10 +21,10 @@
 #include <sstream>
 #include <OgreRoot.h>
 #include <OgreSceneManager.h>
-#include "../include/ogrecamerawrapper.h"
-#include "../include/cameramanager.h"
+#include "../camera/include/ogrecamerawrapper.h"
+#include "../camera/include/cameramanager.h"
 #include "../include/cscenemanager.h"
-#include "../include/cpage.h"
+#include "../page/include/cpage.h"
 #include "../../time/include/timemodule.h"
 #include "../../graphic/include/graphicmodule.h"
 #include "../../core/include/sourcefile.h"
@@ -33,9 +33,9 @@
 #include "../../core/include/messagemodule.h"
 #include "../../core/messages/include/listener.h"
 #include "../../log/include/logmacros.h"
-#include "../include/cameramanager.h"
+#include "../camera/include/cameramanager.h"
 #include "../include/cscenemanager.h"
-#include "../include/cpage.h"
+#include "../page/include/cpage.h"
 
 
 using namespace std;
