@@ -17,21 +17,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------CStaticGObject------------------------------*\
-|   This is a static game object                                            |
-|                                                                           |
-|                                                                           |
-\*-------------------------------------------------------------------------*/
-
-#include "../include/cstaticgobject.h"
-#include "../../graphic/include/graphicmodule.h"
-#include "../../log/include/logmodule.h"
-#include "../page/include/cpage.h"
-#include <glibmm/ustring.h>
-#include "../../dynamicobject/include/float.h"
+#include "../include/staticgobject.h"
 
 #include <iostream>
+
+#include <glibmm/ustring.h>
+
+#include "../../graphic/include/graphicmodule.h"
+#include "../../log/include/logmodule.h"
+#include "../../dynamicobject/include/float.h"
+#include "../page/include/cpage.h"
+
 using namespace std;
 using namespace boost;
 using namespace Ogre;
@@ -41,108 +37,92 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-
-
-		CStaticGObject::CStaticGObject():
-														DynamicObject::DynamicObject(Glib::ustring(""))
+		StaticGObject::StaticGObject():
+			DynamicObject::DynamicObject(Glib::ustring(""))
 		{
-
-			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "CStaticGObject object created");
+			Gnoll::Log::LogModule::getInstancePtr()->logMessage( "StaticGObject object created");
 		}
 
-
-		CStaticGObject::~CStaticGObject()
+		StaticGObject::~StaticGObject()
 		{
 		}
 
-
-		void CStaticGObject::init(CPage* _parentPage)
+		void StaticGObject::init(CPage* _parentPage)
 		{
-
 			/**
 			 * A parent page must exist
 			 */
 			if (_parentPage == NULL)
 			{
-				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "CStaticGObject object initialized without any parent page");
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "StaticGObject object initialized without any parent page");
 				return;
 			}
 
 			string instanceNameStr = this->getInstance();
 
-			shared_ptr< Gnoll::DynamicObject::String > meshName = this->getAttribute < Gnoll::DynamicObject::String > (CStaticGObject::ATTRIBUTE_MESH());
+			shared_ptr< Gnoll::DynamicObject::String > meshName = this->getAttribute < Gnoll::DynamicObject::String > (StaticGObject::ATTRIBUTE_MESH());
 			string meshNameStr(*meshName);
 
 			SceneNode *parentNode = _parentPage->getPageRootNode();
 			SceneNode *staticGObjectNode = parentNode->createChildSceneNode( _parentPage->getInstance() + "_" + instanceNameStr );
 
-			std::string entName = _parentPage->getInstance() + "_" + instanceNameStr + CStaticGObject::ENTITY_SUFFIX();
+			std::string entName = _parentPage->getInstance() + "_" + instanceNameStr + StaticGObject::ENTITY_SUFFIX();
 			Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 
 			Ogre::Entity *ent = sm->createEntity( entName, meshNameStr );
 			staticGObjectNode->attachObject( ent );
 
-
-
 			shared_ptr< Gnoll::DynamicObject::Float > zero ( new Gnoll::DynamicObject::Float(0.0f));
 			shared_ptr< Gnoll::DynamicObject::Float > one ( new Gnoll::DynamicObject::Float(1.0f));
-
-
 
 			/**
 			 * Scale the object
 			 */
 
-			shared_ptr< Gnoll::DynamicObject::Float > scaleX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_SCALE_X(), one);
-			shared_ptr< Gnoll::DynamicObject::Float > scaleY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_SCALE_Y(), one);
-			shared_ptr< Gnoll::DynamicObject::Float > scaleZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_SCALE_Z(), one);
-
+			shared_ptr< Gnoll::DynamicObject::Float > scaleX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_SCALE_X(), one);
+			shared_ptr< Gnoll::DynamicObject::Float > scaleY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_SCALE_Y(), one);
+			shared_ptr< Gnoll::DynamicObject::Float > scaleZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_SCALE_Z(), one);
 
 			staticGObjectNode->setScale(*scaleX, *scaleY, *scaleZ);
-
 
 			/**
 			 * Rotate the object
 			 */
-
-			shared_ptr< Gnoll::DynamicObject::Float > rotX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_ROTATE_X(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > rotY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_ROTATE_Y(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > rotZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_ROTATE_Z(), zero);
+			shared_ptr< Gnoll::DynamicObject::Float > rotX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_ROTATE_X(), zero);
+			shared_ptr< Gnoll::DynamicObject::Float > rotY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_ROTATE_Y(), zero);
+			shared_ptr< Gnoll::DynamicObject::Float > rotZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_ROTATE_Z(), zero);
 
 			staticGObjectNode->rotate(Ogre::Vector3(1,0,0), Ogre::Radian(*rotX));
 			staticGObjectNode->rotate(Ogre::Vector3(0,1,0), Ogre::Radian(*rotY));
 			staticGObjectNode->rotate(Ogre::Vector3(0,0,1), Ogre::Radian(*rotZ));
 
-
 			/**
 			 * Translate the object
 			 */
-			shared_ptr< Gnoll::DynamicObject::Float > posX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_POSITION_X(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > posY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_POSITION_Y(), zero);
-			shared_ptr< Gnoll::DynamicObject::Float > posZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (CStaticGObject::ATTRIBUTE_POSITION_Z(), zero);
+			shared_ptr< Gnoll::DynamicObject::Float > posX = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_POSITION_X(), zero);
+			shared_ptr< Gnoll::DynamicObject::Float > posY = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_POSITION_Y(), zero);
+			shared_ptr< Gnoll::DynamicObject::Float > posZ = this->getAttributeOrDefault < Gnoll::DynamicObject::Float > (StaticGObject::ATTRIBUTE_POSITION_Z(), zero);
 
 			Ogre::Vector3 posGObject(*posX, *posY, *posZ);
 			staticGObjectNode->setPosition(posGObject);
 
 		}
 
-
-		void CStaticGObject::update()
+		void StaticGObject::update()
 		{
 		}
 
-
-		void CStaticGObject::exit(CPage* _parentPage)
+		void StaticGObject::exit(CPage* _parentPage)
 		{
 			if (_parentPage == NULL)
 			{
-				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "CStaticGObject object exiting without any parent page");
+				Gnoll::Log::LogModule::getInstancePtr()->logMessage( "StaticGObject object exiting without any parent page");
 				return;
 			}
 
 			string instanceNameStr(this->getInstance());
 
-			std::string entName = _parentPage->getInstance() + "_" + instanceNameStr  + CStaticGObject::ENTITY_SUFFIX();
+			std::string entName = _parentPage->getInstance() + "_" + instanceNameStr  + StaticGObject::ENTITY_SUFFIX();
 			Ogre::SceneManager* sm = GraphicModule::getInstancePtr()->getSceneManager();
 
 			SceneNode* staticGObjectNode = sm->getSceneNode( _parentPage->getInstance() + "_" + instanceNameStr );
@@ -152,20 +132,15 @@ namespace Gnoll
 			sm->destroySceneNode( _parentPage->getInstance() + "_" + instanceNameStr  );
 		}
 
-
-		shared_ptr<xmlpp::Document> CStaticGObject::serializeXML()
+		shared_ptr<xmlpp::Document> StaticGObject::serializeXML()
 		{
 			shared_ptr<xmlpp::Document> document = DynamicObject::serializeXML();
 			xmlpp::Element* root = document->get_root_node();
 
 			if (root != NULL)
-			{
-				root->set_name( CStaticGObject::DYNAMIC_OBJECT_NAME() );
-			}
+				root->set_name( StaticGObject::DYNAMIC_OBJECT_NAME() );
 
 			return document;
 		}
 	}
 }
-
-

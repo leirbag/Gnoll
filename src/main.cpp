@@ -28,7 +28,7 @@
 #include "graphic/include/graphicmodule.h"
 #include "time/include/timemodule.h"
 #include "sound/include/soundmodule.h"
-#include "scene/include/cscenemanager.h"
+#include "scene/include/scenemanager.h"
 #include "scene/camera/include/cameramanager.h"
 #include "stats/include/statsmodule.h"
 #include "log/include/logmacros.h"
@@ -340,7 +340,7 @@ namespace Gnoll
 
 	void Application::process()
 	{
-		CSceneManager* gSceneManager = new CSceneManager("gSceneManager");
+		Gnoll::Scene::SceneManager* gSceneManager = new Gnoll::Scene::SceneManager("gSceneManager");
 		while (!done)
 		{
 			statsModule->process();

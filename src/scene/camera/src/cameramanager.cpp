@@ -17,15 +17,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------CameraManager ------------------------------*\
-  |   This is the camera manager                                              |
-  |                                                                           |
-  |   Changelog :                                                             |
-  |               07/10/2008 - Gabriel - Initial release                      |
-  \*-------------------------------------------------------------------------*/
-
 #include "../include/cameramanager.h"
+
 #include "../../../dynamicobject/include/list.h"
 #include "../../../log/include/logmacros.h"
 #include "../factory/include/camerafixefactory.h"

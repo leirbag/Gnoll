@@ -17,10 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is the interface of camera wrapper                                 *
- ***************************************************************************/
-
 #ifndef INCLUDED_CAMERAWRAPPER
 #define INCLUDED_CAMERAWRAPPER
 
@@ -57,7 +53,6 @@ namespace Gnoll
 				 */
 				virtual float getNearValue() = 0;
 
-
 				/*
 				 * Set the far value
 				 * @param value The value
@@ -69,7 +64,6 @@ namespace Gnoll
 				 * @return the far value
 				 */
 				virtual float getFarValue() = 0;
-
 
 				/*
 				 * Set the fov value
@@ -83,7 +77,6 @@ namespace Gnoll
 				 */
 				virtual float getFovValue() = 0;
 
-
 				/*
 				 * Set the position of the camera
 				 * @param value The position
@@ -95,7 +88,6 @@ namespace Gnoll
 				 * @return the position of the camera
 				 */
 				virtual Ogre::Vector3 getPosition() = 0;
-
 
 				/*
 				 * Set the direction of the camera
@@ -109,7 +101,6 @@ namespace Gnoll
 				 */
 				virtual Ogre::Vector3 getDirection() = 0;
 
-
 				/*
 				 * Set the orientation of the camera
 				 * @param value The orientation
@@ -122,7 +113,6 @@ namespace Gnoll
 				 */
 				virtual Ogre::Quaternion getOrientation() = 0;
 
-
 				/*
 				 * Get the orientation of the camera
 				 * @return the orientation of the camera
@@ -134,7 +124,6 @@ namespace Gnoll
 				 * @return the orientation of the camera
 				 */
 				virtual Ogre::Vector3 getRight() = 0;
-
 
 				/*
 				 * Set the auto tracking of the camera around a target

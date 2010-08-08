@@ -28,11 +28,13 @@
  ***************************************************************************/
 
 #include "../include/cameraspline.h"
+
+#include <boost/lexical_cast.hpp>
+
 #include "../include/ogrecamerawrapper.h"
 #include "../../../graphic/include/graphicmodule.h"
 #include "../../../dynamicobject/include/float.h"
 #include "../../../dynamicobject/include/dynamicobject.h"
-#include <boost/lexical_cast.hpp>
 
 using namespace Gnoll::Graphic;
 using namespace Gnoll::DynamicObject;

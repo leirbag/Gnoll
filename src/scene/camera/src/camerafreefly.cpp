@@ -17,19 +17,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an implementation of a Free Fly Camera, it provides some        *
- * services:                                                               *
- * 	- Move forward and backward                                           *
- * 	- Strafe on left/right/up/down                                        *
- * 	- Rotate the "at" position on each axes                               *
- ***************************************************************************/
-
 #include "../include/camerafreefly.h"
+
+#include <cmath>
+
 #include "../include/camerawrapper.h"
 #include "../../../dynamicobject/include/float.h"
 #include "../../../log/include/logmodule.h"
-#include <cmath>
 
 using namespace Gnoll::DynamicObject;
 
@@ -40,7 +34,7 @@ namespace Gnoll
 		CameraFreeFly::CameraFreeFly(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper) :
 			Camera(instanceName, wrapper)
 		{
-			rotationX = rotationY = rotationZ = 0.0f;
+			m_rotationX = m_rotationY = m_rotationZ = 0.0f;
 		}
 
 		CameraFreeFly::~CameraFreeFly()
@@ -79,25 +73,25 @@ namespace Gnoll
 
 		void CameraFreeFly::rotateAroundAxisX(float degree)
 		{
-			rotationX += degree;
+			m_rotationX += degree;
 		}
 
 		void CameraFreeFly::rotateAroundAxisY(float degree)
 		{
-			rotationY += degree;
+			m_rotationY += degree;
 		}
 
 		void CameraFreeFly::rotateAroundAxisZ(float degree)
 		{
-			rotationZ += degree;
+			m_rotationZ += degree;
 		}
 
 		void CameraFreeFly::update(float time)
 		{
-			cameraWrapper->yaw(Ogre::Radian(Ogre::Degree(rotationY * mapMovement["ROTATION_AXIS_Y"])));
-			cameraWrapper->pitch(Ogre::Radian(Ogre::Degree(rotationX * mapMovement["ROTATION_AXIS_X"])));
-			cameraWrapper->roll(Ogre::Radian(Ogre::Degree(rotationZ * mapMovement["ROTATION_AXIS_Z"])));
-			rotationX = rotationY = rotationZ = 0.0f;
+			cameraWrapper->yaw(Ogre::Radian(Ogre::Degree(m_rotationY * mapMovement["ROTATION_AXIS_Y"])));
+			cameraWrapper->pitch(Ogre::Radian(Ogre::Degree(m_rotationX * mapMovement["ROTATION_AXIS_X"])));
+			cameraWrapper->roll(Ogre::Radian(Ogre::Degree(m_rotationZ * mapMovement["ROTATION_AXIS_Z"])));
+			m_rotationX = m_rotationY = m_rotationZ = 0.0f;
 			Ogre::Quaternion q = cameraWrapper->getOrientation();
 			q.normalise();
 			cameraWrapper->setOrientation(q);

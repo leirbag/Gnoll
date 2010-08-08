@@ -17,20 +17,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-/*-----------------------------CameraManager ------------------------------*\
-|   This is the camera manager                                              |
-|                                                                           |
-|   Changelog :                                                             |
-|               07/10/2008 - Gabriel - Initial release                      |
-\*-------------------------------------------------------------------------*/
-
-
 #ifndef __CAMERAMANAGER_H__
 #define __CAMERAMANAGER_H__
 
 #include <map>
+
 #include <boost/shared_ptr.hpp>
+
 #include "../factory/include/abstractcamerafactory.h"
 #include "../../../core/include/basemanager.h"
 #include "../../../core/include/singleton.h"
@@ -45,31 +38,7 @@ namespace Gnoll
 	{
 		class CameraManager : public BaseManager<Camera, ObjectNotFoundError<Camera> >, public Gnoll::Core::Singleton<CameraManager>
 		{
-			private:
-				/*
-				 * Map between camera's extension recognize and their factory
-				 */
-				map<string, shared_ptr<AbstractCameraFactory> > extensionsMap;
-
-				/*
-				 * Map between camera's instance name and the instance
-				 */
-				map<string, shared_ptr<Camera> > camerasMap;
-
-			protected:
-
-				/**
-				 * @copydoc BaseManager::loadImpl
-				 */
-				virtual shared_ptr<Camera> loadImpl( shared_ptr<AbstractStream> _stream, string _instance);
-
-				/**
-				 * @copydoc BaseManager::saveImpl
-				 */
-				virtual bool saveImpl( shared_ptr<AbstractStream> _stream, shared_ptr<Camera> _obj, string _instance);
-
 			public:
-
 				/**
 				 * This is a constructor
 				 */
@@ -80,6 +49,28 @@ namespace Gnoll
 				 * This is a destructor
 				 */
 				~CameraManager();
+
+			protected:
+				/**
+				 * @copydoc BaseManager::loadImpl
+				 */
+				virtual shared_ptr<Camera> loadImpl( shared_ptr<AbstractStream> _stream, string _instance);
+
+				/**
+				 * @copydoc BaseManager::saveImpl
+				 */
+				virtual bool saveImpl( shared_ptr<AbstractStream> _stream, shared_ptr<Camera> _obj, string _instance);
+
+			private:
+				/*
+				 * Map between camera's extension recognize and their factory
+				 */
+				map<string, shared_ptr<AbstractCameraFactory> > extensionsMap;
+
+				/*
+				 * Map between camera's instance name and the instance
+				 */
+				map<string, shared_ptr<Camera> > camerasMap;
 		};
 	}
 }

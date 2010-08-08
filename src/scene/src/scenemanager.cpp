@@ -17,13 +17,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "../include/scenemanager.h"
+
 #include <set>
 #include <sstream>
 #include <OgreRoot.h>
 #include <OgreSceneManager.h>
 #include "../camera/include/ogrecamerawrapper.h"
 #include "../camera/include/cameramanager.h"
-#include "../include/cscenemanager.h"
 #include "../page/include/cpage.h"
 #include "../../time/include/timemodule.h"
 #include "../../graphic/include/graphicmodule.h"
@@ -34,9 +35,7 @@
 #include "../../core/messages/include/listener.h"
 #include "../../log/include/logmacros.h"
 #include "../camera/include/cameramanager.h"
-#include "../include/cscenemanager.h"
 #include "../page/include/cpage.h"
-
 
 using namespace std;
 using namespace boost;
@@ -48,22 +47,19 @@ namespace Gnoll
 {
 	namespace Scene
 	{
-
 		/**
 		 * Listener which will update scene content
 		 */
 		class SceneUpdateListener : public Messages::Listener
 		{
 			private:
-
-				CSceneManager* sceneManager;
+				SceneManager* sceneManager;
 
 			public:
-
 				/**
 				 * This is a constructor
 				 */
-				SceneUpdateListener(CSceneManager* _sceneManager) : sceneManager(_sceneManager) {}
+				SceneUpdateListener(SceneManager* _sceneManager) : sceneManager(_sceneManager) {}
 
 				/**
 				 * This is a destructor
@@ -74,103 +70,84 @@ namespace Gnoll
 				 * This method is called in order to process a message
 				 * @param message The message this method will have to process
 				 */
-				virtual void handle ( shared_ptr<Message> message )
+				virtual void handle(shared_ptr<Message> message)
 				{
-
-					if (sceneManager)
+					if(sceneManager)
 					{
 						GNOLL_LOG() << "Updating scene...\n";
 						sceneManager->update();
 						GNOLL_LOG() << " done\n";
 					}
-
 				}
 		};
 
-
-		void CSceneManager::setupSky()
+		void SceneManager::setupSky()
 		{
-
 			/**
 			 * A sky is defined by two attributes :
 			 * - skyType which defines the type of sky (eg. dome)
 			 * - skyMaterial which is the material used for drawing the sky
 			 */
-			if (this->hasAttribute( CSceneManager::ATTRIBUTE_SKY_TYPE() ) == true)
+			if(this->hasAttribute(SceneManager::ATTRIBUTE_SKY_TYPE()) == true)
 			{
-
 				Ogre::Root *ogreRoot = Ogre::Root::getSingletonPtr();
 
-				shared_ptr< Gnoll::DynamicObject::String > skyType = this->getAttribute< Gnoll::DynamicObject::String > ( CSceneManager::ATTRIBUTE_SKY_TYPE() );
-				shared_ptr< Gnoll::DynamicObject::String > skyMaterialName( new Gnoll::DynamicObject::String() );
+				shared_ptr<Gnoll::DynamicObject::String> skyType = this->getAttribute< Gnoll::DynamicObject::String >(SceneManager::ATTRIBUTE_SKY_TYPE());
+				shared_ptr<Gnoll::DynamicObject::String> skyMaterialName( new Gnoll::DynamicObject::String());
 
-				if (this->hasAttribute( CSceneManager::ATTRIBUTE_SKY_MATERIAL() ) == true)
+				if(this->hasAttribute(SceneManager::ATTRIBUTE_SKY_MATERIAL()) == true)
 				{
-					skyMaterialName = this->getAttribute< Gnoll::DynamicObject::String > ( CSceneManager::ATTRIBUTE_SKY_MATERIAL() );
+					skyMaterialName = this->getAttribute< Gnoll::DynamicObject::String > ( SceneManager::ATTRIBUTE_SKY_MATERIAL() );
 				}
 
 				Ogre::SceneManager* sm = ogreRoot->getSceneManager( Gnoll::Graphic::GraphicModule::DEFAULT_OGRE_SCENE_MANAGER_NAME() );
 
-
 				if (skyType->getValue() == "dome")
-				{
 					sm->setSkyDome(true, *skyMaterialName);
-				}
 				else if (skyType->getValue() == "box")
-				{
 					sm->setSkyBox(true, *skyMaterialName);
-				}
 				else
-				{
 					GNOLL_LOG() << "Cannot setup a sky of type " << *skyType << " (unknown).\n";
-				}
 			}
 		}
 
-
-		void CSceneManager::setupCamera()
+		void SceneManager::setupCamera()
 		{
 			/**
 			 * Allocate a camera manager
 			 */
 			CameraManager* cameraManager = CameraManager::getInstancePtr();
 
-
 			/*
 			 * Load current camera
 			 */
-			if(this->hasAttribute( CSceneManager::ATTRIBUTE_CURRENT_CAMERA() ) == true)
+			if(this->hasAttribute( SceneManager::ATTRIBUTE_CURRENT_CAMERA()) == true)
 			{
 				// Get back the name of the instance
-				shared_ptr< Gnoll::DynamicObject::String > instanceCamera = this->getAttribute< Gnoll::DynamicObject::String > ( CSceneManager::ATTRIBUTE_CURRENT_CAMERA() );
+				shared_ptr< Gnoll::DynamicObject::String > instanceCamera = this->getAttribute< Gnoll::DynamicObject::String > (SceneManager::ATTRIBUTE_CURRENT_CAMERA());
 
 				// Load the camera
 				shared_ptr<Camera> currentCamera = cameraManager->load(*instanceCamera);
 			} else
-			{
 				GNOLL_LOG() << "No currentCamera attribute found for scene manager " << this->getInstance() << "\n";
-			}
-
 		}
 
 
-		void CSceneManager::setupLoadedPages()
+		void SceneManager::setupLoadedPages()
 		{
-
-			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ( CSceneManager::ATTRIBUTE_LOADED_PAGES() );
+			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ( SceneManager::ATTRIBUTE_LOADED_PAGES() );
 			if (loadedPages->size() == 0)
 			{
 				loadedPages = shared_ptr< Gnoll::DynamicObject::List > ( new Gnoll::DynamicObject::List() );
-				this->setAttribute( CSceneManager::ATTRIBUTE_LOADED_PAGES(), loadedPages);
+				this->setAttribute( SceneManager::ATTRIBUTE_LOADED_PAGES(), loadedPages);
 			}
 
 			GNOLL_LOG() << "Number of loaded pages : " << loadedPages->size() << "\n";
 		}
 
 
-		void CSceneManager::setupMessages()
+		void SceneManager::setupMessages()
 		{
-
 			MessageModule* messageModule = MessageModule::getInstancePtr();
 			TimeModule* timeModule = TimeModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
@@ -180,13 +157,11 @@ namespace Gnoll
 			 */
 			Messages::MessageType updateMsgType( UPDATE_MSG_TYPE() );
 
-
 			/**
 			 * Message for updating scene has no data
 			 */
 			shared_ptr<boost::any> msgData (new boost::any()) ;
 			shared_ptr<Message>  message (new Message(updateMsgType, msgData) );
-
 
 			/**
 			 * Create a timer for updating the scene
@@ -194,7 +169,6 @@ namespace Gnoll
 			 * But this will happen in 1 000 millisecondes
 			 */
 			timeModule->addPeriodicEvent(500, message, 500);
-
 
 			/**
 			 * Create the listener which will update the scene whenever
@@ -206,24 +180,21 @@ namespace Gnoll
 		}
 
 
-		CSceneManager::CSceneManager(string _instanceName) : DynamicObjectProxy(_instanceName)
+		SceneManager::SceneManager(string _instanceName) : DynamicObjectProxy(_instanceName)
 		{
-
 			/**
 			 * A focusedPage attribute MUST be defined
 			 */
-			if (this->hasAttribute( CSceneManager::ATTRIBUTE_FOCUSED_PAGE() ) == false)
+			if (this->hasAttribute( SceneManager::ATTRIBUTE_FOCUSED_PAGE() ) == false)
 			{
 				GNOLL_LOG() << "No focusedPage attribute found for scene manager " + _instanceName << "\n";
 				return;
 			}
 
-
 			/**
 			 * First we setup the sky
 			 */
 			this->setupSky();
-
 
 			/**
 			 * Load and setup the camera
@@ -236,18 +207,15 @@ namespace Gnoll
 			 */
 			this->setupLoadedPages();
 
-
 			/**
 			 * Set up focused Page
 			 */
-			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>( CSceneManager::ATTRIBUTE_FOCUSED_PAGE() );
-			shared_ptr<Gnoll::DynamicObject::List> loadedPages = this->getAttribute<Gnoll::DynamicObject::List>( CSceneManager::ATTRIBUTE_LOADED_PAGES() );
+			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>( SceneManager::ATTRIBUTE_FOCUSED_PAGE() );
+			shared_ptr<Gnoll::DynamicObject::List> loadedPages = this->getAttribute<Gnoll::DynamicObject::List>( SceneManager::ATTRIBUTE_LOADED_PAGES() );
 
 			this->setupPage(*focusedPageName, loadedPages);
 
 			GNOLL_LOG() << "Number of loadedPages after setup: " << loadedPages->size() << "\n";
-
-
 
 			/**
 			 * Setup message listeners and such
@@ -256,7 +224,7 @@ namespace Gnoll
 		}
 
 
-		CSceneManager::~CSceneManager()
+		SceneManager::~SceneManager()
 		{
 			MessageModule* messageModule = MessageModule::getInstancePtr();
 			Messages::Messenger* messageManager = messageModule->getMessageManager();
@@ -264,22 +232,20 @@ namespace Gnoll
 			messageManager->delListener ( sceneUpdateListener, UPDATE_MSG_TYPE() );
 
 			CameraManager::destroy();
-			this->deleteAttribute( CSceneManager::ATTRIBUTE_LOADED_PAGES() );
+			this->deleteAttribute( SceneManager::ATTRIBUTE_LOADED_PAGES() );
 		}
 
 
-		void CSceneManager::update()
+		void SceneManager::update()
 		{
-
 		}
 
-		void CSceneManager::translateVisiblePages(const  Ogre::Vector3 _translate)
+		void SceneManager::translateVisiblePages(const  Ogre::Vector3 _translate)
 		{
 			/**
 			 * Loaded pages
 			 */
-			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ( CSceneManager::ATTRIBUTE_LOADED_PAGES() );
-
+			shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List > ( SceneManager::ATTRIBUTE_LOADED_PAGES() );
 
 			/**
 			 * Loop through all loaded pages and translate them
@@ -295,24 +261,21 @@ namespace Gnoll
 					sceneNode->translate(_translate);
 				}
 			}
-
 		}
 
-		void CSceneManager::queueJob( shared_ptr<Job> _job)
+		void SceneManager::queueJob( shared_ptr<Job> _job)
 		{
 			m_poolOfThreads.pushJob(_job);
 		}
 
-
-		bool CSceneManager::isPageVisible(const CPage& _page)
+		bool SceneManager::isPageVisible(const CPage& _page)
 		{
-			shared_ptr< Gnoll::DynamicObject::String > currentCameraName = this->getAttribute< Gnoll::DynamicObject::String > ( CSceneManager::ATTRIBUTE_CURRENT_CAMERA() );
+			shared_ptr< Gnoll::DynamicObject::String > currentCameraName = this->getAttribute< Gnoll::DynamicObject::String > ( SceneManager::ATTRIBUTE_CURRENT_CAMERA() );
 
 			return _page.isVisibleFromCamera( currentCameraName );
 		}
 
-
-		void CSceneManager::setupPage( const string _pageInstance, shared_ptr< Gnoll::DynamicObject::List > _loadedPages, const Ogre::Vector3 _offset )
+		void SceneManager::setupPage( const string _pageInstance, shared_ptr< Gnoll::DynamicObject::List > _loadedPages, const Ogre::Vector3 _offset )
 		{
 			const char* neighbors[] =   {
 											CPage::ATTRIBUTE_NORTH_LINK(),
@@ -320,7 +283,7 @@ namespace Gnoll
 											CPage::ATTRIBUTE_EAST_LINK(),
 											CPage::ATTRIBUTE_WEST_LINK()
 										};
-			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>( CSceneManager::ATTRIBUTE_FOCUSED_PAGE() );
+			shared_ptr<Gnoll::DynamicObject::String> focusedPageName = this->getAttribute<Gnoll::DynamicObject::String>( SceneManager::ATTRIBUTE_FOCUSED_PAGE() );
 
 			CPage page(_pageInstance);
 
@@ -337,7 +300,6 @@ namespace Gnoll
 
 			GNOLL_LOG() << "page " << _pageInstance << " initialized\n";
 			shared_ptr<Gnoll::DynamicObject::Float> pageSize = page.getAttribute<Float>( CPage::ATTRIBUTE_SIZE() );
-
 
 			/**
 			 * Look at neighbors and translate from neighbors->length / 2.0 in opposite way
@@ -372,13 +334,13 @@ namespace Gnoll
             }
         }
 
-        bool CSceneManager::isCameraInPage(const shared_ptr<Camera>& _camera)
+        bool SceneManager::isCameraInPage(const shared_ptr<Gnoll::Scene::Camera>& _camera)
         {
             //
             // Check all loaded page
             //
             /*shared_ptr< Gnoll::DynamicObject::List > loadedPages = this->getAttribute< Gnoll::DynamicObject::List >
-              ( CSceneManager::ATTRIBUTE_LOADED_PAGES() );
+              ( SceneManager::ATTRIBUTE_LOADED_PAGES() );
 
               for( Gnoll::DynamicObject::List::const_iterator it = loadedPages->begin(); it != loadedPages->end(); it++)
               {
@@ -405,5 +367,3 @@ namespace Gnoll
         }
     }
 }
-
-

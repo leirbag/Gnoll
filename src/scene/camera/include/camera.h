@@ -17,22 +17,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an abstract class of camera. We can't directly use this camera  *
- * but it provides some services:                                          *
- * 	- Management of listener                                             *
- * 	- Management of target                                               *
- * 	- Set up of serveral parameters: up, eye, at, far, near, fov,        *
- * 	  movement factor                                                    *
- * This camera can change the orientation and the position too.            *
- ***************************************************************************/
-
 #ifndef INCLUDED_CAMERA
 #define INCLUDED_CAMERA
 
+#include <map>
+
 #include <glibmm/ustring.h>
 #include <OgreSceneNode.h>
-#include <map>
+
 #include "camerawrapper.h"
 #include "../../../dynamicobject/include/dynamicobjectproxy.h"
 
@@ -52,60 +44,7 @@ namespace Gnoll
 
 		class Camera : public Gnoll::DynamicObject::DynamicObjectProxy
 		{
-			private:
-				typedef std::pair<shared_ptr<MessageListenerCamera>, shared_ptr<Messages::MessageType> > PairsListener;
-				typedef std::queue<shared_ptr<PairsListener> > QueueListener;
-
-				/*
-				 * This is the queue of cameras listener
-				 */
-				QueueListener queueListener;
-
-				/*
-				 * This is the name of the target (load from scenemanager, "" means no target
-				 */
-				Glib::ustring target;
-
-				/*
-				 * Operator to copy a camera
-				 * @param copy This is the camera to copy
-				 */
-				virtual Camera& operator=(const Camera& copy);
-
-				/*
-				 * Copy constructor
-				 * @param copy This is the camera to copy
-				 */
-				explicit Camera(const Camera& copy);
-
-			protected:
-				/*
-				 * This is a pointer to a Camera Wrapper
-				 */
-				shared_ptr<CameraWrapper> cameraWrapper;
-
-				/*
-				 * This is a map for the speed movement of camera
-				 */
-				std::map<std::string, float> mapMovement;
-
-				/*
-				 * Default constructor, it initializes the camera with default settings :
-				 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-				 * fov PI/4 OR get back ancient configuration with dynamic objet if exists
-				 * @param instanceName This is the instance name of the camera, it will be use for the
-				 * 					   instance name of the Ogre Camera
-				 */
-				explicit Camera(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
-
-				/*
-				 * Helper method for setTarget()
-				 * @param (see setTarget)
-				 */
-				void setTargetHelper(const Glib::ustring& target);
-
 			public:
-
 				/**
 				 * Returns attribute name "name".<br/>
 				 * @return The attribute name "name"
@@ -204,6 +143,59 @@ namespace Gnoll
 				 * @param time This is the time between 2 frames
 				 */
 				virtual void update(float time);
+
+			protected:
+				/*
+				 * This is a pointer to a Camera Wrapper
+				 */
+				shared_ptr<CameraWrapper> cameraWrapper;
+
+				/*
+				 * This is a map for the speed movement of camera
+				 */
+				std::map<std::string, float> mapMovement;
+
+				/*
+				 * Default constructor, it initializes the camera with default settings :
+				 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
+				 * fov PI/4 OR get back ancient configuration with dynamic objet if exists
+				 * @param instanceName This is the instance name of the camera, it will be use for the
+				 * 					   instance name of the Ogre Camera
+				 */
+				explicit Camera(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
+
+				/*
+				 * Helper method for setTarget()
+				 * @param (see setTarget)
+				 */
+				void setTargetHelper(const Glib::ustring& target);
+
+			private:
+				/*
+				 * Operator to copy a camera
+				 * @param copy This is the camera to copy
+				 */
+				virtual Camera& operator=(const Camera& copy);
+
+				/*
+				 * Copy constructor
+				 * @param copy This is the camera to copy
+				 */
+				explicit Camera(const Camera& copy);
+
+			private:
+				typedef std::pair<shared_ptr<MessageListenerCamera>, shared_ptr<Messages::MessageType> > PairsListener;
+				typedef std::queue<shared_ptr<PairsListener> > QueueListener;
+
+				/*
+				 * This is the queue of cameras listener
+				 */
+				QueueListener queueListener;
+
+				/*
+				 * This is the name of the target (load from scenemanager, "" means no target
+				 */
+				Glib::ustring target;
 		};
 	};
 };

@@ -17,12 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an implementation of a First Person Camera, it provides some    *
- * services:                                                               *
- * 	- Set up of a "head" position                                         *
- ***************************************************************************/
-
 #ifndef INCLUDED_CAMERAFIRSTPERSON
 #define INCLUDED_CAMERAFIRSTPERSON
 
@@ -34,51 +28,51 @@ namespace Gnoll
 	{
 		class CameraFirstPerson : public Camera
 		{
-		private:
-			/*
-			 * Parameters of the camera
-			 */
-			Ogre::Vector3* headPosition;
+			public:
+				/**
+				 * Returns attribute name "head_position".<br/>
+				 * @return The attribute name "head_position"
+				 */
+				inline static const char * ATTRIBUTE_HEADPOSITION() {return "head_position";}
 
-		public:
-			/**
-			 * Returns attribute name "head_position".<br/>
-			 * @return The attribute name "head_position"
-			 */
-			inline static const char * ATTRIBUTE_HEADPOSITION() {return "head_position";}
+				/*
+				 * Default constructor, if no head positon is defined, the head position will be set
+				 *                      to the target position
+				 * @param instanceName This is the instance name of the camera, it will be use for the
+				 * 					   instance name of the Ogre Camera
+				 */
+				explicit CameraFirstPerson(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
 
-			/*
-			 * Default constructor, if no head positon is defined, the head position will be set
-			 *                      to the target position
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
-			 */
-			explicit CameraFirstPerson(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
+				/*
+				 * Destructior
+				 */
+				virtual ~CameraFirstPerson();
 
-			/*
-			 * Destructior
-			 */
-			virtual ~CameraFirstPerson();
+				/*
+				 * This method is call each frame
+				 * @param time This is the time between 2 frames
+				 */
+				virtual void update(float time);
 
-			/*
-			 * This method is call each frame
-			 * @param time This is the time between 2 frames
-			 */
-			virtual void update(float time);
+				/**
+				 * This set the offset between the target position and the real head position
+				 * @param offset This is the offset, it's an offset in a 3 dimensions due to the
+				 *               non-alignement of the head and target position
+				 */
+				void setHeadPosition(const Ogre::Vector3& value);
 
-			/**
-			 * This set the offset between the target position and the real head position
-			 * @param offset This is the offset, it's an offset in a 3 dimensions due to the
-			 *               non-alignement of the head and target position
-			 */
-			void setHeadPosition(const Ogre::Vector3& value);
+				/**
+				 * This is the gettor of the head positon offset
+				 * @param value The offset in 3 dimensions between the position of the target and the
+				 *              real head position
+				 */
+				const Ogre::Vector3* getHeadPosition();
 
-			/**
-			 * This is the gettor of the head positon offset
-			 * @param value The offset in 3 dimensions between the position of the target and the
-			 *              real head position
-			 */
-			const Ogre::Vector3* getHeadPosition();
+			private:
+				/*
+				 * Parameters of the camera
+				 */
+				Ogre::Vector3* headPosition;
 		};
 	};
 };

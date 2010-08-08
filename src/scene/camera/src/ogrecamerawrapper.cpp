@@ -17,13 +17,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an implement of camera wrapper for Ogre                         *
- ***************************************************************************/
-
 #include "../include/ogrecamerawrapper.h"
-#include "../../../graphic/include/graphicmodule.h"
+
 #include <OgreRoot.h>
+
+#include "../../../graphic/include/graphicmodule.h"
 
 using namespace Gnoll::Graphic;
 using namespace Gnoll::Core;

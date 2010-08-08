@@ -17,10 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an implement of camera spline wrapper for Ogre                  *
- ***************************************************************************/
-
 #ifndef INCLUDED_OGRECAMERASPLINEWRAPPER
 #define INCLUDED_OGRECAMERASPLINEWRAPPER
 

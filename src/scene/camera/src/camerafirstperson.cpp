@@ -17,13 +17,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an implementation of a First Person Camera, it provides some    *
- * services:                                                               *
- * 	- Set up of a "head" position                                      *
- ***************************************************************************/
-
 #include "../include/camerafirstperson.h"
+
 #include "../../../dynamicobject/include/float.h"
 #include "../../../log/include/logmacros.h"
 #include "../../../dynamicobject/include/vector3.h"

@@ -17,17 +17,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an abstract class of camera. We can't directly use this camera  *
- * but it provides some services:                                          *
- * 	- Management of listener                                              *
- * 	- Management of target                                                *
- * 	- Set up of serveral parameters: up, eye, at, far, near, fov,         *
- * 	  movement factor                                                     *
- * This camera can change the orientation and the position too.            *
- ***************************************************************************/
-
 #include "../include/camera.h"
+
+#include <sstream>
+#include <queue>
+
+#include <OgreRoot.h>
+
 #include "../include/camerawrapper.h"
 #include "../listener/include/cmessagelistenercamera.h"
 #include "../../../graphic/include/graphicmodule.h"
@@ -37,10 +33,6 @@
 #include "../../../dynamicobject/include/string.h"
 #include "../../../log/include/logmodule.h"
 #include "../../../dynamicobject/include/vector3.h"
-#include <sstream>
-#include <queue>
-#include <OgreRoot.h>
-
 #include "../../../config.h"
 
 using namespace Gnoll::Graphic;

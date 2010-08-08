@@ -17,10 +17,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an implementation of a Fixe (not movable) camera                *
- ***************************************************************************/
-
 #ifndef INCLUDED_CAMERAFIXE
 #define INCLUDED_CAMERAFIXE
 
@@ -35,20 +31,20 @@ namespace Gnoll
 		 */
 		class CameraFixe : public Camera
 		{
-		public:
-			/*
-			 * Default constructor, it initializes the camera with default settings :
-			 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
-			 * fov PI/4 OR get back ancient configuration with persistant objet if exists
-			 * @param instanceName This is the instance name of the camera, it will be use for the
-			 * 					   instance name of the Ogre Camera
-			 */
-			explicit CameraFixe(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
+			public:
+				/*
+				 * Default constructor, it initializes the camera with default settings :
+				 * position (0, 0, 0), direction (0, 0, 1), up (0, 1, 0), near 0, far is 200,
+				 * fov PI/4 OR get back ancient configuration with persistant objet if exists
+				 * @param instanceName This is the instance name of the camera, it will be use for the
+				 * 					   instance name of the Ogre Camera
+				 */
+				explicit CameraFixe(const Glib::ustring& instanceName, shared_ptr<CameraWrapper> wrapper);
 
-			/*
-			 * Destructior
-			 */
-			virtual ~CameraFixe();
+				/*
+				 * Destructior
+				 */
+				virtual ~CameraFixe();
 		};
 	};
 };

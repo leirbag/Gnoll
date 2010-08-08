@@ -17,11 +17,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an implement of camera spline wrapper for Ogre                  *
- ***************************************************************************/
-
 #include "../include/ogrecamerasplinewrapper.h"
+
 #include "../../../graphic/include/graphicmodule.h"
 
 using namespace Gnoll::Graphic;

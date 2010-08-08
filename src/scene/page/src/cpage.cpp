@@ -30,7 +30,7 @@
 #include "../../../dynamicobject/include/float.h"
 #include "../../page/include/cpage.h"
 #include "../../page/include/ipagerenderer.h"
-#include "../../include/cstaticgobject.h"
+#include "../../include/staticgobject.h"
 #include "../../gameobject/include/gobject.h"
 #include <OgreCamera.h>
 

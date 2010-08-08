@@ -30,7 +30,7 @@
 #include "../include/set.h"
 #include "../include/inherits.h"
 #include "../../scene/page/include/cmeshpagerenderer.h"
-#include "../../scene/include/cstaticgobject.h"
+#include "../../scene/include/staticgobject.h"
 #include "../../scene/gameobject/include/gobject.h"
 #include "../../scene/gameobject/components/include/cogremeshcomponent.h"
 #include "../../scene/gameobject/components/include/cogreanimatedmeshcomponent.h"
@@ -67,8 +67,8 @@ namespace Gnoll
 					AbstractAttributeHandler_ptr(new InheritsAttributeHandler()));
 			this->registerHandler(Gnoll::Scene::CMeshPageRenderer::DYNAMIC_OBJECT_NAME(), 
 					AbstractAttributeHandler_ptr(new GenericAttributeHandler<CMeshPageRenderer>()));
-			this->registerHandler(Gnoll::Scene::CStaticGObject::DYNAMIC_OBJECT_NAME(),     
-					AbstractAttributeHandler_ptr(new GenericAttributeHandler<CStaticGObject>()));
+			this->registerHandler(Gnoll::Scene::StaticGObject::DYNAMIC_OBJECT_NAME(),     
+					AbstractAttributeHandler_ptr(new GenericAttributeHandler<StaticGObject>()));
 			this->registerHandler(Gnoll::Scene::GObject::DYNAMIC_OBJECT_NAME() ,           
 					AbstractAttributeHandler_ptr(new GenericAttributeHandler<GObject>()));
 			this->registerHandler(Gnoll::Scene::COgreMeshComponent::DYNAMIC_OBJECT_NAME(), 

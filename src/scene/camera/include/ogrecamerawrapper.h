@@ -17,17 +17,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/****************************** Summary ************************************
- * This is an implement of camera wrapper for Ogre                         *
- ***************************************************************************/
-
 #ifndef INCLUDED_OGRECAMERAWRAPPER
 #define INCLUDED_OGRECAMERAWRAPPER
 
-#include "camerawrapper.h"
 #include <glibmm/ustring.h>
 #include <OgreCamera.h>
 #include <boost/shared_ptr.hpp>
+
+#include "camerawrapper.h"
 
 using namespace boost;
 
@@ -37,9 +34,6 @@ namespace Gnoll
 	{
 		class OgreCameraWrapper : public CameraWrapper
 		{
-			protected:
-				Ogre::Camera* camera;
-
 			public:
 				/*
 				 * Constructor
@@ -64,7 +58,6 @@ namespace Gnoll
 				 */
 				virtual float getNearValue();
 
-
 				/*
 				 * Set the far value
 				 * @param value The value
@@ -76,7 +69,6 @@ namespace Gnoll
 				 * @return the far value
 				 */
 				virtual float getFarValue();
-
 
 				/*
 				 * Set the fov value
@@ -90,7 +82,6 @@ namespace Gnoll
 				 */
 				virtual float getFovValue();
 
-
 				/*
 				 * Set the position of the camera
 				 * @param value The position
@@ -102,7 +93,6 @@ namespace Gnoll
 				 * @return the position of the camera
 				 */
 				virtual Ogre::Vector3 getPosition();
-
 
 				/*
 				 * Set the direction of the camera
@@ -116,8 +106,7 @@ namespace Gnoll
 				 */
 				virtual Ogre::Vector3 getDirection();
 
-
-			/*
+				/*
 				 * Set the orientation of the camera
 				 * @param value The orientation
 				 */
@@ -128,7 +117,6 @@ namespace Gnoll
 				 * @return the orientation of the camera
 				 */
 				virtual Ogre::Quaternion getOrientation();
-
 
 				/*
 				 * Get the orientation of the camera
@@ -141,7 +129,6 @@ namespace Gnoll
 				 * @return the orientation of the camera
 				 */
 				virtual Ogre::Vector3 getRight();
-
 
 				/*
 				 * Set the auto tracking of the camera around a target
@@ -167,6 +154,9 @@ namespace Gnoll
 				 * @param value Rotation in radian
 				 */
 				virtual void roll(Ogre::Radian value);
+
+			protected:
+				Ogre::Camera* camera;
 		};
 	};
 };
